@@ -1,7 +1,18 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import "./App.css";
+import { AddPlayer, Icon, Save, AddScore, Load } from "./components/Icons";
+
+const INITIAL_PLAYERS = JSON.parse(window.localStorage.getItem("players") ?? "[]");
 
 const INITIAL_VICTORY_PTN = 5;
+
+interface FormElements extends HTMLFormControlsCollection {
+  newScore: HTMLInputElement;
+}
+
+interface ScoreForm extends HTMLFormElement {
+  readonly elements: FormElements;
+}
 
 type Player = {
   id: number;
@@ -11,10 +22,9 @@ type Player = {
 };
 
 const App = () => {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [newPlayer, setNewPlayer] = useState<string>("");
-  const [newScore, setNewScore] = useState<number>(0);
   // const [ranksChanges, setRanksChanges] = useState<number[]>([]);
 
   const handleNewPlayer = (newPlayer: string) => {
@@ -30,19 +40,29 @@ const App = () => {
     ]);
   };
 
-  const handlePlayersScores = (newScore: number, id: Player["id"]) => {
-    if (newScore == 0 || isNaN(newScore)) {
-      setNewScore(0);
-      return;
-    }
-    const i = players.findIndex((player) => player.id === id);
+  const handleNewScoreEntryEvent = (e: FormEvent<ScoreForm>, subjectId: string) => {
+    e.preventDefault();
 
+    const formData = new FormData(e.currentTarget);
+    const newScore = Number(formData.get(subjectId)) ?? 0;
+    if (isNaN(newScore)) return;
+
+    const playerId = +subjectId.split("_")[0];
     const newPlayers = [...players];
-    const player = newPlayers[i];
-    const previousScore = player.victoryPtn;
-    player.victoryPtn = previousScore + newScore;
+    newPlayers[players.findIndex((player) => player.id === playerId)].victoryPtn += newScore;
 
-    setNewScore(0);
+    setPlayers(newPlayers);
+
+    e.currentTarget.reset();
+  };
+
+  const handleSave = (): void => {
+    window.localStorage.setItem("players", JSON.stringify(players));
+  };
+
+  const handleLoad = (): Player[] => {
+    const players = JSON.parse(window.localStorage.getItem("players") ?? "[]");
+    return players;
   };
 
   return (
@@ -50,21 +70,22 @@ const App = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        gap: "40px",
       }}
     >
       <ul
         style={{
-          textAlign: "left",
           width: "100%",
-          display: "flex",
-          flexDirection: "column",
+          margin: 0,
+          padding: 0,
+          textAlign: "left",
         }}
       >
-        {players
-          // .sort((a, b) => b.victoryPtn - a.victoryPtn)
-          .map((player, i) => (
+        {players.map((player, i) => {
+          const { name, victoryPtn, id } = player;
+          const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+
+          return (
             <li
               key={i}
               style={{
@@ -88,87 +109,149 @@ const App = () => {
                     marginRight: "10px",
                   }}
                 />
-                {player.name} : {player.victoryPtn}
+                {name} : {victoryPtn}
               </span>
-              <label htmlFor="newScore" id="newScore">
-                Turn score :
+              <form
+                style={{ display: "flex", alignItems: "center" }}
+                onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
+              >
+                <label htmlFor={subjectId}>Turn score : </label>
                 <input
-                  style={{ marginLeft: "6px" }}
+                  style={{ marginLeft: "3px" }}
+                  minLength={1}
                   maxLength={3}
+                  type="text"
+                  name={subjectId}
+                  id={subjectId}
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
-                      handlePlayersScores(newScore, i);
-                      e.currentTarget.value = "";
+                      new SubmitEvent("submit");
                     }
                   }}
-                  type="text"
-                  name="newScore"
-                  id="newScore"
-                  onChange={(e) => {
-                    setNewScore(parseInt(e.currentTarget.value, 10));
-                  }}
                 />
-              </label>
-              <div style={{ display: "flex" }}>
-                <div style={{ flex: 1 }}></div>
-                <button
-                  onClick={() => {
-                    console.log(newScore, i);
-                    handlePlayersScores(newScore, i);
-                  }}
-                >
-                  Update Score
+                {/* <Flex sx={{ transform: "translate(30px)" }}> */}
+                {/* <Spacer /> */}
+                <button type="submit" style={{ all: "unset", cursor: "pointer" }}>
+                  <Icon
+                    icon={AddScore}
+                    svgData={{
+                      size: ["40px", "40px"],
+                      filter: ["1px", "0"],
+                      transition: "all 0.2s ease-in-out",
+                      icons: {
+                        addscore: {
+                          color: "#646cff",
+                        },
+                      },
+                    }}
+                  />
                 </button>
-              </div>
+                {/* </Flex> */}
+              </form>
             </li>
-          ))}
+          );
+        })}
       </ul>
-
+      {/* TODO : Implement form for add new player */}
       {openAddPlayer && (
-        <div
+        <form
           style={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          <label htmlFor="player" style={{ textAlign: "left" }}>
-            Name: <br />
-            <input
-              onKeyUp={(e) => {
-                if (e.key === "Enter") {
-                  handleNewPlayer(newPlayer);
-                  setOpenAddPlayer(false);
-                }
-              }}
-              type="text"
-              id="player"
-              name="player"
-              value={newPlayer}
-              onChange={(e) => setNewPlayer(e.target.value)}
-            />
-            <button
-              onClick={() => {
+          <label htmlFor="newPlayer" style={{ textAlign: "left" }}>
+            Name :
+          </label>
+          <br />
+          <input
+            style={{ marginLeft: "6px" }}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
                 handleNewPlayer(newPlayer);
                 setOpenAddPlayer(false);
+              }
+            }}
+            type="text"
+            id="newPlayer"
+            name="newPlayer"
+            value={newPlayer}
+            onChange={(e) => setNewPlayer(e.target.value)}
+          />
+          <button
+            onClick={() => {
+              handleNewPlayer(newPlayer);
+              setOpenAddPlayer(false);
+            }}
+          >
+            Confirm
+          </button>
+        </form>
+      )}
+      {!openAddPlayer && (
+        <div style={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+          <button
+            style={{ all: "unset", cursor: "pointer" }}
+            onClick={() => setOpenAddPlayer(true)}
+          >
+            <Icon
+              icon={AddPlayer}
+              svgData={{
+                size: ["40px", "40px"],
+                filter: ["1px", "0"],
+                transition: "all 0.2s ease-in-out",
+                icons: {
+                  addplayer: {
+                    color: "#646cff",
+                  },
+                },
               }}
-            >
-              Confirm
-            </button>
-          </label>
+            />
+          </button>
+          <button
+            style={{ all: "unset", cursor: "pointer" }}
+            onClick={() => {
+              window.localStorage.setItem("players", JSON.stringify(players));
+            }}
+          >
+            <Icon
+              icon={Save}
+              svgData={{
+                size: ["40px", "40px"],
+                filter: ["1px", "0"],
+                transition: "all 0.2s ease-in-out",
+                icons: {
+                  save: {
+                    color: "#646cff",
+                  },
+                },
+              }}
+            />
+          </button>
+          <button
+            style={{ all: "unset", cursor: "pointer" }}
+            onClick={() => {
+              const players = JSON.parse(window.localStorage.getItem("players") ?? "[]");
+              setPlayers(players);
+            }}
+          >
+            <Icon
+              icon={Load}
+              svgData={{
+                size: ["40px", "40px"],
+                filter: ["1px", "0"],
+                transition: "all 0.2s ease-in-out",
+                icons: {
+                  load: {
+                    color: "#646cff",
+                  },
+                },
+              }}
+            />
+          </button>
         </div>
       )}
-      <div>
-        <button
-          style={
-            {
-              // height: "50px",
-            }
-          }
-          onClick={() => setOpenAddPlayer(true)}
-        >
-          Add Player
-        </button>
-      </div>
     </div>
   );
 };
