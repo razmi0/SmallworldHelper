@@ -3,15 +3,31 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --light-color: #ffffffde;
+  --dark-color: #242424;
+  --primary-color: #646cff;
+  --other-primary-color: #213547;
+  --secondary-color: #454ce1;
+  --tertiary-color: #96969c;
+
+  --hover-color-vite: #646cffaa;
+  --hover-color-react: #61dafbaa;
+
+  --std-height: 40px;
+
+  color-scheme: light dark;
+  background-color: var(--dark-color);
+  color: var(--light-color);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 a {
@@ -37,21 +53,21 @@ h1 {
 }
 
 button {
+  display: flex;
+  align-items: center;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  height: var(--std-height);
+  padding: 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  background-color: #646cff7c;
+  background-color: #4e56e8e9;
   transition: border-color 0.25s;
+  color: black;
 }
 button:hover {
-  filter: drop-shadow(#646cff 0 0 3px);
-}
-button:focus,
-button:focus-visible {
-  /* outline: 1px #646cff -webkit-focus-ring-color; */
+  filter: drop-shadow(#646cff 0 0 10px);
 }
 
 @media (prefers-color-scheme: light) {
@@ -66,7 +82,8 @@ button:focus-visible {
 
 input {
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  height: var(--std-height);
+  padding: 0 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
