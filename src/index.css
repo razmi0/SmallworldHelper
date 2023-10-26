@@ -47,11 +47,11 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  filter: drop-shadow(#646cff 0 0 6px);
+  filter: drop-shadow(#646cff 0 0 3px);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  /* outline: 1px #646cff -webkit-focus-ring-color; */
 }
 
 @media (prefers-color-scheme: light) {
@@ -72,4 +72,9 @@ input {
   font-family: inherit;
   background-color: #96969c92;
   transition: border-color 0.25s;
+  outline: none;
+}
+input:focus,
+input:focus-visible {
+  border-color: #646cff;
 }
