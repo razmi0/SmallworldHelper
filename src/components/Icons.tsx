@@ -23,6 +23,13 @@ export type IconProps = {
   svgData: SvgStatDataType;
 };
 
+export type IconButtonProps = {
+  icon: ComponentType<SvgProps>;
+  svgData: SvgStatDataType;
+  onClick?: () => void;
+  btnType?: "button" | "submit" | "reset";
+};
+
 export const Icon = ({ icon: SvgIcon, svgData }: IconProps) => {
   const [isHover, setIsHover] = useState(false);
 
@@ -61,6 +68,14 @@ export const Icon = ({ icon: SvgIcon, svgData }: IconProps) => {
           `}
       </style>
     </div>
+  );
+};
+
+export const IconButton = ({ icon, svgData, onClick, btnType = "button" }: IconButtonProps) => {
+  return (
+    <button type={btnType} style={{ all: "unset", cursor: "pointer" }} onClick={onClick}>
+      <Icon icon={icon} svgData={svgData} />
+    </button>
   );
 };
 
