@@ -6,6 +6,7 @@
 - Sort by score
 - Save to local storage
 - Load from local storage
+- Switch to dark/light mode
 
 ### Ressources
 

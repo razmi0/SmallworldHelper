@@ -1,28 +1,41 @@
 import { FormEvent, useState } from "react";
-import { AddPlayer, Save, AddScore, Load, IconButton, SvgStatDataType } from "./components/Icons";
+import {
+  AddPlayer,
+  Save,
+  AddScore,
+  Load,
+  IconButton,
+  SvgStatDataType,
+  Theme,
+} from "./components/Icons";
 import "./App.css";
 import { Input, InputButton } from "./components/Input";
 import Heading from "./components/Heading";
 
 const iconStyle: SvgStatDataType = {
-  size: ["40px", "40px"],
-  filter: ["1px", "0"],
+  size: ["50px", "50px"],
+  filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
   icons: {
     addplayer: {
-      color: "#646cff",
+      color: ["#646cff", "#609dff"], // light dark
     },
     save: {
-      color: "#646cff",
+      color: ["#646cff", "#609dff"],
     },
     load: {
-      color: "#646cff",
+      color: ["#646cff", "#609dff"],
     },
     addscore: {
-      color: "#646cff",
+      color: ["#646cff", "#609dff"],
+    },
+    theme: {
+      color: ["#646cff", "#609dff"],
     },
   },
 };
+
+const bodyElement = document.querySelector("body");
 
 const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
 const INITIAL_VICTORY_PTN = 0;
@@ -47,9 +60,22 @@ const App = () => {
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
   const [newPlayer, setNewPlayer] = useState<string>("");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   const handleOpenAddPlayer = () => {
     setOpenAddPlayer(!openAddPlayer);
+  };
+
+  const handleThemeChange = () => {
+    if (theme == "light") {
+      setTheme("dark");
+      bodyElement?.classList.add("dark-bg");
+      bodyElement?.classList.remove("light-bg");
+    } else {
+      setTheme("light");
+      bodyElement?.classList.add("light-bg");
+      bodyElement?.classList.remove("dark-bg");
+    }
   };
 
   const handleNewPlayer = (newPlayer: string, startScore: number) => {
@@ -112,6 +138,14 @@ const App = () => {
         display: flex;
         flex-direction: column;
       }
+      .dark-bg {
+        background-color : #242424;
+        color: #ffffffde;
+      }
+      .light-bg {
+        background-color : #ffffffde;
+        color: #242424;
+      }
       `}
       </style>
       <ul className="players-list-ctn">
@@ -138,6 +172,7 @@ const App = () => {
                     iconName="addscore"
                     svgData={iconStyle}
                     btnType="submit"
+                    theme={theme}
                   />
                 </form>
               </li>
@@ -145,16 +180,6 @@ const App = () => {
           })}
       </ul>
       {openAddPlayer && (
-        // <div className="add-player-ctn">
-        //   <style>
-        //     {`
-        //   .add-player-ctn {
-        //     display: flex;
-        //     flex-direction: row;
-        //     align-items: center;
-        //   }
-        //   `}
-        // </style>
         <div
           style={{
             display: "flex",
@@ -174,7 +199,6 @@ const App = () => {
             onChange={(e) => setNewPlayer(e.currentTarget.value)}
             value={newPlayer}
             onClick={() => {
-              console.log(newPlayer, startScore);
               handleNewPlayer(newPlayer, startScore);
             }}
           />
@@ -197,25 +221,48 @@ const App = () => {
         // </div>
       )}
       {!openAddPlayer && (
-        <div className="actions-icons-ctn">
+        <nav className="actions-icons-ctn">
           <style>
             {`
           .actions-icons-ctn {
             display: flex;
-            justify-content: space-between;
             width: 100%;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 5px;
           }
           `}
           </style>
-          <IconButton icon={Save} iconName="save" svgData={iconStyle} onClick={handleSave} />
-          <IconButton icon={Load} iconName="load" svgData={iconStyle} onClick={handleLoad} />
+
           <IconButton
+            theme={theme}
+            icon={Theme}
+            iconName="theme"
+            svgData={iconStyle}
+            onClick={handleThemeChange}
+          />
+          <IconButton
+            theme={theme}
+            icon={Load}
+            iconName="load"
+            svgData={iconStyle}
+            onClick={handleLoad}
+          />
+          <IconButton
+            icon={Save}
+            iconName="save"
+            svgData={iconStyle}
+            onClick={handleSave}
+            theme={theme}
+          />
+          <IconButton
+            theme={theme}
             icon={AddPlayer}
             iconName="addplayer"
             svgData={iconStyle}
             onClick={handleOpenAddPlayer}
           />
-        </div>
+        </nav>
       )}
     </div>
   );

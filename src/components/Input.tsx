@@ -21,6 +21,25 @@ export const Input: FC<InputProps & InputHTMLAttributes<HTMLInputElement>> = ({
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
+      <style>
+        {`
+        input {
+          border: unset;
+          height: var(--std-height);
+          padding: 0 1.2em;
+          font-size: 1em;
+          font-weight: 500;
+          font-family: inherit;
+          background-color: #96969c92;
+          transition: border-color 0.25s;
+          outline: none;
+        }
+        input:focus,
+        input:focus-visible {
+          border-color: #646cff;
+        }
+        `}
+      </style>
       <label style={{ marginRight: "3px" }} htmlFor={subjectId}>
         {labelText}
       </label>
@@ -59,6 +78,25 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
+      <style>
+        {`
+        input {
+          border: unset;
+          height: var(--std-height);
+          padding: 0 1.2em;
+          font-size: 1em;
+          font-weight: 500;
+          font-family: inherit;
+          background-color: #96969c92;
+          transition: border-color 0.25s;
+          outline: none;
+        }
+        input:focus,
+        input:focus-visible {
+          border-color: #646cff;
+        }
+        `}
+      </style>
       <label style={{ marginRight: "3px" }} htmlFor={subjectId}>
         {labelText}
       </label>
