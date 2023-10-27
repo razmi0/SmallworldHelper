@@ -20,26 +20,27 @@ export const Input: FC<InputProps & InputHTMLAttributes<HTMLInputElement>> = ({
   };
 
   return (
-    <>
-      <label htmlFor={subjectId}>{labelText}</label>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <label style={{ marginRight: "3px" }} htmlFor={subjectId}>
+        {labelText}
+      </label>
       {children}
       <input
         {...inputProps}
-        style={{ marginLeft: "3px" }}
         minLength={1}
-        maxLength={3}
         type="text"
         name={subjectId}
         id={subjectId}
         onKeyUp={(e) => handleEnter(e)}
       />
-    </>
+    </div>
   );
 };
 
 interface InputButtonProps extends InputProps {
   btnText: string;
   onClick?: () => void;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
 }
 export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputElement>> = ({
   onEnter = () => {},
@@ -57,20 +58,28 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
   };
 
   return (
-    <>
-      <label htmlFor={subjectId}>{labelText}</label>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <label style={{ marginRight: "3px" }} htmlFor={subjectId}>
+        {labelText}
+      </label>
       {children}
       <input
         {...inputProps}
-        style={{ marginLeft: "3px" }}
         minLength={1}
-        maxLength={3}
         type="text"
         name={subjectId}
         id={subjectId}
         onKeyUp={(e) => handleEnter(e)}
       />
-      <button onClick={onClick}>{btnText}</button>
-    </>
+      <button
+        onClick={onClick}
+        style={{
+          transform: "translate(-5px, 25px)",
+          zIndex: 1,
+        }}
+      >
+        {btnText}
+      </button>
+    </div>
   );
 };

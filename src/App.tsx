@@ -24,9 +24,8 @@ const iconStyle: SvgStatDataType = {
   },
 };
 
-const INITIAL_PLAYERS = JSON.parse(window.localStorage.getItem("players") ?? "[]");
-
-const INITIAL_VICTORY_PTN = 5;
+const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
+const INITIAL_VICTORY_PTN = 0;
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -44,23 +43,23 @@ type Player = {
 };
 
 const App = () => {
-  const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
+  const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS_LOAD);
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
+  const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
   const [newPlayer, setNewPlayer] = useState<string>("");
-  // const [ranksChanges, setRanksChanges] = useState<number[]>([]);
 
   const handleOpenAddPlayer = () => {
     setOpenAddPlayer(!openAddPlayer);
   };
 
-  const handleNewPlayer = (newPlayer: string) => {
+  const handleNewPlayer = (newPlayer: string, startScore: number) => {
     if (newPlayer === "") return;
     setPlayers([
       ...players,
       {
         id: players.length,
         name: newPlayer.charAt(0).toUpperCase() + newPlayer.slice(1),
-        victoryPtn: INITIAL_VICTORY_PTN,
+        victoryPtn: startScore,
         rankChange: 0,
       },
     ]);
@@ -116,53 +115,86 @@ const App = () => {
       `}
       </style>
       <ul className="players-list-ctn">
-        {players.map((player, i) => {
-          const { name, victoryPtn, id } = player;
-          const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+        {players
+          .sort((a, b) => b.victoryPtn - a.victoryPtn)
+          .map((player, i) => {
+            const { name, victoryPtn, id } = player;
+            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
-          return (
-            <li className="list-element" key={i}>
-              <Heading name={name} victoryPtn={victoryPtn} />
-              <form
-                style={{ display: "flex", alignItems: "center" }}
-                onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
-              >
-                <Input
-                  labelText="Turn score :"
-                  subjectId={subjectId}
-                  onEnter={() => new SubmitEvent("submit")}
-                />
-                <IconButton icon={AddScore} svgData={iconStyle} btnType="submit" />
-              </form>
-            </li>
-          );
-        })}
+            return (
+              <li className="list-element" key={i}>
+                <Heading name={name} victoryPtn={victoryPtn} />
+                <form
+                  style={{ display: "flex", alignItems: "center" }}
+                  onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
+                >
+                  <Input
+                    labelText="Turn score"
+                    subjectId={subjectId}
+                    onEnter={() => new SubmitEvent("submit")}
+                  />
+                  <IconButton
+                    icon={AddScore}
+                    iconName="addscore"
+                    svgData={iconStyle}
+                    btnType="submit"
+                  />
+                </form>
+              </li>
+            );
+          })}
       </ul>
       {openAddPlayer && (
-        <form className="add-player-form">
-          <style>
-            {`
-          .add-player-form {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-          }
-          `}
-          </style>
+        // <div className="add-player-ctn">
+        //   <style>
+        //     {`
+        //   .add-player-ctn {
+        //     display: flex;
+        //     flex-direction: row;
+        //     align-items: center;
+        //   }
+        //   `}
+        // </style>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            transform: "translate(35px)",
+            gap: "5px",
+          }}
+        >
           <InputButton
-            labelText="Name :"
+            labelText="Name"
             subjectId="newPlayer"
             btnText="Confirm"
             onEnter={() => {
-              handleNewPlayer(newPlayer);
+              handleNewPlayer(newPlayer, startScore);
             }}
-            onChange={(e) => setNewPlayer(e.target.value)}
+            onChange={(e) => setNewPlayer(e.currentTarget.value)}
             value={newPlayer}
             onClick={() => {
-              handleNewPlayer(newPlayer);
+              console.log(newPlayer, startScore);
+              handleNewPlayer(newPlayer, startScore);
             }}
           />
-        </form>
+          <div style={{ transform: "translate(-37px" }}>
+            <Input
+              labelText="Start score"
+              subjectId="startScore"
+              onChange={(e) =>
+                setStartScore(
+                  isNaN(Number(e.currentTarget.value)) ? 0 : Number(e.currentTarget.value)
+                )
+              }
+              value={startScore}
+              onEnter={() => {
+                handleNewPlayer(newPlayer, startScore);
+              }}
+            />
+          </div>
+        </div>
+        // </div>
       )}
       {!openAddPlayer && (
         <div className="actions-icons-ctn">
@@ -175,9 +207,14 @@ const App = () => {
           }
           `}
           </style>
-          <IconButton icon={Save} svgData={iconStyle} onClick={handleSave} />
-          <IconButton icon={Load} svgData={iconStyle} onClick={handleLoad} />
-          <IconButton icon={AddPlayer} svgData={iconStyle} onClick={handleOpenAddPlayer} />
+          <IconButton icon={Save} iconName="save" svgData={iconStyle} onClick={handleSave} />
+          <IconButton icon={Load} iconName="load" svgData={iconStyle} onClick={handleLoad} />
+          <IconButton
+            icon={AddPlayer}
+            iconName="addplayer"
+            svgData={iconStyle}
+            onClick={handleOpenAddPlayer}
+          />
         </div>
       )}
     </div>

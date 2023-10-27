@@ -18,27 +18,27 @@ export type SvgStatDataType = {
   };
 };
 
-export type IconProps = {
+export interface IconProps {
   icon: ComponentType<SvgProps>;
   svgData: SvgStatDataType;
-};
+  iconName: string;
+}
 
-export type IconButtonProps = {
-  icon: ComponentType<SvgProps>;
-  svgData: SvgStatDataType;
+export interface IconButtonProps extends IconProps {
   onClick?: () => void;
   btnType?: "button" | "submit" | "reset";
-};
+}
 
-export const Icon = ({ icon: SvgIcon, svgData }: IconProps) => {
+export const Icon = ({ icon: SvgIcon, svgData, iconName }: IconProps) => {
   const [isHover, setIsHover] = useState(false);
 
-  const svgName: string = SvgIcon.name.toLowerCase(); // => NAME OF THE SVG ICON
-  const color = svgData.icons[svgName]?.color;
+  const color = svgData.icons[iconName]?.color;
   let dropShadow = "",
     transform = "";
 
-  if (!color) throw new Error(`Icon ${svgName} is missing a color in svgData`);
+  console.log(iconName, color);
+
+  if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData`);
 
   if (svgData.filter) {
     dropShadow = isHover
@@ -71,10 +71,16 @@ export const Icon = ({ icon: SvgIcon, svgData }: IconProps) => {
   );
 };
 
-export const IconButton = ({ icon, svgData, onClick, btnType = "button" }: IconButtonProps) => {
+export const IconButton = ({
+  onClick,
+  btnType = "button",
+  icon,
+  svgData,
+  iconName,
+}: IconButtonProps) => {
   return (
     <button type={btnType} style={{ all: "unset", cursor: "pointer" }} onClick={onClick}>
-      <Icon icon={icon} svgData={svgData} />
+      <Icon icon={icon} svgData={svgData} iconName={iconName} />
     </button>
   );
 };
@@ -98,10 +104,10 @@ export const SquaredPlus = ({ color, size }: SvgProps) => {
   );
 };
 
-export const Save = ({ color, size }: SvgProps) => {
+export const Load = ({ color, size }: SvgProps) => {
   return (
     <svg width={size[0]} height={size[1]} viewBox="-9.6 -9.6 67.20 67.20" fill="none">
-      <title>Save</title>
+      <title>Load</title>
       <g strokeWidth="0" transform="translate(0,0), scale(1)">
         <path
           transform="translate(-9.6, -9.6), scale(4.2)"
@@ -153,10 +159,10 @@ export const Save = ({ color, size }: SvgProps) => {
   );
 };
 
-export const Load = ({ color, size }: SvgProps) => {
+export const Save = ({ color, size }: SvgProps) => {
   return (
     <svg width={size[0]} height={size[1]} viewBox="-9.6 -9.6 67.20 67.20" fill="none">
-      <title>Load</title>
+      <title>Save</title>
       <g strokeWidth="0">
         <path
           transform="translate(-9.6, -9.6), scale(4.2)"

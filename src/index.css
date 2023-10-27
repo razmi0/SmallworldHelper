@@ -56,13 +56,13 @@ button {
   display: flex;
   align-items: center;
   border: 1px solid transparent;
-  height: var(--std-height);
-  padding: 1.2em;
+  min-height: var(--std-height);
+  padding: 0 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  background-color: #4e56e8e9;
+  background-color: #4e56e8;
   transition: border-color 0.25s;
   color: black;
 }
@@ -81,7 +81,7 @@ button:hover {
 }
 
 input {
-  border: 1px solid transparent;
+  border: unset;
   height: var(--std-height);
   padding: 0 1.2em;
   font-size: 1em;
