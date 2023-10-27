@@ -3,6 +3,8 @@
 - Add player
 - Add player's score
 - Sort by score
+- Save to local storage
+- Load from local storage
 
 ### Ressources
 
