@@ -1,6 +1,7 @@
 # Smallworld Helper
 
 - Add player
+- Add starting score
 - Add player's score
 - Sort by score
 - Save to local storage
