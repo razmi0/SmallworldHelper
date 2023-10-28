@@ -34,9 +34,8 @@ export interface IconButtonProps extends IconProps {
   sx?: React.CSSProperties;
 }
 const getBgColor = (theme: "light" | "dark") => {
-  return theme === "light" ? "#949499" : "#636367";
+  return theme === "light" ? "#bdbdc7" : "#636367";
 };
-// const bgColor = "#949499";
 
 export const Icon = ({
   icon: SvgIcon,
@@ -53,8 +52,6 @@ export const Icon = ({
   const color = svgData.icons[iconName]?.color[idxThemeColor];
   let dropShadow = "",
     transform = "";
-
-  console.log(iconName, color);
 
   if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData`);
 

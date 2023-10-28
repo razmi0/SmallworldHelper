@@ -2,15 +2,13 @@ import { FormEvent, useState } from "react";
 import {
   AddPlayer,
   Save,
-  AddScore,
   Load,
   IconButton,
   SvgStatDataType,
   Theme,
   Menu,
 } from "./components/Icons";
-import "./App.css";
-import { Input, InputButton } from "./components/Input";
+import { Input, InputButton, SoftInput } from "./components/Input";
 import Heading from "./components/Heading";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -55,7 +53,6 @@ const iconStyle: SvgStatDataType = {
 };
 
 const bodyElement = document.querySelector("body");
-const inputsElements = document.querySelectorAll("input");
 
 const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
 const INITIAL_VICTORY_PTN = 0;
@@ -82,19 +79,11 @@ const App = () => {
       setTheme("dark");
       bodyElement?.classList.add("dark-bg");
       bodyElement?.classList.remove("light-bg");
-      for (let i = 0; i < inputsElements.length; i++) {
-        inputsElements[i].style.color = "#ffffffde";
-        inputsElements[i].style.backgroundColor = "#636367";
-      }
     } else {
       //LIGHT
       setTheme("light");
       bodyElement?.classList.add("light-bg");
       bodyElement?.classList.remove("dark-bg");
-      for (let i = 0; i < inputsElements.length; i++) {
-        inputsElements[i].style.color = "#242424";
-        inputsElements[i].style.backgroundColor = "#949499";
-      }
     }
   };
 
@@ -118,6 +107,7 @@ const App = () => {
 
     const formData = new FormData(e.currentTarget);
     const newScore = Number(formData.get(subjectId)) ?? 0;
+
     if (isNaN(newScore)) return;
 
     const playerId = +subjectId.split("_")[0];
@@ -140,6 +130,35 @@ const App = () => {
 
   return (
     <div className="main-ctn">
+      <style>
+        {`
+      .main-ctn {
+        display: flex;
+        flex-direction: column;
+        min-width: 270px;
+      }
+      .players-list-ctn {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+      }
+      .list-element {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+      }
+      .dark-bg {
+        background-color : #242424;
+        color: #ffffffde;
+      }
+      .light-bg {
+        background-color : #ffffffde;
+        color: #242424;
+      }
+      `}
+      </style>
+      {/* == NAV == */}
       {!openAddPlayer && (
         <nav className="actions-icons-ctn">
           <style>
@@ -199,34 +218,7 @@ const App = () => {
           )}
         </nav>
       )}
-      <style>
-        {`
-      .main-ctn {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-      }
-      .players-list-ctn {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        text-align: left;
-      }
-      .list-element {
-        margin-top: 30px;
-        display: flex;
-        flex-direction: column;
-      }
-      .dark-bg {
-        background-color : #242424;
-        color: #ffffffde;
-      }
-      .light-bg {
-        background-color : #ffffffde;
-        color: #242424;
-      }
-      `}
-      </style>
+      {/* == PLAYERS LIST == */}
       <ul className="players-list-ctn">
         {players
           .sort((a, b) => b.victoryPtn - a.victoryPtn)
@@ -238,20 +230,13 @@ const App = () => {
               <li className="list-element" key={i}>
                 <Heading name={name} victoryPtn={victoryPtn} />
                 <form
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{ display: "flex", alignItems: "center", paddingLeft: "30px" }}
                   onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
                 >
-                  <Input
-                    labelText="Turn score"
+                  <SoftInput
+                    labelText="Score"
                     subjectId={subjectId}
                     onEnter={() => new SubmitEvent("submit")}
-                  />
-                  <IconButton
-                    sx={{ transform: "translate(-45px, 1px)" }}
-                    icon={AddScore}
-                    iconName="addscore"
-                    svgData={iconStyle}
-                    btnType="submit"
                     theme={theme}
                   />
                 </form>
@@ -259,6 +244,7 @@ const App = () => {
             );
           })}
       </ul>
+      {/* == ADD PLAYER == */}
       {openAddPlayer && (
         <div
           style={{
