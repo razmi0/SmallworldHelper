@@ -39,87 +39,6 @@ export interface IconButtonProps extends IconProps {
   sx?: React.CSSProperties;
 }
 
-export const iconStyle: SvgStatDataType = {
-  size: ["50px", "50px"],
-  filter: ["4px", "0px"],
-  transition: "all 0.2s ease-in-out",
-  gap: "5px",
-  bezierParams: [0.4, 0.2],
-  icons: {
-    menu: {
-      color: ["#646cff", "#609dff"],
-      zIndex: 10,
-      transform: () => {
-        return `scale(1.2)`;
-      },
-      transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 0.8}s `
-          : iconStyle.transition ?? "none";
-      },
-    },
-    addplayer: {
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 4
-        }px)`,
-      transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 4}s `
-          : iconStyle.transition ?? "none";
-      },
-      zIndex: 6,
-    },
-    save: {
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 3
-        }px)`,
-      transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 3}s `
-          : iconStyle.transition ?? "none";
-      },
-      zIndex: 7,
-    },
-    load: {
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 2
-        }px)`,
-      transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 2}s `
-          : iconStyle.transition ?? "none";
-      },
-      zIndex: 8,
-    },
-    theme: {
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 1
-        }px)`,
-      transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 1}s `
-          : iconStyle.transition ?? "none";
-      },
-      zIndex: 9,
-    },
-    addscore: {
-      color: ["#646cff", "#609dff"],
-    },
-  },
-};
-
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
 };
@@ -404,6 +323,33 @@ export const Menu = ({ color, size, bgColor }: SvgProps) => {
           strokeLinecap="round"
           strokeLinejoin="round"
         ></path>
+      </g>
+    </svg>
+  );
+};
+
+export const Delete = ({ color, size }: SvgProps) => {
+  return (
+    <svg width={size[0]} height={size[1]} viewBox="-4.8 -4.8 33.60 33.60" fill="none">
+      <g strokeWidth="0"></g>
+      <g strokeLinecap="round" strokeLinejoin="round"></g>
+      <g>
+        <path
+          d="M17.23 9.78L15.01 12L17.23 14.22C17.52 14.51 17.52 14.99 17.23 15.28C17.08 15.43 16.89 15.5 16.7 15.5C16.51 15.5 16.32 15.43 16.17 15.28L13.95 13.06L11.73 15.28C11.58 15.43 11.39 15.5 11.2 15.5C11.01 15.5 10.82 15.43 10.67 15.28C10.38 14.99 10.38 14.51 10.67 14.22L12.89 12L10.67 9.78C10.38 9.49 10.38 9.01 10.67 8.72C10.96 8.43 11.44 8.43 11.73 8.72L13.95 10.94L16.17 8.72C16.46 8.43 16.94 8.43 17.23 8.72C17.52 9.01 17.52 9.49 17.23 9.78ZM21.32 7V17C21.32 17.96 20.54 18.75 19.57 18.75H7.64C7.02999 18.75 6.48 18.44 6.16 17.93L2.87 12.66C2.62 12.26 2.62 11.74 2.87 11.33L6.16 6.07C6.48 5.56 7.04 5.25 7.64 5.25H19.58C20.54 5.25 21.33 6.04 21.33 7H21.32ZM19.82 7C19.82 6.86 19.71 6.75 19.57 6.75H7.64C7.54999 6.75 7.47 6.79 7.43 6.87L4.22 12L7.43 17.13C7.48 17.2 7.56 17.25 7.64 17.25H19.58C19.72 17.25 19.83 17.14 19.83 17V7H19.82Z"
+          fill={color}
+        ></path>
+      </g>
+    </svg>
+  );
+};
+
+export const Reset = ({ color, size }: SvgProps) => {
+  return (
+    <svg fill={color} width={size[0]} height={size[1]} viewBox="-102.4 -102.4 716.80 716.80">
+      <g strokeWidth="0"></g>
+      <g strokeLinecap="round" strokeLinejoin="round"></g>
+      <g>
+        <path d="M64,256H34A222,222,0,0,1,430,118.15V85h30V190H355V160h67.27A192.21,192.21,0,0,0,256,64C150.13,64,64,150.13,64,256Zm384,0c0,105.87-86.13,192-192,192A192.21,192.21,0,0,1,89.73,352H157V322H52V427H82V393.85A222,222,0,0,0,478,256Z"></path>
       </g>
     </svg>
   );

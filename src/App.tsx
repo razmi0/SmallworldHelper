@@ -1,7 +1,18 @@
 import { FormEvent, useState } from "react";
-import { AddPlayer, Save, Load, IconButton, iconStyle, Theme, Menu } from "./components/Icons";
+import {
+  AddPlayer,
+  Save,
+  Load,
+  IconButton,
+  Theme,
+  Menu,
+  Reset,
+  Delete,
+} from "./components/icons/Icons";
+import { iconStyle, playerIconStyle } from "./components/icons";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import Heading from "./components/Heading";
+import { Spacer } from "./components/Utils";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -24,9 +35,9 @@ const INITIAL_VICTORY_PTN = 0;
 
 const App = () => {
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS_LOAD);
-  const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
-  const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
   const [newPlayer, setNewPlayer] = useState<string>("");
+  const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
+  const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
@@ -82,6 +93,21 @@ const App = () => {
     setPlayers(newPlayers);
 
     e.currentTarget.reset();
+  };
+
+  const handleDeletePlayer = (id: number) => {
+    const newPlayers = [...players];
+    newPlayers.splice(
+      players.findIndex((p) => p.id == id),
+      1
+    );
+    setPlayers(newPlayers);
+  };
+
+  const handleResetScore = (id: number) => {
+    const newPlayers = [...players];
+    newPlayers[players.findIndex((p) => p.id == id)].victoryPtn = 0;
+    setPlayers(newPlayers);
   };
 
   const handleSave = (): void => {
@@ -207,7 +233,22 @@ const App = () => {
 
             return (
               <li className="list-element" key={i}>
-                <Heading name={name} victoryPtn={victoryPtn} />
+                <div style={{ display: "flex" }}>
+                  <Heading name={name} victoryPtn={victoryPtn} />
+                  <Spacer />
+                  <IconButton
+                    onClick={() => handleResetScore(id)}
+                    icon={Reset}
+                    iconName="reset"
+                    svgData={playerIconStyle}
+                  />
+                  <IconButton
+                    onClick={() => handleDeletePlayer(id)}
+                    icon={Delete}
+                    iconName="delete"
+                    svgData={playerIconStyle}
+                  />
+                </div>
                 <form
                   style={{ display: "flex", alignItems: "center" }}
                   onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
