@@ -5,7 +5,7 @@
 - [x] Add a delete player button
 - [x] Theme button
 - [ ] Add Line Chart to sum up players progresion
-- [ ] Menu animation
+- [x] Menu animation
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
