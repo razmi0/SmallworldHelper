@@ -139,6 +139,8 @@ const App = () => {
         <IconButton
           sx={{
             zIndex: iconStyle.icons.menu.zIndex,
+            transform: openMenu ? "none" : iconStyle.icons.menu.transform?.(),
+            transition: iconStyle.icons.menu.transition?.(),
           }}
           theme={theme}
           icon={Menu}

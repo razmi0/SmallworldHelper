@@ -49,6 +49,14 @@ export const iconStyle: SvgStatDataType = {
     menu: {
       color: ["#646cff", "#609dff"],
       zIndex: 10,
+      transform: () => {
+        return `scale(1.2)`;
+      },
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 0.8}s `
+          : iconStyle.transition ?? "none";
+      },
     },
     addplayer: {
       color: ["#646cff", "#609dff"],
