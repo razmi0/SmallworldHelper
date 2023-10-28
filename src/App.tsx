@@ -7,10 +7,26 @@ import {
   IconButton,
   SvgStatDataType,
   Theme,
+  Menu,
 } from "./components/Icons";
 import "./App.css";
 import { Input, InputButton } from "./components/Input";
 import Heading from "./components/Heading";
+
+interface FormElements extends HTMLFormControlsCollection {
+  newScore: HTMLInputElement;
+}
+
+interface ScoreForm extends HTMLFormElement {
+  readonly elements: FormElements;
+}
+
+type Player = {
+  id: number;
+  name: string;
+  victoryPtn: number;
+  rankChange: number;
+};
 
 const iconStyle: SvgStatDataType = {
   size: ["50px", "50px"],
@@ -32,6 +48,9 @@ const iconStyle: SvgStatDataType = {
     theme: {
       color: ["#646cff", "#609dff"],
     },
+    menu: {
+      color: ["#646cff", "#609dff"],
+    },
   },
 };
 
@@ -40,27 +59,17 @@ const bodyElement = document.querySelector("body");
 const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
 const INITIAL_VICTORY_PTN = 0;
 
-interface FormElements extends HTMLFormControlsCollection {
-  newScore: HTMLInputElement;
-}
-
-interface ScoreForm extends HTMLFormElement {
-  readonly elements: FormElements;
-}
-
-type Player = {
-  id: number;
-  name: string;
-  victoryPtn: number;
-  rankChange: number;
-};
-
 const App = () => {
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS_LOAD);
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
   const [newPlayer, setNewPlayer] = useState<string>("");
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
+
+  const handleOpenMenu = () => {
+    setOpenMenu(!openMenu);
+  };
 
   const handleOpenAddPlayer = () => {
     setOpenAddPlayer(!openAddPlayer);
@@ -226,42 +235,58 @@ const App = () => {
             {`
           .actions-icons-ctn {
             display: flex;
-            width: 100%;
-            justify-content: flex-end;
-            align-items: center;
+            width: fit-content;
             gap: 5px;
+          }
+          .actions-icons-ctn:: {
+            transform: scale(0.8);
           }
           `}
           </style>
-
           <IconButton
+            className="menu-icon"
             theme={theme}
-            icon={Theme}
-            iconName="theme"
+            icon={Menu}
+            iconName="menu"
             svgData={iconStyle}
-            onClick={handleThemeChange}
+            onClick={handleOpenMenu}
           />
-          <IconButton
-            theme={theme}
-            icon={Load}
-            iconName="load"
-            svgData={iconStyle}
-            onClick={handleLoad}
-          />
-          <IconButton
-            icon={Save}
-            iconName="save"
-            svgData={iconStyle}
-            onClick={handleSave}
-            theme={theme}
-          />
-          <IconButton
-            theme={theme}
-            icon={AddPlayer}
-            iconName="addplayer"
-            svgData={iconStyle}
-            onClick={handleOpenAddPlayer}
-          />
+          {openMenu && (
+            <>
+              <IconButton
+                sx={{}}
+                theme={theme}
+                icon={Theme}
+                iconName="theme"
+                svgData={iconStyle}
+                onClick={handleThemeChange}
+              />
+              <IconButton
+                sx={{}}
+                theme={theme}
+                icon={Load}
+                iconName="load"
+                svgData={iconStyle}
+                onClick={handleLoad}
+              />
+              <IconButton
+                sx={{}}
+                icon={Save}
+                iconName="save"
+                svgData={iconStyle}
+                onClick={handleSave}
+                theme={theme}
+              />
+              <IconButton
+                sx={{}}
+                theme={theme}
+                icon={AddPlayer}
+                iconName="addplayer"
+                svgData={iconStyle}
+                onClick={handleOpenAddPlayer}
+              />
+            </>
+          )}
         </nav>
       )}
     </div>

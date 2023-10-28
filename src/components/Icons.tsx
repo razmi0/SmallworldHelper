@@ -23,16 +23,25 @@ export interface IconProps {
   svgData: SvgStatDataType;
   iconName: string;
   theme?: "light" | "dark";
+  sx?: React.CSSProperties;
+  className?: string;
 }
 
 export interface IconButtonProps extends IconProps {
   onClick?: () => void;
   btnType?: "button" | "submit" | "reset";
+  sx?: React.CSSProperties;
 }
 
 const bgColor = "#96969c92";
 
-export const Icon = ({ icon: SvgIcon, svgData, iconName, theme = "light" }: IconProps) => {
+export const Icon = ({
+  icon: SvgIcon,
+  svgData,
+  iconName,
+  theme = "light",
+  className,
+}: IconProps) => {
   const [isHover, setIsHover] = useState(false);
 
   const idxThemeColor = theme === "light" ? 0 : 1;
@@ -54,7 +63,7 @@ export const Icon = ({ icon: SvgIcon, svgData, iconName, theme = "light" }: Icon
 
   return (
     <div
-      className="icon-stat-ctn"
+      className={`icon-stat-ctn ${className || ""}`}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       style={{
@@ -83,9 +92,16 @@ export const IconButton = ({
   svgData,
   iconName,
   theme = "light",
+  sx,
+  className,
 }: IconButtonProps) => {
   return (
-    <button type={btnType} style={{ all: "unset", cursor: "pointer" }} onClick={onClick}>
+    <button
+      type={btnType}
+      style={{ all: "unset", cursor: "pointer", ...sx }}
+      onClick={onClick}
+      className={className}
+    >
       <Icon icon={icon} svgData={svgData} iconName={iconName} theme={theme} />
     </button>
   );
@@ -277,6 +293,31 @@ export const Theme = ({ color, size }: SvgProps) => {
             </g>
           </g>
         </g>
+      </g>
+    </svg>
+  );
+};
+
+export const Menu = ({ color, size }: SvgProps) => {
+  return (
+    <svg width={size[0]} height={size[1]} viewBox="-4.8 -4.8 33.60 33.60" fill="none">
+      <g strokeWidth="0">
+        <path
+          transform="translate(-4.8, -4.8), scale(2.1)"
+          fill={bgColor}
+          d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
+          strokeWidth="0"
+        ></path>
+      </g>
+      <g strokeLinecap="round" strokeLinejoin="round"></g>
+      <g>
+        <path
+          d="M4 12H20M4 8H20M4 16H12"
+          stroke={color}
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>
       </g>
     </svg>
   );
