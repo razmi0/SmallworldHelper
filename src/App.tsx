@@ -19,7 +19,6 @@ type Player = {
 };
 
 const bodyElement = document.querySelector("body");
-
 const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
 const INITIAL_VICTORY_PTN = 0;
 
@@ -125,62 +124,76 @@ const App = () => {
       `}
       </style>
       {/* == NAV == */}
-      <nav className="actions-icons-ctn">
+      <nav className="nav-ctn">
         <style>
           {`
-          .actions-icons-ctn {
+          .nav-ctn {
             display: flex;
             width: 100%;
             gap: 5px;
             justify-content: flex-start;
             align-items: center;
           }
-          
           `}
         </style>
         <IconButton
+          sx={{
+            zIndex: iconStyle.icons.menu.zIndex,
+          }}
           theme={theme}
           icon={Menu}
           iconName="menu"
           svgData={iconStyle}
           onClick={handleOpenMenu}
         />
-        {openMenu && (
-          <>
-            <IconButton
-              sx={{}}
-              theme={theme}
-              icon={Theme}
-              iconName="theme"
-              svgData={iconStyle}
-              onClick={handleThemeChange}
-            />
-            <IconButton
-              sx={{}}
-              theme={theme}
-              icon={Load}
-              iconName="load"
-              svgData={iconStyle}
-              onClick={handleLoad}
-            />
-            <IconButton
-              sx={{}}
-              icon={Save}
-              iconName="save"
-              svgData={iconStyle}
-              onClick={handleSave}
-              theme={theme}
-            />
-            <IconButton
-              sx={{}}
-              theme={theme}
-              icon={AddPlayer}
-              iconName="addplayer"
-              svgData={iconStyle}
-              onClick={handleOpenAddPlayer}
-            />
-          </>
-        )}
+        <IconButton
+          sx={{
+            transform: openMenu ? "translate(0px)" : iconStyle.icons.theme.transform?.(),
+            transition: iconStyle.icons.theme.transition?.(),
+            zIndex: iconStyle.icons.theme.zIndex,
+          }}
+          theme={theme}
+          icon={Theme}
+          iconName="theme"
+          svgData={iconStyle}
+          onClick={handleThemeChange}
+        />
+        <IconButton
+          sx={{
+            transform: openMenu ? "translate(0px)" : iconStyle.icons.load.transform?.(),
+            transition: iconStyle.icons.load.transition?.(),
+            zIndex: iconStyle.icons.load.zIndex,
+          }}
+          theme={theme}
+          icon={Load}
+          iconName="load"
+          svgData={iconStyle}
+          onClick={handleLoad}
+        />
+        <IconButton
+          sx={{
+            transform: openMenu ? "translate(0px)" : iconStyle.icons.save.transform?.(),
+            transition: iconStyle.icons.save.transition?.(),
+            zIndex: iconStyle.icons.save.zIndex,
+          }}
+          icon={Save}
+          iconName="save"
+          svgData={iconStyle}
+          onClick={handleSave}
+          theme={theme}
+        />
+        <IconButton
+          sx={{
+            transform: openMenu ? "translate(0px)" : iconStyle.icons.addplayer.transform?.(),
+            transition: iconStyle.icons.addplayer.transition?.(),
+            zIndex: iconStyle.icons.addplayer.zIndex,
+          }}
+          theme={theme}
+          icon={AddPlayer}
+          iconName="addplayer"
+          svgData={iconStyle}
+          onClick={handleOpenAddPlayer}
+        />
       </nav>
       {/* == PLAYERS LIST == */}
       <ul className="players-list-ctn">

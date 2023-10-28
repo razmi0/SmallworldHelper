@@ -7,14 +7,19 @@ export type SvgProps = {
 };
 
 export type SvgStatDataType = {
-  size: [string, string];
-  filter?: [string, string];
-  scale?: string;
-  transition?: string;
+  size: [string, string]; // width, height in px
+  filter?: [string, string]; // dropshadow
+  scale?: string; // scale factor for the dropshadow
+  transition?: string; // transition for the dropshadow
+  bezierParams?: [number, number]; // bezier factor for the animation
+  gap?: string; // gap between icons in px
   icons: {
     [key: string]: {
-      color: [string, string];
-      stat?: string;
+      color: [string, string]; // light dark
+      label?: string; // label of the icon
+      transform?: () => string;
+      transition?: () => string;
+      zIndex?: number;
     };
   };
 };
@@ -38,23 +43,70 @@ export const iconStyle: SvgStatDataType = {
   size: ["50px", "50px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
+  gap: "5px",
+  bezierParams: [0.4, 0.2],
   icons: {
+    menu: {
+      color: ["#646cff", "#609dff"],
+      zIndex: 10,
+    },
     addplayer: {
-      color: ["#646cff", "#609dff"], // light dark
+      color: ["#646cff", "#609dff"],
+      transform: () =>
+        `translate(-${
+          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
+            1) * 4
+        }px)`,
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 4}s `
+          : iconStyle.transition ?? "none";
+      },
+      zIndex: 6,
     },
     save: {
       color: ["#646cff", "#609dff"],
+      transform: () =>
+        `translate(-${
+          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
+            1) * 3
+        }px)`,
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 3}s `
+          : iconStyle.transition ?? "none";
+      },
+      zIndex: 7,
     },
     load: {
       color: ["#646cff", "#609dff"],
-    },
-    addscore: {
-      color: ["#646cff", "#609dff"],
+      transform: () =>
+        `translate(-${
+          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
+            1) * 2
+        }px)`,
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 2}s `
+          : iconStyle.transition ?? "none";
+      },
+      zIndex: 8,
     },
     theme: {
       color: ["#646cff", "#609dff"],
+      transform: () =>
+        `translate(-${
+          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
+            1) * 1
+        }px)`,
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 1}s `
+          : iconStyle.transition ?? "none";
+      },
+      zIndex: 9,
     },
-    menu: {
+    addscore: {
       color: ["#646cff", "#609dff"],
     },
   },
@@ -126,7 +178,7 @@ export const IconButton = ({
   return (
     <button
       type={btnType}
-      style={{ cursor: "pointer", all: "unset", ...sx }}
+      style={{ all: "unset", cursor: "pointer", ...sx }}
       onClick={onClick}
       className={className}
     >
