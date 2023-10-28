@@ -55,6 +55,7 @@ const iconStyle: SvgStatDataType = {
 };
 
 const bodyElement = document.querySelector("body");
+const inputsElements = document.querySelectorAll("input");
 
 const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
 const INITIAL_VICTORY_PTN = 0;
@@ -77,13 +78,23 @@ const App = () => {
 
   const handleThemeChange = () => {
     if (theme == "light") {
+      //DARK
       setTheme("dark");
       bodyElement?.classList.add("dark-bg");
       bodyElement?.classList.remove("light-bg");
+      for (let i = 0; i < inputsElements.length; i++) {
+        inputsElements[i].style.color = "#ffffffde";
+        inputsElements[i].style.backgroundColor = "#636367";
+      }
     } else {
+      //LIGHT
       setTheme("light");
       bodyElement?.classList.add("light-bg");
       bodyElement?.classList.remove("dark-bg");
+      for (let i = 0; i < inputsElements.length; i++) {
+        inputsElements[i].style.color = "#242424";
+        inputsElements[i].style.backgroundColor = "#949499";
+      }
     }
   };
 
@@ -129,6 +140,65 @@ const App = () => {
 
   return (
     <div className="main-ctn">
+      {!openAddPlayer && (
+        <nav className="actions-icons-ctn">
+          <style>
+            {`
+          .actions-icons-ctn {
+            display: flex;
+            width: 100%;
+            gap: 5px;
+            justify-content: flex-start;
+            align-items: center;
+          }
+          
+          `}
+          </style>
+          <IconButton
+            theme={theme}
+            icon={Menu}
+            iconName="menu"
+            svgData={iconStyle}
+            onClick={handleOpenMenu}
+          />
+          {openMenu && (
+            <>
+              <IconButton
+                sx={{}}
+                theme={theme}
+                icon={Theme}
+                iconName="theme"
+                svgData={iconStyle}
+                onClick={handleThemeChange}
+              />
+              <IconButton
+                sx={{}}
+                theme={theme}
+                icon={Load}
+                iconName="load"
+                svgData={iconStyle}
+                onClick={handleLoad}
+              />
+              <IconButton
+                sx={{}}
+                icon={Save}
+                iconName="save"
+                svgData={iconStyle}
+                onClick={handleSave}
+                theme={theme}
+              />
+              <IconButton
+                sx={{}}
+                theme={theme}
+                icon={AddPlayer}
+                iconName="addplayer"
+                svgData={iconStyle}
+                onClick={handleOpenAddPlayer}
+              />
+            </>
+          )}
+        </nav>
+      )}
       <style>
         {`
       .main-ctn {
@@ -177,6 +247,7 @@ const App = () => {
                     onEnter={() => new SubmitEvent("submit")}
                   />
                   <IconButton
+                    sx={{ transform: "translate(-45px, 1px)" }}
                     icon={AddScore}
                     iconName="addscore"
                     svgData={iconStyle}
@@ -228,66 +299,6 @@ const App = () => {
           </div>
         </div>
         // </div>
-      )}
-      {!openAddPlayer && (
-        <nav className="actions-icons-ctn">
-          <style>
-            {`
-          .actions-icons-ctn {
-            display: flex;
-            width: fit-content;
-            gap: 5px;
-          }
-          .actions-icons-ctn:: {
-            transform: scale(0.8);
-          }
-          `}
-          </style>
-          <IconButton
-            className="menu-icon"
-            theme={theme}
-            icon={Menu}
-            iconName="menu"
-            svgData={iconStyle}
-            onClick={handleOpenMenu}
-          />
-          {openMenu && (
-            <>
-              <IconButton
-                sx={{}}
-                theme={theme}
-                icon={Theme}
-                iconName="theme"
-                svgData={iconStyle}
-                onClick={handleThemeChange}
-              />
-              <IconButton
-                sx={{}}
-                theme={theme}
-                icon={Load}
-                iconName="load"
-                svgData={iconStyle}
-                onClick={handleLoad}
-              />
-              <IconButton
-                sx={{}}
-                icon={Save}
-                iconName="save"
-                svgData={iconStyle}
-                onClick={handleSave}
-                theme={theme}
-              />
-              <IconButton
-                sx={{}}
-                theme={theme}
-                icon={AddPlayer}
-                iconName="addplayer"
-                svgData={iconStyle}
-                onClick={handleOpenAddPlayer}
-              />
-            </>
-          )}
-        </nav>
       )}
     </div>
   );
