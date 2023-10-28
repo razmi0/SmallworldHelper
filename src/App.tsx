@@ -59,7 +59,7 @@ const App = () => {
       ...players,
       {
         id: players.length,
-        name: newPlayer.charAt(0).toUpperCase() + newPlayer.slice(1),
+        name: newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1),
         victoryPtn: startScore,
         rankChange: 0,
       },
@@ -194,7 +194,7 @@ const App = () => {
               <li className="list-element" key={i}>
                 <Heading name={name} victoryPtn={victoryPtn} />
                 <form
-                  style={{ display: "flex", alignItems: "center", paddingLeft: "30px" }}
+                  style={{ display: "flex", alignItems: "center" }}
                   onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
                 >
                   <SoftInput

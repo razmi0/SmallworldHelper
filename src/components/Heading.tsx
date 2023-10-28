@@ -6,6 +6,7 @@ export const Heading = ({ name, victoryPtn }: { name: string; victoryPtn: number
         .heading {
             font-weight: bold;
             font-size: 30px;
+            transform: translate(-30px);
         }
         .heading-img {
             height: 20px;
