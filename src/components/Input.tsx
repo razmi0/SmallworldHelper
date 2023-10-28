@@ -103,7 +103,6 @@ export const SoftInput = ({ labelText, subjectId, onEnter, sx, theme }: InputPro
         position: relative;
         padding: 20px 0 0;
         width: 100%;
-        max-width: 180px;
       }
       .form__field {
         font-family: inherit;
