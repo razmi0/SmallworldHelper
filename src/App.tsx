@@ -1,13 +1,5 @@
 import { FormEvent, useState } from "react";
-import {
-  AddPlayer,
-  Save,
-  Load,
-  IconButton,
-  SvgStatDataType,
-  Theme,
-  Menu,
-} from "./components/Icons";
+import { AddPlayer, Save, Load, IconButton, iconStyle, Theme, Menu } from "./components/Icons";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import Heading from "./components/Heading";
 
@@ -24,32 +16,6 @@ type Player = {
   name: string;
   victoryPtn: number;
   rankChange: number;
-};
-
-const iconStyle: SvgStatDataType = {
-  size: ["50px", "50px"],
-  filter: ["4px", "0px"],
-  transition: "all 0.2s ease-in-out",
-  icons: {
-    addplayer: {
-      color: ["#646cff", "#609dff"], // light dark
-    },
-    save: {
-      color: ["#646cff", "#609dff"],
-    },
-    load: {
-      color: ["#646cff", "#609dff"],
-    },
-    addscore: {
-      color: ["#646cff", "#609dff"],
-    },
-    theme: {
-      color: ["#646cff", "#609dff"],
-    },
-    menu: {
-      color: ["#646cff", "#609dff"],
-    },
-  },
 };
 
 const bodyElement = document.querySelector("body");
@@ -159,10 +125,9 @@ const App = () => {
       `}
       </style>
       {/* == NAV == */}
-      {!openAddPlayer && (
-        <nav className="actions-icons-ctn">
-          <style>
-            {`
+      <nav className="actions-icons-ctn">
+        <style>
+          {`
           .actions-icons-ctn {
             display: flex;
             width: 100%;
@@ -172,52 +137,51 @@ const App = () => {
           }
           
           `}
-          </style>
-          <IconButton
-            theme={theme}
-            icon={Menu}
-            iconName="menu"
-            svgData={iconStyle}
-            onClick={handleOpenMenu}
-          />
-          {openMenu && (
-            <>
-              <IconButton
-                sx={{}}
-                theme={theme}
-                icon={Theme}
-                iconName="theme"
-                svgData={iconStyle}
-                onClick={handleThemeChange}
-              />
-              <IconButton
-                sx={{}}
-                theme={theme}
-                icon={Load}
-                iconName="load"
-                svgData={iconStyle}
-                onClick={handleLoad}
-              />
-              <IconButton
-                sx={{}}
-                icon={Save}
-                iconName="save"
-                svgData={iconStyle}
-                onClick={handleSave}
-                theme={theme}
-              />
-              <IconButton
-                sx={{}}
-                theme={theme}
-                icon={AddPlayer}
-                iconName="addplayer"
-                svgData={iconStyle}
-                onClick={handleOpenAddPlayer}
-              />
-            </>
-          )}
-        </nav>
-      )}
+        </style>
+        <IconButton
+          theme={theme}
+          icon={Menu}
+          iconName="menu"
+          svgData={iconStyle}
+          onClick={handleOpenMenu}
+        />
+        {openMenu && (
+          <>
+            <IconButton
+              sx={{}}
+              theme={theme}
+              icon={Theme}
+              iconName="theme"
+              svgData={iconStyle}
+              onClick={handleThemeChange}
+            />
+            <IconButton
+              sx={{}}
+              theme={theme}
+              icon={Load}
+              iconName="load"
+              svgData={iconStyle}
+              onClick={handleLoad}
+            />
+            <IconButton
+              sx={{}}
+              icon={Save}
+              iconName="save"
+              svgData={iconStyle}
+              onClick={handleSave}
+              theme={theme}
+            />
+            <IconButton
+              sx={{}}
+              theme={theme}
+              icon={AddPlayer}
+              iconName="addplayer"
+              svgData={iconStyle}
+              onClick={handleOpenAddPlayer}
+            />
+          </>
+        )}
+      </nav>
       {/* == PLAYERS LIST == */}
       <ul className="players-list-ctn">
         {players

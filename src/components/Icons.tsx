@@ -33,6 +33,33 @@ export interface IconButtonProps extends IconProps {
   btnType?: "button" | "submit" | "reset";
   sx?: React.CSSProperties;
 }
+
+export const iconStyle: SvgStatDataType = {
+  size: ["50px", "50px"],
+  filter: ["4px", "0px"],
+  transition: "all 0.2s ease-in-out",
+  icons: {
+    addplayer: {
+      color: ["#646cff", "#609dff"], // light dark
+    },
+    save: {
+      color: ["#646cff", "#609dff"],
+    },
+    load: {
+      color: ["#646cff", "#609dff"],
+    },
+    addscore: {
+      color: ["#646cff", "#609dff"],
+    },
+    theme: {
+      color: ["#646cff", "#609dff"],
+    },
+    menu: {
+      color: ["#646cff", "#609dff"],
+    },
+  },
+};
+
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
 };
@@ -107,25 +134,6 @@ export const IconButton = ({
     </button>
   );
 };
-
-// export const SquaredPlus = ({ color, size }: SvgProps) => {
-//   return (
-//     <svg width={size[0]} height={size[1]} viewBox="0 0 20.00 20.00" fill={color}>
-//       <g strokeWidth="0"></g>
-//       <g strokeLinecap="round" strokeLinejoin="round"></g>
-//       <g>
-//         <title>Add Score</title>
-//         <g strokeWidth="0.00021000000000000004" fill="none" fillRule="evenodd">
-//           <g transform="translate(-339.500000, -240.000000)" fill={color}>
-//             <g transform="translate(56.000000, 160.000000)">
-//               <path d="M285.1,98 L301.9,98 L301.9,82 L285.1,82 L285.1,98 Z M283,100 L304,100 L304,80 L283,80 L283,100 Z M292.45,91 L289.3,91 L289.3,89 L292.45,89 L292.45,86 L294.55,86 L294.55,89 L297.7,89 L297.7,91 L294.55,91 L294.55,94 L292.45,94 L292.45,91 Z"></path>
-//             </g>
-//           </g>
-//         </g>
-//       </g>
-//     </svg>
-//   );
-// };
 
 export const Load = ({ color, size, bgColor }: SvgProps) => {
   return (
@@ -236,62 +244,6 @@ export const Save = ({ color, size, bgColor }: SvgProps) => {
     </svg>
   );
 };
-
-// export const AddScore = ({ color, size, bgColor }: SvgProps) => {
-//   return (
-//     <svg fill={color} width={size[0]} height={size[1]} viewBox="-384 -384 2688.00 2688.00">
-//       <g strokeWidth="0" transform="translate(0,0), scale(1)">
-//         <path
-//           transform="translate(-9.6, -9.6), scale(4.2)"
-//           fill={bgColor}
-//           d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
-//           strokeWidth="0"
-//         ></path>
-//       </g>
-//       <g strokeWidth="0"></g>
-//       <g strokeLinecap="round" strokeLinejoin="round"></g>
-//       <g>
-//         <path
-//           d="M915.744 213v702.744H213v87.842h702.744v702.744h87.842v-702.744h702.744v-87.842h-702.744V213z"
-//           fillRule="evenodd"
-//         ></path>
-//       </g>
-//     </svg>
-//   );
-// };
-
-// export const AddScore = ({ color, size, bgColor }: SvgProps) => {
-//   return (
-//     <svg
-//       width={size[0]}
-//       height={size[1]}
-//       viewBox="-102.4 -102.4 716.80 716.80"
-//       fill="none"
-//       transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
-//     >
-//       <title>Add Score</title>
-//       <g strokeWidth="0" transform="translate(0,0), scale(1)">
-//         <path
-//           transform="translate(-102.4, -102.4), scale(44.8)"
-//           fill={bgColor}
-//           d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
-//           strokeWidth="0"
-//         ></path>
-//       </g>
-//       <g strokeLinecap="round" strokeLinejoin="round"></g>
-//       <g>
-//         <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-//           <g id="icon" fill={color} transform="translate(42.666667, 128.000000)">
-//             <path
-//               d="M384,192 L383.999,256 L448,256 L448,298.666667 L383.999,298.666 L384,362.666667 L341.333333,362.666667 L341.333,298.666 L277.333333,298.666667 L277.333333,256 L341.333,256 L341.333333,192 L384,192 Z M149.333333,0 L149.333333,149.333333 L3.55271368e-14,149.333333 L3.55271368e-14,0 L149.333333,0 Z M106.666667,42.6666667 L42.6666667,42.6666667 L42.6666667,106.666667 L106.666667,106.666667 L106.666667,42.6666667 Z M213.333333,64 L426.666667,64 L426.666667,106.666667 L213.333333,106.666667 L213.333333,64 Z"
-//               id="Combined-Shape"
-//             ></path>
-//           </g>
-//         </g>
-//       </g>
-//     </svg>
-//   );
-// };
 
 export const AddScore = ({ color, size }: SvgProps) => {
   return (
