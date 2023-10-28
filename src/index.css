@@ -8,25 +8,28 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  color-scheme: light dark;
+  color: var(--light-color);
 
   --light-color: #ffffffde;
   --dark-color: #242424;
-  --dark-icon : #609dff
+  --dark-icon: #609dff;
   --primary-color: #646cff;
+
   --other-primary-color: #213547;
-  --secondary-color: #454ce1;
-  --tertiary-color: #96969c;
-
+  --secondary-color: #1b25eb;
+  --tertiary-color: #bdbdc7;
   --hover-color-vite: #646cffaa;
-  --hover-color-react: #61dafbaa;
-
+  --hover-color-react: #5decf9;
   --std-height: 40px;
-
-  color-scheme: light dark;
-  
-  color: var(--light-color);
 }
 
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
 * {
   box-sizing: border-box;
 }
@@ -38,14 +41,35 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-
-    width: 100%;
-    /* height: 100%; */
-    --color: rgba(114, 114, 114, 0.3);
-    background-color: var(--dark-color);
-    background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
-        linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
-    background-size: 55px 55px;
+  width: 100%;
+  /* height: 100%; */
+  --color: rgba(114, 114, 114, 0.3);
+  background-color: var(--dark-color);
+  background-image: linear-gradient(
+      0deg,
+      transparent 24%,
+      var(--color) 25%,
+      var(--color) 26%,
+      transparent 27%,
+      transparent 74%,
+      var(--color) 75%,
+      var(--color) 76%,
+      transparent 77%,
+      transparent
+    ),
+    linear-gradient(
+      90deg,
+      transparent 24%,
+      var(--color) 25%,
+      var(--color) 26%,
+      transparent 27%,
+      transparent 74%,
+      var(--color) 75%,
+      var(--color) 76%,
+      transparent 77%,
+      transparent
+    );
+  background-size: 35px 35px;
 }
 
 h1 {
@@ -65,30 +89,7 @@ button {
   cursor: pointer;
   background-color: #646cff;
   transition: border-color 0.25s;
-
 }
 button:hover {
   filter: drop-shadow(#646cff 0 0 10px);
 }
-
-input {
-  border: unset;
-  height: var(--std-height);
-  padding: 0 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #636367;
-  transition: border-color 0.25s;
-  border :  1px transparent solid  ;
-}
-input:focus,
-input:focus-visible {
-  border: 1px solid #646cff;
-  outline: none;
-}
-
-
-
-
-
