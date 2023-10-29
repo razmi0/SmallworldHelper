@@ -20,8 +20,8 @@ type LineProps = {
 };
 export const Line = ({ data, option }: LineProps) => {
   return (
-    <div>
+    <figure>
       <ChartLine data={data} options={option} />
-    </div>
+    </figure>
   );
 };

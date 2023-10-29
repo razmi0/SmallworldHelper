@@ -8,11 +8,15 @@ import {
   Menu,
   Reset,
   Delete,
+  LineChart,
 } from "./components/icons/Icons";
 import { iconStyle, playerIconStyle } from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import Heading from "./components/Heading";
 import { Spacer } from "./components/Utils";
+import { Line } from "./components/charts/Line";
+import { data, options } from "./components/charts/data";
+import { getFromLocalStorage, getRandomColor, saveToLocalStorage } from "./utils";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -26,7 +30,10 @@ type Player = {
   id: number;
   name: string;
   victoryPtn: number;
+  history: number[];
+  addedScores: number[];
   rankChange: number;
+  color: string;
 };
 
 const bodyElement = document.querySelector("body");
@@ -40,6 +47,7 @@ const App = () => {
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const [openLineChart, setOpenLineChart] = useState<boolean>(false);
 
   const handleOpenMenu = () => {
     setOpenMenu(!openMenu);
@@ -48,6 +56,8 @@ const App = () => {
   const handleOpenAddPlayer = () => {
     setOpenAddPlayer(!openAddPlayer);
   };
+
+  // const handleOpenLineChart = () => {};
 
   const handleThemeChange = () => {
     if (theme == "light") {
@@ -71,14 +81,17 @@ const App = () => {
         id: players.length,
         name: newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1),
         victoryPtn: startScore,
+        history: [startScore],
+        addedScores: [startScore],
         rankChange: 0,
+        color: getRandomColor(),
       },
     ]);
     setNewPlayer("");
     setOpenAddPlayer(false);
   };
 
-  const handleNewScoreEntryEvent = (e: FormEvent<ScoreForm>, subjectId: string) => {
+  const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -88,7 +101,11 @@ const App = () => {
 
     const playerId = +subjectId.split("_")[0];
     const newPlayers = [...players];
-    newPlayers[players.findIndex((player) => player.id === playerId)].victoryPtn += newScore;
+    const idx = players.findIndex((p) => p.id === playerId);
+
+    newPlayers[idx].victoryPtn += newScore;
+    newPlayers[idx].history.push(newPlayers[idx].victoryPtn);
+    newPlayers[idx].addedScores.push(newScore);
 
     setPlayers(newPlayers);
 
@@ -110,15 +127,6 @@ const App = () => {
     setPlayers(newPlayers);
   };
 
-  const handleSave = (): void => {
-    window.localStorage.setItem("players", JSON.stringify(players));
-  };
-
-  const handleLoad = (): void => {
-    const players = JSON.parse(window.localStorage.getItem("players") ?? "[]");
-    setPlayers(players);
-  };
-
   return (
     <div className="main-ctn">
       <style>
@@ -126,7 +134,7 @@ const App = () => {
       .main-ctn {
         display: flex;
         flex-direction: column;
-        min-width: 270px;
+        min-width: 325px;
       }
       .players-list-ctn {
         width: 100%;
@@ -186,6 +194,7 @@ const App = () => {
           svgData={iconStyle}
           onClick={handleThemeChange}
         />
+
         <IconButton
           sx={{
             transform: openMenu ? "translate(0px)" : iconStyle.icons.load.transform?.(),
@@ -196,7 +205,9 @@ const App = () => {
           icon={Load}
           iconName="load"
           svgData={iconStyle}
-          onClick={handleLoad}
+          onClick={() => {
+            setPlayers(getFromLocalStorage("players"));
+          }}
         />
         <IconButton
           sx={{
@@ -207,7 +218,7 @@ const App = () => {
           icon={Save}
           iconName="save"
           svgData={iconStyle}
-          onClick={handleSave}
+          onClick={() => saveToLocalStorage("players", players)}
           theme={theme}
         />
         <IconButton
@@ -222,48 +233,71 @@ const App = () => {
           svgData={iconStyle}
           onClick={handleOpenAddPlayer}
         />
+        <IconButton
+          sx={{
+            transform: openMenu ? "translate(0px)" : iconStyle.icons.linechart.transform?.(),
+            transition: iconStyle.icons.linechart.transition?.(),
+            zIndex: iconStyle.icons.linechart.zIndex,
+          }}
+          theme={theme}
+          icon={LineChart}
+          iconName="linechart"
+          svgData={iconStyle}
+          onClick={() => setOpenLineChart(!openLineChart)}
+        />
       </nav>
-      {/* == PLAYERS LIST == */}
-      <ul className="players-list-ctn">
-        {players
-          .sort((a, b) => b.victoryPtn - a.victoryPtn)
-          .map((player, i) => {
-            const { name, victoryPtn, id } = player;
-            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+      <section
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {/* == PLAYERS LIST & SCORE INPUT == */}
+        <ul className="players-list-ctn">
+          {players
+            .sort((a, b) => b.victoryPtn - a.victoryPtn)
+            .map((player, i) => {
+              const { name, victoryPtn, id } = player;
+              const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
-            return (
-              <li className="list-element" key={i}>
-                <div style={{ display: "flex" }}>
-                  <Heading name={name} victoryPtn={victoryPtn} />
-                  <Spacer />
-                  <IconButton
-                    onClick={() => handleResetScore(id)}
-                    icon={Reset}
-                    iconName="reset"
-                    svgData={playerIconStyle}
-                  />
-                  <IconButton
-                    onClick={() => handleDeletePlayer(id)}
-                    icon={Delete}
-                    iconName="delete"
-                    svgData={playerIconStyle}
-                  />
-                </div>
-                <form
-                  style={{ display: "flex", alignItems: "center" }}
-                  onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntryEvent(e, subjectId)}
-                >
-                  <SoftInput
-                    labelText="Score"
-                    subjectId={subjectId}
-                    onEnter={() => new SubmitEvent("submit")}
-                    theme={theme}
-                  />
-                </form>
-              </li>
-            );
-          })}
-      </ul>
+              return (
+                <li className="list-element" key={i}>
+                  <div style={{ display: "flex" }}>
+                    <Heading name={name} victoryPtn={victoryPtn} />
+                    <Spacer />
+                    <IconButton
+                      onClick={() => handleResetScore(id)}
+                      icon={Reset}
+                      iconName="reset"
+                      svgData={playerIconStyle}
+                    />
+                    <IconButton
+                      onClick={() => handleDeletePlayer(id)}
+                      icon={Delete}
+                      iconName="delete"
+                      svgData={playerIconStyle}
+                    />
+                  </div>
+                  <form
+                    autoComplete="off"
+                    noValidate
+                    style={{ display: "flex", alignItems: "center" }}
+                    onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+                  >
+                    <SoftInput
+                      labelText="Score"
+                      subjectId={subjectId}
+                      onEnter={() => new SubmitEvent("submit")}
+                      theme={theme}
+                    />
+                  </form>
+                </li>
+              );
+            })}
+        </ul>
+        {/* == LINECHART == */}
+        {openLineChart && <Line data={data} option={options} />}
+      </section>
       {/* == ADD PLAYER == */}
       {openAddPlayer && (
         <div
