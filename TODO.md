@@ -4,12 +4,13 @@
 - [x] Add a reset player score button
 - [x] Add a delete player button
 - [x] Theme button
-- [ ] Add Line Chart to sum up players progresion
 - [x] Menu animation
+- [ ] Add Line Chart to sum up players progresion
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
 
-- [ ] refacto icon logic to have all in same file
-- [ ] refacto theme logic with context API and localstorage ?
-- [ ] change add player to more designed menu on click
+- [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs :
+  > https://www.jacobparis.com/content/svg-icons
+- [ ] Refacto theme logic with context API and localstorage ?
+- [x] Change add player to more designed menu on click
