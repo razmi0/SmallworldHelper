@@ -13,4 +13,4 @@
 - [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs :
   > https://www.jacobparis.com/content/svg-icons
 - [ ] Refacto theme logic with context API and localstorage ?
-- [x] Change add player to more designed menu on click
+- [ ] Change add player to more designed menu on click
