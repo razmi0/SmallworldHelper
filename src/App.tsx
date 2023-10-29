@@ -9,7 +9,7 @@ import {
   Reset,
   Delete,
 } from "./components/icons/Icons";
-import { iconStyle, playerIconStyle } from "./components/icons";
+import { iconStyle, playerIconStyle } from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import Heading from "./components/Heading";
 import { Spacer } from "./components/Utils";
