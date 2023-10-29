@@ -9,14 +9,15 @@ import {
   Reset,
   Delete,
   LineChart,
+  Star,
 } from "./components/icons/Icons";
 import { iconStyle, playerIconStyle } from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import Heading from "./components/Heading";
 import { Spacer } from "./components/Utils";
 import { Line } from "./components/charts/Line";
-import { data, options } from "./components/charts/data";
-import { getFromLocalStorage, getRandomColor, saveToLocalStorage } from "./utils";
+import { options, playerColors } from "./components/charts/data";
+import { findMaxNbrTurns, getFromLocalStorage, getRandomColor, saveToLocalStorage } from "./utils";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -36,28 +37,47 @@ type Player = {
   color: string;
 };
 
+type LineData = {
+  labels: string[]; // x-axis & ...turns
+  datasets: {
+    label: string; // player name
+    data: number[]; // history
+    backgroundColor: string; // player color
+    borderColor: string; // player color with opacity
+  }[];
+};
+
 const bodyElement = document.querySelector("body");
 const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
+const turns = findMaxNbrTurns(INITIAL_PLAYERS_LOAD);
+const INITIAL_LINE_DATA: LineData = {
+  labels: turns == 0 ? [] : Array.from({ length: turns }, (_, i) => (i + 1).toString()) ?? [],
+  datasets:
+    INITIAL_PLAYERS_LOAD.length == 0
+      ? []
+      : INITIAL_PLAYERS_LOAD.map((p: Player) => {
+          return {
+            label: p.name,
+            data: p.history,
+            backgroundColor: p.color,
+            borderColor: p.color,
+          };
+        }) ?? [],
+};
 const INITIAL_VICTORY_PTN = 0;
 
 const App = () => {
+  /* == STATES FOR DATA == */
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS_LOAD);
   const [newPlayer, setNewPlayer] = useState<string>("");
   const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
+  const [lineData, setLineData] = useState<LineData>(INITIAL_LINE_DATA);
+
+  /* == STATES FOR UI == */
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
-
-  const handleOpenMenu = () => {
-    setOpenMenu(!openMenu);
-  };
-
-  const handleOpenAddPlayer = () => {
-    setOpenAddPlayer(!openAddPlayer);
-  };
-
-  // const handleOpenLineChart = () => {};
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   const handleThemeChange = () => {
     if (theme == "light") {
@@ -75,23 +95,44 @@ const App = () => {
 
   const handleNewPlayer = (newPlayer: string, startScore: number) => {
     if (newPlayer === "") return;
+    if (isNaN(startScore)) return;
+
+    const newColor = playerColors[players.length - 1] ?? getRandomColor();
+    const labels = lineData.labels;
+    const newName = newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1);
+
     setPlayers([
       ...players,
       {
         id: players.length,
-        name: newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1),
+        name: newName,
         victoryPtn: startScore,
         history: [startScore],
         addedScores: [startScore],
         rankChange: 0,
-        color: getRandomColor(),
+        color: newColor,
       },
     ]);
+
+    setLineData({
+      labels,
+      datasets: [
+        ...lineData.datasets,
+        {
+          label: newName,
+          data: [startScore],
+          backgroundColor: newColor,
+          borderColor: newColor,
+        },
+      ],
+    });
+
     setNewPlayer("");
     setOpenAddPlayer(false);
   };
 
   const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
+    /* == PLAYERS STATES UPDATE == */
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -110,6 +151,26 @@ const App = () => {
     setPlayers(newPlayers);
 
     e.currentTarget.reset();
+
+    /* == LINECHART STATES UPDATE == */
+    const newLineChartDatasets = [...lineData.datasets];
+    const newLabels = [...lineData.labels];
+    const newLength = findMaxNbrTurns(newPlayers);
+
+    if (newLength > newLabels.length) {
+      newLabels.push((newLabels.length + 1).toString());
+    }
+
+    const playerDatasetIdx = newLineChartDatasets.findIndex(
+      (d) => d.label === newPlayers[idx].name
+    );
+
+    newLineChartDatasets[playerDatasetIdx].data = newPlayers[idx].history;
+
+    setLineData({
+      labels: newLabels,
+      datasets: newLineChartDatasets,
+    });
   };
 
   const handleDeletePlayer = (id: number) => {
@@ -180,7 +241,9 @@ const App = () => {
           icon={Menu}
           iconName="menu"
           svgData={iconStyle}
-          onClick={handleOpenMenu}
+          onClick={() => {
+            setOpenMenu(!openMenu);
+          }}
         />
         <IconButton
           sx={{
@@ -231,7 +294,7 @@ const App = () => {
           icon={AddPlayer}
           iconName="addplayer"
           svgData={iconStyle}
-          onClick={handleOpenAddPlayer}
+          onClick={() => setOpenAddPlayer(!openAddPlayer)}
         />
         <IconButton
           sx={{
@@ -249,7 +312,6 @@ const App = () => {
       <section
         style={{
           display: "flex",
-          alignItems: "center",
         }}
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
@@ -263,7 +325,19 @@ const App = () => {
               return (
                 <li className="list-element" key={i}>
                   <div style={{ display: "flex" }}>
-                    <Heading name={name} victoryPtn={victoryPtn} />
+                    <span>
+                      <IconButton
+                        sx={{
+                          marginRight: "10px",
+                        }}
+                        icon={Star}
+                        iconName="star"
+                        theme={theme}
+                        svgData={playerIconStyle}
+                      />
+
+                      <Heading name={name} victoryPtn={victoryPtn} />
+                    </span>
                     <Spacer />
                     <IconButton
                       onClick={() => handleResetScore(id)}
@@ -296,7 +370,7 @@ const App = () => {
             })}
         </ul>
         {/* == LINECHART == */}
-        {openLineChart && <Line data={data} option={options} />}
+        {openLineChart && <Line data={lineData} option={options} />}
       </section>
       {/* == ADD PLAYER == */}
       {openAddPlayer && (
