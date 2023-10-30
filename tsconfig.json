@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
@@ -21,5 +22,10 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
+  "path": {
+    "@Components": ["./src/components/*"],
+    "@Icons": ["./src/components/icons/*"],
+    "@Charts": ["./src/components/charts/*"]
+  },
   "references": [{ "path": "./tsconfig.node.json" }]
 }
