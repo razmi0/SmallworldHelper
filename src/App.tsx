@@ -234,6 +234,7 @@ const App = () => {
       return;
     }
     newPlayers[idx].victoryPtn = 0;
+    newPlayers[idx].history.push(0);
 
     /* == LINECHART STATES UPDATE == */
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
