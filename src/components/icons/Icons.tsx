@@ -13,6 +13,7 @@ export type SvgProps = {
  * @param transition transition for the dropshadow
  * @param bezierParams bezier factor for the animation
  * @param gap gap between icons in px
+ * @param subscribe generator function that returns a color
  * @param icons object of icons
  * @param icons[iconName].color [light, dark] color of the icon
  * @param icons[iconName].label label of the icon
@@ -20,6 +21,7 @@ export type SvgProps = {
  * @param icons[iconName].transition transition of the icon
  * @param icons[iconName].zIndex zIndex of the icon
  */
+
 export type SvgDataType = {
   size: [string, string]; // width, height in px
   filter?: [string, string]; // dropshadow
@@ -27,6 +29,7 @@ export type SvgDataType = {
   transition?: string; // transition for the dropshadow
   bezierParams?: [number, number]; // bezier factor for the animation
   gap?: string; // gap between icons in px
+  subscribeColors?: () => Generator<string, never, string>;
   icons: {
     [key: string]: {
       color: [string, string]; // light dark
@@ -68,12 +71,13 @@ export const Icon = ({
 
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
-
-  const color = svgData.icons[iconName]?.color[idxThemeColor];
   let dropShadow = "",
     transform = "";
 
-  if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData`);
+  if (!svgData.icons)
+    throw new Error(`Icon ${iconName} is missing an icon in svgData : ${svgData.icons}`);
+  const color = svgData.icons[iconName]?.color[idxThemeColor];
+  if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData : ${color}`);
 
   if (svgData.filter) {
     dropShadow = isHover
@@ -82,6 +86,56 @@ export const Icon = ({
     transform = isHover ? `scale(${svgData.scale})` : "none";
   }
 
+  return (
+    <div
+      className={`icon-stat-ctn ${className || ""}`}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+      style={{
+        filter: dropShadow ?? "none",
+        transform: transform ?? "none",
+        transition: svgData.transition ?? "none",
+      }}
+    >
+      <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
+      <style>
+        {` 
+          .icon-stat-ctn {
+            display: flex;
+            place-content: center;
+          }
+        `}
+      </style>
+    </div>
+  );
+};
+
+interface IconNameProps {
+  icon: ComponentType<SvgProps>;
+  color: string;
+  svgData: SvgDataType;
+  className?: string;
+  bgColor?: string;
+}
+
+export const IconHeading = ({
+  icon: SvgIcon,
+  color,
+  svgData,
+  className,
+  bgColor = "transparent",
+}: IconNameProps) => {
+  const [isHover, setIsHover] = useState(false);
+
+  let dropShadow = "",
+    transform = "";
+
+  if (svgData.filter) {
+    dropShadow = isHover
+      ? `drop-shadow(0px 0px ${svgData.filter[0]} ${color})`
+      : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
+    transform = isHover ? `scale(${svgData.scale})` : "none";
+  }
   return (
     <div
       className={`icon-stat-ctn ${className || ""}`}

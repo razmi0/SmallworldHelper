@@ -10,12 +10,18 @@ import {
   Delete,
   LineChart,
   Star,
+  IconHeading,
 } from "./components/icons/Icons";
-import { iconStyle, playerIconStyle } from "./components/icons/data";
+import {
+  headingStarIconStyle,
+  iconStyle,
+  playerIconStyle,
+  playerColors,
+} from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import { Spacer } from "./components/Utils";
 import { Line } from "./components/charts/Line";
-import { options, playerColors } from "./components/charts/data";
+import { options } from "./components/charts/data";
 import { findMaxNbrTurns, getFromLocalStorage, getRandomColor, saveToLocalStorage } from "./utils";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -115,14 +121,18 @@ const INITIAL_PLAYERS_LOAD = getFromLocalStorage<Player[]>("players", []);
 const INITIAL_LINE_DATA = initializeLineData(INITIAL_PLAYERS_LOAD);
 const INITIAL_VICTORY_PTN = 0;
 
+/* == COMPONENT == */
+//--
 const App = () => {
   /* == STATES FOR DATA == */
+  //--
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS_LOAD);
   const [newPlayer, setNewPlayer] = useState<string>("");
   const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
   const [lineData, setLineData] = useState<LineData>(INITIAL_LINE_DATA);
 
   /* == STATES FOR UI == */
+  //--
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
@@ -131,11 +141,13 @@ const App = () => {
   const handleThemeChange = () => {
     if (theme == "light") {
       //DARK
+      //--
       setTheme("dark");
       bodyElement?.classList.add("dark-bg");
       bodyElement?.classList.remove("light-bg");
     } else {
       //LIGHT
+      //--
       setTheme("light");
       bodyElement?.classList.add("light-bg");
       bodyElement?.classList.remove("dark-bg");
@@ -182,6 +194,7 @@ const App = () => {
 
   const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
     /* == PLAYERS STATES UPDATE == */
+    //--
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const newScore = Number(formData.get(subjectId)) ?? 0;
@@ -196,6 +209,7 @@ const App = () => {
     e.currentTarget.reset();
 
     /* == LINECHART STATES UPDATE == */
+    //--
     const newLineData = updateLineChartAddScoreState(lineData, newPlayers, idx);
 
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
@@ -204,6 +218,7 @@ const App = () => {
 
   const handleDeletePlayer = ({ id, name }: Player) => {
     /* == PLAYERS STATES UPDATE == */
+    //--
     const idx = players.findIndex((p) => p.id == id);
     if (idx == -1) {
       console.warn(`name : ${name} &  id : ${id} not found`);
@@ -213,6 +228,7 @@ const App = () => {
     newPlayers.splice(idx, 1);
 
     /* == LINECHART STATES UPDATE == */
+    //--
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
     if (playerLineIdx == -1) return;
     const newLineDatasets = [...lineData.datasets];
@@ -227,6 +243,7 @@ const App = () => {
 
   const handleResetScore = ({ id, name }: Player) => {
     /* == PLAYERS STATES UPDATE == */
+    //--
     const newPlayers = [...players];
     const idx = players.findIndex((p) => p.id === id);
     if (idx == -1) {
@@ -237,6 +254,7 @@ const App = () => {
     newPlayers[idx].history.push(0);
 
     /* == LINECHART STATES UPDATE == */
+    //--
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
 
     if (playerLineIdx == -1) {
@@ -269,6 +287,7 @@ const App = () => {
         display: flex;
         flex-direction: column;
         min-width: 325px;
+        gap: 30px;
       }
       .players-list-ctn {
         width: 100%;
@@ -278,9 +297,10 @@ const App = () => {
         min-width: 250px;
       }
       .list-element {
-        margin-top: 30px;
         display: flex;
         flex-direction: column;
+        max-height: 125px;
+        height : 125px;
       }
       .dark-bg {
         background-color : #242424;
@@ -407,27 +427,24 @@ const App = () => {
         {/* == PLAYERS LIST & SCORE INPUT == */}
         <ul className="players-list-ctn">
           {players.map((player, i) => {
-            const { name, victoryPtn, id } = player;
+            const { name, victoryPtn, id, color } = player;
             const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
             return (
               <li className="list-element" key={i}>
                 <div style={{ display: "flex" }}>
-                  <span
+                  <div
                     style={{
+                      display: "flex",
+                      alignItems: "center",
                       fontWeight: "bold",
                       fontSize: "30px",
+                      transform: "translate(-35px)",
                     }}
                   >
-                    <IconButton
-                      sx={{}}
-                      icon={Star}
-                      iconName="star"
-                      theme={theme}
-                      svgData={playerIconStyle}
-                    />
+                    <IconHeading color={color} icon={Star} svgData={headingStarIconStyle} />
                     {name} : {victoryPtn}
-                  </span>
+                  </div>
                   <Spacer />
                   <IconButton
                     onClick={() => handleResetScore(player)}

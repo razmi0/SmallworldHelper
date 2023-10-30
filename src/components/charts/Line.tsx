@@ -28,6 +28,8 @@ export const Line = ({ data, option, theme = "dark" }: LineProps) => {
     <figure
       style={{
         maxHeight: "250px",
+        marginTop: "0px",
+        marginBottom: "0px",
       }}
     >
       <ChartLine data={data} options={option} />
