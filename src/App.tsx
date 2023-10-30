@@ -13,7 +13,6 @@ import {
 } from "./components/icons/Icons";
 import { iconStyle, playerIconStyle } from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
-import Heading from "./components/Heading";
 import { Spacer } from "./components/Utils";
 import { Line } from "./components/charts/Line";
 import { options, playerColors } from "./components/charts/data";
@@ -48,7 +47,8 @@ type LineData = {
 };
 
 const bodyElement = document.querySelector("body");
-const INITIAL_PLAYERS_LOAD = JSON.parse(window.localStorage.getItem("players") ?? "[]");
+
+const INITIAL_PLAYERS_LOAD = getFromLocalStorage<Player[]>("players", []);
 const turns = findMaxNbrTurns(INITIAL_PLAYERS_LOAD);
 const INITIAL_LINE_DATA: LineData = {
   labels: turns == 0 ? [] : Array.from({ length: turns }, (_, i) => (i + 1).toString()) ?? [],
@@ -77,7 +77,7 @@ const App = () => {
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   const handleThemeChange = () => {
     if (theme == "light") {
@@ -143,12 +143,14 @@ const App = () => {
     const playerId = +subjectId.split("_")[0];
     const newPlayers = [...players];
     const idx = players.findIndex((p) => p.id === playerId);
+    if (idx == -1) return;
+    const player = newPlayers[idx];
 
-    newPlayers[idx].victoryPtn += newScore;
-    newPlayers[idx].history.push(newPlayers[idx].victoryPtn);
-    newPlayers[idx].addedScores.push(newScore);
+    player.victoryPtn += newScore;
+    player.history.push(player.victoryPtn);
+    player.addedScores.push(newScore);
 
-    setPlayers(newPlayers);
+    setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
 
     e.currentTarget.reset();
 
@@ -161,11 +163,10 @@ const App = () => {
       newLabels.push((newLabels.length + 1).toString());
     }
 
-    const playerDatasetIdx = newLineChartDatasets.findIndex(
-      (d) => d.label === newPlayers[idx].name
-    );
+    const playerDatasetIdx = newLineChartDatasets.findIndex((d) => d.label === player.name);
+    if (playerDatasetIdx == -1) return;
 
-    newLineChartDatasets[playerDatasetIdx].data = newPlayers[idx].history;
+    newLineChartDatasets[playerDatasetIdx].data = [...newPlayers[idx].history];
 
     setLineData({
       labels: newLabels,
@@ -173,19 +174,64 @@ const App = () => {
     });
   };
 
-  const handleDeletePlayer = (id: number) => {
+  const handleDeletePlayer = (id: number, name: string) => {
+    /* == PLAYERS STATES UPDATE == */
+    const idx = players.findIndex((p) => p.id == id);
+    if (idx == -1) return;
     const newPlayers = [...players];
-    newPlayers.splice(
-      players.findIndex((p) => p.id == id),
-      1
-    );
+    newPlayers.splice(idx, 1);
     setPlayers(newPlayers);
+
+    /* == LINECHART STATES UPDATE == */
+    const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
+    if (playerLineIdx == -1) return;
+    const newLineDatasets = [...lineData.datasets];
+    newLineDatasets.splice(playerLineIdx, 1);
+    setLineData({
+      labels: lineData.labels,
+      datasets: newLineDatasets,
+    });
+    console.log({
+      labels: lineData.labels,
+      datasets: newLineDatasets,
+    });
   };
 
-  const handleResetScore = (id: number) => {
+  const handleResetScore = (id: number, name: string) => {
+    /* == PLAYERS STATES UPDATE == */
     const newPlayers = [...players];
-    newPlayers[players.findIndex((p) => p.id == id)].victoryPtn = 0;
-    setPlayers(newPlayers);
+    const idx = players.findIndex((p) => p.id === id);
+    if (idx == -1) return;
+    newPlayers[idx].victoryPtn = 0;
+
+    /* == LINECHART STATES UPDATE == */
+    const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
+    if (playerLineIdx == -1) return;
+    const newLineDatasets = [...lineData.datasets];
+    const newLabels = [...lineData.labels];
+
+    const data = newLineDatasets[playerLineIdx].data;
+    const maxTurns = lineData.labels.length;
+    if (data.length + 1 > maxTurns) {
+      newLabels.push((data.length + 1).toString());
+    }
+
+    console.log(newLineDatasets[playerLineIdx].data);
+    console.log(data);
+    data.push(0);
+    console.log(newLineDatasets[playerLineIdx].data);
+    console.log(data);
+
+    setLineData({
+      labels: newLabels,
+      datasets: newLineDatasets,
+    });
+    setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
+
+    console.log({
+      labels: lineData.labels,
+      datasets: newLineDatasets,
+    });
   };
 
   return (
@@ -202,6 +248,7 @@ const App = () => {
         margin: 0;
         padding: 0;
         text-align: left;
+        min-width: 250px;
       }
       .list-element {
         margin-top: 30px;
@@ -232,13 +279,13 @@ const App = () => {
           `}
         </style>
         <IconButton
+          icon={Menu}
           sx={{
             zIndex: iconStyle.icons.menu.zIndex,
             transform: openMenu ? "none" : iconStyle.icons.menu.transform?.(),
             transition: iconStyle.icons.menu.transition?.(),
           }}
           theme={theme}
-          icon={Menu}
           iconName="menu"
           svgData={iconStyle}
           onClick={() => {
@@ -246,64 +293,68 @@ const App = () => {
           }}
         />
         <IconButton
+          icon={Theme}
           sx={{
             transform: openMenu ? "translate(0px)" : iconStyle.icons.theme.transform?.(),
             transition: iconStyle.icons.theme.transition?.(),
             zIndex: iconStyle.icons.theme.zIndex,
           }}
           theme={theme}
-          icon={Theme}
           iconName="theme"
           svgData={iconStyle}
           onClick={handleThemeChange}
         />
 
         <IconButton
+          icon={Load}
           sx={{
             transform: openMenu ? "translate(0px)" : iconStyle.icons.load.transform?.(),
             transition: iconStyle.icons.load.transition?.(),
             zIndex: iconStyle.icons.load.zIndex,
           }}
           theme={theme}
-          icon={Load}
           iconName="load"
           svgData={iconStyle}
           onClick={() => {
-            setPlayers(getFromLocalStorage("players"));
+            setPlayers(getFromLocalStorage<Player[]>("players"));
+            setLineData(getFromLocalStorage<LineData>("lineData", INITIAL_LINE_DATA));
           }}
         />
         <IconButton
+          icon={Save}
           sx={{
             transform: openMenu ? "translate(0px)" : iconStyle.icons.save.transform?.(),
             transition: iconStyle.icons.save.transition?.(),
             zIndex: iconStyle.icons.save.zIndex,
           }}
-          icon={Save}
           iconName="save"
           svgData={iconStyle}
-          onClick={() => saveToLocalStorage("players", players)}
+          onClick={() => {
+            saveToLocalStorage("players", players);
+            saveToLocalStorage("lineData", lineData);
+          }}
           theme={theme}
         />
         <IconButton
+          icon={AddPlayer}
           sx={{
             transform: openMenu ? "translate(0px)" : iconStyle.icons.addplayer.transform?.(),
             transition: iconStyle.icons.addplayer.transition?.(),
             zIndex: iconStyle.icons.addplayer.zIndex,
           }}
           theme={theme}
-          icon={AddPlayer}
           iconName="addplayer"
           svgData={iconStyle}
           onClick={() => setOpenAddPlayer(!openAddPlayer)}
         />
         <IconButton
+          icon={LineChart}
           sx={{
             transform: openMenu ? "translate(0px)" : iconStyle.icons.linechart.transform?.(),
             transition: iconStyle.icons.linechart.transition?.(),
             zIndex: iconStyle.icons.linechart.zIndex,
           }}
           theme={theme}
-          icon={LineChart}
           iconName="linechart"
           svgData={iconStyle}
           onClick={() => setOpenLineChart(!openLineChart)}
@@ -316,58 +367,62 @@ const App = () => {
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
         <ul className="players-list-ctn">
-          {players
-            .sort((a, b) => b.victoryPtn - a.victoryPtn)
-            .map((player, i) => {
-              const { name, victoryPtn, id } = player;
-              const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+          {players.map((player, i) => {
+            const { name, victoryPtn, id } = player;
+            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
-              return (
-                <li className="list-element" key={i}>
-                  <div style={{ display: "flex" }}>
-                    <span>
-                      <IconButton
-                        sx={{
-                          marginRight: "10px",
-                        }}
-                        icon={Star}
-                        iconName="star"
-                        theme={theme}
-                        svgData={playerIconStyle}
-                      />
-
-                      <Heading name={name} victoryPtn={victoryPtn} />
-                    </span>
-                    <Spacer />
-                    <IconButton
-                      onClick={() => handleResetScore(id)}
-                      icon={Reset}
-                      iconName="reset"
-                      svgData={playerIconStyle}
-                    />
-                    <IconButton
-                      onClick={() => handleDeletePlayer(id)}
-                      icon={Delete}
-                      iconName="delete"
-                      svgData={playerIconStyle}
-                    />
-                  </div>
-                  <form
-                    autoComplete="off"
-                    noValidate
-                    style={{ display: "flex", alignItems: "center" }}
-                    onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+            return (
+              <li className="list-element" key={i}>
+                <div style={{ display: "flex" }}>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "30px",
+                    }}
                   >
-                    <SoftInput
-                      labelText="Score"
-                      subjectId={subjectId}
-                      onEnter={() => new SubmitEvent("submit")}
+                    <IconButton
+                      sx={{}}
+                      icon={Star}
+                      iconName="star"
                       theme={theme}
+                      svgData={playerIconStyle}
                     />
-                  </form>
-                </li>
-              );
-            })}
+                    {/* <span
+                      
+                    > */}
+                    {name} : {victoryPtn}
+                    {/* </span> */}
+                  </span>
+                  <Spacer />
+                  <IconButton
+                    onClick={() => handleResetScore(id, name)}
+                    icon={Reset}
+                    iconName="reset"
+                    svgData={playerIconStyle}
+                  />
+                  <IconButton
+                    onClick={() => handleDeletePlayer(id, name)}
+                    icon={Delete}
+                    iconName="delete"
+                    svgData={playerIconStyle}
+                  />
+                </div>
+                <form
+                  autoComplete="off"
+                  noValidate
+                  style={{ display: "flex", alignItems: "center" }}
+                  onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+                >
+                  <SoftInput
+                    labelText="Score"
+                    subjectId={subjectId}
+                    onEnter={() => new SubmitEvent("submit")}
+                    theme={theme}
+                  />
+                </form>
+              </li>
+            );
+          })}
         </ul>
         {/* == LINECHART == */}
         {openLineChart && <Line data={lineData} option={options} />}
