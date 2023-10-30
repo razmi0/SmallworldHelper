@@ -46,24 +46,73 @@ type LineData = {
   }[];
 };
 
-const bodyElement = document.querySelector("body");
-
-const INITIAL_PLAYERS_LOAD = getFromLocalStorage<Player[]>("players", []);
-const turns = findMaxNbrTurns(INITIAL_PLAYERS_LOAD);
-const INITIAL_LINE_DATA: LineData = {
-  labels: turns == 0 ? [] : Array.from({ length: turns }, (_, i) => (i + 1).toString()) ?? [],
-  datasets:
-    INITIAL_PLAYERS_LOAD.length == 0
-      ? []
-      : INITIAL_PLAYERS_LOAD.map((p: Player) => {
-          return {
-            label: p.name,
-            data: p.history,
-            backgroundColor: p.color,
-            borderColor: p.color,
-          };
-        }) ?? [],
+const initializeLineData = (players: Player[]): LineData => {
+  const maxTurns = findMaxNbrTurns(players);
+  return {
+    labels:
+      maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
+    datasets:
+      players.length == 0
+        ? []
+        : players.map((p: Player) => {
+            return {
+              label: p.name,
+              data: p.history,
+              backgroundColor: p.color,
+              borderColor: p.color,
+            };
+          }) ?? [],
+  };
 };
+
+const updatePlayersAddScoreState = (
+  players: Player[],
+  subjectId: string,
+  newScore: number
+): [Player[], number] => {
+  const playerId = +subjectId.split("_")[0];
+  const newPlayers = [...players];
+  const idx = players.findIndex((p) => p.id === playerId);
+
+  if (idx === -1) {
+    console.warn(`${playerId} not found`);
+    return [newPlayers, -1];
+  }
+
+  const player = newPlayers[idx];
+  player.victoryPtn += newScore;
+  player.history.push(player.victoryPtn);
+  player.addedScores.push(newScore);
+
+  return [newPlayers, idx];
+};
+
+const updateLineChartAddScoreState = (lineData: LineData, players: Player[], idx: number) => {
+  const newLineChartDatasets = [...lineData.datasets];
+  const newLabels = [...lineData.labels];
+  const newLength = findMaxNbrTurns(players);
+
+  if (newLength > newLabels.length) {
+    newLabels.push((newLabels.length + 1).toString());
+  }
+
+  const playerDatasetIdx = newLineChartDatasets.findIndex((d) => d.label === players[idx].name);
+  if (playerDatasetIdx == -1) {
+    console.warn(`${players[idx].name} not found`);
+    return lineData;
+  }
+
+  newLineChartDatasets[playerDatasetIdx].data = [...players[idx].history];
+
+  return {
+    labels: newLabels,
+    datasets: newLineChartDatasets,
+  };
+};
+
+const bodyElement = document.querySelector("body");
+const INITIAL_PLAYERS_LOAD = getFromLocalStorage<Player[]>("players", []);
+const INITIAL_LINE_DATA = initializeLineData(INITIAL_PLAYERS_LOAD);
 const INITIAL_VICTORY_PTN = 0;
 
 const App = () => {
@@ -134,50 +183,26 @@ const App = () => {
   const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
     /* == PLAYERS STATES UPDATE == */
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
     const newScore = Number(formData.get(subjectId)) ?? 0;
-
     if (isNaN(newScore)) return;
 
-    const playerId = +subjectId.split("_")[0];
-    const newPlayers = [...players];
-    const idx = players.findIndex((p) => p.id == playerId);
+    const [newPlayers, idx] = updatePlayersAddScoreState(players, subjectId, newScore);
+
     if (idx == -1) {
-      console.warn(`${playerId} not found`);
+      console.warn(`${subjectId} not found`);
       return;
     }
-    const player = newPlayers[idx];
-
-    player.victoryPtn += newScore;
-    player.history.push(player.victoryPtn);
-    player.addedScores.push(newScore);
-
     e.currentTarget.reset();
 
     /* == LINECHART STATES UPDATE == */
-    const newLineChartDatasets = [...lineData.datasets];
-    const newLabels = [...lineData.labels];
-    const newLength = findMaxNbrTurns(newPlayers);
-
-    if (newLength > newLabels.length) {
-      newLabels.push((newLabels.length + 1).toString());
-    }
-
-    const playerDatasetIdx = newLineChartDatasets.findIndex((d) => d.label === player.name);
-    if (playerDatasetIdx == -1) return;
-
-    newLineChartDatasets[playerDatasetIdx].data = [...newPlayers[idx].history];
+    const newLineData = updateLineChartAddScoreState(lineData, newPlayers, idx);
 
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
-
-    setLineData({
-      labels: newLabels,
-      datasets: newLineChartDatasets,
-    });
+    setLineData(newLineData);
   };
 
-  const handleDeletePlayer = (id: number, name: string) => {
+  const handleDeletePlayer = ({ id, name }: Player) => {
     /* == PLAYERS STATES UPDATE == */
     const idx = players.findIndex((p) => p.id == id);
     if (idx == -1) {
@@ -186,24 +211,21 @@ const App = () => {
     }
     const newPlayers = [...players];
     newPlayers.splice(idx, 1);
-    setPlayers(newPlayers);
 
     /* == LINECHART STATES UPDATE == */
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
     if (playerLineIdx == -1) return;
     const newLineDatasets = [...lineData.datasets];
     newLineDatasets.splice(playerLineIdx, 1);
+
     setLineData({
       labels: lineData.labels,
       datasets: newLineDatasets,
     });
-    console.log({
-      labels: lineData.labels,
-      datasets: newLineDatasets,
-    });
+    setPlayers(newPlayers);
   };
 
-  const handleResetScore = (id: number, name: string) => {
+  const handleResetScore = ({ id, name }: Player) => {
     /* == PLAYERS STATES UPDATE == */
     const newPlayers = [...players];
     const idx = players.findIndex((p) => p.id === id);
@@ -236,11 +258,6 @@ const App = () => {
       datasets: newLineDatasets,
     });
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
-
-    // console.log({
-    //   labels: lineData.labels,
-    //   datasets: newLineDatasets,
-    // });
   };
 
   return (
@@ -412,13 +429,13 @@ const App = () => {
                   </span>
                   <Spacer />
                   <IconButton
-                    onClick={() => handleResetScore(id, name)}
+                    onClick={() => handleResetScore(player)}
                     icon={Reset}
                     iconName="reset"
                     svgData={playerIconStyle}
                   />
                   <IconButton
-                    onClick={() => handleDeletePlayer(id, name)}
+                    onClick={() => handleDeletePlayer(player)}
                     icon={Delete}
                     iconName="delete"
                     svgData={playerIconStyle}
