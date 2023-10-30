@@ -112,5 +112,8 @@ export const playerIconStyle: SvgDataType = {
     reset: {
       color: ["#e19f12", "#e19f12"],
     },
+    star: {
+      color: ["#e14512", "#e14512"],
+    },
   },
 };
