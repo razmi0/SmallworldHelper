@@ -5,7 +5,7 @@
 - [x] Add a delete player button
 - [x] Theme button
 - [x] Menu animation
-- [ ] Add Line Chart to sum up players progresion
+- [x] Add Line Chart to sum up players progresion
 - [ ] Add Hide scores button
 - [ ] Change player icon indicator to another icon & svg
 
@@ -15,4 +15,4 @@
 - [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon
 - [ ] Refacto theme logic with context API and localstorage ?
 - [ ] Change add player to more designed menu on click
-- [ ] Replace setNewPlayer by a formdata logic
+- [ ] Replace setNewPlayer by a formdata logic ?
