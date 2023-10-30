@@ -20,7 +20,11 @@ type LineProps = {
 };
 export const Line = ({ data, option }: LineProps) => {
   return (
-    <figure>
+    <figure
+      style={{
+        maxHeight: "250px",
+      }}
+    >
       <ChartLine data={data} options={option} />
     </figure>
   );
