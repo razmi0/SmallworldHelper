@@ -9,6 +9,7 @@
 - Save to local storage
 - Load from local storage
 - Dark/light mode
+- Line chart
 
 ### Ressources
 
