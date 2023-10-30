@@ -7,7 +7,8 @@
 - [x] Menu animation
 - [x] Add Line Chart to sum up players progresion
 - [ ] Add Hide scores button
-- [ ] Change player icon indicator to another icon & svg
+- [x] Change player icon indicator to another icon & svg
+- [x] generator in utils to get color
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
