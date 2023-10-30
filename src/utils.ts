@@ -41,9 +41,11 @@ export const findMaxNbrTurns = (arr: HistoryItem[] | []) => {
   return max;
 };
 
-export const saveToLocalStorage = (key: string, value: unknown) => {
+export const saveToLocalStorage = <T>(key: string, value: T) => {
   window.localStorage.setItem(key, JSON.stringify(value));
 };
-export const getFromLocalStorage = (key: string) => {
-  return JSON.parse(window.localStorage.getItem(key) || "null");
+
+export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T): T => {
+  const storedValue = window.localStorage.getItem(key);
+  return storedValue !== null ? (JSON.parse(storedValue) as T) : defaultValue;
 };
