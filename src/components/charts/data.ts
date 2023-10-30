@@ -1,10 +1,18 @@
-import { ChartOptions } from "chart.js";
+import { ChartOptions, ChartType, Tooltip, TooltipPositionerFunction } from "chart.js";
+
+declare module "chart.js" {
+  interface TooltipPositionerMap {
+    topleft: TooltipPositionerFunction<ChartType>;
+  }
+}
 
 export const options: ChartOptions<"line"> = {
   responsive: true,
   elements: {
     point: {
       radius: 0,
+      hoverRadius: 6,
+      pointStyle: "triangle",
     },
     line: {
       tension: 0.4,
@@ -14,14 +22,13 @@ export const options: ChartOptions<"line"> = {
   maintainAspectRatio: false,
   scales: {
     x: {
-      display: false,
+      display: true,
       grid: {
         display: false,
       },
     },
     y: {
-      display: false,
-
+      display: true,
       grid: {
         display: false,
       },
@@ -39,12 +46,29 @@ export const options: ChartOptions<"line"> = {
     tooltip: {
       callbacks: {
         title: () => "",
+        label: (context) => {
+          const label = context.dataset.label || "";
+          const value = context.parsed.y || 0;
+          return ` ${label} : ${value}`;
+        },
       },
+      xAlign: "left",
+      yAlign: "bottom",
+      position: "topleft",
+      usePointStyle: true,
       bodyFont: {
-        size: 16,
+        size: 15,
       },
+      caretSize: 0,
     },
   },
+};
+
+Tooltip.positioners.topleft = () => {
+  return {
+    x: 40,
+    y: 0,
+  };
 };
 
 export const playerColors = [

@@ -142,15 +142,16 @@ const App = () => {
 
     const playerId = +subjectId.split("_")[0];
     const newPlayers = [...players];
-    const idx = players.findIndex((p) => p.id === playerId);
-    if (idx == -1) return;
+    const idx = players.findIndex((p) => p.id == playerId);
+    if (idx == -1) {
+      console.warn(`${playerId} not found`);
+      return;
+    }
     const player = newPlayers[idx];
 
     player.victoryPtn += newScore;
     player.history.push(player.victoryPtn);
     player.addedScores.push(newScore);
-
-    setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
 
     e.currentTarget.reset();
 
@@ -168,6 +169,8 @@ const App = () => {
 
     newLineChartDatasets[playerDatasetIdx].data = [...newPlayers[idx].history];
 
+    setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
+
     setLineData({
       labels: newLabels,
       datasets: newLineChartDatasets,
@@ -177,7 +180,10 @@ const App = () => {
   const handleDeletePlayer = (id: number, name: string) => {
     /* == PLAYERS STATES UPDATE == */
     const idx = players.findIndex((p) => p.id == id);
-    if (idx == -1) return;
+    if (idx == -1) {
+      console.warn(`name : ${name} &  id : ${id} not found`);
+      return;
+    }
     const newPlayers = [...players];
     newPlayers.splice(idx, 1);
     setPlayers(newPlayers);
@@ -201,11 +207,18 @@ const App = () => {
     /* == PLAYERS STATES UPDATE == */
     const newPlayers = [...players];
     const idx = players.findIndex((p) => p.id === id);
-    if (idx == -1) return;
+    if (idx == -1) {
+      console.warn(`name : ${name} &  id : ${id} not found`);
+      return;
+    }
     newPlayers[idx].victoryPtn = 0;
 
     /* == LINECHART STATES UPDATE == */
+    console.log(name);
+
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
+    console.log(playerLineIdx);
+
     if (playerLineIdx == -1) return;
     const newLineDatasets = [...lineData.datasets];
     const newLabels = [...lineData.labels];
@@ -216,11 +229,7 @@ const App = () => {
       newLabels.push((data.length + 1).toString());
     }
 
-    console.log(newLineDatasets[playerLineIdx].data);
-    console.log(data);
     data.push(0);
-    console.log(newLineDatasets[playerLineIdx].data);
-    console.log(data);
 
     setLineData({
       labels: newLabels,
@@ -228,10 +237,10 @@ const App = () => {
     });
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
 
-    console.log({
-      labels: lineData.labels,
-      datasets: newLineDatasets,
-    });
+    // console.log({
+    //   labels: lineData.labels,
+    //   datasets: newLineDatasets,
+    // });
   };
 
   return (
@@ -302,7 +311,10 @@ const App = () => {
           theme={theme}
           iconName="theme"
           svgData={iconStyle}
-          onClick={handleThemeChange}
+          onClick={() => {
+            handleThemeChange();
+            setOpenMenu(!openMenu);
+          }}
         />
 
         <IconButton
@@ -318,6 +330,7 @@ const App = () => {
           onClick={() => {
             setPlayers(getFromLocalStorage<Player[]>("players"));
             setLineData(getFromLocalStorage<LineData>("lineData", INITIAL_LINE_DATA));
+            setOpenMenu(!openMenu);
           }}
         />
         <IconButton
@@ -332,6 +345,7 @@ const App = () => {
           onClick={() => {
             saveToLocalStorage("players", players);
             saveToLocalStorage("lineData", lineData);
+            setOpenMenu(!openMenu);
           }}
           theme={theme}
         />
@@ -345,7 +359,10 @@ const App = () => {
           theme={theme}
           iconName="addplayer"
           svgData={iconStyle}
-          onClick={() => setOpenAddPlayer(!openAddPlayer)}
+          onClick={() => {
+            setOpenAddPlayer(!openAddPlayer);
+            setOpenMenu(!openMenu);
+          }}
         />
         <IconButton
           icon={LineChart}
@@ -357,7 +374,11 @@ const App = () => {
           theme={theme}
           iconName="linechart"
           svgData={iconStyle}
-          onClick={() => setOpenLineChart(!openLineChart)}
+          onClick={() => {
+            setOpenMenu(!openMenu);
+            if (players.length == 0) return;
+            setOpenLineChart(!openLineChart);
+          }}
         />
       </nav>
       <section
@@ -387,11 +408,7 @@ const App = () => {
                       theme={theme}
                       svgData={playerIconStyle}
                     />
-                    {/* <span
-                      
-                    > */}
                     {name} : {victoryPtn}
-                    {/* </span> */}
                   </span>
                   <Spacer />
                   <IconButton
@@ -425,7 +442,7 @@ const App = () => {
           })}
         </ul>
         {/* == LINECHART == */}
-        {openLineChart && <Line data={lineData} option={options} />}
+        {openLineChart && <Line data={lineData} option={options} theme={theme} />}
       </section>
       {/* == ADD PLAYER == */}
       {openAddPlayer && (
