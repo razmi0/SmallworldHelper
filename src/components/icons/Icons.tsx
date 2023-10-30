@@ -119,7 +119,7 @@ export const IconButton = ({
   return (
     <button
       type={btnType}
-      style={{ all: "unset", cursor: "pointer", ...sx }}
+      style={{ cursor: "pointer", ...sx }}
       onClick={onClick}
       className={className}
     >
