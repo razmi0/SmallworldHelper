@@ -236,12 +236,12 @@ const App = () => {
     newPlayers[idx].victoryPtn = 0;
 
     /* == LINECHART STATES UPDATE == */
-    console.log(name);
-
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
-    console.log(playerLineIdx);
 
-    if (playerLineIdx == -1) return;
+    if (playerLineIdx == -1) {
+      console.warn(`${name} not found`);
+      return;
+    }
     const newLineDatasets = [...lineData.datasets];
     const newLabels = [...lineData.labels];
 
