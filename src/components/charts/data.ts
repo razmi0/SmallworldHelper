@@ -47,19 +47,18 @@ export const options: ChartOptions<"line"> = {
       callbacks: {
         title: () => "",
         label: (context) => {
-          const label = context.dataset.label || "";
-          const value = context.parsed.y || 0;
-          return ` ${label} : ${value}`;
+          return ` ${context.dataset.label || ""} : ${context.parsed.y || 0}`;
         },
       },
-      xAlign: "left",
-      yAlign: "bottom",
       position: "topleft",
       usePointStyle: true,
       bodyFont: {
         size: 15,
       },
       caretSize: 0,
+      itemSort: (a, b) => {
+        return b.parsed.y - a.parsed.y;
+      },
     },
   },
 };
