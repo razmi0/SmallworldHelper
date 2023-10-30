@@ -5,8 +5,22 @@ export type SvgProps = {
   size: [string, string];
   bgColor?: string;
 };
-
-export type SvgStatDataType = {
+/**
+ * @type SvgDataType
+ * @param size [width, height] in px
+ * @param filter [light, dark] dropshadow
+ * @param scale scale factor for the dropshadow
+ * @param transition transition for the dropshadow
+ * @param bezierParams bezier factor for the animation
+ * @param gap gap between icons in px
+ * @param icons object of icons
+ * @param icons[iconName].color [light, dark] color of the icon
+ * @param icons[iconName].label label of the icon
+ * @param icons[iconName].transform transform of the icon
+ * @param icons[iconName].transition transition of the icon
+ * @param icons[iconName].zIndex zIndex of the icon
+ */
+export type SvgDataType = {
   size: [string, string]; // width, height in px
   filter?: [string, string]; // dropshadow
   scale?: string; // scale factor for the dropshadow
@@ -26,7 +40,7 @@ export type SvgStatDataType = {
 
 export interface IconProps {
   icon: ComponentType<SvgProps>;
-  svgData: SvgStatDataType;
+  svgData: SvgDataType;
   iconName: string;
   theme?: "light" | "dark";
   sx?: React.CSSProperties;
@@ -105,7 +119,7 @@ export const IconButton = ({
   return (
     <button
       type={btnType}
-      style={{ all: "unset", cursor: "pointer", ...sx }}
+      style={{ cursor: "pointer", ...sx }}
       onClick={onClick}
       className={className}
     >
@@ -227,8 +241,8 @@ export const Save = ({ color, size, bgColor }: SvgProps) => {
 export const AddScore = ({ color, size }: SvgProps) => {
   return (
     <svg width={size[0]} height={size[1]} viewBox="-4.8 -4.8 33.60 33.60" fill="none">
-      <g stroke-width="0"></g>
-      <g stroke-linecap="round" stroke-linejoin="round"></g>
+      <g strokeWidth="0"></g>
+      <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
         <path
           d="M20 4L4 20"
@@ -330,14 +344,10 @@ export const Menu = ({ color, size, bgColor }: SvgProps) => {
 
 export const Delete = ({ color, size }: SvgProps) => {
   return (
-    <svg width={size[0]} height={size[1]} viewBox="-4.8 -4.8 33.60 33.60" fill="none">
-      <g strokeWidth="0"></g>
+    <svg fill={color} width={size[0]} height={size[1]} viewBox="-4.8 -4.8 33.60 33.60">
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
-        <path
-          d="M17.23 9.78L15.01 12L17.23 14.22C17.52 14.51 17.52 14.99 17.23 15.28C17.08 15.43 16.89 15.5 16.7 15.5C16.51 15.5 16.32 15.43 16.17 15.28L13.95 13.06L11.73 15.28C11.58 15.43 11.39 15.5 11.2 15.5C11.01 15.5 10.82 15.43 10.67 15.28C10.38 14.99 10.38 14.51 10.67 14.22L12.89 12L10.67 9.78C10.38 9.49 10.38 9.01 10.67 8.72C10.96 8.43 11.44 8.43 11.73 8.72L13.95 10.94L16.17 8.72C16.46 8.43 16.94 8.43 17.23 8.72C17.52 9.01 17.52 9.49 17.23 9.78ZM21.32 7V17C21.32 17.96 20.54 18.75 19.57 18.75H7.64C7.02999 18.75 6.48 18.44 6.16 17.93L2.87 12.66C2.62 12.26 2.62 11.74 2.87 11.33L6.16 6.07C6.48 5.56 7.04 5.25 7.64 5.25H19.58C20.54 5.25 21.33 6.04 21.33 7H21.32ZM19.82 7C19.82 6.86 19.71 6.75 19.57 6.75H7.64C7.54999 6.75 7.47 6.79 7.43 6.87L4.22 12L7.43 17.13C7.48 17.2 7.56 17.25 7.64 17.25H19.58C19.72 17.25 19.83 17.14 19.83 17V7H19.82Z"
-          fill={color}
-        ></path>
+        <path d="M1,20a1,1,0,0,0,1,1h8a1,1,0,0,0,0-2H3.071A7.011,7.011,0,0,1,10,13a5.044,5.044,0,1,0-3.377-1.337A9.01,9.01,0,0,0,1,20ZM10,5A3,3,0,1,1,7,8,3,3,0,0,1,10,5Zm12.707,9.707L20.414,17l2.293,2.293a1,1,0,1,1-1.414,1.414L19,18.414l-2.293,2.293a1,1,0,0,1-1.414-1.414L17.586,17l-2.293-2.293a1,1,0,0,1,1.414-1.414L19,15.586l2.293-2.293a1,1,0,0,1,1.414,1.414Z"></path>
       </g>
     </svg>
   );
@@ -350,6 +360,40 @@ export const Reset = ({ color, size }: SvgProps) => {
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
         <path d="M64,256H34A222,222,0,0,1,430,118.15V85h30V190H355V160h67.27A192.21,192.21,0,0,0,256,64C150.13,64,64,150.13,64,256Zm384,0c0,105.87-86.13,192-192,192A192.21,192.21,0,0,1,89.73,352H157V322H52V427H82V393.85A222,222,0,0,0,478,256Z"></path>
+      </g>
+    </svg>
+  );
+};
+
+export const LineChart = ({ color, size, bgColor }: SvgProps) => {
+  return (
+    <svg fill={color} width={size[0]} height={size[1]} viewBox="-6.4 -6.4 44.80 44.80">
+      <g strokeWidth="0">
+        <path
+          transform="translate(-6.4, -6.4), scale(2.8)"
+          fill={bgColor}
+          d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
+          strokeWidth="0"
+        ></path>
+      </g>
+      <g strokeLinecap="round" strokeLinejoin="round"></g>
+      <g>
+        <path d="M29.5 7c-1.381 0-2.5 1.12-2.5 2.5 0 0.284 0.058 0.551 0.144 0.805l-6.094 5.247c-0.427-0.341-0.961-0.553-1.55-0.553-0.68 0-1.294 0.273-1.744 0.713l-4.774-2.39c-0.093-1.296-1.162-2.323-2.482-2.323-1.38 0-2.5 1.12-2.5 2.5 0 0.378 0.090 0.732 0.24 1.053l-4.867 5.612c-0.273-0.102-0.564-0.166-0.873-0.166-1.381 0-2.5 1.119-2.5 2.5s1.119 2.5 2.5 2.5c1.381 0 2.5-1.119 2.5-2.5 0-0.332-0.068-0.649-0.186-0.939l4.946-5.685c0.236 0.073 0.48 0.124 0.74 0.124 0.727 0 1.377-0.316 1.834-0.813l4.669 2.341c0.017 1.367 1.127 2.471 2.497 2.471 1.381 0 2.5-1.119 2.5-2.5 0-0.044-0.011-0.086-0.013-0.13l6.503-5.587c0.309 0.137 0.649 0.216 1.010 0.216 1.381 0 2.5-1.119 2.5-2.5s-1.119-2.5-2.5-2.5z"></path>{" "}
+      </g>
+    </svg>
+  );
+};
+
+export const Star = ({ color, size }: SvgProps) => {
+  return (
+    <svg width={size[0]} height={size[1]} viewBox="-102.4 -102.4 716.80 716.80" fill={color}>
+      <g strokeWidth="0"></g>
+      <g strokeLinecap="round" strokeLinejoin="round"></g>
+      <g>
+        <path
+          fill={color}
+          d="M256 38.013c-22.458 0-66.472 110.3-84.64 123.502-18.17 13.2-136.674 20.975-143.614 42.334-6.94 21.358 84.362 97.303 91.302 118.662 6.94 21.36-22.286 136.465-4.116 149.665 18.17 13.2 118.61-50.164 141.068-50.164 22.458 0 122.9 63.365 141.068 50.164 18.17-13.2-11.056-128.306-4.116-149.665 6.94-21.36 98.242-97.304 91.302-118.663-6.94-21.36-125.444-29.134-143.613-42.335-18.168-13.2-62.182-123.502-84.64-123.502z"
+        ></path>
       </g>
     </svg>
   );

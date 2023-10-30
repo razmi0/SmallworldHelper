@@ -1,12 +1,14 @@
 # Smallworld Helper
 
 - Add player
+- Delete player
 - Add starting score
 - Add player's score
+- Reset player's score
 - Sort by score
 - Save to local storage
 - Load from local storage
-- Switch to dark/light mode
+- Dark/light mode
 
 ### Ressources
 

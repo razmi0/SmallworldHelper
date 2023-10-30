@@ -1,6 +1,6 @@
-import { SvgStatDataType } from "./Icons";
+import { SvgDataType } from "./Icons";
 
-export const iconStyle: SvgStatDataType = {
+export const iconStyle: SvgDataType = {
   size: ["50px", "50px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
@@ -20,6 +20,7 @@ export const iconStyle: SvgStatDataType = {
       },
     },
     addplayer: {
+      // 4
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
@@ -34,6 +35,7 @@ export const iconStyle: SvgStatDataType = {
       zIndex: 6,
     },
     save: {
+      // 3
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
@@ -48,6 +50,7 @@ export const iconStyle: SvgStatDataType = {
       zIndex: 7,
     },
     load: {
+      // 2
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
@@ -62,6 +65,7 @@ export const iconStyle: SvgStatDataType = {
       zIndex: 8,
     },
     theme: {
+      // 1
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
@@ -76,12 +80,28 @@ export const iconStyle: SvgStatDataType = {
       zIndex: 9,
     },
     addscore: {
+      // unused
       color: ["#646cff", "#609dff"],
+    },
+    linechart: {
+      // 5
+      color: ["#646cff", "#609dff"],
+      transform: () =>
+        `translate(-${
+          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
+            1) * 5
+        }px)`,
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 5}s `
+          : iconStyle.transition ?? "none";
+      },
+      zIndex: 5,
     },
   },
 };
 
-export const playerIconStyle: SvgStatDataType = {
+export const playerIconStyle: SvgDataType = {
   size: ["35px", "35px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
@@ -91,6 +111,9 @@ export const playerIconStyle: SvgStatDataType = {
     },
     reset: {
       color: ["#e19f12", "#e19f12"],
+    },
+    star: {
+      color: ["#e14512", "#e14512"],
     },
   },
 };
