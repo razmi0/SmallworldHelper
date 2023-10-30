@@ -77,7 +77,17 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+/* button {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0; */
+/* } */
 button {
+  all: unset;
+}
+/* button {
   display: flex;
   align-items: center;
   border: 0px solid transparent;
@@ -86,11 +96,10 @@ button {
   font-size: 1.1em;
   font-weight: 500;
   font-family: inherit;
-  /* corlor : #949499 */
   cursor: pointer;
   background-color: #646cff;
   transition: border-color 0.25s;
 }
 button:hover {
   filter: drop-shadow(#646cff 0 0 10px);
-}
+} */
