@@ -52,24 +52,7 @@ type LineData = {
   }[];
 };
 
-const initializeLineData = (players: Player[]): LineData => {
-  const maxTurns = findMaxNbrTurns(players);
-  return {
-    labels:
-      maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
-    datasets:
-      players.length == 0
-        ? []
-        : players.map((p: Player) => {
-            return {
-              label: p.name,
-              data: p.history,
-              backgroundColor: p.color,
-              borderColor: p.color,
-            };
-          }) ?? [],
-  };
-};
+// const initializeLineData = (players: Player[]): LineData => {};
 
 const updatePlayersAddScoreState = (
   players: Player[],
@@ -117,25 +100,48 @@ const updateLineChartAddScoreState = (lineData: LineData, players: Player[], idx
 };
 
 const bodyElement = document.querySelector("body");
-const INITIAL_PLAYERS_LOAD = getFromLocalStorage<Player[]>("players", []);
-const INITIAL_LINE_DATA = initializeLineData(INITIAL_PLAYERS_LOAD);
-const INITIAL_VICTORY_PTN = 0;
+
+const INITIAL_STATES = {
+  players: getFromLocalStorage<Player[]>("players", []),
+  hovering: () => Array.from({ length: INITIAL_STATES.players.length }, () => false),
+  lineData: () => INITIAL_STATES.initLineData(),
+  initLineData: () => {
+    const maxTurns = findMaxNbrTurns(INITIAL_STATES.players);
+    return {
+      labels:
+        maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
+      datasets:
+        INITIAL_STATES.players.length == 0
+          ? []
+          : INITIAL_STATES.players.map((p: Player) => {
+              return {
+                label: p.name,
+                data: p.history,
+                backgroundColor: p.color,
+                borderColor: p.color,
+              };
+            }) ?? [],
+    };
+  },
+  startScore: 0,
+};
 
 /* == COMPONENT == */
 //--
 const App = () => {
   /* == STATES FOR DATA == */
   //--
-  const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS_LOAD);
+  const [players, setPlayers] = useState<Player[]>(INITIAL_STATES.players);
   const [newPlayer, setNewPlayer] = useState<string>("");
-  const [startScore, setStartScore] = useState<number>(INITIAL_VICTORY_PTN);
-  const [lineData, setLineData] = useState<LineData>(INITIAL_LINE_DATA);
+  const [startScore, setStartScore] = useState<number>(INITIAL_STATES.startScore);
+  const [lineData, setLineData] = useState<LineData>(INITIAL_STATES.lineData());
 
   /* == STATES FOR UI == */
   //--
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
+  const [isHoveringPlayer, setIsHoveringPlayer] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   const handleThemeChange = () => {
@@ -158,7 +164,7 @@ const App = () => {
     if (newPlayer === "") return;
     if (isNaN(startScore)) return;
 
-    const newColor = playerColors[players.length - 1] ?? getRandomColor();
+    const newColor = playerColors[players.length] ?? getRandomColor();
     const labels = lineData.labels;
     const newName = newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1);
 
@@ -367,7 +373,7 @@ const App = () => {
           svgData={iconStyle}
           onClick={() => {
             setPlayers(getFromLocalStorage<Player[]>("players"));
-            setLineData(getFromLocalStorage<LineData>("lineData", INITIAL_LINE_DATA));
+            setLineData(getFromLocalStorage<LineData>("lineData", INITIAL_STATES.lineData()));
             setOpenMenu(!openMenu);
           }}
         />
@@ -430,6 +436,8 @@ const App = () => {
             const { name, victoryPtn, id, color } = player;
             const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
+            console.log(name, " : ", color);
+
             return (
               <li className="list-element" key={i}>
                 <div style={{ display: "flex" }}>
@@ -441,9 +449,29 @@ const App = () => {
                       fontSize: "30px",
                       transform: "translate(-35px)",
                     }}
+                    onMouseLeave={() =>
+                      setIsHoveringPlayer((prev) => {
+                        const newPrev = [...prev];
+                        newPrev[i] = false;
+                        return newPrev;
+                      })
+                    }
                   >
-                    <IconHeading color={color} icon={Star} svgData={headingStarIconStyle} />
-                    {name} : {victoryPtn}
+                    <IconHeading
+                      animationName="translate"
+                      isHover={isHoveringPlayer[i]}
+                      color={color}
+                      icon={Star}
+                      svgData={headingStarIconStyle}
+                    />
+                    <span
+                      style={{
+                        color: isHoveringPlayer[i] ? color : "inherit",
+                        transition: "color 0.3s ease-in-out",
+                      }}
+                    >
+                      {name} : {victoryPtn}
+                    </span>
                   </div>
                   <Spacer />
                   <IconButton
@@ -466,6 +494,21 @@ const App = () => {
                   onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
                 >
                   <SoftInput
+                    color={color}
+                    onFocus={() =>
+                      setIsHoveringPlayer((prev) => {
+                        const newPrev = [...prev];
+                        newPrev[i] = true;
+                        return newPrev;
+                      })
+                    }
+                    onBlur={() =>
+                      setIsHoveringPlayer((prev) => {
+                        const newPrev = [...prev];
+                        newPrev[i] = false;
+                        return newPrev;
+                      })
+                    }
                     labelText="Score"
                     subjectId={subjectId}
                     onEnter={() => new SubmitEvent("submit")}
