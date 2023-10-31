@@ -5,22 +5,6 @@ export type SvgProps = {
   size: [string, string];
   bgColor?: string;
 };
-/**
- * @type SvgDataType
- * @param size [width, height] in px
- * @param filter [light, dark] dropshadow
- * @param scale scale factor for the dropshadow
- * @param transition transition for the dropshadow
- * @param bezierParams bezier factor for the animation
- * @param gap gap between icons in px
- * @param subscribe generator function that returns a color
- * @param icons object of icons
- * @param icons[iconName].color [light, dark] color of the icon
- * @param icons[iconName].label label of the icon
- * @param icons[iconName].transform transform of the icon
- * @param icons[iconName].transition transition of the icon
- * @param icons[iconName].zIndex zIndex of the icon
- */
 
 export type SvgDataType = {
   size: [string, string]; // width, height in px
@@ -37,6 +21,18 @@ export type SvgDataType = {
       transform?: () => string;
       transition?: () => string;
       zIndex?: number;
+    };
+  };
+  animations?: {
+    [key: string]: {
+      name: string;
+      duration: number;
+      timing: string;
+      delay: number;
+      iteration: string;
+      direction: string;
+      keyframes?: string;
+      get?: () => string;
     };
   };
 };
@@ -109,13 +105,15 @@ export const Icon = ({
     </div>
   );
 };
-
-interface IconNameProps {
+interface IconHeadingProps {
   icon: ComponentType<SvgProps>;
   color: string;
   svgData: SvgDataType;
   className?: string;
   bgColor?: string;
+  animationName?: string;
+  isHover?: boolean;
+  i?: number;
 }
 
 export const IconHeading = ({
@@ -124,9 +122,9 @@ export const IconHeading = ({
   svgData,
   className,
   bgColor = "transparent",
-}: IconNameProps) => {
-  const [isHover, setIsHover] = useState(false);
-
+  animationName = "none",
+  isHover = false,
+}: IconHeadingProps) => {
   let dropShadow = "",
     transform = "";
 
@@ -136,23 +134,34 @@ export const IconHeading = ({
       : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
     transform = isHover ? `scale(${svgData.scale})` : "none";
   }
+
+  const keyframes = svgData.animations?.[animationName].keyframes,
+    get =
+      svgData.animations?.[animationName].get ??
+      function () {
+        return "none";
+      };
+
   return (
     <div
-      className={`icon-stat-ctn ${className || ""}`}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      className={`star-head-ctn ${className || ""}`}
       style={{
+        zIndex: -1,
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
+        animation: isHover ? `${get()}` : "none",
       }}
     >
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
       <style>
         {` 
-          .icon-stat-ctn {
+          .star-head-ctn {
             display: flex;
             place-content: center;
+          }
+          @keyframes ${animationName} {
+            ${keyframes}
           }
         `}
       </style>
