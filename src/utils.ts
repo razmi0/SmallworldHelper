@@ -2,7 +2,7 @@ export const getRandomColor = (opacity: number = 1) => {
   const randomRgba = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
     Math.random() * 255
   )}, ${Math.floor(Math.random() * 255)}, ${opacity})`;
-  console.log(randomRgba);
+  console.warn("random color");
   return rgbaToHex(randomRgba);
 };
 
