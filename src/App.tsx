@@ -436,8 +436,6 @@ const App = () => {
             const { name, victoryPtn, id, color } = player;
             const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
-            console.log(name, " : ", color);
-
             return (
               <li className="list-element" key={i}>
                 <div style={{ display: "flex" }}>

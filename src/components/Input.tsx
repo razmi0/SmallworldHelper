@@ -107,7 +107,7 @@ export const SoftInput = ({
   };
 
   return (
-    <div className="form__group field">
+    <div className="form__group">
       <style>
         {`
       .form__group {
@@ -115,7 +115,7 @@ export const SoftInput = ({
         padding: 20px 0 0;
         width: 100%;
       }
-      .form__field {
+      .form__field--${subjectId} {
         font-family: inherit;
         width: 100%;
         border: none;
@@ -127,10 +127,10 @@ export const SoftInput = ({
         background: transparent;
         transition: border-color 0.2s;
       }
-      .form__field::placeholder {
+      .form__field--${subjectId}::placeholder {
         color: transparent;
       }
-      .form__field:placeholder-shown ~ .form__label {
+      .form__field--${subjectId}:placeholder-shown ~ .form__label {
         font-size: 17px;
         cursor: text;
         top: 20px;
@@ -144,14 +144,14 @@ export const SoftInput = ({
         color: #9b9b9b;
         pointer-events: none;
       }
-      .form__field:focus {
+      .form__field--${subjectId}:focus {
         padding-bottom: 6px;
         font-weight: 700;
         border-width: 4px;
         border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
         border-image-slice: 1;
       }
-      .form__field:focus ~ .form__label {
+      .form__field--${subjectId}:focus ~ .form__label {
         position: absolute;
         top: 0;
         display: block;
@@ -161,7 +161,7 @@ export const SoftInput = ({
         font-weight: 700;
       }
       /* reset input */
-      .form__field:required, .form__field:invalid {
+      .form__field--${subjectId}:required, .form__field--${subjectId}:invalid {
         box-shadow: none;
       }
       `}
@@ -170,7 +170,7 @@ export const SoftInput = ({
         onKeyUp={(e) => handleEnter(e)}
         onFocus={onFocus}
         onBlur={onBlur}
-        className="form__field"
+        className={`form__field--${subjectId}`}
         placeholder={labelText}
         minLength={1}
         id={subjectId}
