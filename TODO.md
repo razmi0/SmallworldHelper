@@ -9,6 +9,7 @@
 - [ ] Add Hide scores button
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color
+- [ ] refacto css => module, tailwind, styled-components or just css files ?
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
