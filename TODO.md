@@ -5,7 +5,8 @@
 - [x] Add a delete player button
 - [x] Theme button
 - [x] Menu animation
-- [x] Add Line Chart to sum up players progresion
+- [x] Add Line Chart to sum up players progression
+- [ ] Add Bar Chart to sum up players's score data
 - [ ] Add Hide scores button
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color

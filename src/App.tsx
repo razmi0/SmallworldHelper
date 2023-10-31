@@ -1,4 +1,6 @@
 import { FormEvent, useState } from "react";
+import { flushSync } from "react-dom";
+import { createRoot } from "react-dom/client";
 import {
   AddPlayer,
   Save,
@@ -143,6 +145,8 @@ const App = () => {
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
   const [isHoveringPlayer, setIsHoveringPlayer] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  const handleOpenLineChart = () => {};
 
   const handleThemeChange = () => {
     if (theme == "light") {
@@ -405,7 +409,6 @@ const App = () => {
           svgData={iconStyle}
           onClick={() => {
             setOpenAddPlayer(!openAddPlayer);
-            setOpenMenu(!openMenu);
           }}
         />
         <IconButton
