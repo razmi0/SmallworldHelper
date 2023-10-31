@@ -2,6 +2,7 @@ export const getRandomColor = (opacity: number = 1) => {
   const randomRgba = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
     Math.random() * 255
   )}, ${Math.floor(Math.random() * 255)}, ${opacity})`;
+  console.log(randomRgba);
   return rgbaToHex(randomRgba);
 };
 
@@ -25,6 +26,15 @@ const rgbaToHex = (orig: string) => {
   hex = hex + a;
 
   return "#" + hex;
+};
+
+export const hexToRgba = (hex: string, opacity: number = 1) => {
+  const bigint = parseInt(hex.replace("#", ""), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 };
 
 type HistoryItem = {

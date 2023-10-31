@@ -7,6 +7,9 @@ interface InputProps {
   children?: ReactNode;
   sx?: CSSProperties;
   theme?: "light" | "dark";
+  onFocus?: () => void;
+  onBlur?: () => void;
+  color?: string;
 }
 
 interface InputButtonProps extends InputProps {
@@ -88,7 +91,15 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
   );
 };
 
-export const SoftInput = ({ labelText, subjectId, onEnter, sx, theme }: InputProps) => {
+export const SoftInput = ({
+  labelText,
+  subjectId,
+  onEnter,
+  sx,
+  onFocus,
+  onBlur,
+  color,
+}: InputProps) => {
   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (onEnter && e.key === "Enter") {
       onEnter(e);
@@ -137,9 +148,7 @@ export const SoftInput = ({ labelText, subjectId, onEnter, sx, theme }: InputPro
         padding-bottom: 6px;
         font-weight: 700;
         border-width: 4px;
-        border-image: linear-gradient(to right, ${
-          theme == "light" ? "#646cff, #609dff" : "#609dff, #646cff"
-        } );
+        border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
         border-image-slice: 1;
       }
       .form__field:focus ~ .form__label {
@@ -148,7 +157,7 @@ export const SoftInput = ({ labelText, subjectId, onEnter, sx, theme }: InputPro
         display: block;
         transition: 0.2s;
         font-size: 17px;
-        color: ${theme == "light" ? "#646cff" : "#609dff"};
+        color: ${color};
         font-weight: 700;
       }
       /* reset input */
@@ -159,6 +168,8 @@ export const SoftInput = ({ labelText, subjectId, onEnter, sx, theme }: InputPro
       </style>
       <input
         onKeyUp={(e) => handleEnter(e)}
+        onFocus={onFocus}
+        onBlur={onBlur}
         className="form__field"
         placeholder={labelText}
         minLength={1}
@@ -171,4 +182,9 @@ export const SoftInput = ({ labelText, subjectId, onEnter, sx, theme }: InputPro
       </label>
     </div>
   );
+};
+
+/** Add 4d at the end of an hex */
+const add4dToHex = (color: string = "#fff") => {
+  return color + "4d";
 };

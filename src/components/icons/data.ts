@@ -112,18 +112,14 @@ export const playerIconStyle: SvgDataType = {
     reset: {
       color: ["#e19f12", "#e19f12"],
     },
-    star: {
-      color: ["#e14512", "#e14512"],
-    },
   },
 };
 
 export const headingStarIconStyle: SvgDataType = {
-  size: ["35px", "35px"],
-  filter: ["4px", "0px"],
-  transition: "all 0.2s ease-in-out",
+  size: ["40px", "40px"],
+  filter: ["7px", "2px"],
+  transition: "all 1s ease-in-out",
   icons: {},
-
   subscribeColors: function* () {
     const playerColors = [
       "#f94144",
@@ -149,6 +145,35 @@ export const headingStarIconStyle: SvgDataType = {
       yield playerColors[i];
       i = (i + 1) % playerColors.length;
     }
+  },
+  animations: {
+    rotate: {
+      delay: 1,
+      duration: 2,
+      timing: "ease-in-out",
+      iteration: "1",
+      direction: "alternate",
+      name: "rotate",
+      keyframes: `0%  {transform: rotate(0deg) }
+                  100% {transform: rotate(360deg)}`,
+
+      get: () => {
+        return `${headingStarIconStyle.animations?.rotate.name} ${headingStarIconStyle.animations?.rotate.duration}s ${headingStarIconStyle.animations?.rotate.timing} ${headingStarIconStyle.animations?.rotate.delay}s ${headingStarIconStyle.animations?.rotate.iteration} ${headingStarIconStyle.animations?.rotate.direction}`;
+      },
+    },
+    translate: {
+      delay: 0.3,
+      duration: 1.2,
+      timing: "ease-in-out",
+      iteration: "infinite",
+      direction: "alternate",
+      name: "translate",
+      keyframes:
+        "0% {transform: translate(0px, 0px) ; transform: rotate(0deg)} 50% {transform : translate(0px, 5px)} 100% {transform: translate(0px, -5px) ; transform: rotate(360deg)}",
+      get: () => {
+        return `${headingStarIconStyle.animations?.translate.name} ${headingStarIconStyle.animations?.translate.duration}s ${headingStarIconStyle.animations?.translate.timing} ${headingStarIconStyle.animations?.translate.delay}s ${headingStarIconStyle.animations?.translate.iteration} ${headingStarIconStyle.animations?.translate.direction}`;
+      },
+    },
   },
 };
 
