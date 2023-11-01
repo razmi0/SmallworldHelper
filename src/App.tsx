@@ -316,6 +316,7 @@ const App = () => {
         display: ${openLineChart ? "flex" : "block"};
         flex-direction: ${openLineChart ? "column" : "row"};
         align-items: ${openLineChart ? "flex-end" : "center"};
+        flex-wrap: wrap;
 
       }
       .list-element {

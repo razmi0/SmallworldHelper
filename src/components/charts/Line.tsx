@@ -31,6 +31,7 @@ export const Line = ({ data, option, theme = "dark" }: LineProps) => {
         marginTop: "0px",
         marginBottom: "0px",
       }}
+      className="chart-ctn"
     >
       <ChartLine data={data} options={option} />
     </figure>
