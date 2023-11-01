@@ -105,6 +105,7 @@ export const SoftInput = ({
       onEnter(e);
     }
   };
+  const fontSize = sx?.fontSize || "15px";
 
   return (
     <div className="form__group">
@@ -112,16 +113,17 @@ export const SoftInput = ({
         {`
       .form__group {
         position: relative;
-        padding: 20px 0 0;
+        padding: 20px 5px;
+        padding-top : 0px;
         width: 100%;
       }
       .form__field--${subjectId} {
         font-family: inherit;
         width: 100%;
         border: none;
-        border-bottom: 3px solid #9b9b9b;
+        border-bottom: 2px solid #9b9b9b;
         outline: 0;
-        font-size: 17px;
+        font-size: ${fontSize};
         color: #fff;
         padding: 7px 0;
         background: transparent;
@@ -131,32 +133,32 @@ export const SoftInput = ({
         color: transparent;
       }
       .form__field--${subjectId}:placeholder-shown ~ .form__label {
-        font-size: 17px;
+        font-size: ${fontSize};
         cursor: text;
-        top: 20px;
+        top: 6px;
       }
       .form__label {
         position: absolute;
         top: 0;
         display: block;
         transition: 0.2s;
-        font-size: 17px;
+        font-size: ${fontSize};
         color: #9b9b9b;
         pointer-events: none;
       }
       .form__field--${subjectId}:focus {
         padding-bottom: 6px;
         font-weight: 700;
-        border-width: 4px;
+        border-width: 3px;
         border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
         border-image-slice: 1;
       }
       .form__field--${subjectId}:focus ~ .form__label {
         position: absolute;
-        top: 0;
+        top: -10px;
         display: block;
         transition: 0.2s;
-        font-size: 17px;
+        font-size: ${fontSize};
         color: ${color};
         font-weight: 700;
       }

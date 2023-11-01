@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react";
 import { flushSync } from "react-dom";
-import { createRoot } from "react-dom/client";
 import {
   AddPlayer,
   Save,
@@ -143,10 +142,17 @@ const App = () => {
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
+  const [isFocusOnField, setIsFocusOnField] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [isHoveringPlayer, setIsHoveringPlayer] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
-  const handleOpenLineChart = () => {};
+  const handleWithViewTransition = (fn: () => void) => {
+    document.startViewTransition(() => {
+      flushSync(() => {
+        fn();
+      });
+    });
+  };
 
   const handleThemeChange = () => {
     if (theme == "light") {
@@ -297,20 +303,25 @@ const App = () => {
         display: flex;
         flex-direction: column;
         min-width: 325px;
-        gap: 30px;
+        gap: 10px;
+        align-items: center;
       }
       .players-list-ctn {
         width: 100%;
         margin: 0;
         padding: 0;
         text-align: left;
-        min-width: 250px;
+        min-width: ${openLineChart ? "fit-content" : "250px"};
+        max-width: ${openLineChart ? "fit-content" : "275px"};
+        display: ${openLineChart ? "flex" : "block"};
+        flex-direction: ${openLineChart ? "column" : "row"};
+        align-items: ${openLineChart ? "flex-end" : "center"};
+
       }
       .list-element {
         display: flex;
         flex-direction: column;
         max-height: 125px;
-        height : 125px;
       }
       .dark-bg {
         background-color : #242424;
@@ -328,7 +339,7 @@ const App = () => {
           {`
           .nav-ctn {
             display: flex;
-            width: 100%;
+            width: fit-content;
             gap: 5px;
             justify-content: flex-start;
             align-items: center;
@@ -424,7 +435,7 @@ const App = () => {
           onClick={() => {
             setOpenMenu(!openMenu);
             if (players.length == 0) return;
-            setOpenLineChart(!openLineChart);
+            handleWithViewTransition(() => setOpenLineChart((p) => !p));
           }}
         />
       </nav>
@@ -432,93 +443,185 @@ const App = () => {
         style={{
           display: "flex",
         }}
+        className="players-ctn"
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
-        <ul className="players-list-ctn">
-          {players.map((player, i) => {
-            const { name, victoryPtn, id, color } = player;
-            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+        <ul className="players-list-ctn" style={{}}>
+          {!openLineChart &&
+            players.map((player, i) => {
+              const { name, victoryPtn, id, color } = player;
+              const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
-            return (
-              <li className="list-element" key={i}>
-                <div style={{ display: "flex" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      fontWeight: "bold",
-                      fontSize: "30px",
-                      transform: "translate(-35px)",
-                    }}
-                    onMouseLeave={() =>
-                      setIsHoveringPlayer((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = false;
-                        return newPrev;
-                      })
-                    }
-                  >
-                    <IconHeading
-                      animationName="translate"
-                      isHover={isHoveringPlayer[i]}
-                      color={color}
-                      icon={Star}
-                      svgData={headingStarIconStyle}
-                    />
-                    <span
+              return (
+                <li className="list-element" key={i}>
+                  <div style={{ display: "flex" }}>
+                    <div
                       style={{
-                        color: isHoveringPlayer[i] ? color : "inherit",
-                        transition: "color 0.3s ease-in-out",
+                        display: "flex",
+                        alignItems: "center",
+                        fontWeight: "bold",
+                        fontSize: "30px",
+                        transform: "translate(-35px)",
                       }}
                     >
-                      {name} : {victoryPtn}
-                    </span>
+                      <IconHeading
+                        animationName="translate"
+                        isHover={isFocusOnField[i]}
+                        color={color}
+                        icon={Star}
+                        svgData={headingStarIconStyle}
+                      />
+                      <span
+                        style={{
+                          color: isFocusOnField[i] ? color : "inherit",
+                          transition: "color 0.3s ease-in-out",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {name} : {victoryPtn}
+                      </span>
+                    </div>
+                    <Spacer />
+                    <IconButton
+                      onClick={() => handleResetScore(player)}
+                      icon={Reset}
+                      iconName="reset"
+                      svgData={playerIconStyle}
+                    />
+                    <IconButton
+                      onClick={() => handleDeletePlayer(player)}
+                      icon={Delete}
+                      iconName="delete"
+                      svgData={playerIconStyle}
+                    />
                   </div>
-                  <Spacer />
-                  <IconButton
-                    onClick={() => handleResetScore(player)}
-                    icon={Reset}
-                    iconName="reset"
-                    svgData={playerIconStyle}
-                  />
-                  <IconButton
-                    onClick={() => handleDeletePlayer(player)}
-                    icon={Delete}
-                    iconName="delete"
-                    svgData={playerIconStyle}
-                  />
-                </div>
-                <form
-                  autoComplete="off"
-                  noValidate
-                  style={{ display: "flex", alignItems: "center" }}
-                  onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+                  <form
+                    autoComplete="off"
+                    noValidate
+                    style={{ display: "flex", alignItems: "center" }}
+                    onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+                  >
+                    <SoftInput
+                      color={color}
+                      onFocus={() =>
+                        setIsFocusOnField((prev) => {
+                          const newPrev = [...prev];
+                          newPrev[i] = true;
+                          return newPrev;
+                        })
+                      }
+                      onBlur={() =>
+                        setIsFocusOnField((prev) => {
+                          const newPrev = [...prev];
+                          newPrev[i] = false;
+                          return newPrev;
+                        })
+                      }
+                      labelText="Score"
+                      subjectId={subjectId}
+                      onEnter={() => new SubmitEvent("submit")}
+                      theme={theme}
+                    />
+                  </form>
+                </li>
+              );
+            })}
+          {openLineChart &&
+            players.map((player, i) => {
+              const { name, victoryPtn, id, color } = player;
+              const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+
+              return (
+                <li
+                  key={i}
+                  style={{
+                    height: "fit-content",
+                    width: "fit-content",
+                    flexDirection: "column",
+                    listStyle: "none",
+                  }}
+                  onClick={() => {
+                    setIsHoveringPlayer((prev) => {
+                      const newPrev = [...prev];
+                      newPrev[i] = !prev[i];
+                      return newPrev;
+                    });
+                  }}
+                  onMouseEnter={() => {
+                    setIsHoveringPlayer((prev) => {
+                      prev[i] = true;
+                      return prev;
+                    });
+                  }}
+                  onMouseLeave={() => {
+                    setIsHoveringPlayer((prev) => {
+                      prev[i] = false;
+                      return prev;
+                    });
+                  }}
                 >
-                  <SoftInput
-                    color={color}
-                    onFocus={() =>
-                      setIsHoveringPlayer((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = true;
-                        return newPrev;
-                      })
-                    }
-                    onBlur={() =>
-                      setIsHoveringPlayer((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = false;
-                        return newPrev;
-                      })
-                    }
-                    labelText="Score"
-                    subjectId={subjectId}
-                    onEnter={() => new SubmitEvent("submit")}
-                    theme={theme}
-                  />
-                </form>
-              </li>
-            );
-          })}
+                  <div style={{ display: "flex" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                        // transform: "translate(-35px)",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: isHoveringPlayer[i] ? color : "inherit",
+                          transition: "color 0.3s ease-in-out",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {name} : {victoryPtn}
+                      </span>
+                      <IconHeading
+                        animationName="translate"
+                        isHover={isHoveringPlayer[i]}
+                        color={color}
+                        icon={Star}
+                        svgData={headingStarIconStyle}
+                      />
+                    </div>
+                  </div>
+                  {/* <form
+                    autoComplete="off"
+                    noValidate
+                    style={{ display: "flex", alignItems: "center" }}
+                    onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+                  >
+                    <SoftInput
+                      sx={{
+                        fontSize: "13px",
+                      }}
+                      color={color}
+                      onFocus={() =>
+                        setIsFocusOnField((prev) => {
+                          const newPrev = [...prev];
+                          newPrev[i] = true;
+                          return newPrev;
+                        })
+                      }
+                      onBlur={() =>
+                        setIsFocusOnField((prev) => {
+                          const newPrev = [...prev];
+                          newPrev[i] = false;
+                          return newPrev;
+                        })
+                      }
+                      labelText="Score"
+                      subjectId={subjectId}
+                      onEnter={() => new SubmitEvent("submit")}
+                      theme={theme}
+                    />
+                  </form> */}
+                </li>
+              );
+            })}
         </ul>
         {/* == LINECHART == */}
         {openLineChart && <Line data={lineData} option={options} theme={theme} />}
