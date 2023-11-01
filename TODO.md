@@ -7,6 +7,7 @@
 - [x] Menu animation
 - [x] Add Line Chart to sum up players progression
 - [ ] Add Bar Chart to sum up players's score data
+- [ ] Pie chart for total shared scored
 - [x] Add Hide scores button
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color
