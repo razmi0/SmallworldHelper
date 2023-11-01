@@ -98,6 +98,21 @@ export const iconStyle: SvgDataType = {
       },
       zIndex: 5,
     },
+    eyes: {
+      //6
+      color: ["#646cff", "#609dff"],
+      transform: () =>
+        `translate(-${
+          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
+            1) * 6
+        }px)`,
+      transition: () => {
+        return iconStyle.bezierParams
+          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 6}s `
+          : iconStyle.transition ?? "none";
+      },
+      zIndex: 4,
+    },
   },
 };
 

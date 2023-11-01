@@ -7,10 +7,10 @@
 - [x] Menu animation
 - [x] Add Line Chart to sum up players progression
 - [ ] Add Bar Chart to sum up players's score data
-- [ ] Add Hide scores button
+- [x] Add Hide scores button
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color
-- [ ] change layout when charts for players
+- [x] change layout when charts for players
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)

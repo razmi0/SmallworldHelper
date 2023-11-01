@@ -12,6 +12,8 @@ import {
   LineChart,
   Star,
   IconHeading,
+  EyeClose,
+  EyeOpen,
 } from "./components/icons/Icons";
 import {
   headingStarIconStyle,
@@ -144,6 +146,7 @@ const App = () => {
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
   const [isFocusOnField, setIsFocusOnField] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [isHoveringPlayer, setIsHoveringPlayer] = useState<boolean[]>(INITIAL_STATES.hovering());
+  const [isScoreHidden, setIsScoreHidden] = useState<boolean>(false);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   const handleWithViewTransition = (fn: () => void) => {
@@ -439,6 +442,21 @@ const App = () => {
             handleWithViewTransition(() => setOpenLineChart((p) => !p));
           }}
         />
+        <IconButton
+          icon={isScoreHidden ? EyeClose : EyeOpen}
+          sx={{
+            transform: openMenu ? "translate(0px)" : iconStyle.icons.eyes.transform?.(),
+            transition: iconStyle.icons.eyes.transition?.(),
+            zIndex: iconStyle.icons.eyes.zIndex,
+          }}
+          theme={theme}
+          iconName="eyes"
+          svgData={iconStyle}
+          onClick={() => {
+            setOpenMenu(!openMenu);
+            setIsScoreHidden((p) => !p);
+          }}
+        />
       </nav>
       <section
         style={{
@@ -479,7 +497,7 @@ const App = () => {
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {name} : {victoryPtn}
+                        {name} : {isScoreHidden ? "" : victoryPtn}
                       </span>
                     </div>
                     <Spacer />
