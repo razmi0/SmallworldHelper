@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react";
 import { flushSync } from "react-dom";
-import { createRoot } from "react-dom/client";
 import {
   AddPlayer,
   Save,
@@ -143,10 +142,16 @@ const App = () => {
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [openLineChart, setOpenLineChart] = useState<boolean>(false);
-  const [isHoveringPlayer, setIsHoveringPlayer] = useState<boolean[]>(INITIAL_STATES.hovering());
+  const [isFocusOnField, setIsFocusOnField] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
-  const handleOpenLineChart = () => {};
+  const handleWithViewTransition = (fn: () => void) => {
+    document.startViewTransition(() => {
+      flushSync(() => {
+        fn();
+      });
+    });
+  };
 
   const handleThemeChange = () => {
     if (theme == "light") {
@@ -305,6 +310,7 @@ const App = () => {
         padding: 0;
         text-align: left;
         min-width: 250px;
+        max-width: 275px;
       }
       .list-element {
         display: flex;
@@ -424,7 +430,7 @@ const App = () => {
           onClick={() => {
             setOpenMenu(!openMenu);
             if (players.length == 0) return;
-            setOpenLineChart(!openLineChart);
+            handleWithViewTransition(() => setOpenLineChart((p) => !p));
           }}
         />
       </nav>
@@ -434,7 +440,12 @@ const App = () => {
         }}
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
-        <ul className="players-list-ctn">
+        <ul
+          className="players-list-ctn"
+          style={{
+            viewTransitionName: "playerslist", // unused
+          }}
+        >
           {players.map((player, i) => {
             const { name, victoryPtn, id, color } = player;
             const subjectId = `${id}_${name.toLowerCase()}_newScore`;
@@ -451,7 +462,7 @@ const App = () => {
                       transform: "translate(-35px)",
                     }}
                     onMouseLeave={() =>
-                      setIsHoveringPlayer((prev) => {
+                      setIsFocusOnField((prev) => {
                         const newPrev = [...prev];
                         newPrev[i] = false;
                         return newPrev;
@@ -460,15 +471,16 @@ const App = () => {
                   >
                     <IconHeading
                       animationName="translate"
-                      isHover={isHoveringPlayer[i]}
+                      isHover={isFocusOnField[i]}
                       color={color}
                       icon={Star}
                       svgData={headingStarIconStyle}
                     />
                     <span
                       style={{
-                        color: isHoveringPlayer[i] ? color : "inherit",
+                        color: isFocusOnField[i] ? color : "inherit",
                         transition: "color 0.3s ease-in-out",
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {name} : {victoryPtn}
@@ -497,14 +509,14 @@ const App = () => {
                   <SoftInput
                     color={color}
                     onFocus={() =>
-                      setIsHoveringPlayer((prev) => {
+                      setIsFocusOnField((prev) => {
                         const newPrev = [...prev];
                         newPrev[i] = true;
                         return newPrev;
                       })
                     }
                     onBlur={() =>
-                      setIsHoveringPlayer((prev) => {
+                      setIsFocusOnField((prev) => {
                         const newPrev = [...prev];
                         newPrev[i] = false;
                         return newPrev;

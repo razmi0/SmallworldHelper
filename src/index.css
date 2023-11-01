@@ -35,6 +35,20 @@
   box-sizing: border-box;
 }
 
+::view-transition-new(linechart) {
+  animation: slideinLine 0.2s ease-in;
+  z-index: -2;
+}
+
+@keyframes slideinLine {
+  from {
+    transform: translate(-50%);
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
 body {
   /* background-color: ; */
   margin: 0;
