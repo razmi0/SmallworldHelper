@@ -304,7 +304,7 @@ const App = () => {
         flex-direction: column;
         min-width: 325px;
         gap: 10px;
-        align-items: center;
+        align-items: flex-start;
       }
       .players-list-ctn {
         width: 100%;
@@ -528,8 +528,7 @@ const App = () => {
             })}
           {openLineChart &&
             players.map((player, i) => {
-              const { name, victoryPtn, id, color } = player;
-              const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+              const { name, victoryPtn, color } = player;
 
               return (
                 <li
