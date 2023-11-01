@@ -1,7 +1,7 @@
 import { SvgDataType } from "./Icons";
 
 export const iconStyle: SvgDataType = {
-  size: ["50px", "50px"],
+  size: ["40px", "40px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
   gap: "5px",

@@ -10,11 +10,12 @@
 - [ ] Add Hide scores button
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color
-- [ ] refacto css => module, tailwind, styled-components or just css files ?
+- [ ] change layout when charts for players
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
 
+- [ ] refacto css => module, tailwind, styled-components or just css files ?
 - [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon
 - [ ] Refacto theme logic with context API and localstorage ?
 - [ ] Change add player to more designed menu on click

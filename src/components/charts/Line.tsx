@@ -30,7 +30,6 @@ export const Line = ({ data, option, theme = "dark" }: LineProps) => {
         maxHeight: "250px",
         marginTop: "0px",
         marginBottom: "0px",
-        viewTransitionName: "linechart",
       }}
     >
       <ChartLine data={data} options={option} />
