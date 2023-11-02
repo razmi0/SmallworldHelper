@@ -24,16 +24,5 @@ export const Line = ({ data, option, theme = "dark" }: LineProps) => {
     option.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
     option.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffffde" : "#242424";
   }
-  return (
-    <figure
-      style={{
-        maxHeight: "250px",
-        marginTop: "0px",
-        marginBottom: "0px",
-      }}
-      className="chart-ctn"
-    >
-      <ChartLine data={data} options={option} />
-    </figure>
-  );
+  return <ChartLine data={data} options={option} />;
 };

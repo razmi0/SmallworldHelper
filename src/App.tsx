@@ -24,8 +24,18 @@ import {
 import { Input, InputButton, SoftInput } from "./components/Input";
 import { Spacer } from "./components/Utils";
 import { Line } from "./components/charts/Line";
-import { options } from "./components/charts/data";
-import { findMaxNbrTurns, getFromLocalStorage, getRandomColor, saveToLocalStorage } from "./utils";
+import { lineOptions, barOptions } from "./components/charts/data";
+import {
+  findMaxNbrTurns,
+  getFromLocalStorage,
+  getRandomColor,
+  saveToLocalStorage,
+  findAverage,
+  findMin,
+  findMax,
+} from "./utils";
+import { ChartContainer } from "./components/Containers";
+import { Bar } from "./components/charts/Bar";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -55,9 +65,19 @@ type LineData = {
   }[];
 };
 
+type BarData = {
+  labels: string[]; // x-axis & players name
+  datasets: {
+    label: string; // maxscore, minscore, average
+    data: number[]; // treated data from Player['addedScores'] [fn maxscoredata, fn minscoredata, fn average data]
+    backgroundColor: string; // player color with opacity
+    borderColor: string; // player color
+  }[];
+};
+
 // const initializeLineData = (players: Player[]): LineData => {};
 
-const updatePlayersAddScoreState = (
+const updatePlayers = (
   players: Player[],
   subjectId: string,
   newScore: number
@@ -79,7 +99,7 @@ const updatePlayersAddScoreState = (
   return [newPlayers, idx];
 };
 
-const updateLineChartAddScoreState = (lineData: LineData, players: Player[], idx: number) => {
+const updateLineChart = (lineData: LineData, players: Player[], idx: number) => {
   const newLineChartDatasets = [...lineData.datasets];
   const newLabels = [...lineData.labels];
   const newLength = findMaxNbrTurns(players);
@@ -102,12 +122,29 @@ const updateLineChartAddScoreState = (lineData: LineData, players: Player[], idx
   };
 };
 
+const updateBarChart = (barData: BarData, players: Player[], idx: number) => {
+  const player = players[idx];
+  const newDatasets = [...barData.datasets];
+  const fns = [findMax, findMin, findAverage];
+  const idxInData = barData.labels.findIndex((l) => l === player.name);
+  for (let i = 0; i < fns.length; i++) {
+    newDatasets[i].data[idxInData] = fns[i](player.addedScores);
+  }
+
+  return {
+    labels: barData.labels,
+    datasets: newDatasets,
+  };
+};
+
 const bodyElement = document.querySelector("body");
 
 const INITIAL_STATES = {
   players: getFromLocalStorage<Player[]>("players", []),
+  startScore: 0,
   hovering: () => Array.from({ length: INITIAL_STATES.players.length }, () => false),
   lineData: () => INITIAL_STATES.initLineData(),
+  barData: () => INITIAL_STATES.initBarData(),
   initLineData: () => {
     const maxTurns = findMaxNbrTurns(INITIAL_STATES.players);
     return {
@@ -126,7 +163,31 @@ const INITIAL_STATES = {
             }) ?? [],
     };
   },
-  startScore: 0,
+  initBarData: (): BarData => {
+    return {
+      labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
+      datasets: [
+        {
+          label: "Max score",
+          data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
+          backgroundColor: "#ff0000",
+          borderColor: "#ff0000",
+        },
+        {
+          label: "Min score",
+          data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
+          backgroundColor: "#00ff00",
+          borderColor: "#00ff00",
+        },
+        {
+          label: "Average score",
+          data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
+          backgroundColor: "#0000ff",
+          borderColor: "#0000ff",
+        },
+      ],
+    };
+  },
 };
 
 /* == COMPONENT == */
@@ -138,14 +199,14 @@ const App = () => {
   const [newPlayer, setNewPlayer] = useState<string>("");
   const [startScore, setStartScore] = useState<number>(INITIAL_STATES.startScore);
   const [lineData, setLineData] = useState<LineData>(INITIAL_STATES.lineData());
+  const [barData, setBarData] = useState<BarData>(INITIAL_STATES.barData());
 
   /* == STATES FOR UI == */
   //--
   const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const [openLineChart, setOpenLineChart] = useState<boolean>(false);
+  const [openCharts, setOpenCharts] = useState<boolean>(false);
   const [isFocusOnField, setIsFocusOnField] = useState<boolean[]>(INITIAL_STATES.hovering());
-  const [isHoveringPlayer, setIsHoveringPlayer] = useState<boolean[]>(INITIAL_STATES.hovering());
   const [isScoreHidden, setIsScoreHidden] = useState<boolean>(false);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
 
@@ -178,8 +239,8 @@ const App = () => {
     if (isNaN(startScore)) return;
 
     const newColor = playerColors[players.length] ?? getRandomColor();
-    const labels = lineData.labels;
     const newName = newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1);
+    const newBarDatasets = [...barData.datasets];
 
     setPlayers([
       ...players,
@@ -195,7 +256,7 @@ const App = () => {
     ]);
 
     setLineData({
-      labels,
+      labels: lineData.labels,
       datasets: [
         ...lineData.datasets,
         {
@@ -207,8 +268,16 @@ const App = () => {
       ],
     });
 
+    newBarDatasets[0].data = [...newBarDatasets[0].data, startScore];
+    newBarDatasets[1].data = [...newBarDatasets[1].data, startScore];
+    newBarDatasets[2].data = [...newBarDatasets[2].data, startScore];
+
+    setBarData({
+      labels: [...barData.labels, newName],
+      datasets: newBarDatasets,
+    });
+
     setNewPlayer("");
-    setOpenAddPlayer(false);
   };
 
   const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
@@ -219,7 +288,7 @@ const App = () => {
     const newScore = Number(formData.get(subjectId)) ?? 0;
     if (isNaN(newScore)) return;
 
-    const [newPlayers, idx] = updatePlayersAddScoreState(players, subjectId, newScore);
+    const [newPlayers, idx] = updatePlayers(players, subjectId, newScore);
 
     if (idx == -1) {
       console.warn(`${subjectId} not found`);
@@ -227,12 +296,14 @@ const App = () => {
     }
     e.currentTarget.reset();
 
-    /* == LINECHART STATES UPDATE == */
+    /* == CHARTS STATES UPDATE == */
     //--
-    const newLineData = updateLineChartAddScoreState(lineData, newPlayers, idx);
+    const newLineData = updateLineChart(lineData, newPlayers, idx);
+    const newBarData = updateBarChart(barData, newPlayers, idx);
 
-    setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
     setLineData(newLineData);
+    setBarData(newBarData);
+    setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
   };
 
   const handleDeletePlayer = ({ id, name }: Player) => {
@@ -246,16 +317,30 @@ const App = () => {
     const newPlayers = [...players];
     newPlayers.splice(idx, 1);
 
-    /* == LINECHART STATES UPDATE == */
+    /* == CHARTS STATES UPDATE == */
     //--
     const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
     if (playerLineIdx == -1) return;
     const newLineDatasets = [...lineData.datasets];
     newLineDatasets.splice(playerLineIdx, 1);
 
+    /* == BAR CHART STATES UPDATE == */
+    //--
+    const newBarLabels = [...barData.labels];
+    const newBarDatasets = [...barData.datasets];
+    const idxInDatasets = newBarLabels.findIndex((l) => l === name);
+    newBarLabels.splice(idxInDatasets, 1);
+    newBarDatasets.map((d) => {
+      d.data.splice(idxInDatasets, 1);
+    });
+
     setLineData({
       labels: lineData.labels,
       datasets: newLineDatasets,
+    });
+    setBarData({
+      labels: newBarLabels,
+      datasets: newBarDatasets,
     });
     setPlayers(newPlayers);
   };
@@ -271,6 +356,7 @@ const App = () => {
     }
     newPlayers[idx].victoryPtn = 0;
     newPlayers[idx].history.push(0);
+    newPlayers[idx].addedScores.push(0);
 
     /* == LINECHART STATES UPDATE == */
     //--
@@ -291,9 +377,21 @@ const App = () => {
 
     data.push(0);
 
+    /* == BAR CHART STATES UPDATE == */
+    //--
+    const newBarDatasets = [...barData.datasets];
+    const idxInData = barData.labels.findIndex((l) => l === name);
+    newBarDatasets.map((d) => {
+      d.data[idxInData] = 0;
+    });
+
     setLineData({
       labels: newLabels,
       datasets: newLineDatasets,
+    });
+    setBarData({
+      labels: barData.labels,
+      datasets: newBarDatasets,
     });
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
   };
@@ -314,11 +412,9 @@ const App = () => {
         margin: 0;
         padding: 0;
         text-align: left;
-        min-width: ${openLineChart ? "fit-content" : "250px"};
-        max-width: ${openLineChart ? "fit-content" : "275px"};
-        display: ${openLineChart ? "flex" : "block"};
-        flex-direction: ${openLineChart ? "column" : "row"};
-        align-items: ${openLineChart ? "flex-end" : "center"};
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
         flex-wrap: wrap;
 
       }
@@ -393,6 +489,7 @@ const App = () => {
           onClick={() => {
             setPlayers(getFromLocalStorage<Player[]>("players"));
             setLineData(getFromLocalStorage<LineData>("lineData", INITIAL_STATES.lineData()));
+            setBarData(getFromLocalStorage<BarData>("barData", INITIAL_STATES.barData()));
             setOpenMenu(!openMenu);
           }}
         />
@@ -408,6 +505,7 @@ const App = () => {
           onClick={() => {
             saveToLocalStorage("players", players);
             saveToLocalStorage("lineData", lineData);
+            saveToLocalStorage("barData", barData);
             setOpenMenu(!openMenu);
           }}
           theme={theme}
@@ -439,7 +537,7 @@ const App = () => {
           onClick={() => {
             setOpenMenu(!openMenu);
             if (players.length == 0) return;
-            handleWithViewTransition(() => setOpenLineChart((p) => !p));
+            handleWithViewTransition(() => setOpenCharts((p) => !p));
           }}
         />
         <IconButton
@@ -466,183 +564,106 @@ const App = () => {
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
         <ul className="players-list-ctn" style={{}}>
-          {!openLineChart &&
-            players.map((player, i) => {
-              const { name, victoryPtn, id, color } = player;
-              const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+          {players.map((player, i) => {
+            const { name, victoryPtn, id, color } = player;
+            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
-              return (
-                <li className="list-element" key={i}>
-                  <div style={{ display: "flex" }}>
-                    <div
+            return (
+              <li className="list-element" key={i}>
+                <div style={{ display: "flex" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                      fontSize: "30px",
+                    }}
+                  >
+                    <IconHeading
+                      animationName="translate"
+                      isHover={isFocusOnField[i]}
+                      color={color}
+                      icon={Star}
+                      svgData={headingStarIconStyle}
+                    />
+                    <span
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        fontWeight: "bold",
-                        fontSize: "30px",
-                        transform: "translate(-35px)",
+                        color: isFocusOnField[i] ? color : "inherit",
+                        transition: "color 0.3s ease-in-out",
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      <IconHeading
-                        animationName="translate"
-                        isHover={isFocusOnField[i]}
-                        color={color}
-                        icon={Star}
-                        svgData={headingStarIconStyle}
-                      />
-                      <span
-                        style={{
-                          color: isFocusOnField[i] ? color : "inherit",
-                          transition: "color 0.3s ease-in-out",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {name} : {isScoreHidden ? "" : victoryPtn}
-                      </span>
-                    </div>
-                    <Spacer />
-                    <IconButton
-                      onClick={() => handleResetScore(player)}
-                      icon={Reset}
-                      iconName="reset"
-                      svgData={playerIconStyle}
-                    />
-                    <IconButton
-                      onClick={() => handleDeletePlayer(player)}
-                      icon={Delete}
-                      iconName="delete"
-                      svgData={playerIconStyle}
-                    />
+                      {name} : {isScoreHidden ? "*****" : victoryPtn}
+                    </span>
                   </div>
-                  <form
-                    autoComplete="off"
-                    noValidate
-                    style={{ display: "flex", alignItems: "center" }}
-                    onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
-                  >
-                    <SoftInput
-                      color={color}
-                      onFocus={() =>
-                        setIsFocusOnField((prev) => {
-                          const newPrev = [...prev];
-                          newPrev[i] = true;
-                          return newPrev;
-                        })
-                      }
-                      onBlur={() =>
-                        setIsFocusOnField((prev) => {
-                          const newPrev = [...prev];
-                          newPrev[i] = false;
-                          return newPrev;
-                        })
-                      }
-                      labelText="Score"
-                      subjectId={subjectId}
-                      onEnter={() => new SubmitEvent("submit")}
-                      theme={theme}
-                    />
-                  </form>
-                </li>
-              );
-            })}
-          {openLineChart &&
-            players.map((player, i) => {
-              const { name, victoryPtn, color } = player;
-
-              return (
-                <li
-                  key={i}
-                  style={{
-                    height: "fit-content",
-                    width: "fit-content",
-                    flexDirection: "column",
-                    listStyle: "none",
-                  }}
-                  onClick={() => {
-                    setIsHoveringPlayer((prev) => {
-                      const newPrev = [...prev];
-                      newPrev[i] = !prev[i];
-                      return newPrev;
-                    });
-                  }}
-                  onMouseEnter={() => {
-                    setIsHoveringPlayer((prev) => {
-                      prev[i] = true;
-                      return prev;
-                    });
-                  }}
-                  onMouseLeave={() => {
-                    setIsHoveringPlayer((prev) => {
-                      prev[i] = false;
-                      return prev;
-                    });
-                  }}
+                  <Spacer />
+                  <IconButton
+                    onClick={() => handleResetScore(player)}
+                    icon={Reset}
+                    iconName="reset"
+                    svgData={playerIconStyle}
+                  />
+                  <IconButton
+                    onClick={() => handleDeletePlayer(player)}
+                    icon={Delete}
+                    iconName="delete"
+                    svgData={playerIconStyle}
+                  />
+                </div>
+                <form
+                  autoComplete="off"
+                  noValidate
+                  style={{ display: "flex", alignItems: "center" }}
+                  onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
                 >
-                  <div style={{ display: "flex" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        fontWeight: "bold",
-                        fontSize: "15px",
-                        // transform: "translate(-35px)",
-                      }}
-                    >
-                      <span
-                        style={{
-                          color: isHoveringPlayer[i] ? color : "inherit",
-                          transition: "color 0.3s ease-in-out",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {name} : {victoryPtn}
-                      </span>
-                      <IconHeading
-                        animationName="translate"
-                        isHover={isHoveringPlayer[i]}
-                        color={color}
-                        icon={Star}
-                        svgData={headingStarIconStyle}
-                      />
-                    </div>
-                  </div>
-                  {/* <form
-                    autoComplete="off"
-                    noValidate
-                    style={{ display: "flex", alignItems: "center" }}
-                    onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
-                  >
-                    <SoftInput
-                      sx={{
-                        fontSize: "13px",
-                      }}
-                      color={color}
-                      onFocus={() =>
-                        setIsFocusOnField((prev) => {
-                          const newPrev = [...prev];
-                          newPrev[i] = true;
-                          return newPrev;
-                        })
-                      }
-                      onBlur={() =>
-                        setIsFocusOnField((prev) => {
-                          const newPrev = [...prev];
-                          newPrev[i] = false;
-                          return newPrev;
-                        })
-                      }
-                      labelText="Score"
-                      subjectId={subjectId}
-                      onEnter={() => new SubmitEvent("submit")}
-                      theme={theme}
-                    />
-                  </form> */}
-                </li>
-              );
-            })}
+                  <SoftInput
+                    color={color}
+                    onFocus={() =>
+                      setIsFocusOnField((prev) => {
+                        const newPrev = [...prev];
+                        newPrev[i] = true;
+                        return newPrev;
+                      })
+                    }
+                    onBlur={() =>
+                      setIsFocusOnField((prev) => {
+                        const newPrev = [...prev];
+                        newPrev[i] = false;
+                        return newPrev;
+                      })
+                    }
+                    labelText="Score"
+                    subjectId={subjectId}
+                    onEnter={() => new SubmitEvent("submit")}
+                    theme={theme}
+                  />
+                </form>
+              </li>
+            );
+          })}
         </ul>
-        {/* == LINECHART == */}
-        {openLineChart && <Line data={lineData} option={options} theme={theme} />}
+        {/* == CHARTS == */}
+        {openCharts && players.length > 0 && (
+          <section className="charts-ctn">
+            <style>
+              {`
+              .charts-ctn {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                justify-content: space-around;
+              }
+              `}
+            </style>
+            <ChartContainer>
+              <Line data={lineData} option={lineOptions} theme={theme} />
+            </ChartContainer>
+            <ChartContainer>
+              <Bar data={barData} option={barOptions} theme={theme} />
+            </ChartContainer>
+          </section>
+        )}
       </section>
       {/* == ADD PLAYER == */}
       {openAddPlayer && (
