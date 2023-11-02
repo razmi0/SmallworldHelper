@@ -6,7 +6,7 @@ declare module "chart.js" {
   }
 }
 
-export const options: ChartOptions<"line"> = {
+export const lineOptions: ChartOptions<"line"> = {
   responsive: true,
   elements: {
     point: {
@@ -38,7 +38,6 @@ export const options: ChartOptions<"line"> = {
     mode: "index",
     intersect: false,
   },
-
   plugins: {
     legend: {
       display: false,
@@ -59,6 +58,16 @@ export const options: ChartOptions<"line"> = {
       itemSort: (a, b) => {
         return b.parsed.y - a.parsed.y;
       },
+    },
+  },
+};
+
+export const barOptions: ChartOptions<"bar"> = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
     },
   },
 };
