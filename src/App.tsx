@@ -326,7 +326,6 @@ const App = () => {
 
     /* == BAR CHART STATES UPDATE == */
     //--
-    const fns = [findMax, findMin, findAverage];
     const newBarLabels = [...barData.labels];
     const newBarDatasets = [...barData.datasets];
     const idxInDatasets = newBarLabels.findIndex((l) => l === name);
@@ -413,10 +412,9 @@ const App = () => {
         margin: 0;
         padding: 0;
         text-align: left;
-        min-width: ${openCharts ? "fit-content" : "250px"};
-        max-width: ${openCharts ? "fit-content" : "275px"};
-        display: ${openCharts ? "flex" : "block"};
-        flex-direction: ${openCharts ? "column" : "row"};
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
         flex-wrap: wrap;
 
       }
