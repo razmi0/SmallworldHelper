@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, KeyboardEvent, ReactNode, FC, CSSProperties } from "react";
-import { add4dToHex } from "src/utils";
+import { add4dToHex } from "../utils";
 
 interface InputProps {
   labelText: string;
