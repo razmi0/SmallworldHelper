@@ -59,3 +59,16 @@ export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T): 
   const storedValue = window.localStorage.getItem(key);
   return storedValue !== null ? (JSON.parse(storedValue) as T) : defaultValue;
 };
+
+export const findAverage = (arr: number[]) => {
+  const sum = arr.reduce((a, b) => a + b, 0);
+  return sum / arr.length || 0;
+};
+
+export const findMax = (arr: number[]) => {
+  return Math.max(...arr);
+};
+
+export const findMin = (arr: number[]) => {
+  return Math.min(...arr);
+};
