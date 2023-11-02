@@ -33,6 +33,7 @@ import {
   findAverage,
   findMin,
   findMax,
+  hexToRgba,
 } from "./utils";
 import { ChartContainer } from "./components/Containers";
 import { Bar } from "./components/charts/Bar";
@@ -53,6 +54,9 @@ type Player = {
   addedScores: number[];
   rankChange: number;
   color: string;
+  max: number;
+  min: number;
+  avg: number;
 };
 
 type LineData = {
@@ -70,8 +74,8 @@ type BarData = {
   datasets: {
     label: string; // maxscore, minscore, average
     data: number[]; // treated data from Player['addedScores'] [fn maxscoredata, fn minscoredata, fn average data]
-    backgroundColor: string; // player color with opacity
-    borderColor: string; // player color
+    backgroundColor?: string | string[]; // player color with opacity
+    borderColor?: string | string[]; // player color
   }[];
 };
 
@@ -170,20 +174,28 @@ const INITIAL_STATES = {
         {
           label: "Max score",
           data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
-          backgroundColor: "#ff0000",
-          borderColor: "#ff0000",
+          backgroundColor:
+            INITIAL_STATES.players.map((p) => {
+              return hexToRgba(p.color), hexToRgba(p.color, 0.95), hexToRgba(p.color, 0.9);
+            }) ?? [],
         },
         {
           label: "Min score",
           data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
-          backgroundColor: "#00ff00",
-          borderColor: "#00ff00",
+          backgroundColor:
+            INITIAL_STATES.players.map((p) => {
+              return hexToRgba(p.color), hexToRgba(p.color, 0.95), hexToRgba(p.color, 0.9);
+            }) ?? [],
+          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
         },
         {
           label: "Average score",
           data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
-          backgroundColor: "#0000ff",
-          borderColor: "#0000ff",
+          backgroundColor:
+            INITIAL_STATES.players.map((p) => {
+              return hexToRgba(p.color), hexToRgba(p.color, 0.95), hexToRgba(p.color, 0.9);
+            }) ?? [],
+          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
         },
       ],
     };
@@ -252,6 +264,9 @@ const App = () => {
         addedScores: [startScore],
         rankChange: 0,
         color: newColor,
+        max: startScore,
+        min: startScore,
+        avg: startScore,
       },
     ]);
 
