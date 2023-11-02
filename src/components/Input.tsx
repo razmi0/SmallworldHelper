@@ -1,4 +1,5 @@
 import { InputHTMLAttributes, KeyboardEvent, ReactNode, FC, CSSProperties } from "react";
+import { add4dToHex } from "src/utils";
 
 interface InputProps {
   labelText: string;
@@ -184,9 +185,4 @@ export const SoftInput = ({
       </label>
     </div>
   );
-};
-
-/** Add 4d at the end of an hex */
-const add4dToHex = (color: string = "#fff") => {
-  return color + "4d";
 };
