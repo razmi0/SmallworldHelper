@@ -37,6 +37,15 @@ export const hexToRgba = (hex: string, opacity: number = 1) => {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 };
 
+/** Add 4d at the end of an hex */
+export const add4dToHex = (color: string = "#fff") => {
+  return color + "4d";
+};
+
+export const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => {
+  return hexToRgba(color, opacity);
+};
+
 type HistoryItem = {
   history: number[];
 };
