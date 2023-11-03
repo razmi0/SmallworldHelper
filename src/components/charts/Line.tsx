@@ -16,13 +16,13 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 type LineProps = {
   data: ChartData<"line">;
-  option: ChartOptions<"line">;
+  options: ChartOptions<"line">;
   theme?: "light" | "dark";
 };
-export const Line = ({ data, option, theme = "dark" }: LineProps) => {
-  if (option.plugins?.tooltip) {
-    option.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
-    option.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffffde" : "#242424";
+export const Line = ({ data, options, theme = "dark" }: LineProps) => {
+  if (options.plugins?.tooltip) {
+    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
+    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffffde" : "#242424";
   }
-  return <ChartLine data={data} options={option} />;
+  return <ChartLine data={data} options={options} />;
 };

@@ -24,7 +24,7 @@ import {
 import { Input, InputButton, SoftInput } from "./components/Input";
 import { Spacer } from "./components/Utils";
 import { Line } from "./components/charts/Line";
-import { lineOptions, barOptions } from "./components/charts/data";
+import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import {
   findMaxNbrTurns,
   getFromLocalStorage,
@@ -37,6 +37,7 @@ import {
 } from "./utils";
 import { ChartContainer } from "./components/Containers";
 import { Bar } from "./components/charts/Bar";
+import { Pie } from "./components/charts/Pie";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -77,10 +78,20 @@ type BarData = {
     data: number[]; // treated data from Player['addedScores'] [fn maxscoredata, fn minscoredata, fn average data]
     backgroundColor: string[]; // player color with opacity
     borderColor: string[]; // player color
-    borderWidth?: number;
+    borderWidth: number;
   }[];
 };
 
+type PieData = {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string[];
+    borderColor: string[];
+    borderWidth: number;
+  }[];
+};
 // const initializeLineData = (players: Player[]): LineData => {};
 
 const updatePlayers = (
@@ -143,6 +154,18 @@ const updateBarChart = (barData: BarData, players: Player[], idx: number) => {
   };
 };
 
+const updatePieChart = (pieData: PieData, players: Player[], idx: number) => {
+  const newDatasets = [...pieData.datasets];
+  const player = players[idx];
+  const idxInData = pieData.labels.findIndex((l) => l === player.name);
+  newDatasets[0].data[idxInData] = player.victoryPtn;
+
+  return {
+    labels: pieData.labels,
+    datasets: newDatasets,
+  };
+};
+
 const bodyElement = document.querySelector("body");
 
 const INITIAL_STATES = {
@@ -150,6 +173,7 @@ const INITIAL_STATES = {
   startScore: 0,
   lineData: () => getFromLocalStorage<LineData>("lineData", INITIAL_STATES.initLineData()),
   barData: () => getFromLocalStorage<BarData>("barData", INITIAL_STATES.initBarData()),
+  pieData: () => getFromLocalStorage<PieData>("pieData", INITIAL_STATES.initPieData()),
   hovering: () => Array.from({ length: INITIAL_STATES.players.length }, () => false),
   initLineData: () => {
     const maxTurns = findMaxNbrTurns(INITIAL_STATES.players);
@@ -169,30 +193,44 @@ const INITIAL_STATES = {
             }) ?? [],
     };
   },
-  initBarData: (): BarData => {
+  initBarData: () => {
     return {
       labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
       datasets: [
         {
           label: "Max score",
           data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.95)) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 3,
+          borderWidth: 2,
         },
         {
           label: "Min score",
           data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.95)) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 3,
+          borderWidth: 2,
         },
         {
           label: "Average score",
           data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.95)) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 3,
+          borderWidth: 2,
+        },
+      ],
+    };
+  },
+  initPieData: () => {
+    return {
+      labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
+      datasets: [
+        {
+          label: "Victory points",
+          data: INITIAL_STATES.players.map((p) => p.victoryPtn) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
+          borderWidth: 2,
         },
       ],
     };
@@ -209,6 +247,7 @@ const App = () => {
   const [startScore, setStartScore] = useState<number>(INITIAL_STATES.startScore);
   const [lineData, setLineData] = useState<LineData>(INITIAL_STATES.lineData());
   const [barData, setBarData] = useState<BarData>(INITIAL_STATES.barData());
+  const [pieData, setPieData] = useState<PieData>(INITIAL_STATES.pieData());
 
   /* == STATES FOR UI == */
   //--
@@ -250,6 +289,7 @@ const App = () => {
     const newColor = playerColors[players.length] ?? getRandomColor();
     const newName = newPlayer.trim().charAt(0).toUpperCase() + newPlayer.slice(1);
     const newBarDatasets = [...barData.datasets];
+    const newPieDatasets = [...pieData.datasets];
 
     setPlayers([
       ...players,
@@ -285,12 +325,25 @@ const App = () => {
       dataset.data = [...dataset.data, startScore];
       dataset.backgroundColor.push(addOpacityToHex(newColor, 0.8));
       dataset.borderColor.push(newColor);
-      dataset.borderWidth = 3;
+      dataset.borderWidth = 2;
     }
 
     setBarData({
       labels: [...barData.labels, newName],
       datasets: newBarDatasets,
+    });
+
+    setPieData({
+      labels: [...pieData.labels, newName],
+      datasets: [
+        {
+          label: "Victory points",
+          data: [...newPieDatasets[0].data, startScore],
+          backgroundColor: [...newPieDatasets[0].backgroundColor, addOpacityToHex(newColor, 0.8)],
+          borderColor: [...newPieDatasets[0].borderColor, newColor],
+          borderWidth: 2,
+        },
+      ],
     });
 
     setNewPlayer("");
@@ -316,9 +369,11 @@ const App = () => {
     //--
     const newLineData = updateLineChart(lineData, newPlayers, idx);
     const newBarData = updateBarChart(barData, newPlayers, idx);
+    const newPieData = updatePieChart(pieData, newPlayers, idx);
 
     setLineData(newLineData);
     setBarData(newBarData);
+    setPieData(newPieData);
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
   };
 
@@ -340,8 +395,6 @@ const App = () => {
     const newLineDatasets = [...lineData.datasets];
     newLineDatasets.splice(playerLineIdx, 1);
 
-    /* == BAR CHART STATES UPDATE == */
-    //--
     const newBarLabels = [...barData.labels];
     const newBarDatasets = [...barData.datasets];
     const idxInDatasets = newBarLabels.findIndex((l) => l === name);
@@ -350,7 +403,17 @@ const App = () => {
     newBarDatasets.map((d) => {
       d.data.splice(idxInDatasets, 1);
       d.backgroundColor.splice(idxInDatasets, 1);
+      d.borderColor.splice(idxInDatasets, 1);
     });
+
+    const newPieLabels = [...pieData.labels];
+    const newPieDatasets = [...pieData.datasets];
+    const idxInPieDatasets = newPieLabels.findIndex((l) => l === name);
+    if (idxInPieDatasets == -1) return;
+    newPieLabels.splice(idxInPieDatasets, 1);
+    newPieDatasets[0].data.splice(idxInPieDatasets, 1);
+    newPieDatasets[0].backgroundColor.splice(idxInPieDatasets, 1);
+    newPieDatasets[0].borderColor.splice(idxInPieDatasets, 1);
 
     setLineData({
       labels: lineData.labels,
@@ -359,6 +422,10 @@ const App = () => {
     setBarData({
       labels: newBarLabels,
       datasets: newBarDatasets,
+    });
+    setPieData({
+      labels: newPieLabels,
+      datasets: newPieDatasets,
     });
     setPlayers(newPlayers);
   };
@@ -403,6 +470,13 @@ const App = () => {
       d.data[idxInData] = 0;
     });
 
+    /* == PIE CHART STATES UPDATE == */
+    //--
+
+    const newPieDatasets = [...pieData.datasets];
+    const idxInPieData = pieData.labels.findIndex((l) => l === name);
+    newPieDatasets[0].data[idxInPieData] = 0;
+
     setLineData({
       labels: newLabels,
       datasets: newLineDatasets,
@@ -410,6 +484,10 @@ const App = () => {
     setBarData({
       labels: barData.labels,
       datasets: newBarDatasets,
+    });
+    setPieData({
+      labels: pieData.labels,
+      datasets: newPieDatasets,
     });
     setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
   };
@@ -675,10 +753,13 @@ const App = () => {
               `}
             </style>
             <ChartContainer>
-              <Line data={lineData} option={lineOptions} theme={theme} />
+              <Line data={lineData} options={lineOptions} theme={theme} />
             </ChartContainer>
             <ChartContainer>
-              <Bar data={barData} option={barOptions} theme={theme} />
+              <Bar data={barData} options={barOptions} theme={theme} />
+            </ChartContainer>
+            <ChartContainer>
+              <Pie data={pieData} options={pieOptions} theme={theme} />
             </ChartContainer>
           </section>
         )}
