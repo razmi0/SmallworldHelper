@@ -10,6 +10,7 @@
 - Load from local storage
 - Dark/light mode
 - Line chart
+- Bar chart
 
 ### Ressources
 
