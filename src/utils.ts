@@ -90,3 +90,7 @@ export const findMax = (arr: number[]) => {
 export const findMin = (arr: number[]) => {
   return Math.min(...arr);
 };
+
+export const findSum = (arr: number[]) => {
+  return arr.reduce((a, b) => a + b, 0);
+};
