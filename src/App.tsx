@@ -35,6 +35,7 @@ import {
   findMin,
   findMax,
   addOpacityToHex,
+  findSum,
 } from "./utils";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -110,6 +111,10 @@ const updatePlayers = (
   player.victoryPtn += newScore;
   player.history.push(player.victoryPtn);
   player.addedScores.push(newScore);
+  player.max = findMax(player.addedScores);
+  player.min = findMin(player.addedScores);
+  player.avg = findAverage(player.addedScores);
+  player.sum = findSum(player.addedScores);
 
   return [newPlayers, idx];
 };
