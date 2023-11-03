@@ -65,10 +65,31 @@ export const lineOptions: ChartOptions<"line"> = {
 export const barOptions: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
+  scales: {
+    x: {
+      display: true,
+      grid: {
+        display: false,
+      },
+    },
+    y: {
+      display: true,
+      grid: {
+        display: false,
+      },
+    },
+  },
   plugins: {
     legend: {
       display: false,
     },
+    colors: {
+      forceOverride: true,
+    },
+  },
+  interaction: {
+    mode: "index",
+    intersect: false,
   },
 };
 
