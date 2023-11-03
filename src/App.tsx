@@ -33,7 +33,7 @@ import {
   findAverage,
   findMin,
   findMax,
-  hexToRgba,
+  addOpacityToHex,
 } from "./utils";
 import { ChartContainer } from "./components/Containers";
 import { Bar } from "./components/charts/Bar";
@@ -57,6 +57,7 @@ type Player = {
   max: number;
   min: number;
   avg: number;
+  sum: number;
 };
 
 type LineData = {
@@ -74,8 +75,8 @@ type BarData = {
   datasets: {
     label: string; // maxscore, minscore, average
     data: number[]; // treated data from Player['addedScores'] [fn maxscoredata, fn minscoredata, fn average data]
-    backgroundColor?: string | string[]; // player color with opacity
-    borderColor?: string | string[]; // player color
+    backgroundColor: string[]; // player color with opacity
+    borderColor?: string[]; // player color
   }[];
 };
 
@@ -146,9 +147,9 @@ const bodyElement = document.querySelector("body");
 const INITIAL_STATES = {
   players: getFromLocalStorage<Player[]>("players", []),
   startScore: 0,
+  lineData: () => getFromLocalStorage<LineData>("lineData", INITIAL_STATES.initLineData()),
+  barData: () => getFromLocalStorage<BarData>("barData", INITIAL_STATES.initBarData()),
   hovering: () => Array.from({ length: INITIAL_STATES.players.length }, () => false),
-  lineData: () => INITIAL_STATES.initLineData(),
-  barData: () => INITIAL_STATES.initBarData(),
   initLineData: () => {
     const maxTurns = findMaxNbrTurns(INITIAL_STATES.players);
     return {
@@ -176,25 +177,23 @@ const INITIAL_STATES = {
           data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
           backgroundColor:
             INITIAL_STATES.players.map((p) => {
-              return hexToRgba(p.color), hexToRgba(p.color, 0.95), hexToRgba(p.color, 0.9);
+              return (
+                addOpacityToHex(p.color),
+                addOpacityToHex(p.color, 0.95),
+                addOpacityToHex(p.color, 0.9)
+              );
             }) ?? [],
         },
         {
           label: "Min score",
           data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
-          backgroundColor:
-            INITIAL_STATES.players.map((p) => {
-              return hexToRgba(p.color), hexToRgba(p.color, 0.95), hexToRgba(p.color, 0.9);
-            }) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
         },
         {
           label: "Average score",
           data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
-          backgroundColor:
-            INITIAL_STATES.players.map((p) => {
-              return hexToRgba(p.color), hexToRgba(p.color, 0.95), hexToRgba(p.color, 0.9);
-            }) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
         },
       ],
@@ -267,6 +266,7 @@ const App = () => {
         max: startScore,
         min: startScore,
         avg: startScore,
+        sum: startScore,
       },
     ]);
 
@@ -283,9 +283,18 @@ const App = () => {
       ],
     });
 
-    newBarDatasets[0].data = [...newBarDatasets[0].data, startScore];
-    newBarDatasets[1].data = [...newBarDatasets[1].data, startScore];
-    newBarDatasets[2].data = [...newBarDatasets[2].data, startScore];
+    newBarDatasets[0].data = [...newBarDatasets[0].data, startScore]; // max
+    newBarDatasets[1].data = [...newBarDatasets[1].data, startScore]; // min
+    newBarDatasets[2].data = [...newBarDatasets[2].data, startScore]; // avg
+
+    newBarDatasets[0].backgroundColor.push(newColor);
+    newBarDatasets[1].backgroundColor.push(newColor);
+    newBarDatasets[2].backgroundColor.push(newColor);
+
+    console.log([...barData.labels, newName]);
+    console.log(newBarDatasets[0].backgroundColor);
+    console.log(newBarDatasets[1].backgroundColor);
+    console.log(newBarDatasets[2].backgroundColor);
 
     setBarData({
       labels: [...barData.labels, newName],
@@ -344,9 +353,12 @@ const App = () => {
     const newBarLabels = [...barData.labels];
     const newBarDatasets = [...barData.datasets];
     const idxInDatasets = newBarLabels.findIndex((l) => l === name);
+    if (idxInDatasets == -1) return;
     newBarLabels.splice(idxInDatasets, 1);
     newBarDatasets.map((d) => {
       d.data.splice(idxInDatasets, 1);
+      // idxInDatasets = 1 => bgcolor splice 3,4,5
+      d.backgroundColor.splice(idxInDatasets * 3, 3);
     });
 
     setLineData({
