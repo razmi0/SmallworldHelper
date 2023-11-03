@@ -586,6 +586,7 @@ const App = () => {
             setPlayers(getFromLocalStorage<Player[]>("players"));
             setLineData(getFromLocalStorage<LineData>("lineData", INITIAL_STATES.lineData()));
             setBarData(getFromLocalStorage<BarData>("barData", INITIAL_STATES.barData()));
+            setPieData(getFromLocalStorage<PieData>("pieData", INITIAL_STATES.pieData()));
             setOpenMenu(!openMenu);
           }}
         />
@@ -602,6 +603,7 @@ const App = () => {
             saveToLocalStorage("players", players);
             saveToLocalStorage("lineData", lineData);
             saveToLocalStorage("barData", barData);
+            saveToLocalStorage("pieData", pieData);
             setOpenMenu(!openMenu);
           }}
           theme={theme}
