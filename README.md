@@ -11,6 +11,7 @@
 - Dark/light mode
 - Line chart
 - Bar chart
+- Pie chart
 
 ### Ressources
 
