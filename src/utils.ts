@@ -6,7 +6,7 @@ export const getRandomColor = (opacity: number = 1) => {
   return rgbaToHex(randomRgba);
 };
 
-const rgbaToHex = (orig: string) => {
+export const rgbaToHex = (orig: string) => {
   let a: string;
   const rgb = orig.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i);
   const alpha = ((rgb && rgb[4]) || "").trim();
@@ -43,7 +43,14 @@ export const add4dToHex = (color: string = "#fff") => {
 };
 
 export const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => {
-  return hexToRgba(color, opacity);
+  color = color.replace("#", "");
+  opacity = Math.min(1, Math.max(0, opacity));
+  const alphaHex = Math.round(opacity * 255)
+    .toString(16)
+    .toUpperCase();
+  const alphaChannel = alphaHex.length === 1 ? `0${alphaHex}` : alphaHex;
+  const colorWithAlpha = `#${color}${alphaChannel}`;
+  return colorWithAlpha;
 };
 
 type HistoryItem = {
@@ -63,7 +70,9 @@ export const findMaxNbrTurns = (arr: HistoryItem[] | []) => {
 export const saveToLocalStorage = <T>(key: string, value: T) => {
   window.localStorage.setItem(key, JSON.stringify(value));
 };
-
+/**
+ * @param defaultValue: default value if nothing is found in localStorage
+ */
 export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T): T => {
   const storedValue = window.localStorage.getItem(key);
   return storedValue !== null ? (JSON.parse(storedValue) as T) : defaultValue;
