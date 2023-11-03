@@ -262,18 +262,6 @@ const App = () => {
     });
   };
 
-  const handleThemeChange = () => {
-    if (theme == "light") {
-      //DARK
-      //--
-      setTheme("dark");
-    } else {
-      //LIGHT
-      //--
-      setTheme("light");
-    }
-  };
-
   const handleNewPlayer = (newPlayer: string, startScore: number) => {
     if (newPlayer === "") return;
     if (isNaN(startScore)) return;
@@ -521,7 +509,7 @@ const App = () => {
           iconName="theme"
           svgData={iconStyle}
           onClick={() => {
-            handleThemeChange();
+            theme == "dark" ? setTheme("light") : setTheme("dark");
             setOpenMenu(!openMenu);
           }}
         />
