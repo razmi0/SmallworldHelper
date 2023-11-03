@@ -13,6 +13,7 @@
 - [x] generator in utils to get color
 - [x] change layout when charts for players
 - [ ] if name input is empty, close the panel AddPlayer
+- [ ] if focus on x Player, highlight x elements in charts for this player
 
 - [ ] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
