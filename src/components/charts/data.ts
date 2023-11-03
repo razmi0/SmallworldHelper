@@ -104,6 +104,16 @@ export const barOptions: ChartOptions<"bar"> = {
   },
 };
 
+export const pieOptions: ChartOptions<"pie"> = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+};
+
 Tooltip.positioners.topleft = () => {
   return {
     x: 40,

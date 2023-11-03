@@ -15,13 +15,13 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 type BarProps = {
   data: ChartData<"bar">;
-  option: ChartOptions<"bar">;
+  options: ChartOptions<"bar">;
   theme?: "light" | "dark";
 };
-export const Bar = ({ data, option, theme = "dark" }: BarProps) => {
-  if (option.plugins?.tooltip) {
-    option.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
-    option.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffffde" : "#242424";
+export const Bar = ({ data, options, theme = "dark" }: BarProps) => {
+  if (options.plugins?.tooltip) {
+    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
+    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffffde" : "#242424";
   }
-  return <ChartBar options={option} data={data} />;
+  return <ChartBar options={options} data={data} />;
 };
