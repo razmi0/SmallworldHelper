@@ -106,74 +106,25 @@ export const SoftInput = ({
       onEnter(e);
     }
   };
-  const fontSize = sx?.fontSize || "15px";
 
   return (
     <div className="form__group">
       <style>
         {`
-      .form__group {
-        position: relative;
-        padding: 20px 5px;
-        padding-top : 0px;
-        width: 100%;
-      }
-      .form__field--${subjectId} {
-        font-family: inherit;
-        width: 100%;
-        border: none;
-        border-bottom: 2px solid #9b9b9b;
-        outline: 0;
-        font-size: ${fontSize};
-        color: #fff;
-        padding: 7px 0;
-        background: transparent;
-        transition: border-color 0.2s;
-      }
-      .form__field--${subjectId}::placeholder {
-        color: transparent;
-      }
-      .form__field--${subjectId}:placeholder-shown ~ .form__label {
-        font-size: ${fontSize};
-        cursor: text;
-        top: 6px;
-      }
-      .form__label {
-        position: absolute;
-        top: 0;
-        display: block;
-        transition: 0.2s;
-        font-size: ${fontSize};
-        color: #9b9b9b;
-        pointer-events: none;
-      }
-      .form__field--${subjectId}:focus {
-        padding-bottom: 6px;
-        font-weight: 700;
-        border-width: 3px;
-        border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
-        border-image-slice: 1;
-      }
-      .form__field--${subjectId}:focus ~ .form__label {
-        position: absolute;
-        top: -10px;
-        display: block;
-        transition: 0.2s;
-        font-size: ${fontSize};
-        color: ${color};
-        font-weight: 700;
-      }
-      /* reset input */
-      .form__field--${subjectId}:required, .form__field--${subjectId}:invalid {
-        box-shadow: none;
-      }
+        .form__field--${subjectId}:focus {
+          border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
+          border-image-slice: 1;
+        }
+        .form__field--${subjectId}:focus ~ .form__label {
+          color: ${color};
+        }
       `}
       </style>
       <input
         onKeyUp={(e) => handleEnter(e)}
         onFocus={onFocus}
         onBlur={onBlur}
-        className={`form__field--${subjectId}`}
+        className={`form__field--${subjectId} form__field--commun`}
         placeholder={labelText}
         minLength={1}
         id={subjectId}

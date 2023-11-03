@@ -84,11 +84,112 @@ button {
   all: unset;
 }
 
+.main-ctn {
+  display: flex;
+  flex-direction: column;
+  min-width: 325px;
+  gap: 10px;
+  align-items: flex-start;
+}
+.nav-ctn {
+  display: flex;
+  width: fit-content;
+  gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+}
+.icon-stat-ctn {
+  display: flex;
+  place-content: center;
+}
+.star-head-ctn {
+  display: flex;
+  place-content: center;
+}
+.players-list-ctn {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.list-element {
+  display: flex;
+  flex-direction: column;
+  max-height: 125px;
+}
+
+.charts-ctn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-around;
+}
+.form__group {
+  position: relative;
+  padding: 20px 5px;
+  padding-top: 0px;
+  width: 100%;
+}
+.form__field--commun {
+  font-family: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 15px;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.form__field--commun::placeholder {
+  color: transparent;
+}
+.form__field--commun:placeholder-shown ~ .form__label {
+  font-size: 15px;
+  cursor: text;
+  top: 6px;
+}
+.form__field--commun:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+}
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 15px;
+  color: #9b9b9b;
+  pointer-events: none;
+}
+.form__field--commun:focus ~ .form__label {
+  position: absolute;
+  top: -10px;
+  display: block;
+  transition: 0.2s;
+  font-size: 15px;
+  font-weight: 700;
+}
+/* reset input */
+.form__field--commun:required,
+.form__field--commun:invalid {
+  box-shadow: none;
+}
+
+/* FOR DOCUMENTATION */
 .cl {
   color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef,
     #560bad, #277da1, #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
 }
 
+/* MEDIA QUERIES */
 @media screen and (max-width: 472px) {
   body,
   #root {

@@ -94,14 +94,6 @@ export const Icon = ({
       }}
     >
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
-      <style>
-        {` 
-          .icon-stat-ctn {
-            display: flex;
-            place-content: center;
-          }
-        `}
-      </style>
     </div>
   );
 };
@@ -156,10 +148,6 @@ export const IconHeading = ({
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
       <style>
         {` 
-          .star-head-ctn {
-            display: flex;
-            place-content: center;
-          }
           @keyframes ${animationName} {
             ${keyframes}
           }

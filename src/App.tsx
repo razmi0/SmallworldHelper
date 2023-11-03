@@ -23,8 +23,9 @@ import {
 } from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import { Spacer } from "./components/Utils";
-import { Line } from "./components/charts/Line";
+import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
+import { ChartContainer } from "./components/Containers";
 import {
   findMaxNbrTurns,
   getFromLocalStorage,
@@ -35,9 +36,6 @@ import {
   findMax,
   addOpacityToHex,
 } from "./utils";
-import { ChartContainer } from "./components/Containers";
-import { Bar } from "./components/charts/Bar";
-import { Pie } from "./components/charts/Pie";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -166,8 +164,6 @@ const updatePieChart = (pieData: PieData, players: Player[], idx: number) => {
   };
 };
 
-const bodyElement = document.querySelector("body");
-
 const INITIAL_STATES = {
   players: getFromLocalStorage<Player[]>("players", []),
   startScore: 0,
@@ -271,14 +267,10 @@ const App = () => {
       //DARK
       //--
       setTheme("dark");
-      bodyElement?.classList.add("dark-bg");
-      bodyElement?.classList.remove("light-bg");
     } else {
       //LIGHT
       //--
       setTheme("light");
-      bodyElement?.classList.add("light-bg");
-      bodyElement?.classList.remove("dark-bg");
     }
   };
 
@@ -496,52 +488,14 @@ const App = () => {
     <div className="main-ctn">
       <style>
         {`
-      .main-ctn {
-        display: flex;
-        flex-direction: column;
-        min-width: 325px;
-        gap: 10px;
-        align-items: flex-start;
-      }
-      .players-list-ctn {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        text-align: left;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        flex-wrap: wrap;
-
-      }
-      .list-element {
-        display: flex;
-        flex-direction: column;
-        max-height: 125px;
-      }
-      .dark-bg {
-        background-color : #242424;
-        color: #ffffffde;
-      }
-      .light-bg {
-        background-color : #ffffffde;
-        color: #242424;
-      }
+          .themed-bg {
+            background-color : ${theme == "dark" ? "#242424" : "#ffffffde"} ;
+            color: ${theme == "dark" ? "#ffffffde" : "#242424"};
+          }
       `}
       </style>
       {/* == NAV == */}
       <nav className="nav-ctn">
-        <style>
-          {`
-          .nav-ctn {
-            display: flex;
-            width: fit-content;
-            gap: 5px;
-            justify-content: flex-start;
-            align-items: center;
-          }
-          `}
-        </style>
         <IconButton
           icon={Menu}
           sx={{
@@ -743,17 +697,6 @@ const App = () => {
         {/* == CHARTS == */}
         {openCharts && players.length > 0 && (
           <section className="charts-ctn">
-            <style>
-              {`
-              .charts-ctn {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                width: 100%;
-                justify-content: space-around;
-              }
-              `}
-            </style>
             <ChartContainer>
               <Line data={lineData} options={lineOptions} theme={theme} />
             </ChartContainer>
