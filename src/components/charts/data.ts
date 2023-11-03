@@ -10,9 +10,9 @@ export const lineOptions: ChartOptions<"line"> = {
   responsive: true,
   elements: {
     point: {
-      radius: 0,
-      hoverRadius: 6,
-      pointStyle: "triangle",
+      radius: 2,
+      hoverRadius: 5,
+      pointStyle: "circle",
     },
     line: {
       tension: 0.4,
@@ -46,18 +46,15 @@ export const lineOptions: ChartOptions<"line"> = {
       callbacks: {
         title: () => "",
         label: (context) => {
-          return ` ${context.dataset.label || ""} : ${context.parsed.y || 0}`;
+          return ` ${context.dataset.label || ""} : ${Math.floor(context.parsed.y) || 0}`;
         },
       },
       position: "topleft",
       usePointStyle: true,
       bodyFont: {
-        size: 15,
+        size: 13,
       },
       caretSize: 0,
-      itemSort: (a, b) => {
-        return b.parsed.y - a.parsed.y;
-      },
     },
   },
 };
@@ -65,9 +62,10 @@ export const lineOptions: ChartOptions<"line"> = {
 export const barOptions: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
+
   scales: {
     x: {
-      display: true,
+      display: false,
       grid: {
         display: false,
       },
@@ -83,8 +81,21 @@ export const barOptions: ChartOptions<"bar"> = {
     legend: {
       display: false,
     },
-    colors: {
-      forceOverride: true,
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          return ` ${context.dataset.label || ""} : ${Math.floor(context.parsed.y) || 0}`;
+        },
+      },
+      position: "topleft",
+      usePointStyle: true,
+      bodyFont: {
+        size: 13,
+      },
+      caretSize: 0,
+      itemSort: (a, b) => {
+        return b.parsed.y - a.parsed.y;
+      },
     },
   },
   interaction: {

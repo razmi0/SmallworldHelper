@@ -76,7 +76,8 @@ type BarData = {
     label: string; // maxscore, minscore, average
     data: number[]; // treated data from Player['addedScores'] [fn maxscoredata, fn minscoredata, fn average data]
     backgroundColor: string[]; // player color with opacity
-    borderColor?: string[]; // player color
+    borderColor: string[]; // player color
+    borderWidth?: number;
   }[];
 };
 
@@ -175,26 +176,23 @@ const INITIAL_STATES = {
         {
           label: "Max score",
           data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
-          backgroundColor:
-            INITIAL_STATES.players.map((p) => {
-              return (
-                addOpacityToHex(p.color),
-                addOpacityToHex(p.color, 0.95),
-                addOpacityToHex(p.color, 0.9)
-              );
-            }) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.95)) ?? [],
+          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
+          borderWidth: 3,
         },
         {
           label: "Min score",
           data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.95)) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
+          borderWidth: 3,
         },
         {
           label: "Average score",
           data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
+          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.95)) ?? [],
           borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
+          borderWidth: 3,
         },
       ],
     };
@@ -283,18 +281,12 @@ const App = () => {
       ],
     });
 
-    newBarDatasets[0].data = [...newBarDatasets[0].data, startScore]; // max
-    newBarDatasets[1].data = [...newBarDatasets[1].data, startScore]; // min
-    newBarDatasets[2].data = [...newBarDatasets[2].data, startScore]; // avg
-
-    newBarDatasets[0].backgroundColor.push(newColor);
-    newBarDatasets[1].backgroundColor.push(newColor);
-    newBarDatasets[2].backgroundColor.push(newColor);
-
-    console.log([...barData.labels, newName]);
-    console.log(newBarDatasets[0].backgroundColor);
-    console.log(newBarDatasets[1].backgroundColor);
-    console.log(newBarDatasets[2].backgroundColor);
+    for (const dataset of newBarDatasets) {
+      dataset.data = [...dataset.data, startScore];
+      dataset.backgroundColor.push(addOpacityToHex(newColor, 0.8));
+      dataset.borderColor.push(newColor);
+      dataset.borderWidth = 3;
+    }
 
     setBarData({
       labels: [...barData.labels, newName],
@@ -357,8 +349,7 @@ const App = () => {
     newBarLabels.splice(idxInDatasets, 1);
     newBarDatasets.map((d) => {
       d.data.splice(idxInDatasets, 1);
-      // idxInDatasets = 1 => bgcolor splice 3,4,5
-      d.backgroundColor.splice(idxInDatasets * 3, 3);
+      d.backgroundColor.splice(idxInDatasets, 1);
     });
 
     setLineData({
