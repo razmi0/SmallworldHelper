@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useReducer, useState } from "react";
 import { flushSync } from "react-dom";
 import {
   AddPlayer,
@@ -37,6 +37,7 @@ import {
   addOpacityToHex,
   findSum,
 } from "./utils";
+import { playerReducer } from "./reducers/reducers";
 
 interface FormElements extends HTMLFormControlsCollection {
   newScore: HTMLInputElement;
@@ -46,7 +47,7 @@ interface ScoreForm extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-type Player = {
+export type Player = {
   id: number;
   name: string;
   victoryPtn: number;
@@ -60,7 +61,7 @@ type Player = {
   sum: number;
 };
 
-type LineData = {
+export type LineData = {
   labels: string[]; // x-axis & ...turns
   datasets: {
     label: string; // player name
@@ -70,7 +71,7 @@ type LineData = {
   }[];
 };
 
-type BarData = {
+export type BarData = {
   labels: string[]; // x-axis & players name
   datasets: {
     label: string; // maxscore, minscore, average
@@ -81,7 +82,7 @@ type BarData = {
   }[];
 };
 
-type PieData = {
+export type PieData = {
   labels: string[];
   datasets: {
     label: string;
@@ -243,6 +244,9 @@ const INITIAL_STATES = {
 const App = () => {
   /* == STATES FOR DATA == */
   //--
+  const [playersState, playersDispatch] = useReducer(playerReducer, {
+    players: INITIAL_STATES.players,
+  });
   const [players, setPlayers] = useState<Player[]>(INITIAL_STATES.players);
   const [newPlayer, setNewPlayer] = useState<string>("");
   const [startScore, setStartScore] = useState<number>(INITIAL_STATES.startScore);
@@ -334,21 +338,29 @@ const App = () => {
     setNewPlayer("");
   };
 
-  const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
-    /* == PLAYERS STATES UPDATE == */
-    //--
+  const getNewScore = (e: FormEvent<ScoreForm>, subjectId: string) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const newScore = Number(formData.get(subjectId)) ?? 0;
     if (isNaN(newScore)) return;
-
-    const [newPlayers, idx] = updatePlayers(players, subjectId, newScore);
-
-    if (idx == -1) {
-      console.warn(`${subjectId} not found`);
-      return;
-    }
     e.currentTarget.reset();
+    return newScore as number;
+  };
+  const handleNewScoreEntry = (e: FormEvent<ScoreForm>, subjectId: string) => {
+    /* == PLAYERS STATES UPDATE == */
+    //--
+    // e.preventDefault();
+    // const formData = new FormData(e.currentTarget);
+    // const newScore = Number(formData.get(subjectId)) ?? 0;
+    // if (isNaN(newScore)) return;
+
+    // const [newPlayers, idx] = updatePlayers(players, subjectId, newScore);
+
+    // if (idx == -1) {
+    //   console.warn(`${subjectId} not found`);
+    //   return;
+    // }
+    // e.currentTarget.reset();
 
     /* == CHARTS STATES UPDATE == */
     //--
@@ -608,8 +620,8 @@ const App = () => {
         className="players-ctn"
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
-        <ul className="players-list-ctn" style={{}}>
-          {players.map((player, i) => {
+        <ul className="players-list-ctn">
+          {playersState.players.map((player, i) => {
             const { name, victoryPtn, id, color } = player;
             const subjectId = `${id}_${name.toLowerCase()}_newScore`;
 
@@ -643,13 +655,17 @@ const App = () => {
                   </div>
                   <Spacer />
                   <IconButton
-                    onClick={() => handleResetScore(player)}
+                    onClick={() => {
+                      playersDispatch({ type: "RESET_SCORE", payload: id });
+                    }}
                     icon={Reset}
                     iconName="reset"
                     svgData={playerIconStyle}
                   />
                   <IconButton
-                    onClick={() => handleDeletePlayer(player)}
+                    onClick={() => {
+                      playersDispatch({ type: "REMOVE_PLAYER", payload: id });
+                    }}
                     icon={Delete}
                     iconName="delete"
                     svgData={playerIconStyle}
@@ -659,7 +675,12 @@ const App = () => {
                   autoComplete="off"
                   noValidate
                   style={{ display: "flex", alignItems: "center" }}
-                  onSubmit={(e: FormEvent<ScoreForm>) => handleNewScoreEntry(e, subjectId)}
+                  onSubmit={(e: FormEvent<ScoreForm>) => {
+                    playersDispatch({
+                      type: "UPDATE_SCORE",
+                      payload: { id: id, newScore: getNewScore(e, subjectId) as number },
+                    });
+                  }}
                 >
                   <SoftInput
                     color={color}
@@ -718,12 +739,12 @@ const App = () => {
             subjectId="newPlayer"
             btnText="Confirm"
             onEnter={() => {
-              handleNewPlayer(newPlayer, startScore);
+              playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
             }}
             onChange={(e) => setNewPlayer(e.currentTarget.value)}
             value={newPlayer}
             onClick={() => {
-              handleNewPlayer(newPlayer, startScore);
+              playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
             }}
           />
           <div style={{ transform: "translate(-37px" }}>
@@ -737,7 +758,7 @@ const App = () => {
               }
               value={startScore}
               onEnter={() => {
-                handleNewPlayer(newPlayer, startScore);
+                playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
               }}
             />
           </div>
