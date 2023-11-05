@@ -8,11 +8,7 @@ type PlayerAction =
   | { type: "RESET_SCORE"; payload: Player["id"] }
   | { type: "UPDATE_SCORE"; payload: { id: Player["id"]; newScore: number } };
 
-type PlayerState = {
-  players: Player[];
-};
-
-export const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
+export const combinedReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
   const { type, payload } = action;
   const players = state.players;
   switch (type) {
@@ -91,17 +87,36 @@ export const playerReducer = (state: PlayerState, action: PlayerAction): PlayerS
   }
 };
 
-type LineAction =
-  | {
-      type: "ADD_ELEMENT";
-      payload: { name: Player["name"]; startScore: number; color: Player["color"] };
-    }
-  | { type: "REMOVE_ELEMENT"; payload: Player["name"] }
-  | { type: "RESET_SCORE"; payload: Player["name"] }
-  | { type: "UPDATE_SCORE"; payload: { name: Player["name"]; players: Player[] } };
-
-type LineState = {
-  lines: LineData[];
+type PlayerState = {
+  players: Player[];
 };
 
-export const chartsReducer = (state: LineState, action: LineAction) => {};
+type LineState = {
+  lines: LineData;
+};
+
+type BarState = {
+  bars: BarData[];
+};
+
+type PieState = {
+  pies: PieData[];
+};
+
+type CombinedState = {
+  players: PlayerState;
+  lines: LineState;
+  bars: BarState;
+  pies: PieState;
+};
+
+type CombinedAction = PlayerAction | LineAction | BarAction | PieAction;
+
+export const rootReducer = (state: CombinedState, action: CombinedAction): CombinedState => {
+  return {
+    players: playerReducer(state.players, action),
+    lines: lineReducer(state.lines, action),
+    bars: barReducer(state.bars, action),
+    pies: pieReducer(state.pies, action),
+  };
+};
