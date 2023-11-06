@@ -1,4 +1,4 @@
-import { useReducer, useState, MouseEvent } from "react";
+import { useReducer, useState, MouseEvent, MouseEventHandler } from "react";
 import { flushSync } from "react-dom";
 import {
   AddPlayer,
@@ -662,7 +662,6 @@ const App = () => {
               subjectId="startScore"
               onChange={(e) => {
                 e.preventDefault();
-
                 setStartScore(
                   isNaN(Number(e.currentTarget.value)) ? 0 : Number(e.currentTarget.value)
                 );
@@ -670,7 +669,6 @@ const App = () => {
               value={startScore}
               onEnter={(e) => {
                 e.preventDefault();
-
                 playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
               }}
             />

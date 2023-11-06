@@ -11,7 +11,6 @@ type PlayerAction =
 export const playersReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
   const { type, payload } = action;
   const { players, lines, bars, pies } = state;
-
   switch (type) {
     case "ADD_PLAYER": {
       const { name, startScore } = payload;
@@ -92,43 +91,6 @@ type PlayerState = {
   pies: PieData;
 };
 
-type LineState = {
-  lines: LineData;
-};
-
-type BarState = {
-  bars: BarData[];
-};
-
-type PieState = {
-  pies: PieData[];
-};
-
-type CombinedState = {
-  players: PlayerState;
-  lines: LineState;
-  bars: BarState;
-  pies: PieState;
-};
-
-type LineAction =
-  | { type: "ADD_LINE"; payload: LineData }
-  | { type: "REMOVE_LINE"; payload: number };
-type BarAction = { type: "ADD_BAR"; payload: BarData } | { type: "REMOVE_BAR"; payload: number };
-type PieAction = { type: "ADD_PIE"; payload: PieData } | { type: "REMOVE_PIE"; payload: number };
-
-type CombinedAction = PlayerAction | LineAction | BarAction | PieAction;
-
-// export const rootReducer = (state: CombinedState, action: CombinedAction): CombinedState => {
-//     const [tet, dispatch] = useReducer()
-//   return {
-//     players: playerReducer(state.players, action),
-//     lines: lineReducer(state.lines, action),
-//     bars: barReducer(state.bars, action),
-//     pies: pieReducer(state.pies, action),
-//   };
-// };
-
 // HELPERS FUNCTIONS FOR ADD_PLAYER
 //--
 const buildBaseStats = (name: string, startScore: number, id: number) => {
@@ -148,36 +110,33 @@ const buildBaseStats = (name: string, startScore: number, id: number) => {
 };
 
 const newLineDatasets = (datasets: LineData["datasets"], newPlayer: Player) => {
-  const temp = [...datasets];
-  temp.push({
+  datasets.push({
     label: newPlayer.name,
-    data: newPlayer.history,
+    data: [...newPlayer.history],
     backgroundColor: newPlayer.color,
     borderColor: newPlayer.color,
   });
 
-  return temp;
+  return datasets;
 };
 
 const newBarsDatasets = (datasets: BarData["datasets"], newPlayer: Player) => {
-  const temp = [...datasets];
-  for (let i = 0; i < temp.length; i++) {
-    temp[i].data.push(newPlayer.victoryPtn); // push a new max, min, avg
-    temp[i].borderColor.push(newPlayer.color);
-    temp[i].backgroundColor.push(addOpacityToHex(newPlayer.color, 0.8));
+  for (let i = 0; i < datasets.length; i++) {
+    datasets[i].data.push(newPlayer.victoryPtn); // push a new max, min, avg
+    datasets[i].borderColor.push(newPlayer.color);
+    datasets[i].backgroundColor.push(addOpacityToHex(newPlayer.color, 0.8));
   }
-  console.log(temp);
-  return temp;
+  console.log(datasets);
+  return datasets;
 };
 
 const newPieDatasets = (datasets: PieData["datasets"], player: Player) => {
-  const temp = [...datasets];
-  temp[0].label = player.name;
-  temp[0].data.push(player.victoryPtn);
-  temp[0].backgroundColor.push(addOpacityToHex(player.color, 0.8));
-  temp[0].borderColor.push(player.color);
+  datasets[0].label = player.name;
+  datasets[0].data.push(player.victoryPtn);
+  datasets[0].backgroundColor.push(addOpacityToHex(player.color, 0.8));
+  datasets[0].borderColor.push(player.color);
 
-  return temp;
+  return datasets;
 };
 
 // HELPERS FUNCTIONS FOR UPDATE_SCORE
