@@ -48,6 +48,7 @@ export const Line = ({ data, options, theme = "dark" }: LineProps) => {
     options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
     options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffffde" : "#242424";
   }
+  console.log(data);
   return <ChartLine data={data} options={options} />;
 };
 
