@@ -1,44 +1,47 @@
 import { BarData, LineData, PieData, Player } from "../App";
 import { playerColors } from "../components/icons/data";
-import { getRandomColor } from "../utils";
+import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "../utils";
 
 type PlayerAction =
   | { type: "ADD_PLAYER"; payload: { name: Player["name"]; startScore: number } }
-  | { type: "REMOVE_PLAYER"; payload: Player["id"] }
+  | { type: "REMOVE_PLAYER"; payload: { id: Player["id"] } }
   | { type: "RESET_SCORE"; payload: Player["id"] }
   | { type: "UPDATE_SCORE"; payload: { id: Player["id"]; newScore: number } };
 
-export const combinedReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
+export const playersReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
   const { type, payload } = action;
-  const players = state.players;
+  const { players, lines, bars, pies } = state;
+
   switch (type) {
     case "ADD_PLAYER": {
-      const newName = payload.name.trim().charAt(0).toUpperCase() + payload.name.slice(1);
-      const newColor = playerColors[players.length] ?? getRandomColor();
-      const startScore = payload.startScore;
+      const { name, startScore } = payload;
+      const newPlayer: Player = buildBaseStats(name, startScore, players.length /*id*/);
+      const newLines = {
+        labels: [...lines.labels],
+        datasets: newLineDatasets([...lines.datasets], newPlayer),
+      };
+      const newBars = {
+        labels: [...bars.labels, newPlayer.name],
+        datasets: newBarsDatasets([...bars.datasets], newPlayer),
+      };
+      const newPies = {
+        labels: [...pies.labels, newPlayer.name],
+        datasets: newPieDatasets([...pies.datasets], newPlayer),
+      };
       return {
         ...state,
-        players: [
-          ...players,
-          {
-            id: players.length,
-            name: newName,
-            victoryPtn: startScore,
-            history: [startScore],
-            addedScores: [startScore],
-            rankChange: 0,
-            color: newColor,
-            max: startScore,
-            min: startScore,
-            avg: startScore,
-            sum: startScore,
-          },
-        ],
+        players: [...players, newPlayer],
+        lines: newLines,
+        bars: newBars,
+        pies: newPies,
       };
     }
 
-    case "REMOVE_PLAYER":
-      return { ...state, players: players.filter((player) => player.id !== payload) };
+    case "REMOVE_PLAYER": {
+      const { id } = payload;
+      const newPlayers = players.filter((player) => player.id !== id);
+      return { ...state, players: newPlayers };
+    }
 
     case "RESET_SCORE": {
       return {
@@ -63,25 +66,20 @@ export const combinedReducer = (state: PlayerState, action: PlayerAction): Playe
 
     case "UPDATE_SCORE": {
       const { id, newScore } = payload;
+      const { updatedPlayer, updatedPlayers } = updatePlayersStats(players, newScore, id);
+      const updatedLines = updateLines(lines, updatedPlayer, updatedPlayers);
+      const updatedBars = updateBars(bars, updatedPlayer);
+      const updatedPies = updatePies(pies, updatedPlayer);
+
       return {
         ...state,
-        players: players.map((player) => {
-          if (player.id === id) {
-            return {
-              ...player,
-              history: [...player.history, newScore],
-              addedScores: [...player.addedScores, newScore],
-              victoryPtn: (player.victoryPtn += newScore),
-              max: Math.max(player.max, newScore),
-              min: Math.min(player.min, newScore),
-              avg: Math.round((player.sum + newScore) / (player.addedScores.length + 1)),
-              sum: player.sum + newScore,
-            };
-          }
-          return player;
-        }),
+        players: updatedPlayers,
+        lines: updatedLines,
+        bars: updatedBars,
+        pies: updatedPies,
       };
     }
+
     default:
       return state;
   }
@@ -89,6 +87,9 @@ export const combinedReducer = (state: PlayerState, action: PlayerAction): Playe
 
 type PlayerState = {
   players: Player[];
+  lines: LineData;
+  bars: BarData;
+  pies: PieData;
 };
 
 type LineState = {
@@ -110,13 +111,145 @@ type CombinedState = {
   pies: PieState;
 };
 
+type LineAction =
+  | { type: "ADD_LINE"; payload: LineData }
+  | { type: "REMOVE_LINE"; payload: number };
+type BarAction = { type: "ADD_BAR"; payload: BarData } | { type: "REMOVE_BAR"; payload: number };
+type PieAction = { type: "ADD_PIE"; payload: PieData } | { type: "REMOVE_PIE"; payload: number };
+
 type CombinedAction = PlayerAction | LineAction | BarAction | PieAction;
 
-export const rootReducer = (state: CombinedState, action: CombinedAction): CombinedState => {
+// export const rootReducer = (state: CombinedState, action: CombinedAction): CombinedState => {
+//     const [tet, dispatch] = useReducer()
+//   return {
+//     players: playerReducer(state.players, action),
+//     lines: lineReducer(state.lines, action),
+//     bars: barReducer(state.bars, action),
+//     pies: pieReducer(state.pies, action),
+//   };
+// };
+
+// HELPERS FUNCTIONS FOR ADD_PLAYER
+//--
+const buildBaseStats = (name: string, startScore: number, id: number) => {
   return {
-    players: playerReducer(state.players, action),
-    lines: lineReducer(state.lines, action),
-    bars: barReducer(state.bars, action),
-    pies: pieReducer(state.pies, action),
+    id: id,
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    victoryPtn: startScore,
+    history: [startScore],
+    addedScores: [startScore],
+    rankChange: 0,
+    color: playerColors[id] ?? getRandomColor(),
+    max: startScore,
+    min: startScore,
+    avg: startScore,
+    sum: startScore,
+  };
+};
+
+const newLineDatasets = (datasets: LineData["datasets"], newPlayer: Player) => {
+  const temp = [...datasets];
+  temp.push({
+    label: newPlayer.name,
+    data: newPlayer.history,
+    backgroundColor: newPlayer.color,
+    borderColor: newPlayer.color,
+  });
+
+  return temp;
+};
+
+const newBarsDatasets = (datasets: BarData["datasets"], newPlayer: Player) => {
+  const temp = [...datasets];
+  for (let i = 0; i < temp.length; i++) {
+    temp[i].data.push(newPlayer.victoryPtn); // push a new max, min, avg
+    temp[i].borderColor.push(newPlayer.color);
+    temp[i].backgroundColor.push(addOpacityToHex(newPlayer.color, 0.8));
+  }
+  console.log(temp);
+  return temp;
+};
+
+const newPieDatasets = (datasets: PieData["datasets"], player: Player) => {
+  const temp = [...datasets];
+  temp[0].label = player.name;
+  temp[0].data.push(player.victoryPtn);
+  temp[0].backgroundColor.push(addOpacityToHex(player.color, 0.8));
+  temp[0].borderColor.push(player.color);
+
+  return temp;
+};
+
+// HELPERS FUNCTIONS FOR UPDATE_SCORE
+//--
+const updatePlayerStats = (player: Player, newScore: number) => {
+  const updatedPlayer = {
+    ...player,
+    history: [...player.history, newScore],
+    addedScores: [...player.addedScores, newScore],
+    victoryPtn: player.victoryPtn + newScore,
+    max: Math.max(player.max, newScore),
+    min: Math.min(player.min, newScore),
+    avg: Math.round((player.sum + newScore) / (player.addedScores.length + 1)),
+    sum: player.sum + newScore,
+  };
+
+  return updatedPlayer;
+};
+
+const updatePlayersStats = (players: Player[], newScore: number, id: number) => {
+  const playerIndex = players.findIndex((p) => p.id === id);
+  if (playerIndex === -1) {
+    throw new Error("Player not found");
+  }
+  const updatedPlayer = updatePlayerStats(players[playerIndex], newScore);
+  const updatedPlayers = [
+    ...players.slice(0, playerIndex),
+    updatedPlayer,
+    ...players.slice(playerIndex + 1),
+  ];
+
+  return { updatedPlayer, updatedPlayers };
+};
+
+const updateLines = (lines: LineData, updatedPlayer: Player, players: Player[]): LineData => {
+  const { labels, datasets } = lines;
+  const newLabels = [...labels];
+  const temp = [...datasets];
+  findMaxNbrTurns(players) > newLabels.length
+    ? newLabels.push((newLabels.length + 1).toString())
+    : newLabels;
+  const i = temp.findIndex((d) => d.label === updatedPlayer.name);
+  if (i == -1) throw new Error("Player in lines not found");
+  temp[i].data.push(updatedPlayer.victoryPtn);
+  return {
+    labels: newLabels,
+    datasets: temp,
+  };
+};
+
+const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
+  const { labels, datasets } = bars;
+  const temp = [...datasets];
+  const i = labels.findIndex((l) => l === updatedPlayer.name);
+  if (i == -1) throw new Error("Player in bars not found");
+  temp[0].data[i] = updatedPlayer.max;
+  temp[1].data[i] = updatedPlayer.min;
+  temp[2].data[i] = updatedPlayer.avg;
+  return {
+    labels: labels,
+    datasets: temp,
+  };
+};
+
+const updatePies = (pies: PieData, updatedPlayer: Player): PieData => {
+  const { labels, datasets } = pies;
+  const temp = [...datasets];
+  const i = labels.findIndex((l) => l === updatedPlayer.name);
+  if (i == -1) throw new Error("Player in pies not found");
+  temp[0].data[i] = updatedPlayer.victoryPtn;
+  return {
+    labels: labels,
+    datasets: temp,
   };
 };
