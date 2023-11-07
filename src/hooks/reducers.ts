@@ -22,48 +22,43 @@ export const playersReducer = (state: PlayerState, action: PlayerAction): Player
   switch (type) {
     case "ADD_PLAYER": {
       const { name, startScore } = payload;
-
       const newPlayer = buildBaseStats(name, startScore, players.length /*id*/);
-      const newLines = buildNewLines(lines, newPlayer);
-      const newBars = buildNewBars(bars, newPlayer);
-      const newPies = buildNewPies(pies, newPlayer);
-
       return {
         ...state,
         players: [...players, newPlayer],
-        lines: newLines,
-        bars: newBars,
-        pies: newPies,
+        lines: buildNewLines(lines, newPlayer),
+        bars: buildNewBars(bars, newPlayer),
+        pies: buildNewPies(pies, newPlayer),
       };
     }
 
     case "REMOVE_PLAYER": {
       const { id } = payload;
-      const newPlayers = players.filter((player) => player.id !== id);
-      return { ...state, players: newPlayers };
+      const { rmPlayers, rmPlayer } = removePlayer(players, id);
+      return {
+        ...state,
+        players: rmPlayers,
+        lines: removeLine(lines, rmPlayer.name),
+        bars: removeBar(bars, rmPlayer.name),
+        pies: removePie(pies, rmPlayer.name),
+      };
     }
 
     case "RESET_SCORE": {
       const { id } = payload;
       const { newPlayer, newPlayers } = resetPlayersStats(players, id);
-
-      const newLines = resetLine(lines, newPlayer.name, newPlayers);
-      const newBars = resetBar(bars, newPlayer.name);
-      const newPies = resetPie(pies, newPlayer.name);
-
       return {
         ...state,
         players: newPlayers,
-        lines: newLines,
-        bars: newBars,
-        pies: newPies,
+        lines: resetLine(lines, newPlayer.name, newPlayers),
+        bars: resetBar(bars, newPlayer.name),
+        pies: resetPie(pies, newPlayer.name),
       };
     }
 
     case "UPDATE_SCORE": {
       const { id, newScore } = payload;
       const { updatedPlayer, updatedPlayers } = updatePlayersStats(players, newScore, id);
-
       return {
         ...state,
         players: updatedPlayers,
@@ -301,6 +296,60 @@ const resetPie = (pies: PieData, name: Player["name"]): PieData => {
   });
   return {
     labels: pies.labels,
+    datasets: newDatasets,
+  };
+};
+
+// HELPERS FUNCTIONS FOR REMOVE_PLAYER
+//--
+const removePlayer = (players: Player[], id: Player["id"]) => {
+  const index = players.findIndex((player) => player.id === id);
+  return {
+    rmPlayers: players.filter((player) => player.id !== id),
+    rmPlayer: players[index],
+  };
+};
+
+const removeLine = (lines: LineData, name: Player["name"]): LineData => {
+  const newDatasets = lines.datasets.filter((dataset) => dataset.label !== name);
+  return {
+    labels: [...lines.labels],
+    datasets: newDatasets,
+  };
+};
+
+const removeBar = (bars: BarData, name: Player["name"]): BarData => {
+  const index = bars.labels.findIndex((label) => label === name);
+  const newDatasets = bars.datasets.map((dataset) => {
+    const newData = [...dataset.data];
+    if (index !== -1) {
+      newData.splice(index, 1);
+    }
+    return {
+      ...dataset,
+      data: newData,
+    };
+  });
+  return {
+    labels: bars.labels.filter((label) => label !== name),
+    datasets: newDatasets,
+  };
+};
+
+const removePie = (pies: PieData, name: Player["name"]): PieData => {
+  const index = pies.labels.findIndex((label) => label === name);
+  const newDatasets = pies.datasets.map((dataset) => {
+    const newData = [...dataset.data];
+    if (index !== -1) {
+      newData.splice(index, 1);
+    }
+    return {
+      ...dataset,
+      data: newData,
+    };
+  });
+  return {
+    labels: pies.labels.filter((label) => label !== name),
     datasets: newDatasets,
   };
 };
