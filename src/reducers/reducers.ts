@@ -17,15 +17,15 @@ export const playersReducer = (state: PlayerState, action: PlayerAction): Player
       const newPlayer: Player = buildBaseStats(name, startScore, players.length /*id*/);
       const newLines = {
         labels: [...lines.labels],
-        datasets: newLineDatasets([...lines.datasets], newPlayer),
+        datasets: [...newLineDatasets([...lines.datasets], newPlayer)],
       };
       const newBars = {
         labels: [...bars.labels, newPlayer.name],
-        datasets: newBarsDatasets([...bars.datasets], newPlayer),
+        datasets: [...newBarsDatasets([...bars.datasets], newPlayer)],
       };
       const newPies = {
         labels: [...pies.labels, newPlayer.name],
-        datasets: newPieDatasets([...pies.datasets], newPlayer),
+        datasets: [...newPieDatasets([...pies.datasets], newPlayer)],
       };
       return {
         ...state,
@@ -110,33 +110,35 @@ const buildBaseStats = (name: string, startScore: number, id: number) => {
 };
 
 const newLineDatasets = (datasets: LineData["datasets"], newPlayer: Player) => {
-  datasets.push({
-    label: newPlayer.name,
-    data: [...newPlayer.history],
-    backgroundColor: newPlayer.color,
-    borderColor: newPlayer.color,
-  });
-
-  return datasets;
+  return [
+    ...datasets,
+    {
+      label: newPlayer.name,
+      data: [...newPlayer.history],
+      backgroundColor: newPlayer.color,
+      borderColor: newPlayer.color,
+    },
+  ];
 };
-
 const newBarsDatasets = (datasets: BarData["datasets"], newPlayer: Player) => {
-  for (let i = 0; i < datasets.length; i++) {
-    datasets[i].data.push(newPlayer.victoryPtn); // push a new max, min, avg
-    datasets[i].borderColor.push(newPlayer.color);
-    datasets[i].backgroundColor.push(addOpacityToHex(newPlayer.color, 0.8));
-  }
-  console.log(datasets);
-  return datasets;
+  const clonedDatasets = datasets.map((dataset) => ({
+    ...dataset,
+    data: [...dataset.data, newPlayer.victoryPtn], // Add new data to a cloned array
+    borderColor: [...dataset.borderColor, newPlayer.color],
+    backgroundColor: [...dataset.backgroundColor, addOpacityToHex(newPlayer.color, 0.8)],
+  }));
+  return clonedDatasets;
 };
 
-const newPieDatasets = (datasets: PieData["datasets"], player: Player) => {
-  datasets[0].label = player.name;
-  datasets[0].data.push(player.victoryPtn);
-  datasets[0].backgroundColor.push(addOpacityToHex(player.color, 0.8));
-  datasets[0].borderColor.push(player.color);
-
-  return datasets;
+const newPieDatasets = (datasets: PieData["datasets"], newPlayer: Player) => {
+  return [
+    {
+      ...datasets[0],
+      data: [...datasets[0].data, newPlayer.victoryPtn],
+      backgroundColor: [...datasets[0].backgroundColor, addOpacityToHex(newPlayer.color, 0.8)],
+      borderColor: [...datasets[0].borderColor, newPlayer.color],
+    },
+  ];
 };
 
 // HELPERS FUNCTIONS FOR UPDATE_SCORE
@@ -172,43 +174,58 @@ const updatePlayersStats = (players: Player[], newScore: number, id: number) => 
 };
 
 const updateLines = (lines: LineData, updatedPlayer: Player, players: Player[]): LineData => {
-  const { labels, datasets } = lines;
-  const newLabels = [...labels];
-  const temp = [...datasets];
-  findMaxNbrTurns(players) > newLabels.length
-    ? newLabels.push((newLabels.length + 1).toString())
-    : newLabels;
-  const i = temp.findIndex((d) => d.label === updatedPlayer.name);
-  if (i == -1) throw new Error("Player in lines not found");
-  temp[i].data.push(updatedPlayer.victoryPtn);
+  const newLabels =
+    findMaxNbrTurns(players) > lines.labels.length
+      ? [...lines.labels, (lines.labels.length + 1).toString()]
+      : [...lines.labels];
+  const newDatasets = lines.datasets.map((dataset) => {
+    if (dataset.label === updatedPlayer.name) {
+      return {
+        ...dataset,
+        data: [...dataset.data, updatedPlayer.victoryPtn],
+      };
+    }
+    return dataset;
+  });
   return {
     labels: newLabels,
-    datasets: temp,
+    datasets: newDatasets,
   };
 };
 
 const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
-  const { labels, datasets } = bars;
-  const temp = [...datasets];
-  const i = labels.findIndex((l) => l === updatedPlayer.name);
-  if (i == -1) throw new Error("Player in bars not found");
-  temp[0].data[i] = updatedPlayer.max;
-  temp[1].data[i] = updatedPlayer.min;
-  temp[2].data[i] = updatedPlayer.avg;
+  const index = bars.labels.findIndex((label) => label === updatedPlayer.name);
+  const newDatasets = bars.datasets.map((dataset, i) => {
+    const newData = [...dataset.data];
+    if (index !== -1) {
+      newData[index] =
+        i === 0 ? updatedPlayer.max : i === 1 ? updatedPlayer.min : updatedPlayer.avg;
+    }
+    return {
+      ...dataset,
+      data: newData,
+    };
+  });
   return {
-    labels: labels,
-    datasets: temp,
+    labels: [...bars.labels], // This spread is not necessary labels are not being mutated
+    datasets: newDatasets,
   };
 };
 
 const updatePies = (pies: PieData, updatedPlayer: Player): PieData => {
-  const { labels, datasets } = pies;
-  const temp = [...datasets];
-  const i = labels.findIndex((l) => l === updatedPlayer.name);
-  if (i == -1) throw new Error("Player in pies not found");
-  temp[0].data[i] = updatedPlayer.victoryPtn;
+  const index = pies.labels.findIndex((label) => label === updatedPlayer.name);
+  const newDatasets = pies.datasets.map((dataset) => {
+    const newData = [...dataset.data];
+    if (index !== -1) {
+      newData[index] = updatedPlayer.victoryPtn;
+    }
+    return {
+      ...dataset,
+      data: newData,
+    };
+  });
   return {
-    labels: labels,
-    datasets: temp,
+    labels: [...pies.labels], // This spread is not necessary labels are not being mutated
+    datasets: newDatasets,
   };
 };
