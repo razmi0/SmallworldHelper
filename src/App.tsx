@@ -1,4 +1,4 @@
-import { useReducer, useState, MouseEvent, MouseEventHandler } from "react";
+import { useReducer, useState } from "react";
 import { flushSync } from "react-dom";
 import {
   AddPlayer,
@@ -29,17 +29,8 @@ import {
   findMin,
   findMax,
   addOpacityToHex,
-  // findSum,
 } from "./utils";
-import { playersReducer } from "./reducers/reducers";
-
-// interface FormElements extends HTMLFormControlsCollection {
-//   newScore: HTMLInputElement;
-// }
-
-// interface ScoreForm extends HTMLFormElement {
-//   readonly elements: FormElements;
-// }
+import { playersReducer } from "./hooks/reducers";
 
 export type Player = {
   id: number;
@@ -86,83 +77,6 @@ export type PieData = {
     borderWidth: number;
   }[];
 };
-// const initializeLineData = (players: Player[]): LineData => {};
-
-// const updatePlayers = (
-//   players: Player[],
-//   subjectId: string,
-//   newScore: number
-// ): [Player[], number] => {
-//   const playerId = +subjectId.split("_")[0];
-//   const newPlayers = [...players];
-//   const idx = players.findIndex((p) => p.id === playerId);
-
-//   if (idx === -1) {
-//     console.warn(`${playerId} not found`);
-//     return [newPlayers, -1];
-//   }
-
-//   const player = newPlayers[idx];
-//   player.victoryPtn += newScore;
-//   player.history.push(player.victoryPtn);
-//   player.addedScores.push(newScore);
-//   player.max = findMax(player.addedScores);
-//   player.min = findMin(player.addedScores);
-//   player.avg = findAverage(player.addedScores);
-//   player.sum = findSum(player.addedScores);
-
-//   return [newPlayers, idx];
-// };
-
-// const updateLineChart = (lineData: LineData, players: Player[], idx: number) => {
-//   const newLineChartDatasets = [...lineData.datasets];
-//   const newLabels = [...lineData.labels];
-//   const newLength = findMaxNbrTurns(players);
-
-//   if (newLength > newLabels.length) {
-//     newLabels.push((newLabels.length + 1).toString());
-//   }
-
-//   const playerDatasetIdx = newLineChartDatasets.findIndex((d) => d.label === players[idx].name);
-//   if (playerDatasetIdx == -1) {
-//     console.warn(`${players[idx].name} not found`);
-//     return lineData;
-//   }
-
-//   newLineChartDatasets[playerDatasetIdx].data = [...players[idx].history];
-
-//   return {
-//     labels: newLabels,
-//     datasets: newLineChartDatasets,
-//   };
-// };
-
-// const updateBarChart = (barData: BarData, players: Player[], idx: number) => {
-//   const player = players[idx];
-//   const newDatasets = [...barData.datasets];
-//   const fns = [findMax, findMin, findAverage];
-//   const idxInData = barData.labels.findIndex((l) => l === player.name);
-//   for (let i = 0; i < fns.length; i++) {
-//     newDatasets[i].data[idxInData] = fns[i](player.addedScores);
-//   }
-
-//   return {
-//     labels: barData.labels,
-//     datasets: newDatasets,
-//   };
-// };
-
-// const updatePieChart = (pieData: PieData, players: Player[], idx: number) => {
-//   const newDatasets = [...pieData.datasets];
-//   const player = players[idx];
-//   const idxInData = pieData.labels.findIndex((l) => l === player.name);
-//   newDatasets[0].data[idxInData] = player.victoryPtn;
-
-//   return {
-//     labels: pieData.labels,
-//     datasets: newDatasets,
-//   };
-// };
 
 const INITIAL_STATES = {
   players: getFromLocalStorage<Player[]>("players", []),
@@ -266,123 +180,6 @@ const App = () => {
       });
     });
   };
-
-  // const handleDeletePlayer = ({ id, name }: Player) => {
-  //   /* == PLAYERS STATES UPDATE == */
-  //   //--
-  //   const idx = players.findIndex((p) => p.id == id);
-  //   if (idx == -1) {
-  //     console.warn(`name : ${name} &  id : ${id} not found`);
-  //     return;
-  //   }
-  //   const newPlayers = [...players];
-  //   newPlayers.splice(idx, 1);
-
-  //   /* == CHARTS STATES UPDATE == */
-  //   //--
-  //   const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
-  //   if (playerLineIdx == -1) return;
-  //   const newLineDatasets = [...lineData.datasets];
-  //   newLineDatasets.splice(playerLineIdx, 1);
-
-  //   const newBarLabels = [...barData.labels];
-  //   const newBarDatasets = [...barData.datasets];
-  //   const idxInDatasets = newBarLabels.findIndex((l) => l === name);
-  //   if (idxInDatasets == -1) return;
-  //   newBarLabels.splice(idxInDatasets, 1);
-  //   newBarDatasets.map((d) => {
-  //     d.data.splice(idxInDatasets, 1);
-  //     d.backgroundColor.splice(idxInDatasets, 1);
-  //     d.borderColor.splice(idxInDatasets, 1);
-  //   });
-
-  //   const newPieLabels = [...pieData.labels];
-  //   const newPieDatasets = [...pieData.datasets];
-  //   const idxInPieDatasets = newPieLabels.findIndex((l) => l === name);
-  //   if (idxInPieDatasets == -1) return;
-  //   newPieLabels.splice(idxInPieDatasets, 1);
-  //   newPieDatasets[0].data.splice(idxInPieDatasets, 1);
-  //   newPieDatasets[0].backgroundColor.splice(idxInPieDatasets, 1);
-  //   newPieDatasets[0].borderColor.splice(idxInPieDatasets, 1);
-
-  //   setLineData({
-  //     labels: lineData.labels,
-  //     datasets: newLineDatasets,
-  //   });
-  //   setBarData({
-  //     labels: newBarLabels,
-  //     datasets: newBarDatasets,
-  //   });
-  //   setPieData({
-  //     labels: newPieLabels,
-  //     datasets: newPieDatasets,
-  //   });
-  //   setPlayers(newPlayers);
-  // };
-
-  // const handleResetScore = ({ id, name }: Player) => {
-  //   /* == PLAYERS STATES UPDATE == */
-  //   //--
-  //   const newPlayers = [...players];
-  //   const idx = players.findIndex((p) => p.id === id);
-  //   if (idx == -1) {
-  //     console.warn(`name : ${name} &  id : ${id} not found`);
-  //     return;
-  //   }
-  //   newPlayers[idx].victoryPtn = 0;
-  //   newPlayers[idx].history.push(0);
-  //   newPlayers[idx].addedScores.push(0);
-
-  //   /* == LINECHART STATES UPDATE == */
-  //   //--
-  //   const playerLineIdx = lineData.datasets.findIndex((d) => d.label === name);
-
-  //   if (playerLineIdx == -1) {
-  //     console.warn(`${name} not found`);
-  //     return;
-  //   }
-  //   const newLineDatasets = [...lineData.datasets];
-  //   const newLabels = [...lineData.labels];
-
-  //   const data = newLineDatasets[playerLineIdx].data;
-  //   const maxTurns = lineData.labels.length;
-  //   if (data.length + 1 > maxTurns) {
-  //     newLabels.push((data.length + 1).toString());
-  //   }
-
-  //   data.push(0);
-
-  //   /* == BAR CHART STATES UPDATE == */
-  //   //--
-  //   const newBarDatasets = [...barData.datasets];
-  //   const idxInData = barData.labels.findIndex((l) => l === name);
-  //   newBarDatasets.map((d) => {
-  //     d.data[idxInData] = 0;
-  //   });
-
-  //   /* == PIE CHART STATES UPDATE == */
-  //   //--
-
-  //   const newPieDatasets = [...pieData.datasets];
-  //   const idxInPieData = pieData.labels.findIndex((l) => l === name);
-  //   newPieDatasets[0].data[idxInPieData] = 0;
-
-  //   setLineData({
-  //     labels: newLabels,
-  //     datasets: newLineDatasets,
-  //   });
-  //   setBarData({
-  //     labels: barData.labels,
-  //     datasets: newBarDatasets,
-  //   });
-  //   setPieData({
-  //     labels: pieData.labels,
-  //     datasets: newPieDatasets,
-  //   });
-  //   setPlayers(newPlayers.sort((a, b) => b.victoryPtn - a.victoryPtn));
-  // };
-
-  console.log(playersState);
 
   return (
     <div className="main-ctn">
@@ -586,7 +383,6 @@ const App = () => {
                     }}
                     onKeyUp={(e) => {
                       if (e.key === "Enter") {
-                        e.preventDefault();
                         playersDispatch({
                           type: "UPDATE_SCORE",
                           payload: { id: id, newScore: newScore[i] },
@@ -595,7 +391,6 @@ const App = () => {
                       }
                     }}
                     onChange={(e) => {
-                      e.preventDefault();
                       const newScore = Number(e.currentTarget.value);
                       if (isNaN(newScore)) return;
                       setNewScore((prev) => {
@@ -616,17 +411,11 @@ const App = () => {
         </ul>
         {/* == CHARTS == */}
         {openCharts && playersState.players.length > 0 && (
-          <section className="charts-ctn">
-            <ChartContainer>
-              <Line data={playersState.lines} options={lineOptions} theme={theme} />
-            </ChartContainer>
-            <ChartContainer>
-              <Bar data={playersState.bars} options={barOptions} theme={theme} />
-            </ChartContainer>
-            <ChartContainer>
-              <Pie data={playersState.pies} options={pieOptions} theme={theme} />
-            </ChartContainer>
-          </section>
+          <ChartContainer>
+            <Line data={playersState.lines} options={lineOptions} theme={theme} />
+            <Bar data={playersState.bars} options={barOptions} theme={theme} />
+            <Pie data={playersState.pies} options={pieOptions} theme={theme} />
+          </ChartContainer>
         )}
       </section>
       {/* == ADD PLAYER == */}
@@ -644,15 +433,13 @@ const App = () => {
             labelText="Name"
             subjectId="newPlayer"
             btnText="Confirm"
-            onEnter={(e) => {
-              e.preventDefault();
+            onEnter={() => {
               playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
               setNewPlayer("");
             }}
             onChange={(e) => setNewPlayer(e.currentTarget.value)}
             value={newPlayer}
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
             }}
           />
@@ -661,14 +448,12 @@ const App = () => {
               labelText="Start score"
               subjectId="startScore"
               onChange={(e) => {
-                e.preventDefault();
                 setStartScore(
                   isNaN(Number(e.currentTarget.value)) ? 0 : Number(e.currentTarget.value)
                 );
               }}
               value={startScore}
-              onEnter={(e) => {
-                e.preventDefault();
+              onEnter={() => {
                 playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
               }}
             />
