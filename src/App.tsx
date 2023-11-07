@@ -30,7 +30,7 @@ import {
   findMax,
   addOpacityToHex,
 } from "./utils";
-import { playersReducer } from "./hooks/reducers";
+import { playersReducer } from "./hooks/playersReducers";
 
 export type Player = {
   id: number;
@@ -76,77 +76,6 @@ export type PieData = {
     borderColor: string[];
     borderWidth: number;
   }[];
-};
-
-const INITIAL_STATES = {
-  players: getFromLocalStorage<Player[]>("players", []),
-  startScore: 0,
-  newScores: () => INITIAL_STATES.initNewScores(),
-  lineData: () => getFromLocalStorage<LineData>("lineData", INITIAL_STATES.initLineData()),
-  barData: () => getFromLocalStorage<BarData>("barData", INITIAL_STATES.initBarData()),
-  pieData: () => getFromLocalStorage<PieData>("pieData", INITIAL_STATES.initPieData()),
-  hovering: () => Array.from({ length: INITIAL_STATES.players.length }, () => false),
-  initNewScores: () => Array.from({ length: INITIAL_STATES.players.length }, () => 0),
-  initLineData: () => {
-    const maxTurns = findMaxNbrTurns(INITIAL_STATES.players);
-    return {
-      labels:
-        maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
-      datasets:
-        INITIAL_STATES.players.length == 0
-          ? []
-          : INITIAL_STATES.players.map((p: Player) => {
-              return {
-                label: p.name,
-                data: p.history,
-                backgroundColor: p.color,
-                borderColor: p.color,
-              };
-            }) ?? [],
-    };
-  },
-  initBarData: () => {
-    return {
-      labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
-      datasets: [
-        {
-          label: "Max score",
-          data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-        {
-          label: "Min score",
-          data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-        {
-          label: "Average score",
-          data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-      ],
-    };
-  },
-  initPieData: () => {
-    return {
-      labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
-      datasets: [
-        {
-          label: "Victory points",
-          data: INITIAL_STATES.players.map((p) => p.victoryPtn) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-      ],
-    };
-  },
 };
 
 /* == COMPONENT == */
