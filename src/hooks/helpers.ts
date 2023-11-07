@@ -1,6 +1,6 @@
-import { playerColors } from "src/components/icons/data";
-import { BarData, LineData, Player, PieData } from "src/types";
-import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "src/utils";
+import { playerColors } from "../components/icons/data";
+import { BarData, LineData, Player, PieData } from "../types";
+import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "../utils";
 
 // HELPERS FUNCTIONS FOR ADD_PLAYER
 //--
