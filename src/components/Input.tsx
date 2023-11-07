@@ -1,4 +1,11 @@
-import { InputHTMLAttributes, KeyboardEvent, ReactNode, FC, CSSProperties } from "react";
+import {
+  InputHTMLAttributes,
+  KeyboardEvent,
+  ReactNode,
+  FC,
+  CSSProperties,
+  MouseEventHandler,
+} from "react";
 import { add4dToHex } from "../utils";
 
 interface InputProps {
@@ -18,7 +25,7 @@ interface InputProps {
 
 interface InputButtonProps extends InputProps {
   btnText: string;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Input: FC<InputProps & InputHTMLAttributes<HTMLInputElement>> = ({
