@@ -135,32 +135,6 @@ export const headingStarIconStyle: SvgDataType = {
   filter: ["7px", "2px"],
   transition: "all 1s ease-in-out",
   icons: {},
-  subscribeColors: function* () {
-    const playerColors = [
-      "#f94144",
-      "#43aa8b",
-      "#4cc9f0",
-      "#3a0ca3",
-      "#f9c74f",
-      "#4d908e",
-      "#4361ee",
-      "#f3722c",
-      "#f72585",
-      "#4895ef",
-      "#560bad",
-      "#277da1",
-      "#3f37c9",
-      "#f8961e",
-      "#577590",
-      "#b5179e",
-      "#90be6d",
-    ];
-    let i = 0;
-    while (true) {
-      yield playerColors[i];
-      i = (i + 1) % playerColors.length;
-    }
-  },
   animations: {
     rotate: {
       delay: 1,
@@ -193,14 +167,14 @@ export const headingStarIconStyle: SvgDataType = {
 };
 
 export const playerColors = [
+  "#f9c74f",
+  "#3a0ca3",
   "#f94144",
+  "#f3722c",
   "#43aa8b",
   "#4cc9f0",
-  "#3a0ca3",
-  "#f9c74f",
   "#4d908e",
   "#4361ee",
-  "#f3722c",
   "#f72585",
   "#4895ef",
   "#560bad",
