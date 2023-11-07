@@ -344,7 +344,7 @@ const App = () => {
                   <Spacer />
                   <IconButton
                     onClick={() => {
-                      playersDispatch({ type: "RESET_SCORE", payload: id });
+                      playersDispatch({ type: "RESET_SCORE", payload: { id: id } });
                     }}
                     icon={Reset}
                     iconName="reset"
