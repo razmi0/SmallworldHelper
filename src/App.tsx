@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import { flushSync } from "react-dom";
 import {
   AddPlayer,
@@ -21,61 +21,19 @@ import { Spacer } from "./components/Utils";
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import { ChartContainer } from "./components/Containers";
-import {
-  findMaxNbrTurns,
-  getFromLocalStorage,
-  saveToLocalStorage,
-  findAverage,
-  findMin,
-  findMax,
-  addOpacityToHex,
-} from "./utils";
-import { playersReducer } from "./hooks/playersReducers";
+import { saveToLocalStorage } from "./utils";
+import { usePlayers } from "./hooks/usePlayer";
 
-export type Player = {
-  id: number;
-  name: string;
-  victoryPtn: number;
-  history: number[];
-  addedScores: number[];
-  rankChange: number;
-  color: string;
-  max: number;
-  min: number;
-  avg: number;
-  sum: number;
-};
-
-export type LineData = {
-  labels: string[]; // x-axis & ...turns
-  datasets: {
-    label: string; // player name
-    data: number[]; // history
-    backgroundColor: string; // player color
-    borderColor: string; // player color with opacity
-  }[];
-};
-
-export type BarData = {
-  labels: string[]; // x-axis & players name
-  datasets: {
-    label: string; // maxscore, minscore, average
-    data: number[]; // treated data from Player['addedScores'] [fn maxscoredata, fn minscoredata, fn average data]
-    backgroundColor: string[]; // player color with opacity
-    borderColor: string[]; // player color
-    borderWidth: number;
-  }[];
-};
-
-export type PieData = {
-  labels: string[];
-  datasets: {
-    label: string;
-    data: number[];
-    backgroundColor: string[];
-    borderColor: string[];
-    borderWidth: number;
-  }[];
+const INITIAL_UI_STATES = {
+  booleanMap: (size: number): boolean[] => Array.from({ length: size }, () => false),
+  newScores: (size: number): number[] => Array.from({ length: size }, () => 0),
+  hideScore: false,
+  startScore: 0,
+  newPlayerName: "",
+  openAddPlayer: false,
+  openMenu: false,
+  openCharts: false,
+  theme: "dark" as "dark" | "light",
 };
 
 /* == COMPONENT == */
@@ -83,24 +41,24 @@ export type PieData = {
 const App = () => {
   /* == STATES FOR DATA == */
   //--
-  const [playersState, playersDispatch] = useReducer(playersReducer, {
-    players: INITIAL_STATES.players,
-    lines: INITIAL_STATES.lineData(),
-    bars: INITIAL_STATES.barData(),
-    pies: INITIAL_STATES.pieData(),
-  });
-  const [newPlayer, setNewPlayer] = useState<string>("");
-  const [newScore, setNewScore] = useState<number[]>(INITIAL_STATES.newScores());
-  const [startScore, setStartScore] = useState<number>(INITIAL_STATES.startScore);
+  const { addPlayer, removePlayer, resetScore, updateScore, players, lines, bars, pies } =
+    usePlayers();
+
+  /* == STATES FOR WORKING DATA == */
+  const [newPlayer, setNewPlayer] = useState(INITIAL_UI_STATES.newPlayerName);
+  const [newScore, setNewScore] = useState(INITIAL_UI_STATES.newScores(players.length));
+  const [startScore, setStartScore] = useState(INITIAL_UI_STATES.startScore);
 
   /* == STATES FOR UI == */
   //--
-  const [openAddPlayer, setOpenAddPlayer] = useState<boolean>(false);
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const [openCharts, setOpenCharts] = useState<boolean>(false);
-  const [isFocusOnField, setIsFocusOnField] = useState<boolean[]>(INITIAL_STATES.hovering());
-  const [isScoreHidden, setIsScoreHidden] = useState<boolean>(false);
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [openAddPlayer, setOpenAddPlayer] = useState(INITIAL_UI_STATES.openAddPlayer);
+  const [openMenu, setOpenMenu] = useState(INITIAL_UI_STATES.openMenu);
+  const [openCharts, setOpenCharts] = useState(INITIAL_UI_STATES.openCharts);
+  const [isFocusOnField, setIsFocusOnField] = useState(
+    INITIAL_UI_STATES.booleanMap(players.length)
+  );
+  const [isScoreHidden, setIsScoreHidden] = useState(INITIAL_UI_STATES.hideScore);
+  const [theme, setTheme] = useState(INITIAL_UI_STATES.theme);
 
   const handleWithViewTransition = (fn: () => void) => {
     document.startViewTransition(() => {
@@ -176,10 +134,10 @@ const App = () => {
           iconName="save"
           svgData={iconStyle}
           onClick={() => {
-            saveToLocalStorage("players", playersState.players);
-            saveToLocalStorage("lineData", playersState.lines);
-            saveToLocalStorage("barData", playersState.bars);
-            saveToLocalStorage("pieData", playersState.pies);
+            saveToLocalStorage("players", players);
+            saveToLocalStorage("lineData", lines);
+            saveToLocalStorage("barData", bars);
+            saveToLocalStorage("pieData", pies);
             setOpenMenu(!openMenu);
           }}
           theme={theme}
@@ -210,7 +168,7 @@ const App = () => {
           svgData={iconStyle}
           onClick={() => {
             setOpenMenu(!openMenu);
-            if (playersState.players.length == 0) return;
+            if (players.length == 0) return;
             handleWithViewTransition(() => setOpenCharts((p) => !p));
           }}
         />
@@ -238,9 +196,9 @@ const App = () => {
       >
         {/* == PLAYERS LIST & SCORE INPUT == */}
         <ul className="players-list-ctn">
-          {playersState.players.map((player, i) => {
+          {players.map((player, i) => {
             const { name, victoryPtn, id, color } = player;
-            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+            const subjectId = `${id}_${name.toLowerCase()}`;
 
             return (
               <li className="list-element" key={i}>
@@ -272,17 +230,13 @@ const App = () => {
                   </div>
                   <Spacer />
                   <IconButton
-                    onClick={() => {
-                      playersDispatch({ type: "RESET_SCORE", payload: { id: id } });
-                    }}
+                    onClick={() => resetScore(id)}
                     icon={Reset}
                     iconName="reset"
                     svgData={playerIconStyle}
                   />
                   <IconButton
-                    onClick={() => {
-                      playersDispatch({ type: "REMOVE_PLAYER", payload: { id: id } });
-                    }}
+                    onClick={() => removePlayer(id)}
                     icon={Delete}
                     iconName="delete"
                     svgData={playerIconStyle}
@@ -312,16 +266,15 @@ const App = () => {
                     }}
                     onKeyUp={(e) => {
                       if (e.key === "Enter") {
-                        playersDispatch({
-                          type: "UPDATE_SCORE",
-                          payload: { id: id, newScore: newScore[i] },
-                        });
+                        updateScore(id, newScore[i]);
                         e.currentTarget.blur();
                       }
                     }}
                     onChange={(e) => {
                       const newScore = Number(e.currentTarget.value);
+
                       if (isNaN(newScore)) return;
+
                       setNewScore((prev) => {
                         const newPrev = [...prev];
                         newPrev[i] = newScore;
@@ -339,11 +292,11 @@ const App = () => {
           })}
         </ul>
         {/* == CHARTS == */}
-        {openCharts && playersState.players.length > 0 && (
+        {openCharts && players.length > 0 && (
           <ChartContainer>
-            <Line data={playersState.lines} options={lineOptions} theme={theme} />
-            <Bar data={playersState.bars} options={barOptions} theme={theme} />
-            <Pie data={playersState.pies} options={pieOptions} theme={theme} />
+            <Line key="line" data={lines} options={lineOptions} theme={theme} />
+            <Bar key="bar" data={bars} options={barOptions} theme={theme} />
+            <Pie key="pie" data={pies} options={pieOptions} theme={theme} />
           </ChartContainer>
         )}
       </section>
@@ -363,13 +316,14 @@ const App = () => {
             subjectId="newPlayer"
             btnText="Confirm"
             onEnter={() => {
-              playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
+              addPlayer(newPlayer, startScore);
               setNewPlayer("");
             }}
             onChange={(e) => setNewPlayer(e.currentTarget.value)}
             value={newPlayer}
             onClick={() => {
-              playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
+              addPlayer(newPlayer, startScore);
+              setNewPlayer("");
             }}
           />
           <div style={{ transform: "translate(-37px" }}>
@@ -382,9 +336,7 @@ const App = () => {
                 );
               }}
               value={startScore}
-              onEnter={() => {
-                playersDispatch({ type: "ADD_PLAYER", payload: { name: newPlayer, startScore } });
-              }}
+              onEnter={() => addPlayer(newPlayer, startScore)}
             />
           </div>
         </div>

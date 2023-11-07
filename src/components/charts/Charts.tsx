@@ -26,23 +26,24 @@ ChartJS.register(
   BarElement
 );
 
-type LineProps = {
+export type LineProps = {
   data: ChartData<"line">;
   options: ChartOptions<"line">;
   theme?: "light" | "dark";
 };
 
-type BarProps = {
+export type BarProps = {
   data: ChartData<"bar">;
   options: ChartOptions<"bar">;
   theme?: "light" | "dark";
 };
 
-type PieProps = {
+export type PieProps = {
   data: ChartData<"pie">;
   options: ChartOptions<"pie">;
   theme?: "light" | "dark";
 };
+
 export const Line = ({ data, options, theme = "dark" }: LineProps) => {
   if (options.plugins?.tooltip) {
     options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffffde";
