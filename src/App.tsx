@@ -22,7 +22,7 @@ import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import { ChartContainer } from "./components/Containers";
 import { saveToLocalStorage } from "./utils";
-import { useChart, usePlayers } from "./hooks/usePlayer";
+import { usePlayers } from "./hooks/usePlayer";
 
 const INITIAL_UI_STATES = {
   booleanMap: (size: number): boolean[] => Array.from({ length: size }, () => false),
@@ -41,8 +41,8 @@ const INITIAL_UI_STATES = {
 const App = () => {
   /* == STATES FOR DATA == */
   //--
-  const { addPlayer, removePlayer, resetScore, updateScore, players } = usePlayers();
-  const { lines, bars, pies } = useChart();
+  const { addPlayer, removePlayer, resetScore, updateScore, players, lines, bars, pies } =
+    usePlayers();
 
   /* == STATES FOR WORKING DATA == */
   const [newPlayer, setNewPlayer] = useState(INITIAL_UI_STATES.newPlayerName);
@@ -198,7 +198,7 @@ const App = () => {
         <ul className="players-list-ctn">
           {players.map((player, i) => {
             const { name, victoryPtn, id, color } = player;
-            const subjectId = `${id}_${name.toLowerCase()}_newScore`;
+            const subjectId = `${id}_${name.toLowerCase()}`;
 
             return (
               <li className="list-element" key={i}>
@@ -265,12 +265,16 @@ const App = () => {
                       });
                     }}
                     onKeyUp={(e) => {
-                      if (e.key === "Enter") updateScore(id, newScore[i]);
-                      e.currentTarget.blur();
+                      if (e.key === "Enter") {
+                        updateScore(id, newScore[i]);
+                        e.currentTarget.blur();
+                      }
                     }}
                     onChange={(e) => {
                       const newScore = Number(e.currentTarget.value);
+
                       if (isNaN(newScore)) return;
+
                       setNewScore((prev) => {
                         const newPrev = [...prev];
                         newPrev[i] = newScore;
@@ -290,9 +294,9 @@ const App = () => {
         {/* == CHARTS == */}
         {openCharts && players.length > 0 && (
           <ChartContainer>
-            <Line data={lines} options={lineOptions} theme={theme} />
-            <Bar data={bars} options={barOptions} theme={theme} />
-            <Pie data={pies} options={pieOptions} theme={theme} />
+            <Line key="line" data={lines} options={lineOptions} theme={theme} />
+            <Bar key="bar" data={bars} options={barOptions} theme={theme} />
+            <Pie key="pie" data={pies} options={pieOptions} theme={theme} />
           </ChartContainer>
         )}
       </section>
@@ -317,7 +321,10 @@ const App = () => {
             }}
             onChange={(e) => setNewPlayer(e.currentTarget.value)}
             value={newPlayer}
-            onClick={() => addPlayer(newPlayer, startScore)}
+            onClick={() => {
+              addPlayer(newPlayer, startScore);
+              setNewPlayer("");
+            }}
           />
           <div style={{ transform: "translate(-37px" }}>
             <Input

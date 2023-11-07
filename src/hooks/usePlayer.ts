@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { BarData, LineData, PieData, Player } from "../types";
 import {
   buildBaseStats,
@@ -176,6 +176,7 @@ export const usePlayers = () => {
     bars: INITIAL_STATES.barData(),
     pies: INITIAL_STATES.pieData(),
   });
+
   return {
     // STATES
     //--
@@ -186,26 +187,17 @@ export const usePlayers = () => {
 
     // ACTIONS
     //--
-    addPlayer: (name: string, startScore: number) => {
+    addPlayer: useCallback((name: string, startScore: number) => {
       playersDispatch({ type: "ADD_PLAYER", payload: { name, startScore } });
-    },
-    removePlayer: (id: Player["id"]) => {
+    }, []),
+    removePlayer: useCallback((id: Player["id"]) => {
       playersDispatch({ type: "REMOVE_PLAYER", payload: { id } });
-    },
-    resetScore: (id: Player["id"]) => {
+    }, []),
+    resetScore: useCallback((id: Player["id"]) => {
       playersDispatch({ type: "RESET_SCORE", payload: { id } });
-    },
-    updateScore: (id: Player["id"], newScore: number) => {
+    }, []),
+    updateScore: useCallback((id: Player["id"], newScore: number) => {
       playersDispatch({ type: "UPDATE_SCORE", payload: { id, newScore } });
-    },
-  };
-};
-
-export const useChart = () => {
-  const { lines, pies, bars } = usePlayers();
-  return {
-    lines,
-    pies,
-    bars,
+    }, []),
   };
 };
