@@ -43,12 +43,9 @@ body {
   place-items: center;
   min-height: 100vh;
   width: 100%;
-  background-image: url(/public/bg-1.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-blend-mode: difference; /*  soft-light difference
-  /* --color: #7272724d;
+  background-image: url(/bg-1.png);
+
+  --color: #7272724d;
   background-color: var(--dark-color);
   background-image: linear-gradient(
       0deg,
@@ -74,7 +71,7 @@ body {
       transparent 77%,
       transparent
     );
-  background-size: 50px 50px; */
+  background-size: 50px 50px;
 }
 
 h1 {
