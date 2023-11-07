@@ -15,21 +15,22 @@ export const playersReducer = (state: PlayerState, action: PlayerAction): Player
     case "ADD_PLAYER": {
       const { name, startScore } = payload;
       const newPlayer: Player = buildBaseStats(name, startScore, players.length /*id*/);
+      const newPlayers = [...players, newPlayer];
       const newLines = {
-        labels: [...lines.labels],
-        datasets: [...newLineDatasets([...lines.datasets], newPlayer)],
+        labels: lines.labels,
+        datasets: newLineDatasets(lines.datasets, newPlayer),
       };
       const newBars = {
         labels: [...bars.labels, newPlayer.name],
-        datasets: [...newBarsDatasets([...bars.datasets], newPlayer)],
+        datasets: newBarsDatasets(bars.datasets, newPlayer),
       };
       const newPies = {
         labels: [...pies.labels, newPlayer.name],
-        datasets: [...newPieDatasets([...pies.datasets], newPlayer)],
+        datasets: newPieDatasets(pies.datasets, newPlayer),
       };
       return {
         ...state,
-        players: [...players, newPlayer],
+        players: newPlayers,
         lines: newLines,
         bars: newBars,
         pies: newPies,
