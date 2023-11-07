@@ -38,15 +38,17 @@
 }
 
 body {
-  /* background-color: ; */
   margin: 0;
   display: flex;
   place-items: center;
-  /* min-width: 320px; */
   min-height: 100vh;
   width: 100%;
-  /* height: 100%; */
-  --color: #7272724d;
+  background-image: url(/public/bg-1.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: difference; /*  soft-light difference
+  /* --color: #7272724d;
   background-color: var(--dark-color);
   background-image: linear-gradient(
       0deg,
@@ -72,7 +74,7 @@ body {
       transparent 77%,
       transparent
     );
-  background-size: 50px 50px;
+  background-size: 50px 50px; */
 }
 
 h1 {
