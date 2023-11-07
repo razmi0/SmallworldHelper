@@ -15,12 +15,12 @@
 - [ ] if unFocus name input is empty, close the panel AddPlayer
 - [ ] if focus on x Player, highlight x elements in charts for this player
 
-- [ ] Try to use `useReducer` instead of `useState` for the players state ?
+- [x] Try to use `useReducer` instead of `useState` for the players state ?
 - [ ] Try to add a column to player list ( by 2)
-- [ ] IMPLEMENT MIN MAX AVG IN PLAYERS
+- [x] IMPLEMENT MIN MAX AVG IN PLAYERS
 - [ ] implement custom hook for update line & bar based on changed detected in players
-- [ ] study the use of useId()
-- [ ] install and confid postcss with autoprefixer
+- [x] study the use of useId()
+- [ ] install and config postcss with autoprefixer
 
 - [x] refacto css => module, tailwind, styled-components or just css files ?
 - [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon

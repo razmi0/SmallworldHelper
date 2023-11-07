@@ -1,4 +1,11 @@
-import { InputHTMLAttributes, KeyboardEvent, ReactNode, FC, CSSProperties } from "react";
+import {
+  InputHTMLAttributes,
+  KeyboardEvent,
+  ReactNode,
+  FC,
+  CSSProperties,
+  MouseEventHandler,
+} from "react";
 import { add4dToHex } from "../utils";
 
 interface InputProps {
@@ -11,12 +18,14 @@ interface InputProps {
   onFocus?: () => void;
   onBlur?: () => void;
   color?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  value?: number | string;
 }
 
 interface InputButtonProps extends InputProps {
   btnText: string;
-  onClick?: () => void;
-  inputProps?: InputHTMLAttributes<HTMLInputElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Input: FC<InputProps & InputHTMLAttributes<HTMLInputElement>> = ({
@@ -57,7 +66,8 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
   labelText,
   btnText,
   onClick = () => {},
-  ...inputProps
+  value,
+  onChange = () => {},
 }: InputButtonProps) => {
   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (onEnter && e.key === "Enter") {
@@ -72,7 +82,8 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
       </label>
       {children}
       <input
-        {...inputProps}
+        onChange={onChange}
+        value={value}
         minLength={1}
         type="text"
         name={subjectId}
@@ -95,18 +106,14 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
 export const SoftInput = ({
   labelText,
   subjectId,
-  onEnter,
   sx,
   onFocus,
   onBlur,
   color,
+  onChange,
+  onKeyUp,
+  value,
 }: InputProps) => {
-  const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (onEnter && e.key === "Enter") {
-      onEnter(e);
-    }
-  };
-
   return (
     <div className="form__group">
       <style>
@@ -121,7 +128,6 @@ export const SoftInput = ({
       `}
       </style>
       <input
-        onKeyUp={(e) => handleEnter(e)}
         onFocus={onFocus}
         onBlur={onBlur}
         className={`form__field--${subjectId} form__field--commun`}
@@ -130,6 +136,10 @@ export const SoftInput = ({
         id={subjectId}
         name={subjectId}
         style={sx}
+        type="text"
+        onChange={onChange}
+        onKeyUp={onKeyUp}
+        value={value}
       />
       <label htmlFor={subjectId} className="form__label">
         {labelText}

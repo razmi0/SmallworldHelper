@@ -9,16 +9,25 @@ export const Flex = ({ children, sx }: FlexProps) => {
 };
 
 export const ChartContainer = ({ children }: { children: ReactNode }) => {
+  const childrenArr = Array.isArray(children) ? children : [children];
   return (
-    <figure
-      style={{
-        maxHeight: "250px",
-        marginTop: "0px",
-        marginBottom: "0px",
-      }}
-      className="chart-ctn"
-    >
-      {children}
-    </figure>
+    <section className="charts-ctn">
+      {children &&
+        childrenArr.map((child, i) => {
+          return (
+            <figure
+              key={i}
+              style={{
+                maxHeight: "250px",
+                marginTop: "0px",
+                marginBottom: "0px",
+              }}
+              className="chart-ctn"
+            >
+              {child}
+            </figure>
+          );
+        })}
+    </section>
   );
 };
