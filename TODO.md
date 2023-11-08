@@ -16,6 +16,7 @@
 - [x] change layout when charts for players
 - [ ] if unFocus name input is empty, close the panel AddPlayer
 - [ ] if focus on x Player, highlight x elements in charts for this player
+- [ ] No two players can have the same name
 
 ## REFACTORING
 
@@ -40,3 +41,4 @@
 - [x] refacto setterStates to (prev) => ... instead of new = [...old]
 - [ ] reducer for transition ? => useTransition
 - [ ] reducer for lclStrg => useLocalStorage ?
+- [ ] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
