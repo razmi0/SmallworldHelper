@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { flushSync } from "react-dom";
 import {
   AddPlayer,
@@ -22,43 +21,32 @@ import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import { ChartContainer } from "./components/Containers";
 import { saveToLocalStorage } from "./utils";
-import { usePlayers } from "./hooks/usePlayer";
+import { usePlayer, useTheme, useToggle, useIntermediateState } from "./hooks";
 
-const INITIAL_UI_STATES = {
-  booleanMap: (size: number): boolean[] => Array.from({ length: size }, () => false),
-  newScores: (size: number): number[] => Array.from({ length: size }, () => 0),
-  hideScore: false,
-  startScore: 0,
-  newPlayerName: "",
-  openAddPlayer: false,
-  openMenu: false,
-  openCharts: false,
-  theme: "dark" as "dark" | "light",
-};
-
-/* == COMPONENT == */
-//--
 const App = () => {
-  /* == STATES FOR DATA == */
-  //--
   const { addPlayer, removePlayer, resetScore, updateScore, players, lines, bars, pies } =
-    usePlayers();
-
-  /* == STATES FOR WORKING DATA == */
-  const [newPlayer, setNewPlayer] = useState(INITIAL_UI_STATES.newPlayerName);
-  const [newScore, setNewScore] = useState(INITIAL_UI_STATES.newScores(players.length));
-  const [startScore, setStartScore] = useState(INITIAL_UI_STATES.startScore);
-
-  /* == STATES FOR UI == */
-  //--
-  const [openAddPlayer, setOpenAddPlayer] = useState(INITIAL_UI_STATES.openAddPlayer);
-  const [openMenu, setOpenMenu] = useState(INITIAL_UI_STATES.openMenu);
-  const [openCharts, setOpenCharts] = useState(INITIAL_UI_STATES.openCharts);
-  const [isFocusOnField, setIsFocusOnField] = useState(
-    INITIAL_UI_STATES.booleanMap(players.length)
-  );
-  const [isScoreHidden, setIsScoreHidden] = useState(INITIAL_UI_STATES.hideScore);
-  const [theme, setTheme] = useState(INITIAL_UI_STATES.theme);
+    usePlayer();
+  const {
+    booleanMap,
+    newPlayerName,
+    newScores,
+    setBooleanMap,
+    setNewPlayerName,
+    setNewScores,
+    setStartScore,
+    startScore,
+  } = useIntermediateState(players.length);
+  const {
+    isAddPlayerOpen,
+    isChartsOpen,
+    isNavOpen,
+    isScoreHidden,
+    toggleHideScore,
+    toggleOpenAddPlayer,
+    toggleOpenCharts,
+    toggleOpenNav,
+  } = useToggle();
+  const { theme, switchTheme } = useTheme();
 
   const handleWithViewTransition = (fn: () => void) => {
     document.startViewTransition(() => {
@@ -84,20 +72,18 @@ const App = () => {
           icon={Menu}
           sx={{
             zIndex: iconStyle.icons.menu.zIndex,
-            transform: openMenu ? "none" : iconStyle.icons.menu.transform?.(),
+            transform: isNavOpen ? "none" : iconStyle.icons.menu.transform?.(),
             transition: iconStyle.icons.menu.transition?.(),
           }}
           theme={theme}
           iconName="menu"
           svgData={iconStyle}
-          onClick={() => {
-            setOpenMenu(!openMenu);
-          }}
+          onClick={toggleOpenNav}
         />
         <IconButton
           icon={Theme}
           sx={{
-            transform: openMenu ? "translate(0px)" : iconStyle.icons.theme.transform?.(),
+            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.theme.transform?.(),
             transition: iconStyle.icons.theme.transition?.(),
             zIndex: iconStyle.icons.theme.zIndex,
           }}
@@ -105,29 +91,27 @@ const App = () => {
           iconName="theme"
           svgData={iconStyle}
           onClick={() => {
-            theme == "dark" ? setTheme("light") : setTheme("dark");
-            setOpenMenu(!openMenu);
+            toggleOpenNav();
+            switchTheme();
           }}
         />
 
         <IconButton
           icon={Load}
           sx={{
-            transform: openMenu ? "translate(0px)" : iconStyle.icons.load.transform?.(),
+            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.load.transform?.(),
             transition: iconStyle.icons.load.transition?.(),
             zIndex: iconStyle.icons.load.zIndex,
           }}
           theme={theme}
           iconName="load"
           svgData={iconStyle}
-          onClick={() => {
-            setOpenMenu(!openMenu);
-          }}
+          onClick={toggleOpenNav}
         />
         <IconButton
           icon={Save}
           sx={{
-            transform: openMenu ? "translate(0px)" : iconStyle.icons.save.transform?.(),
+            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.save.transform?.(),
             transition: iconStyle.icons.save.transition?.(),
             zIndex: iconStyle.icons.save.zIndex,
           }}
@@ -138,28 +122,26 @@ const App = () => {
             saveToLocalStorage("lineData", lines);
             saveToLocalStorage("barData", bars);
             saveToLocalStorage("pieData", pies);
-            setOpenMenu(!openMenu);
+            toggleOpenNav();
           }}
           theme={theme}
         />
         <IconButton
           icon={AddPlayer}
           sx={{
-            transform: openMenu ? "translate(0px)" : iconStyle.icons.addplayer.transform?.(),
+            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.addplayer.transform?.(),
             transition: iconStyle.icons.addplayer.transition?.(),
             zIndex: iconStyle.icons.addplayer.zIndex,
           }}
           theme={theme}
           iconName="addplayer"
           svgData={iconStyle}
-          onClick={() => {
-            setOpenAddPlayer(!openAddPlayer);
-          }}
+          onClick={toggleOpenAddPlayer}
         />
         <IconButton
           icon={LineChart}
           sx={{
-            transform: openMenu ? "translate(0px)" : iconStyle.icons.linechart.transform?.(),
+            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.linechart.transform?.(),
             transition: iconStyle.icons.linechart.transition?.(),
             zIndex: iconStyle.icons.linechart.zIndex,
           }}
@@ -167,15 +149,15 @@ const App = () => {
           iconName="linechart"
           svgData={iconStyle}
           onClick={() => {
-            setOpenMenu(!openMenu);
+            toggleOpenNav;
             if (players.length == 0) return;
-            handleWithViewTransition(() => setOpenCharts((p) => !p));
+            handleWithViewTransition(toggleOpenCharts);
           }}
         />
         <IconButton
           icon={isScoreHidden ? EyeClose : EyeOpen}
           sx={{
-            transform: openMenu ? "translate(0px)" : iconStyle.icons.eyes.transform?.(),
+            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.eyes.transform?.(),
             transition: iconStyle.icons.eyes.transition?.(),
             zIndex: iconStyle.icons.eyes.zIndex,
           }}
@@ -183,8 +165,8 @@ const App = () => {
           iconName="eyes"
           svgData={iconStyle}
           onClick={() => {
-            setOpenMenu(!openMenu);
-            setIsScoreHidden((p) => !p);
+            toggleOpenNav();
+            toggleHideScore();
           }}
         />
       </nav>
@@ -213,14 +195,14 @@ const App = () => {
                   >
                     <IconHeading
                       animationName="translate"
-                      isHover={isFocusOnField[i]}
+                      isHover={booleanMap[i]}
                       color={color}
                       icon={Star}
                       svgData={headingStarIconStyle}
                     />
                     <span
                       style={{
-                        color: isFocusOnField[i] ? color : "inherit",
+                        color: booleanMap[i] ? color : "inherit",
                         transition: "color 0.3s ease-in-out",
                         whiteSpace: "nowrap",
                       }}
@@ -245,43 +227,23 @@ const App = () => {
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <SoftInput
                     color={color}
-                    onFocus={() =>
-                      setIsFocusOnField((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = true;
-                        return newPrev;
-                      })
-                    }
+                    onFocus={() => setBooleanMap(i, true)}
                     onBlur={() => {
-                      setIsFocusOnField((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = false;
-                        return newPrev;
-                      });
-                      setNewScore((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = 0;
-                        return newPrev;
-                      });
+                      setBooleanMap(i, false);
+                      setNewScores(i, 0);
                     }}
                     onKeyUp={(e) => {
                       if (e.key === "Enter") {
-                        updateScore(id, newScore[i]);
+                        updateScore(id, newScores[i]);
                         e.currentTarget.blur();
                       }
                     }}
                     onChange={(e) => {
                       const newScore = Number(e.currentTarget.value);
-
                       if (isNaN(newScore)) return;
-
-                      setNewScore((prev) => {
-                        const newPrev = [...prev];
-                        newPrev[i] = newScore;
-                        return newPrev;
-                      });
+                      setNewScores(i, newScore);
                     }}
-                    value={newScore[i] == 0 ? "" : newScore[i]}
+                    value={newScores[i] == 0 ? "" : newScores[i]}
                     labelText="Score"
                     subjectId={subjectId}
                     theme={theme}
@@ -292,7 +254,7 @@ const App = () => {
           })}
         </ul>
         {/* == CHARTS == */}
-        {openCharts && players.length > 0 && (
+        {isChartsOpen && players.length > 0 && (
           <ChartContainer>
             <Line key="line" data={lines} options={lineOptions} theme={theme} />
             <Bar key="bar" data={bars} options={barOptions} theme={theme} />
@@ -301,7 +263,7 @@ const App = () => {
         )}
       </section>
       {/* == ADD PLAYER == */}
-      {openAddPlayer && (
+      {isAddPlayerOpen && (
         <div
           style={{
             display: "flex",
@@ -316,14 +278,14 @@ const App = () => {
             subjectId="newPlayer"
             btnText="Confirm"
             onEnter={() => {
-              addPlayer(newPlayer, startScore);
-              setNewPlayer("");
+              addPlayer(newPlayerName, startScore);
+              setNewPlayerName("");
             }}
-            onChange={(e) => setNewPlayer(e.currentTarget.value)}
-            value={newPlayer}
+            onChange={(e) => setNewPlayerName(e.currentTarget.value)}
+            value={newPlayerName}
             onClick={() => {
-              addPlayer(newPlayer, startScore);
-              setNewPlayer("");
+              addPlayer(newPlayerName, startScore);
+              setNewPlayerName("");
             }}
           />
           <div style={{ transform: "translate(-37px" }}>
@@ -336,7 +298,7 @@ const App = () => {
                 );
               }}
               value={startScore}
-              onEnter={() => addPlayer(newPlayer, startScore)}
+              onEnter={() => addPlayer(newPlayerName, startScore)}
             />
           </div>
         </div>
