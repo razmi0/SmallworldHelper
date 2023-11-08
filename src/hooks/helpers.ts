@@ -1,7 +1,8 @@
 import { playerColors } from "../components/icons/data";
 import { BarData, LineData, Player, PieData } from "../types";
-import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "../utils";
+import { addOpacityToHex, findMaxNbrTurns, getRandomColor, throwError } from "../utils";
 
+const errorMsg = "Player not found";
 // HELPERS FUNCTIONS FOR ADD_PLAYER
 //--
 
@@ -85,9 +86,7 @@ const updatePlayerStats = (player: Player, newScore: number) => {
 
 export const updatePlayersStats = (players: Player[], newScore: number, id: number) => {
   const playerIndex = players.findIndex((p) => p.id === id);
-  if (playerIndex === -1) {
-    throw new Error("Player not found");
-  }
+  if (playerIndex === -1) throwError(errorMsg);
   const updatedPlayer = updatePlayerStats(players[playerIndex], newScore);
   const updatedPlayers = [
     ...players.slice(0, playerIndex),
@@ -124,12 +123,10 @@ export const updateLines = (
 
 export const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
   const index = bars.labels.findIndex((label) => label === updatedPlayer.name);
+  if (index === -1) throwError(errorMsg);
   const newDatasets = bars.datasets.map((dataset, i) => {
     const newData = [...dataset.data];
-    if (index !== -1) {
-      newData[index] =
-        i === 0 ? updatedPlayer.max : i === 1 ? updatedPlayer.min : updatedPlayer.avg;
-    }
+    newData[index] = i === 0 ? updatedPlayer.max : i === 1 ? updatedPlayer.min : updatedPlayer.avg;
     return {
       ...dataset,
       data: newData,
@@ -143,11 +140,10 @@ export const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
 
 export const updatePies = (pies: PieData, updatedPlayer: Player): PieData => {
   const index = pies.labels.findIndex((label) => label === updatedPlayer.name);
+  if (index === -1) throwError(errorMsg);
   const newDatasets = pies.datasets.map((dataset) => {
     const newData = [...dataset.data];
-    if (index !== -1) {
-      newData[index] = updatedPlayer.victoryPtn;
-    }
+    newData[index] = updatedPlayer.victoryPtn;
     return {
       ...dataset,
       data: newData,
@@ -166,9 +162,7 @@ export const resetPlayersStats = (players: Player[], id: Player["id"]) => {
     return player.id === id ? resetPlayerStats(player) : player;
   });
   const index = newPlayers.findIndex((player) => player.id === id);
-  if (index === -1) {
-    throw new Error("Player not found");
-  }
+  if (index === -1) throwError(errorMsg);
   return {
     newPlayer: newPlayers[index],
     newPlayers: newPlayers,
@@ -200,11 +194,10 @@ export const resetLine = (lines: LineData, name: Player["name"], players: Player
 
 export const resetBar = (bars: BarData, name: Player["name"]): BarData => {
   const index = bars.labels.findIndex((label) => label === name);
+  if (index === -1) throwError(errorMsg);
   const newDatasets = bars.datasets.map((dataset) => {
     const newData = [...dataset.data];
-    if (index !== -1) {
-      newData[index] = 0;
-    }
+    newData[index] = 0;
     return {
       ...dataset,
       data: newData,
@@ -218,11 +211,10 @@ export const resetBar = (bars: BarData, name: Player["name"]): BarData => {
 
 export const resetPie = (pies: PieData, name: Player["name"]): PieData => {
   const index = pies.labels.findIndex((label) => label === name);
+  if (index === -1) throwError(errorMsg);
   const newDatasets = pies.datasets.map((dataset) => {
     const newData = [...dataset.data];
-    if (index !== -1) {
-      newData[index] = 0;
-    }
+    newData[index] = 0;
     return {
       ...dataset,
       data: newData,
@@ -238,6 +230,7 @@ export const resetPie = (pies: PieData, name: Player["name"]): PieData => {
 //--
 export const removePlayer = (players: Player[], id: Player["id"]) => {
   const index = players.findIndex((player) => player.id === id);
+  if (index === -1) throwError(errorMsg);
   return {
     rmPlayers: players.filter((player) => player.id !== id),
     rmPlayer: players[index],
@@ -246,6 +239,7 @@ export const removePlayer = (players: Player[], id: Player["id"]) => {
 
 export const removeLine = (lines: LineData, name: Player["name"]): LineData => {
   const newDatasets = lines.datasets.filter((dataset) => dataset.label !== name);
+  if (newDatasets.length === 0) throwError(errorMsg);
   return {
     labels: [...lines.labels],
     datasets: newDatasets,
@@ -254,14 +248,19 @@ export const removeLine = (lines: LineData, name: Player["name"]): LineData => {
 
 export const removeBar = (bars: BarData, name: Player["name"]): BarData => {
   const index = bars.labels.findIndex((label) => label === name);
+  if (index === -1) throwError(errorMsg);
   const newDatasets = bars.datasets.map((dataset) => {
     const newData = [...dataset.data];
-    if (index !== -1) {
-      newData.splice(index, 1);
-    }
+    const newBackgroundColor = [...dataset.backgroundColor];
+    const newBorderColor = [...dataset.borderColor];
+    newData.splice(index, 1);
+    newBackgroundColor.splice(index, 1);
+    newBorderColor.splice(index, 1);
     return {
       ...dataset,
       data: newData,
+      backgroundColor: newBackgroundColor,
+      borderColor: newBorderColor,
     };
   });
   return {
@@ -272,14 +271,19 @@ export const removeBar = (bars: BarData, name: Player["name"]): BarData => {
 
 export const removePie = (pies: PieData, name: Player["name"]): PieData => {
   const index = pies.labels.findIndex((label) => label === name);
+  if (index === -1) throwError(errorMsg);
   const newDatasets = pies.datasets.map((dataset) => {
     const newData = [...dataset.data];
-    if (index !== -1) {
-      newData.splice(index, 1);
-    }
+    const newBackgroundColor = [...dataset.backgroundColor];
+    const newBorderColor = [...dataset.borderColor];
+    newData.splice(index, 1);
+    newBackgroundColor.splice(index, 1);
+    newBorderColor.splice(index, 1);
     return {
       ...dataset,
       data: newData,
+      backgroundColor: newBackgroundColor,
+      borderColor: newBorderColor,
     };
   });
   return {
