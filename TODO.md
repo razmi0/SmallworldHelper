@@ -1,5 +1,7 @@
 # TODOS
 
+## FEATURES
+
 - [x] Make the svgData type simple by implementing directly iconName and color as props for Icon component
 - [x] Add a reset player score button
 - [x] Add a delete player button
@@ -15,16 +17,26 @@
 - [ ] if unFocus name input is empty, close the panel AddPlayer
 - [ ] if focus on x Player, highlight x elements in charts for this player
 
+## REFACTORING
+
 - [x] Try to use `useReducer` instead of `useState` for the players state ?
-- [ ] Try to add a column to player list ( by 2)
 - [x] IMPLEMENT MIN MAX AVG IN PLAYERS
 - [x] implement custom hook for update line & bar based on changed detected in players
 - [x] study the use of useId()
 - [ ] install and config postcss with autoprefixer
 - [ ] Move playerBaseStats related states to a context for better scalability with charts ( useChart custom hook)
+- [x] reducer for newPlayer startScore (useIntermediateState)
+- [x] reducer for newScores boolean map (useIntermediateMap)
+- [x] reducer for togglers => useToggle
+- [x] reducer for theme => useTheme (context)
 
+## BUGS & PROPOSITIONS
+
+- [ ] Try to add a column to player list ( by 2)
 - [x] refacto css => module, tailwind, styled-components or just css files ?
 - [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon
 - [ ] Refacto theme logic with context API and localstorage ?
 - [ ] Change add player to more designed menu on click
 - [x] refacto setterStates to (prev) => ... instead of new = [...old]
+- [ ] reducer for transition ? => useTransition
+- [ ] reducer for lclStrg => useLocalStorage ?

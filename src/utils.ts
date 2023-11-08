@@ -94,3 +94,7 @@ export const findMin = (arr: number[]) => {
 export const findSum = (arr: number[]) => {
   return arr.reduce((a, b) => a + b, 0);
 };
+
+export const throwError = (msg: string) => {
+  throw `${new Date().toLocaleTimeString("en-US")} :  ${msg}`;
+};
