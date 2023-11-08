@@ -29,7 +29,7 @@
 - [x] reducer for newPlayer startScore (useIntermediateState)
 - [x] reducer for newScores boolean map (useIntermediateMap)
 - [x] reducer for togglers => useToggle
-- [x] reducer for theme => useTheme (context)
+- [ ] reducer for theme => useTheme (context)
 
 ## BUGS & PROPOSITIONS
 
