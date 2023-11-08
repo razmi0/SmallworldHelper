@@ -1,7 +1,7 @@
 // IMPORTS
 // --
 import { useCallback, useReducer } from "react";
-import { BarData, LineData, PieData, Player } from "../types";
+import { BarData, LineData, PieData, Player } from "../../types";
 import {
   buildBaseStats,
   buildNewBars,
@@ -28,7 +28,7 @@ import {
   findMax,
   findMin,
   getFromLocalStorage,
-} from "../utils";
+} from "../../utils";
 
 // TYPES
 // --
