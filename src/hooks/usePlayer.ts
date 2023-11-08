@@ -1,3 +1,5 @@
+// IMPORTS
+// --
 import { useCallback, useReducer } from "react";
 import { BarData, LineData, PieData, Player } from "../types";
 import {
@@ -27,6 +29,8 @@ import {
   getFromLocalStorage,
 } from "../utils";
 
+// TYPES
+// --
 type PlayerState = {
   players: Player[];
   lines: LineData;
@@ -40,7 +44,84 @@ type PlayerAction =
   | { type: "RESET_SCORE"; payload: { id: Player["id"] } }
   | { type: "UPDATE_SCORE"; payload: { id: Player["id"]; newScore: number } };
 
-const playersReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
+// INITIAL STATES
+// --
+const initialPlayerStates = {
+  players: getFromLocalStorage<Player[]>("players", []),
+  startScore: 0,
+  lineData: () => getFromLocalStorage<LineData>("lineData", initialPlayerStates.initLineData()),
+  barData: () => getFromLocalStorage<BarData>("barData", initialPlayerStates.initBarData()),
+  pieData: () => getFromLocalStorage<PieData>("pieData", initialPlayerStates.initPieData()),
+
+  initLineData: () => {
+    const maxTurns = findMaxNbrTurns(initialPlayerStates.players);
+    return {
+      labels:
+        maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
+      datasets:
+        initialPlayerStates.players.length == 0
+          ? []
+          : initialPlayerStates.players.map((p: Player) => {
+              return {
+                label: p.name,
+                data: p.history,
+                backgroundColor: p.color,
+                borderColor: p.color,
+              };
+            }) ?? [],
+    };
+  },
+  initBarData: () => {
+    return {
+      labels: initialPlayerStates.players.map((p) => p.name) ?? [],
+      datasets: [
+        {
+          label: "Max score",
+          data: initialPlayerStates.players.map((p) => findMax(p.addedScores)) ?? [],
+          backgroundColor:
+            initialPlayerStates.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+          borderColor: initialPlayerStates.players.map((p) => p.color) ?? [],
+          borderWidth: 2,
+        },
+        {
+          label: "Min score",
+          data: initialPlayerStates.players.map((p) => findMin(p.addedScores)) ?? [],
+          backgroundColor:
+            initialPlayerStates.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+          borderColor: initialPlayerStates.players.map((p) => p.color) ?? [],
+          borderWidth: 2,
+        },
+        {
+          label: "Average score",
+          data: initialPlayerStates.players.map((p) => findAverage(p.addedScores)) ?? [],
+          backgroundColor:
+            initialPlayerStates.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+          borderColor: initialPlayerStates.players.map((p) => p.color) ?? [],
+          borderWidth: 2,
+        },
+      ],
+    };
+  },
+  initPieData: () => {
+    return {
+      labels: initialPlayerStates.players.map((p) => p.name) ?? [],
+      datasets: [
+        {
+          label: "Victory points",
+          data: initialPlayerStates.players.map((p) => p.victoryPtn) ?? [],
+          backgroundColor:
+            initialPlayerStates.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+          borderColor: initialPlayerStates.players.map((p) => p.color) ?? [],
+          borderWidth: 2,
+        },
+      ],
+    };
+  },
+};
+
+// REDUCER
+// --
+const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
   const { type, payload } = action;
   const { players, lines, bars, pies } = state;
 
@@ -98,106 +179,37 @@ const playersReducer = (state: PlayerState, action: PlayerAction): PlayerState =
   }
 };
 
-const INITIAL_STATES = {
-  players: getFromLocalStorage<Player[]>("players", []),
-  startScore: 0,
-  lineData: () => getFromLocalStorage<LineData>("lineData", INITIAL_STATES.initLineData()),
-  barData: () => getFromLocalStorage<BarData>("barData", INITIAL_STATES.initBarData()),
-  pieData: () => getFromLocalStorage<PieData>("pieData", INITIAL_STATES.initPieData()),
-
-  initLineData: () => {
-    const maxTurns = findMaxNbrTurns(INITIAL_STATES.players);
-    return {
-      labels:
-        maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
-      datasets:
-        INITIAL_STATES.players.length == 0
-          ? []
-          : INITIAL_STATES.players.map((p: Player) => {
-              return {
-                label: p.name,
-                data: p.history,
-                backgroundColor: p.color,
-                borderColor: p.color,
-              };
-            }) ?? [],
-    };
-  },
-  initBarData: () => {
-    return {
-      labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
-      datasets: [
-        {
-          label: "Max score",
-          data: INITIAL_STATES.players.map((p) => findMax(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-        {
-          label: "Min score",
-          data: INITIAL_STATES.players.map((p) => findMin(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-        {
-          label: "Average score",
-          data: INITIAL_STATES.players.map((p) => findAverage(p.addedScores)) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-      ],
-    };
-  },
-  initPieData: () => {
-    return {
-      labels: INITIAL_STATES.players.map((p) => p.name) ?? [],
-      datasets: [
-        {
-          label: "Victory points",
-          data: INITIAL_STATES.players.map((p) => p.victoryPtn) ?? [],
-          backgroundColor: INITIAL_STATES.players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
-          borderColor: INITIAL_STATES.players.map((p) => p.color) ?? [],
-          borderWidth: 2,
-        },
-      ],
-    };
-  },
-};
-
-// PLAYER REDUCER HOOK
+// PLAYER STATES HOOK
 //--
-export const usePlayers = () => {
-  const [playersState, playersDispatch] = useReducer(playersReducer, {
-    players: INITIAL_STATES.players,
-    lines: INITIAL_STATES.lineData(),
-    bars: INITIAL_STATES.barData(),
-    pies: INITIAL_STATES.pieData(),
+export const usePlayer = () => {
+  const [state, dispatch] = useReducer(playerReducer, {
+    players: initialPlayerStates.players,
+    lines: initialPlayerStates.lineData(),
+    bars: initialPlayerStates.barData(),
+    pies: initialPlayerStates.pieData(),
   });
 
   return {
     // STATES
     //--
-    players: playersState.players,
-    lines: playersState.lines,
-    bars: playersState.bars,
-    pies: playersState.pies,
+    players: state.players,
+    lines: state.lines,
+    bars: state.bars,
+    pies: state.pies,
 
     // ACTIONS
     //--
     addPlayer: useCallback((name: string, startScore: number) => {
-      playersDispatch({ type: "ADD_PLAYER", payload: { name, startScore } });
+      dispatch({ type: "ADD_PLAYER", payload: { name, startScore } });
     }, []),
     removePlayer: useCallback((id: Player["id"]) => {
-      playersDispatch({ type: "REMOVE_PLAYER", payload: { id } });
+      dispatch({ type: "REMOVE_PLAYER", payload: { id } });
     }, []),
     resetScore: useCallback((id: Player["id"]) => {
-      playersDispatch({ type: "RESET_SCORE", payload: { id } });
+      dispatch({ type: "RESET_SCORE", payload: { id } });
     }, []),
     updateScore: useCallback((id: Player["id"], newScore: number) => {
-      playersDispatch({ type: "UPDATE_SCORE", payload: { id, newScore } });
+      dispatch({ type: "UPDATE_SCORE", payload: { id, newScore } });
     }, []),
   };
 };
