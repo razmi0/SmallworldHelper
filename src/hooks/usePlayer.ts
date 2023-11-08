@@ -15,6 +15,7 @@ import {
   resetLine,
   resetPie,
   resetPlayersStats,
+  fullReset,
   updateBars,
   updateLines,
   updatePies,
@@ -141,6 +142,8 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
     case "REMOVE_PLAYER": {
       const { id } = payload;
       const { rmPlayers, rmPlayer } = removePlayer(players, id);
+      if (rmPlayers.length === 0) return { ...state, ...fullReset() };
+
       return {
         ...state,
         players: rmPlayers,

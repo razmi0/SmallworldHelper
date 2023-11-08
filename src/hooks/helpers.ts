@@ -291,3 +291,66 @@ export const removePie = (pies: PieData, name: Player["name"]): PieData => {
     datasets: newDatasets,
   };
 };
+
+type ResetStates = {
+  players: Player[];
+  lines: LineData;
+  bars: BarData;
+  pies: PieData;
+};
+// RESET ALL STATES (PLAYERS, LINES, BARS, PIES)
+//--
+export const fullReset = (): ResetStates => {
+  return {
+    players: [],
+    lines: {
+      labels: [],
+      datasets: [
+        {
+          label: "",
+          data: [],
+          backgroundColor: "",
+          borderColor: "",
+        },
+      ],
+    },
+    bars: {
+      labels: [],
+      datasets: [
+        {
+          label: "",
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 2,
+        },
+        {
+          label: "",
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 2,
+        },
+        {
+          label: "",
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 2,
+        },
+      ],
+    },
+    pies: {
+      labels: [],
+      datasets: [
+        {
+          label: "",
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 2,
+        },
+      ],
+    },
+  };
+};
