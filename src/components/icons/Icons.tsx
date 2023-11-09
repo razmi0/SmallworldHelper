@@ -1,56 +1,6 @@
+import { useState } from "react";
 import { useTheme } from "../../hooks";
-import { ComponentType, useState } from "react";
-
-export type SvgProps = {
-  color: string;
-  size: [string, string];
-  bgColor?: string;
-};
-
-export type SvgDataType = {
-  size: [string, string]; // width, height in px
-  filter?: [string, string]; // dropshadow
-  scale?: string; // scale factor for the dropshadow
-  transition?: string; // transition for the dropshadow
-  bezierParams?: [number, number]; // bezier factor for the animation
-  gap?: string; // gap between icons in px
-  subscribeColors?: () => Generator<string, never, string>;
-  icons: {
-    [key: string]: {
-      color: [string, string]; // light dark
-      label?: string; // label of the icon
-      transform?: () => string;
-      transition?: () => string;
-      zIndex?: number;
-    };
-  };
-  animations?: {
-    [key: string]: {
-      name: string;
-      duration: number;
-      timing: string;
-      delay: number;
-      iteration: string;
-      direction: string;
-      keyframes?: string;
-      get?: () => string;
-    };
-  };
-};
-
-export interface IconProps {
-  icon: ComponentType<SvgProps>;
-  svgData: SvgDataType;
-  iconName: string;
-  sx?: React.CSSProperties;
-  className?: string;
-}
-
-export interface IconButtonProps extends IconProps {
-  onClick?: () => void;
-  btnType?: "button" | "submit" | "reset";
-  sx?: React.CSSProperties;
-}
+import { IconProps, IconButtonProps, IconHeadingProps, SvgProps } from "../../types";
 
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
@@ -92,16 +42,6 @@ export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps)
     </div>
   );
 };
-interface IconHeadingProps {
-  icon: ComponentType<SvgProps>;
-  color: string;
-  svgData: SvgDataType;
-  className?: string;
-  bgColor?: string;
-  animationName?: string;
-  isHover?: boolean;
-  i?: number;
-}
 
 export const IconHeading = ({
   icon: SvgIcon,
@@ -160,11 +100,24 @@ export const IconButton = ({
   iconName,
   sx,
   className,
+  animStartAt = false,
+  animStartState = "none",
+  onMouseEnter,
 }: IconButtonProps) => {
+  const transform = animStartAt ? animStartState : svgData.icons[iconName].transform?.();
+  const zIndex = svgData.icons[iconName].zIndex;
+  const transition = svgData.icons[iconName].transition?.();
   return (
     <button
       type={btnType}
-      style={{ cursor: "pointer", ...sx }}
+      onMouseEnter={onMouseEnter}
+      style={{
+        cursor: "pointer",
+        transform: `${transform}`,
+        transition: `${transition}`,
+        zIndex: `${zIndex}`,
+        ...sx,
+      }}
       onClick={onClick}
       className={className}
     >
@@ -410,7 +363,7 @@ export const Reset = ({ color, size }: SvgProps) => {
   );
 };
 
-export const LineChart = ({ color, size, bgColor }: SvgProps) => {
+export const Chart = ({ color, size, bgColor }: SvgProps) => {
   return (
     <svg fill={color} width={size[0]} height={size[1]} viewBox="-6.4 -6.4 44.80 44.80">
       <g strokeWidth="0">
