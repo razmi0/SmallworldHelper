@@ -1,5 +1,6 @@
-import { createContext, useContext, ReactNode, useReducer } from "react";
-import { getFromLocalStorage, saveToLocalStorage } from "../../utils";
+import { createContext, useContext, ReactNode, useReducer, useCallback } from "react";
+import { getFromLocalStorage, saveToLocalStorage } from "../../../utils";
+import styles from "./_.module.css";
 
 type ThemeState = "light" | "dark";
 type ThemeContextType = "light" | "dark";
@@ -40,26 +41,26 @@ export const useTheme = () => {
 };
 
 export const useSwitchTheme = () => {
-  const switchTheme = useContext(ThemeDispatchContext);
-  if (switchTheme === null) {
+  const dispatch = useContext(ThemeDispatchContext);
+  if (dispatch === null) {
     throw new Error("useSwitchTheme must be used within a ThemeProvider");
   }
+  const switchTheme = useCallback(() => dispatch!(), [dispatch]);
   return { switchTheme };
 };
 
 const initTheme = () => {
   const systemMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   const localMode = getFromLocalStorage("__smallWorld_th", false) as ThemeState | false;
-
+  setStyles(localMode || systemMode);
   return localMode || systemMode;
 };
 
+const body = document.querySelector("body")!;
 const setStyles = (theme: ThemeState) => {
-  const body = document.querySelector("body")!;
   const isDark = theme === "dark";
-  const lightColor = "#ffffffde";
-  const darkColor = "#242424";
 
-  body.style.setProperty("background-color", isDark ? darkColor : lightColor);
-  body.style.setProperty("color", isDark ? lightColor : darkColor);
+  body.className = `${styles["bg-img-square-size"]} ${
+    isDark ? styles["dark-body"] : styles["light-body"]
+  }`;
 };

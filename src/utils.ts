@@ -1,3 +1,4 @@
+import { KeyboardEvent } from "react";
 import { flushSync } from "react-dom";
 
 export const getRandomColor = (opacity: number = 1) => {
@@ -118,4 +119,20 @@ export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
       fn(...args);
     }, delay);
   };
+};
+
+export const validateOnChange = (str: string) => {
+  const valid = /^-?\d\d*$/.test(str);
+  if (!valid) return;
+  const num = Number(str);
+  if (isNaN(num)) return;
+  return num;
+};
+
+export const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+  return e.key === "Enter" && e.currentTarget.value.length > 0 ? true : false;
+};
+
+export const onBackspace = (e: KeyboardEvent<HTMLInputElement>) => {
+  return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
 };

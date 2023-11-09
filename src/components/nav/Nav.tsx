@@ -33,7 +33,6 @@ export const Nav = ({
         <IconButton
           icon={Menu}
           animStartAt={isNavOpen}
-          animStartState={"none"}
           iconName="menu"
           svgData={iconStyle}
           onMouseEnter={debouncedToggleOpenNav(true)}
@@ -41,29 +40,15 @@ export const Nav = ({
         <IconButton
           icon={Theme}
           animStartAt={isNavOpen}
-          animStartState={"translate(0px)"}
           iconName="theme"
           svgData={iconStyle}
           onClick={switchTheme}
         />
-        <IconButton
-          icon={Load}
-          animStartAt={isNavOpen}
-          animStartState={"translate(0px)"}
-          iconName="load"
-          svgData={iconStyle}
-        />
-        <IconButton
-          icon={Save}
-          animStartAt={isNavOpen}
-          animStartState={"translate(0px)"}
-          iconName="save"
-          svgData={iconStyle}
-        />
+        <IconButton icon={Load} animStartAt={isNavOpen} iconName="load" svgData={iconStyle} />
+        <IconButton icon={Save} animStartAt={isNavOpen} iconName="save" svgData={iconStyle} />
         <IconButton
           icon={AddPlayer}
           animStartAt={isNavOpen}
-          animStartState={"translate(0px)"}
           iconName="addplayer"
           svgData={iconStyle}
           onClick={toggleOpenAddPlayer}
@@ -71,7 +56,6 @@ export const Nav = ({
         <IconButton
           icon={Chart}
           animStartAt={isNavOpen}
-          animStartState={"translate(0px)"}
           iconName="chart"
           svgData={iconStyle}
           onClick={() => withViewTransition(toggleOpenCharts)}
@@ -79,7 +63,6 @@ export const Nav = ({
         <IconButton
           icon={isScoreHidden ? EyeClose : EyeOpen}
           animStartAt={isNavOpen}
-          animStartState={"translate(0px)"}
           iconName="eyes"
           svgData={iconStyle}
           onClick={toggleHideScore}

@@ -17,6 +17,8 @@
 - [ ] if unFocus name input is empty, close the panel AddPlayer
 - [ ] if focus on x Player, highlight x elements in charts for this player
 - [ ] No two players can have the same name
+- [ ] Undo Button
+- [ ] Tooltip for each element of the nav
 
 ## REFACTORING
 
@@ -30,6 +32,9 @@
 - [x] reducer for newScores boolean map (useIntermediateMap)
 - [x] reducer for togglers => useToggle
 - [x] reducer for theme => useTheme (context)
+- [x] Nav
+- [x] PlayerList
+- [ ] AddPlayer
 
 ## BUGS & PROPOSITIONS
 
@@ -42,3 +47,5 @@
 - [ ] reducer for transition ? => useTransition
 - [ ] reducer for lclStrg => useLocalStorage ?
 - [ ] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
+- [ ] score input changing from controlled to unconrolled
+- [ ] cannot score < 0 in score input

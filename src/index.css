@@ -15,14 +15,15 @@
   --dark-color: #242424;
   --dark-icon: #609dff;
   --primary-color: #646cff;
-
   --other-primary-color: #213547;
-  --secondary-color: #e14512;
-  --othernary-color: #e19f12;
-  --tertiary-color: #bdbdc7;
-  --hover-color-vite: #646cffaa;
-  --hover-color-react: #5decf9;
   --std-height: 40px;
+  --color: #7272724d;
+}
+
+/* FOR DOCUMENTATION */
+.cl {
+  color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef,
+    #560bad, #277da1, #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
 }
 
 #root {
@@ -43,35 +44,6 @@ body {
   place-items: center;
   min-height: 100vh;
   width: 100%;
-  background-image: url(/bg-1.png);
-
-  --color: #7272724d;
-  background-color: var(--dark-color);
-  background-image: linear-gradient(
-      0deg,
-      transparent 24%,
-      var(--color) 25%,
-      var(--color) 26%,
-      transparent 27%,
-      transparent 74%,
-      var(--color) 75%,
-      var(--color) 76%,
-      transparent 77%,
-      transparent
-    ),
-    linear-gradient(
-      90deg,
-      transparent 24%,
-      var(--color) 25%,
-      var(--color) 26%,
-      transparent 27%,
-      transparent 74%,
-      var(--color) 75%,
-      var(--color) 76%,
-      transparent 77%,
-      transparent
-    );
-  background-size: 50px 50px;
 }
 
 h1 {
@@ -79,7 +51,8 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+button,
+p {
   all: unset;
 }
 
@@ -90,21 +63,6 @@ button {
 .star-head-ctn {
   display: flex;
   place-content: center;
-}
-.players-list-ctn {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.list-element {
-  display: flex;
-  flex-direction: column;
-  max-height: 125px;
 }
 
 .charts-ctn {
@@ -166,12 +124,6 @@ button {
 .form__field--commun:required,
 .form__field--commun:invalid {
   box-shadow: none;
-}
-
-/* FOR DOCUMENTATION */
-.cl {
-  color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef,
-    #560bad, #277da1, #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
 }
 
 /* MEDIA QUERIES */
