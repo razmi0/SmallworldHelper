@@ -4,23 +4,28 @@ import { Input, InputButton, SoftInput } from "./components/Input";
 import { Spacer } from "./components/Utils";
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
-import { ChartContainer, MainContainer } from "./components/containers/Containers";
-import { usePlayer, useToggle, useIntermediateState } from "./hooks";
+import {
+  ChartContainer,
+  Flex,
+  InputContainer,
+  MainContainer,
+} from "./components/containers/Containers";
+import {
+  PlayerListElement,
+  PlayerStatsContainer,
+  PlayerText,
+  PlayerTextContainer,
+  PlayersList,
+} from "./components/players/PlayersList";
+import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
 import { Nav } from "./components/nav/Nav";
 
 const App = () => {
   const { addPlayer, removePlayer, resetScore, updateScore, players, lines, bars, pies } =
     usePlayer();
-  const {
-    booleanMap,
-    newPlayerName,
-    newScores,
-    startScore,
-    setBooleanMap,
-    setNewPlayerName,
-    setNewScores,
-    setStartScore,
-  } = useIntermediateState(players.length);
+  const { booleanMap, newPlayerName, newScores, startScore } = useIntermediate();
+  const { setBooleanMap, setNewPlayerName, setNewScores, setStartScore } =
+    useIntermediateDispatch();
   const {
     isAddPlayerOpen,
     isChartsOpen,
@@ -38,29 +43,16 @@ const App = () => {
         toggleOpenCharts={toggleOpenCharts}
         isScoreHidden={isScoreHidden}
       />
-      <section
-        style={{
-          display: "flex",
-        }}
-        className="players-ctn"
-      >
-        {/* == PLAYERS LIST & SCORE INPUT == */}
-        <ul className="players-list-ctn">
+      <PlayerStatsContainer>
+        <PlayersList>
           {players.map((player, i) => {
             const { name, victoryPtn, id, color } = player;
             const subjectId = `${id}_${name.toLowerCase()}`;
 
             return (
-              <li className="list-element" key={i}>
-                <div style={{ display: "flex" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      fontWeight: "bold",
-                      fontSize: "30px",
-                    }}
-                  >
+              <PlayerListElement key={id}>
+                <Flex>
+                  <PlayerTextContainer>
                     <IconHeading
                       animationName="translate"
                       isHover={booleanMap[i]}
@@ -68,16 +60,10 @@ const App = () => {
                       icon={Star}
                       svgData={headingStarIconStyle}
                     />
-                    <span
-                      style={{
-                        color: booleanMap[i] ? color : "inherit",
-                        transition: "color 0.3s ease-in-out",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                    <PlayerText color={booleanMap[i] ? color : "inherit"}>
                       {name} : {isScoreHidden ? "*****" : victoryPtn}
-                    </span>
-                  </div>
+                    </PlayerText>
+                  </PlayerTextContainer>
                   <Spacer />
                   <IconButton
                     onClick={() => resetScore(id)}
@@ -91,8 +77,8 @@ const App = () => {
                     iconName="delete"
                     svgData={playerIconStyle}
                   />
-                </div>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                </Flex>
+                <InputContainer>
                   <SoftInput
                     color={color}
                     onFocus={() => setBooleanMap(i, true)}
@@ -115,20 +101,17 @@ const App = () => {
                     labelText="Score"
                     subjectId={subjectId}
                   />
-                </div>
-              </li>
+                </InputContainer>
+              </PlayerListElement>
             );
           })}
-        </ul>
-        {/* == CHARTS == */}
-        {isChartsOpen && players.length > 0 && (
-          <ChartContainer>
-            <Line key="line" data={lines} options={lineOptions} />
-            <Bar key="bar" data={bars} options={barOptions} />
-            <Pie key="pie" data={pies} options={pieOptions} />
-          </ChartContainer>
-        )}
-      </section>
+        </PlayersList>
+        <ChartContainer isOpen={isChartsOpen && players.length > 0}>
+          <Line data={lines} options={lineOptions} />
+          <Bar data={bars} options={barOptions} />
+          <Pie data={pies} options={pieOptions} />
+        </ChartContainer>
+      </PlayerStatsContainer>
       {/* == ADD PLAYER == */}
       {isAddPlayerOpen && (
         <div
