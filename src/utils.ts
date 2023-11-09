@@ -1,3 +1,5 @@
+import { flushSync } from "react-dom";
+
 export const getRandomColor = (opacity: number = 1) => {
   const randomRgba = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
     Math.random() * 255
@@ -97,4 +99,23 @@ export const findSum = (arr: number[]) => {
 
 export const throwError = (msg: string) => {
   throw `${new Date().toLocaleTimeString("en-US")} :  ${msg}`;
+};
+
+export const withViewTransition = (fn: () => void) => {
+  document.startViewTransition(() => {
+    flushSync(() => {
+      fn();
+    });
+  });
+};
+
+type F<T extends unknown[] = unknown[]> = (...args: T) => unknown | void;
+export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
+  let timerId: ReturnType<typeof setTimeout>;
+  return function (...args: T) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
 };
