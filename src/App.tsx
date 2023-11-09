@@ -1,27 +1,12 @@
-import { flushSync } from "react-dom";
-import {
-  AddPlayer,
-  Save,
-  Load,
-  IconButton,
-  Theme,
-  Menu,
-  Reset,
-  Delete,
-  LineChart,
-  Star,
-  IconHeading,
-  EyeClose,
-  EyeOpen,
-} from "./components/icons/Icons";
-import { headingStarIconStyle, iconStyle, playerIconStyle } from "./components/icons/data";
+import { IconButton, Reset, Delete, Star, IconHeading } from "./components/icons/Icons";
+import { headingStarIconStyle, playerIconStyle } from "./components/icons/data";
 import { Input, InputButton, SoftInput } from "./components/Input";
 import { Spacer } from "./components/Utils";
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
-import { ChartContainer } from "./components/Containers";
-import { saveToLocalStorage } from "./utils";
-import { usePlayer, useTheme, useToggle, useIntermediateState } from "./hooks";
+import { ChartContainer, MainContainer } from "./components/containers/Containers";
+import { usePlayer, useToggle, useIntermediateState } from "./hooks";
+import { Nav } from "./components/nav/Nav";
 
 const App = () => {
   const { addPlayer, removePlayer, resetScore, updateScore, players, lines, bars, pies } =
@@ -30,146 +15,33 @@ const App = () => {
     booleanMap,
     newPlayerName,
     newScores,
+    startScore,
     setBooleanMap,
     setNewPlayerName,
     setNewScores,
     setStartScore,
-    startScore,
   } = useIntermediateState(players.length);
   const {
     isAddPlayerOpen,
     isChartsOpen,
-    isNavOpen,
     isScoreHidden,
+    isNavOpen,
     toggleHideScore,
     toggleOpenAddPlayer,
     toggleOpenCharts,
     toggleOpenNav,
   } = useToggle();
-  const { theme, switchTheme } = useTheme();
-
-  const handleWithViewTransition = (fn: () => void) => {
-    document.startViewTransition(() => {
-      flushSync(() => {
-        fn();
-      });
-    });
-  };
 
   return (
-    <div className="main-ctn">
-      <style>
-        {`
-          .themed-bg {
-            background-color : ${theme == "dark" ? "#242424" : "#ffffffde"} ;
-            color: ${theme == "dark" ? "#ffffffde" : "#242424"};
-          }
-      `}
-      </style>
-      {/* == NAV == */}
-      <nav className="nav-ctn">
-        <IconButton
-          icon={Menu}
-          sx={{
-            zIndex: iconStyle.icons.menu.zIndex,
-            transform: isNavOpen ? "none" : iconStyle.icons.menu.transform?.(),
-            transition: iconStyle.icons.menu.transition?.(),
-          }}
-          theme={theme}
-          iconName="menu"
-          svgData={iconStyle}
-          onClick={toggleOpenNav}
-        />
-        <IconButton
-          icon={Theme}
-          sx={{
-            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.theme.transform?.(),
-            transition: iconStyle.icons.theme.transition?.(),
-            zIndex: iconStyle.icons.theme.zIndex,
-          }}
-          theme={theme}
-          iconName="theme"
-          svgData={iconStyle}
-          onClick={() => {
-            toggleOpenNav();
-            switchTheme();
-          }}
-        />
-
-        <IconButton
-          icon={Load}
-          sx={{
-            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.load.transform?.(),
-            transition: iconStyle.icons.load.transition?.(),
-            zIndex: iconStyle.icons.load.zIndex,
-          }}
-          theme={theme}
-          iconName="load"
-          svgData={iconStyle}
-          onClick={toggleOpenNav}
-        />
-        <IconButton
-          icon={Save}
-          sx={{
-            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.save.transform?.(),
-            transition: iconStyle.icons.save.transition?.(),
-            zIndex: iconStyle.icons.save.zIndex,
-          }}
-          iconName="save"
-          svgData={iconStyle}
-          onClick={() => {
-            saveToLocalStorage("players", players);
-            saveToLocalStorage("lineData", lines);
-            saveToLocalStorage("barData", bars);
-            saveToLocalStorage("pieData", pies);
-            toggleOpenNav();
-          }}
-          theme={theme}
-        />
-        <IconButton
-          icon={AddPlayer}
-          sx={{
-            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.addplayer.transform?.(),
-            transition: iconStyle.icons.addplayer.transition?.(),
-            zIndex: iconStyle.icons.addplayer.zIndex,
-          }}
-          theme={theme}
-          iconName="addplayer"
-          svgData={iconStyle}
-          onClick={toggleOpenAddPlayer}
-        />
-        <IconButton
-          icon={LineChart}
-          sx={{
-            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.linechart.transform?.(),
-            transition: iconStyle.icons.linechart.transition?.(),
-            zIndex: iconStyle.icons.linechart.zIndex,
-          }}
-          theme={theme}
-          iconName="linechart"
-          svgData={iconStyle}
-          onClick={() => {
-            toggleOpenNav;
-            if (players.length == 0) return;
-            handleWithViewTransition(toggleOpenCharts);
-          }}
-        />
-        <IconButton
-          icon={isScoreHidden ? EyeClose : EyeOpen}
-          sx={{
-            transform: isNavOpen ? "translate(0px)" : iconStyle.icons.eyes.transform?.(),
-            transition: iconStyle.icons.eyes.transition?.(),
-            zIndex: iconStyle.icons.eyes.zIndex,
-          }}
-          theme={theme}
-          iconName="eyes"
-          svgData={iconStyle}
-          onClick={() => {
-            toggleOpenNav();
-            toggleHideScore();
-          }}
-        />
-      </nav>
+    <MainContainer>
+      <Nav
+        toggleHideScore={toggleHideScore}
+        toggleOpenAddPlayer={toggleOpenAddPlayer}
+        toggleOpenCharts={toggleOpenCharts}
+        toggleOpenNav={toggleOpenNav}
+        isScoreHidden={isScoreHidden}
+        isNavOpen={isNavOpen}
+      />
       <section
         style={{
           display: "flex",
@@ -246,7 +118,6 @@ const App = () => {
                     value={newScores[i] == 0 ? "" : newScores[i]}
                     labelText="Score"
                     subjectId={subjectId}
-                    theme={theme}
                   />
                 </div>
               </li>
@@ -256,9 +127,9 @@ const App = () => {
         {/* == CHARTS == */}
         {isChartsOpen && players.length > 0 && (
           <ChartContainer>
-            <Line key="line" data={lines} options={lineOptions} theme={theme} />
-            <Bar key="bar" data={bars} options={barOptions} theme={theme} />
-            <Pie key="pie" data={pies} options={pieOptions} theme={theme} />
+            <Line key="line" data={lines} options={lineOptions} />
+            <Bar key="bar" data={bars} options={barOptions} />
+            <Pie key="pie" data={pies} options={pieOptions} />
           </ChartContainer>
         )}
       </section>
@@ -304,7 +175,7 @@ const App = () => {
         </div>
         // </div>
       )}
-    </div>
+    </MainContainer>
   );
 };
 

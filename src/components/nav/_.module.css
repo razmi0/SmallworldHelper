@@ -1,0 +1,7 @@
+.nav-ctn {
+  display: flex;
+  width: fit-content;
+  gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+}

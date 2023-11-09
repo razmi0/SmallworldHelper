@@ -83,20 +83,6 @@ button {
   all: unset;
 }
 
-.main-ctn {
-  display: flex;
-  flex-direction: column;
-  min-width: 325px;
-  gap: 10px;
-  align-items: flex-start;
-}
-.nav-ctn {
-  display: flex;
-  width: fit-content;
-  gap: 5px;
-  justify-content: flex-start;
-  align-items: center;
-}
 .icon-stat-ctn {
   display: flex;
   place-content: center;

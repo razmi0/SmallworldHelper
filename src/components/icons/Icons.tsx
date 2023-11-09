@@ -1,3 +1,4 @@
+import { useTheme } from "../../hooks";
 import { ComponentType, useState } from "react";
 
 export type SvgProps = {
@@ -41,7 +42,6 @@ export interface IconProps {
   icon: ComponentType<SvgProps>;
   svgData: SvgDataType;
   iconName: string;
-  theme?: "light" | "dark";
   sx?: React.CSSProperties;
   className?: string;
 }
@@ -56,14 +56,9 @@ const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
 };
 
-export const Icon = ({
-  icon: SvgIcon,
-  svgData,
-  iconName,
-  theme = "light",
-  className,
-}: IconProps) => {
+export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps) => {
   const [isHover, setIsHover] = useState(false);
+  const { theme } = useTheme();
 
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
@@ -163,7 +158,6 @@ export const IconButton = ({
   icon,
   svgData,
   iconName,
-  theme = "light",
   sx,
   className,
 }: IconButtonProps) => {
@@ -174,7 +168,7 @@ export const IconButton = ({
       onClick={onClick}
       className={className}
     >
-      <Icon icon={icon} svgData={svgData} iconName={iconName} theme={theme} />
+      <Icon icon={icon} svgData={svgData} iconName={iconName} />
     </button>
   );
 };

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import styles from "./_.module.css";
 
 type FlexProps = {
   children: ReactNode;
@@ -30,4 +31,8 @@ export const ChartContainer = ({ children }: { children: ReactNode }) => {
         })}
     </section>
   );
+};
+
+export const MainContainer = ({ children }: { children: ReactNode }) => {
+  return <div className={styles["main-ctn"]}>{children}</div>;
 };
