@@ -1,17 +1,8 @@
 import { ReactNode } from "react";
 import styles from "./_.module.css";
 
-type FlexProps = {
-  children: ReactNode;
-  sx?: React.CSSProperties;
-};
-
 export type ContainerProps = {
   children: ReactNode;
-};
-
-export const Flex = ({ children, sx }: FlexProps) => {
-  return <div style={{ ...sx, display: "flex" }}>{children}</div>;
 };
 
 export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
