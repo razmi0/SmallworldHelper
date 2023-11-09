@@ -10,7 +10,7 @@ type ToggleState = {
 type ToggleActions =
   | { type: "TOGGLE_HIDE_SCORE" }
   | { type: "TOGGLE_OPEN_ADD_PLAYER" }
-  | { type: "TOGGLE_OPEN_NAV" }
+  | { type: "TOGGLE_OPEN_NAV"; payload?: boolean }
   | { type: "TOGGLE_OPEN_CHARTS" };
 
 // INITIAL STATES
@@ -33,12 +33,17 @@ const toggleReducer = (state: ToggleState, action: ToggleActions): ToggleState =
     case "TOGGLE_OPEN_ADD_PLAYER": {
       return { ...state, isAddPlayerOpen: !state.isAddPlayerOpen };
     }
+
     case "TOGGLE_OPEN_NAV": {
-      return { ...state, isNavOpen: !state.isNavOpen };
+      return action.payload
+        ? { ...state, isNavOpen: action.payload }
+        : { ...state, isNavOpen: !state.isNavOpen };
     }
+
     case "TOGGLE_OPEN_CHARTS": {
       return { ...state, isChartsOpen: !state.isChartsOpen };
     }
+
     default:
       return state;
   }
@@ -57,7 +62,10 @@ export const useToggle = () => {
     isScoreHidden: state.isScoreHidden,
     toggleHideScore: useCallback(() => dispatch({ type: "TOGGLE_HIDE_SCORE" }), []),
     toggleOpenAddPlayer: useCallback(() => dispatch({ type: "TOGGLE_OPEN_ADD_PLAYER" }), []),
-    toggleOpenNav: useCallback(() => dispatch({ type: "TOGGLE_OPEN_NAV" }), []),
+    toggleOpenNav: useCallback(
+      (newState?: boolean) => dispatch({ type: "TOGGLE_OPEN_NAV", payload: newState }),
+      []
+    ),
     toggleOpenCharts: useCallback(() => dispatch({ type: "TOGGLE_OPEN_CHARTS" }), []),
   };
 };
