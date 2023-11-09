@@ -5,3 +5,7 @@
   justify-content: flex-start;
   align-items: center;
 }
+.menu-icon-ctn {
+  display: flex;
+  place-content: center;
+}
