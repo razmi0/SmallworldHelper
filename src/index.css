@@ -15,14 +15,14 @@
   --dark-color: #242424;
   --dark-icon: #609dff;
   --primary-color: #646cff;
-
   --other-primary-color: #213547;
-  --secondary-color: #e14512;
-  --othernary-color: #e19f12;
-  --tertiary-color: #bdbdc7;
-  --hover-color-vite: #646cffaa;
-  --hover-color-react: #5decf9;
   --std-height: 40px;
+}
+
+/* FOR DOCUMENTATION */
+.cl {
+  color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef,
+    #560bad, #277da1, #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
 }
 
 #root {
@@ -43,9 +43,9 @@ body {
   place-items: center;
   min-height: 100vh;
   width: 100%;
-  background-image: url(/bg-1.png);
+  /* background-image: url(/bg-1.png); */
 
-  --color: #7272724d;
+  /* --color: #7272724d;
   background-color: var(--dark-color);
   background-image: linear-gradient(
       0deg,
@@ -70,8 +70,7 @@ body {
       var(--color) 76%,
       transparent 77%,
       transparent
-    );
-  background-size: 50px 50px;
+    ); */
 }
 
 h1 {
@@ -152,12 +151,6 @@ p {
 .form__field--commun:required,
 .form__field--commun:invalid {
   box-shadow: none;
-}
-
-/* FOR DOCUMENTATION */
-.cl {
-  color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef,
-    #560bad, #277da1, #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
 }
 
 /* MEDIA QUERIES */
