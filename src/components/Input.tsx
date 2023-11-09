@@ -9,7 +9,7 @@ import {
 import { add4dToHex } from "../utils";
 
 interface InputProps {
-  labelText: string;
+  labelText?: string;
   subjectId: string;
   onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
   children?: ReactNode;
@@ -104,7 +104,6 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
 };
 
 export const SoftInput = ({
-  labelText,
   subjectId,
   sx,
   onFocus,
@@ -131,7 +130,7 @@ export const SoftInput = ({
         onFocus={onFocus}
         onBlur={onBlur}
         className={`form__field--${subjectId} form__field--commun`}
-        placeholder={labelText}
+        placeholder="Score"
         minLength={1}
         id={subjectId}
         name={subjectId}
@@ -142,7 +141,7 @@ export const SoftInput = ({
         value={value}
       />
       <label htmlFor={subjectId} className="form__label">
-        {labelText}
+        Score
       </label>
     </div>
   );
