@@ -45,3 +45,5 @@
 - [ ] reducer for transition ? => useTransition
 - [ ] reducer for lclStrg => useLocalStorage ?
 - [ ] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
+- [ ] score input changing from controlled to unconrolled
+- [ ] cannot score < 0 in score input
