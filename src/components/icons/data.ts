@@ -1,4 +1,4 @@
-import { SvgDataType } from "./Icons";
+import { SvgDataType } from "../../types";
 
 export const iconStyle: SvgDataType = {
   size: ["40px", "40px"],
@@ -83,7 +83,7 @@ export const iconStyle: SvgDataType = {
       // unused
       color: ["#646cff", "#609dff"],
     },
-    linechart: {
+    chart: {
       // 5
       color: ["#646cff", "#609dff"],
       transform: () =>
