@@ -30,6 +30,9 @@
 - [x] reducer for newScores boolean map (useIntermediateMap)
 - [x] reducer for togglers => useToggle
 - [x] reducer for theme => useTheme (context)
+- [x] Nav
+- [ ] PlayerList
+- [ ] AddPlayer
 
 ## BUGS & PROPOSITIONS
 
