@@ -1,36 +1,51 @@
-import { ReactNode, KeyboardEvent, ChangeEvent } from "react";
+import { ReactNode, KeyboardEvent, ChangeEvent, useEffect, useState } from "react";
 import styles from "./_.module.css";
 import { ContainerProps, InputContainer } from "../containers/Containers";
 import { Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
-import { useIntermediate, useIntermediateDispatch, useToggle } from "../../hooks";
+import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { headingStarIconStyle, playerIconStyle } from "../icons/data";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { Spacer, Flex } from "../Utils";
 import { SoftInput } from "../Input";
+import {
+  onBackspace,
+  onEnter,
+  throwError,
+  validateOnChange,
+  withViewTransition,
+} from "../../utils";
 
 /* players, reset, remove, update, */
 type PlayerListType = {
   children?: ReactNode;
   players: Player[];
+  hideScore: boolean;
   reset: (id: number) => void;
   remove: (id: number) => void;
   update: (id: number, score: number) => void;
+};
+
+type PlayerUtilitiesProps = {
+  id: number;
+  reset: (id: number) => void;
+  remove: (id: number) => void;
+  isFocus: boolean;
 };
 
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
   return <section className={styles["players-ctn"]}>{children}</section>;
 };
 
-export const PlayerListElement = ({ children }: ContainerProps) => {
+const PlayerListElement = ({ children }: ContainerProps) => {
   return <li className={styles["list-element-ctn"]}>{children}</li>;
 };
 
-export const PlayerTextContainer = ({ children }: ContainerProps) => {
+const PlayerTextContainer = ({ children }: ContainerProps) => {
   return <div className={styles["player-text-ctn"]}>{children}</div>;
 };
 
-export const PlayerText = ({ children, color }: { children: ReactNode; color: string }) => {
+const PlayerText = ({ children, color }: { children: ReactNode; color: string }) => {
   return (
     <p style={{ color }} className={styles["player-text"]}>
       {children}
@@ -38,30 +53,60 @@ export const PlayerText = ({ children, color }: { children: ReactNode; color: st
   );
 };
 
-export const PlayersList = ({ players, remove, reset, update }: PlayerListType) => {
-  const { booleanMap, newScores } = useIntermediate();
+const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
+  return (
+    <>
+      {isFocus && (
+        <>
+          <IconButton
+            onClick={() => reset(id)}
+            icon={Reset}
+            iconName="reset"
+            svgData={playerIconStyle}
+          />
+          <IconButton
+            onClick={() => remove(id)}
+            icon={Delete}
+            iconName="delete"
+            svgData={playerIconStyle}
+          />
+        </>
+      )}
+    </>
+  );
+};
+
+export const PlayersList = ({ players, update, reset, remove, hideScore }: PlayerListType) => {
+  const [softs, setSofts] = useState<HTMLInputElement[]>([]);
+  const { booleanMap: isActive, newScores } = useIntermediate();
   const { setBooleanMap, setNewScores } = useIntermediateDispatch();
-  const { isScoreHidden } = useToggle();
+
+  useEffect(() => {
+    setSofts(() => allSofts());
+  }, [players]);
 
   const handleBlur = (i: number) => {
-    setBooleanMap(i, false);
+    withViewTransition(() => setBooleanMap(i, false));
     setNewScores(i, 0);
   };
 
   const handleFocus = (i: number) => {
-    setBooleanMap(i, true);
+    withViewTransition(() => setBooleanMap(i, true));
   };
 
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>, id: number, i: number) => {
-    if (e.key === "Enter") {
+    if (onEnter(e)) {
+      focusNextSoft(softs, e.currentTarget.id);
       update(id, newScores[i]);
-      e.currentTarget.blur();
+    } else if (onBackspace(e)) {
+      setNewScores(i, 0);
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
-    const newScore = Number(e.currentTarget.value);
-    if (isNaN(newScore)) return;
+  const handleChangeScore = (e: ChangeEvent<HTMLInputElement>, i: number) => {
+    const raw = e.currentTarget.value;
+    const newScore = validateOnChange(raw);
+    if (!newScore) return;
     setNewScores(i, newScore);
   };
 
@@ -77,28 +122,17 @@ export const PlayersList = ({ players, remove, reset, update }: PlayerListType) 
               <PlayerTextContainer>
                 <IconHeading
                   animationName="translate"
-                  isHover={booleanMap[i]}
+                  isHover={isActive[i]}
                   color={color}
                   icon={Star}
                   svgData={headingStarIconStyle}
                 />
-                <PlayerText color={booleanMap[i] ? color : "inherit"}>
-                  {name} : {isScoreHidden ? "*****" : victoryPtn}
+                <PlayerText color={isActive[i] ? color : "inherit"}>
+                  {name} : {hideScore ? "***" : victoryPtn}
                 </PlayerText>
               </PlayerTextContainer>
               <Spacer />
-              <IconButton
-                onClick={() => reset(id)}
-                icon={Reset}
-                iconName="reset"
-                svgData={playerIconStyle}
-              />
-              <IconButton
-                onClick={() => remove(id)}
-                icon={Delete}
-                iconName="delete"
-                svgData={playerIconStyle}
-              />
+              <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isActive[i]} />
             </Flex>
             <InputContainer>
               <SoftInput
@@ -106,8 +140,8 @@ export const PlayersList = ({ players, remove, reset, update }: PlayerListType) 
                 onFocus={() => handleFocus(i)}
                 onBlur={() => handleBlur(i)}
                 onKeyUp={(e) => handleKeyUp(e, id, i)}
-                onChange={(e) => handleChange(e, i)}
-                value={newScores[i] == 0 ? "" : newScores[i]}
+                onChange={(e) => handleChangeScore(e, i)}
+                value={newScores[i] ? newScores[i] : ""}
                 subjectId={subjectId}
               />
             </InputContainer>
@@ -116,4 +150,20 @@ export const PlayersList = ({ players, remove, reset, update }: PlayerListType) 
       })}
     </ul>
   );
+};
+
+// HELPERS
+//--
+
+const allSofts = (name = '[name="soft-input"]') => {
+  return Array.from(document.querySelectorAll<HTMLInputElement>(name));
+};
+
+const focusNextSoft = (softs: HTMLInputElement[], targetId: string) => {
+  const softIndex = softs.findIndex((soft) => soft.id === targetId);
+  if (softIndex === -1) {
+    throwError("SoftInput not found");
+  }
+  const nextSoftInput = softIndex + 1 < softs.length ? softs[softIndex + 1] : softs[0];
+  nextSoftInput.focus();
 };

@@ -30,10 +30,11 @@ const App = () => {
       />
       <PlayerStatsContainer>
         <PlayersList
+          hideScore={isScoreHidden}
           players={players}
           reset={resetScore}
-          update={updateScore}
           remove={removePlayer}
+          update={updateScore}
         />
         <ChartContainer isOpen={isChartsOpen && players.length > 0}>
           <Line data={lines} options={lineOptions} />
