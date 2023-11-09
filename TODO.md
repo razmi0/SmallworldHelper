@@ -33,7 +33,7 @@
 - [x] reducer for togglers => useToggle
 - [x] reducer for theme => useTheme (context)
 - [x] Nav
-- [ ] PlayerList
+- [x] PlayerList
 - [ ] AddPlayer
 
 ## BUGS & PROPOSITIONS
