@@ -25,11 +25,9 @@ const App = () => {
     isAddPlayerOpen,
     isChartsOpen,
     isScoreHidden,
-    isNavOpen,
     toggleHideScore,
     toggleOpenAddPlayer,
     toggleOpenCharts,
-    toggleOpenNav,
   } = useToggle();
 
   return (
@@ -38,9 +36,7 @@ const App = () => {
         toggleHideScore={toggleHideScore}
         toggleOpenAddPlayer={toggleOpenAddPlayer}
         toggleOpenCharts={toggleOpenCharts}
-        toggleOpenNav={toggleOpenNav}
         isScoreHidden={isScoreHidden}
-        isNavOpen={isNavOpen}
       />
       <section
         style={{
