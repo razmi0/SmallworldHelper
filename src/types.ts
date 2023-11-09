@@ -1,3 +1,5 @@
+import { ComponentType } from "react";
+
 export type Player = {
   id: number;
   name: string;
@@ -43,3 +45,82 @@ export type PieData = {
     borderWidth: number;
   }[];
 };
+
+// ICONS
+//--
+
+export type SvgProps = {
+  color: string;
+  size: [string, string];
+  bgColor?: string;
+};
+
+export type SvgDataType = {
+  size: [string, string]; // width, height in px
+  filter?: [string, string]; // dropshadow
+  scale?: string; // scale factor for the dropshadow
+  transition?: string; // transition for the dropshadow
+  bezierParams?: [number, number]; // bezier factor for the animation
+  gap?: string; // gap between icons in px
+  subscribeColors?: () => Generator<string, never, string>;
+  icons: {
+    [key: string]: {
+      color: [string, string]; // light dark
+      label?: string; // label of the icon
+      transform?: () => string;
+      transition?: () => string;
+      zIndex?: number;
+    };
+  };
+  animations?: {
+    [key: string]: {
+      name: string;
+      duration: number;
+      timing: string;
+      delay: number;
+      iteration: string;
+      direction: string;
+      keyframes?: string;
+      get?: () => string;
+    };
+  };
+};
+
+export interface IconProps {
+  icon: ComponentType<SvgProps>;
+  svgData: SvgDataType;
+  iconName: IconName;
+  sx?: React.CSSProperties;
+  className?: string;
+}
+
+export interface IconHeadingProps {
+  icon: ComponentType<SvgProps>;
+  color: string;
+  svgData: SvgDataType;
+  className?: string;
+  bgColor?: string;
+  animationName?: string;
+  isHover?: boolean;
+  i?: number;
+}
+
+export type IconName =
+  | "menu"
+  | "theme"
+  | "load"
+  | "save"
+  | "addplayer"
+  | "chart"
+  | "eyes"
+  | "reset"
+  | "delete";
+
+export interface IconButtonProps extends IconProps {
+  onClick?: () => void;
+  btnType?: "button" | "submit" | "reset";
+  sx?: React.CSSProperties;
+  animStartAt?: boolean;
+  animStartState?: string;
+  onMouseEnter?: () => void;
+}
