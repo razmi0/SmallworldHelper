@@ -79,7 +79,8 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+button,
+p {
   all: unset;
 }
 
@@ -90,21 +91,6 @@ button {
 .star-head-ctn {
   display: flex;
   place-content: center;
-}
-.players-list-ctn {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.list-element {
-  display: flex;
-  flex-direction: column;
-  max-height: 125px;
 }
 
 .charts-ctn {

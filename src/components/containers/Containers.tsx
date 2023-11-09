@@ -5,15 +5,21 @@ type FlexProps = {
   children: ReactNode;
   sx?: React.CSSProperties;
 };
+
+export type ContainerProps = {
+  children: ReactNode;
+};
+
 export const Flex = ({ children, sx }: FlexProps) => {
   return <div style={{ ...sx, display: "flex" }}>{children}</div>;
 };
 
-export const ChartContainer = ({ children }: { children: ReactNode }) => {
+export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
   const childrenArr = Array.isArray(children) ? children : [children];
   return (
     <section className="charts-ctn">
-      {children &&
+      {isOpen &&
+        children &&
         childrenArr.map((child, i) => {
           return (
             <figure
@@ -33,6 +39,10 @@ export const ChartContainer = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const MainContainer = ({ children }: { children: ReactNode }) => {
+export const MainContainer = ({ children }: ContainerProps) => {
   return <div className={styles["main-ctn"]}>{children}</div>;
+};
+
+export const InputContainer = ({ children }: ContainerProps) => {
+  return <div className={styles["input-ctn"]}>{children}</div>;
 };
