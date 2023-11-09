@@ -17,6 +17,8 @@
 - [ ] if unFocus name input is empty, close the panel AddPlayer
 - [ ] if focus on x Player, highlight x elements in charts for this player
 - [ ] No two players can have the same name
+- [ ] Undo Button
+- [ ] Tooltip for each element of the nav
 
 ## REFACTORING
 
