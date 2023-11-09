@@ -55,7 +55,7 @@ const PlayerText = ({ children, color }: { children: ReactNode; color: string })
 
 const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
   return (
-    <>
+    <div className={styles["player-utilities-ctn"]}>
       {isFocus && (
         <>
           <IconButton
@@ -72,7 +72,7 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
           />
         </>
       )}
-    </>
+    </div>
   );
 };
 
