@@ -133,6 +133,9 @@ export const usePlayer = () => {
     pies: initialPlayerStates.pieData(),
   });
 
+  /**
+   * Build charts from there
+   */
   const setPlayers = useCallback((players: Player[]) => {
     dispatch({ type: "SET_PLAYERS", payload: { players: players } });
   }, []);
