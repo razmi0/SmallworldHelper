@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, ChangeEvent, useEffect, useState } from "react";
+import { ReactNode, KeyboardEvent, ChangeEvent, useEffect, useState, useCallback } from "react";
 import styles from "./_.module.css";
 import { ContainerProps, InputContainer } from "../containers/Containers";
 import { Player } from "../../types";
@@ -54,18 +54,20 @@ const PlayerText = ({ children, color }: { children: ReactNode; color: string })
 };
 
 const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
+  const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
+  const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
   return (
     <div className={styles["player-utilities-ctn"]}>
       {isFocus && (
         <>
           <IconButton
-            onClick={() => reset(id)}
+            onClick={resetWithViewTransition}
             icon={Reset}
             iconName="reset"
             svgData={playerIconStyle}
           />
           <IconButton
-            onClick={() => remove(id)}
+            onClick={removeWithViewTransition}
             icon={Delete}
             iconName="delete"
             svgData={playerIconStyle}
