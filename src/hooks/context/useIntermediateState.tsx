@@ -5,7 +5,7 @@ import { throwError } from "../../utils";
 type newScore = number | string;
 
 type IntermediateStates = {
-  isOnFocus: boolean[]; // useMap
+  isFocus: boolean[]; // useMap
   newScores: newScore[]; // useMap
   startScore: number; // useIntermediateState
   newPlayerName: string; // useIntermediateState
@@ -53,15 +53,15 @@ const intermediateReducer = (
 
     case "SET_BOOLEAN_MAP": {
       const { index, value } = action.payload;
-      let newBooleanMap = state.isOnFocus;
+      let newBooleanMap = state.isFocus;
 
-      if (index >= state.isOnFocus.length) {
-        newBooleanMap = resizeArray(state.isOnFocus, index + 1, false);
+      if (index >= state.isFocus.length) {
+        newBooleanMap = resizeArray(state.isFocus, index + 1, false);
       }
 
       return {
         ...state,
-        isOnFocus: newBooleanMap.map((item, i) => (i === index ? value : item)),
+        isFocus: newBooleanMap.map((item, i) => (i === index ? value : item)),
       };
     }
     case "SET_NEW_SCORES": {
@@ -104,7 +104,7 @@ export const IntermediateProvider = ({
 }) => {
   const [state, dispatch] = useReducer(intermediateReducer, {
     ...initialIntermediateState,
-    isOnFocus: initBooleanMap(size),
+    isFocus: initBooleanMap(size),
     newScores: initNewScores(size),
   });
 
@@ -124,8 +124,8 @@ export const useIntermediate = () => {
   if (states === null) {
     throwError("useIntermediate must be used within a IntermediateProvider");
   }
-  const { isOnFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states!;
-  return { isOnFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
+  const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states!;
+  return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
 };
 
 export const useIntermediateDispatch = () => {

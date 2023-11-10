@@ -130,8 +130,8 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
 };
 
 export const PlayersList = ({ players, update, reset, remove, hideScore }: PlayerListType) => {
-  const { isOnFocus: isFocus, newScores } = useIntermediate();
-  const { isOnFocus: isOnFocus, setNewScores } = useIntermediateDispatch();
+  const { isFocus, newScores } = useIntermediate();
+  const { isOnFocus, setNewScores } = useIntermediateDispatch();
 
   const resetInput = (i: number) => {
     setNewScores(i, 0);
