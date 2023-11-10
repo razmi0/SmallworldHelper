@@ -11,7 +11,9 @@
 - [x] Add Bar Chart to sum up players's score data
 - [x] Pie chart for total shared scored
 - [x] Add Hide scores button
-- [ ] UndoRedo
+- [x] UndoRedo
+- [x] Save / Load
+- [x] Keyboard navigation
 
 ## REFACTORING
 
