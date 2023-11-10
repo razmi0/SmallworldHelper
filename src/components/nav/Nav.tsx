@@ -1,10 +1,19 @@
-import { withViewTransition, debounce } from "../../utils";
-import { useSwitchTheme, useToggle } from "../../hooks";
-import { AddPlayer, EyeClose, EyeOpen, IconButton } from "../icons/Icons";
-import { Chart, Load, Menu, Save, Theme } from "../icons/Icons";
+import { useCallback } from "react";
+import { useIntermediateDispatch, useSwitchTheme, useToggle } from "../../hooks";
+import { debounce, withViewTransition } from "../../utils";
+import {
+  AddPlayer,
+  Chart,
+  EyeClose,
+  EyeOpen,
+  IconButton,
+  Load,
+  Menu,
+  Save,
+  Theme,
+} from "../icons/Icons";
 import { iconStyle } from "../icons/data";
 import styles from "./_.module.css";
-import { useCallback } from "react";
 
 type NavProps = {
   toggleOpenAddPlayer: () => void;
@@ -23,6 +32,7 @@ export const Nav = ({
   const { toggleActions, toggleStates } = useToggle();
   const { isNavOpen } = toggleStates;
   const { openNav } = toggleActions;
+  const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
 
   const debouncedToggleOpenNav = useCallback(
     (arg: boolean) => debounce(() => openNav(arg), 100),
@@ -47,8 +57,20 @@ export const Nav = ({
           svgData={iconStyle}
           onClick={switchTheme}
         />
-        <IconButton icon={Load} animStartAt={isNavOpen} iconName="load" svgData={iconStyle} />
-        <IconButton icon={Save} animStartAt={isNavOpen} iconName="save" svgData={iconStyle} />
+        <IconButton
+          icon={Load}
+          animStartAt={isNavOpen}
+          iconName="load"
+          svgData={iconStyle}
+          onClick={() => setLoadPlayers(true)}
+        />
+        <IconButton
+          icon={Save}
+          onClick={() => setSavePlayers(true)}
+          animStartAt={isNavOpen}
+          iconName="save"
+          svgData={iconStyle}
+        />
         <IconButton
           icon={AddPlayer}
           animStartAt={isNavOpen}
