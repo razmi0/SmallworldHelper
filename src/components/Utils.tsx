@@ -1,11 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 
 type FlexProps = {
   children: ReactNode;
-  sx?: React.CSSProperties;
+  sx?: CSSProperties;
 };
-export const Spacer = () => {
-  return <div style={{ flex: 1 }}></div>;
+export const Spacer = ({ sx }: { sx?: CSSProperties }) => {
+  return <div style={{ ...sx, flex: 1 }}></div>;
 };
 export const Flex = ({ children, sx }: FlexProps) => {
   return <div style={{ ...sx, display: "flex" }}>{children}</div>;

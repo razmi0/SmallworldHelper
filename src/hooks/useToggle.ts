@@ -52,20 +52,20 @@ const toggleReducer = (state: ToggleState, action: ToggleActions): ToggleState =
 // HOOK
 //--
 export const useToggle = () => {
-  const [state, dispatch] = useReducer(toggleReducer, {
+  const [toggleStates, dispatch] = useReducer(toggleReducer, {
     ...initialToggleStates,
   });
-  return {
-    isNavOpen: state.isNavOpen,
-    isAddPlayerOpen: state.isAddPlayerOpen,
-    isChartsOpen: state.isChartsOpen,
-    isScoreHidden: state.isScoreHidden,
-    toggleHideScore: useCallback(() => dispatch({ type: "TOGGLE_HIDE_SCORE" }), []),
-    toggleOpenAddPlayer: useCallback(() => dispatch({ type: "TOGGLE_OPEN_ADD_PLAYER" }), []),
-    toggleOpenNav: useCallback(
+
+  // Group action creators
+  const toggleActions = {
+    hideScore: useCallback(() => dispatch({ type: "TOGGLE_HIDE_SCORE" }), []),
+    openAddPlayer: useCallback(() => dispatch({ type: "TOGGLE_OPEN_ADD_PLAYER" }), []),
+    openNav: useCallback(
       (newState?: boolean) => dispatch({ type: "TOGGLE_OPEN_NAV", payload: newState }),
       []
     ),
-    toggleOpenCharts: useCallback(() => dispatch({ type: "TOGGLE_OPEN_CHARTS" }), []),
+    openCharts: useCallback(() => dispatch({ type: "TOGGLE_OPEN_CHARTS" }), []),
   };
+
+  return { toggleStates, toggleActions };
 };

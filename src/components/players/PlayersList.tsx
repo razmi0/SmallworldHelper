@@ -55,7 +55,7 @@ const PlayerText = ({ children, color }: { children: ReactNode; color: string })
 
 const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
   return (
-    <>
+    <div className={styles["player-utilities-ctn"]}>
       {isFocus && (
         <>
           <IconButton
@@ -72,7 +72,7 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
           />
         </>
       )}
-    </>
+    </div>
   );
 };
 
@@ -98,6 +98,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
     if (onEnter(e)) {
       focusNextSoft(softs, e.currentTarget.id);
       update(id, newScores[i]);
+      setNewScores(i, 0);
     } else if (onBackspace(e)) {
       setNewScores(i, 0);
     }

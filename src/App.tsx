@@ -5,27 +5,35 @@ import { ChartContainer, MainContainer } from "./components/containers/Container
 import { PlayerStatsContainer, PlayersList } from "./components/players/PlayersList";
 import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
 import { Nav } from "./components/nav/Nav";
+import { useUndoRedo } from "./hooks";
+import { Player } from "./types"; // BarData, LineData, PieData,
 
 const App = () => {
-  const { addPlayer, removePlayer, resetScore, updateScore, players, lines, bars, pies } =
-    usePlayer();
+  const { playersStates, playersActions } = usePlayer();
+  const { players, lines, bars, pies } = playersStates;
+  const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
+
   const { newPlayerName, startScore } = useIntermediate();
   const { setNewPlayerName, setStartScore } = useIntermediateDispatch();
-  const {
-    isAddPlayerOpen,
-    isChartsOpen,
-    isScoreHidden,
-    toggleHideScore,
-    toggleOpenAddPlayer,
-    toggleOpenCharts,
-  } = useToggle();
+
+  const { toggleStates, toggleActions } = useToggle();
+  const { hideScore, openAddPlayer, openCharts } = toggleActions;
+  const { isScoreHidden, isChartsOpen } = toggleStates;
+
+  const { undo, redo, isUndoPossible, isRedoPossible } = useUndoRedo<Player[]>(players, setPlayers);
 
   return (
     <MainContainer>
+      <UndoRedo
+        undo={undo}
+        redo={redo}
+        isUndoPossible={isUndoPossible}
+        isRedoPossible={isRedoPossible}
+      />
       <Nav
-        toggleHideScore={toggleHideScore}
-        toggleOpenAddPlayer={toggleOpenAddPlayer}
-        toggleOpenCharts={toggleOpenCharts}
+        toggleHideScore={hideScore}
+        toggleOpenAddPlayer={openAddPlayer}
+        toggleOpenCharts={openCharts}
         isScoreHidden={isScoreHidden}
       />
       <PlayerStatsContainer>
@@ -43,7 +51,7 @@ const App = () => {
         </ChartContainer>
       </PlayerStatsContainer>
       {/* == ADD PLAYER == */}
-      {isAddPlayerOpen && (
+      {toggleStates.isAddPlayerOpen && (
         <div
           style={{
             display: "flex",
@@ -89,3 +97,31 @@ const App = () => {
 };
 
 export default App;
+
+type UndoRedo = {
+  undo: () => void;
+  redo: () => void;
+  isUndoPossible: boolean;
+  isRedoPossible: boolean;
+};
+const UndoRedo = ({ undo, redo, isRedoPossible, isUndoPossible }: UndoRedo) => {
+  return (
+    <div>
+      <button
+        onClick={undo}
+        disabled={!isUndoPossible}
+        style={{ color: `${isUndoPossible ? "green" : "red"}` }}
+      >
+        Undo
+      </button>
+      <button
+        onClick={redo}
+        disabled={!isRedoPossible}
+        style={{ color: `${isRedoPossible ? "green" : "red"}` }}
+      >
+        Redo
+      </button>
+      <button>Add</button>
+    </div>
+  );
+};

@@ -32,6 +32,12 @@
   white-space: nowrap;
 }
 
+.player-utilities-ctn {
+  min-width: 70px;
+  display: flex;
+  align-items: center;
+}
+
 /* MEDIA QUERIES */
 @media screen and (max-width: 472px) {
   .players-list-ctn {

@@ -20,11 +20,13 @@ export const Nav = ({
   isScoreHidden,
 }: NavProps) => {
   const { switchTheme } = useSwitchTheme();
-  const { isNavOpen, toggleOpenNav } = useToggle();
+  const { toggleActions, toggleStates } = useToggle();
+  const { isNavOpen } = toggleStates;
+  const { openNav } = toggleActions;
 
   const debouncedToggleOpenNav = useCallback(
-    (arg: boolean) => debounce(() => toggleOpenNav(arg), 100),
-    [toggleOpenNav]
+    (arg: boolean) => debounce(() => openNav(arg), 100),
+    [openNav]
   );
 
   return (
@@ -32,10 +34,11 @@ export const Nav = ({
       <nav className={styles["nav-ctn"]} onMouseLeave={debouncedToggleOpenNav(false)}>
         <IconButton
           icon={Menu}
-          animStartAt={isNavOpen}
+          animStartAt={toggleStates.isNavOpen}
           iconName="menu"
           svgData={iconStyle}
           onMouseEnter={debouncedToggleOpenNav(true)}
+          onClick={debouncedToggleOpenNav(!isNavOpen)}
         />
         <IconButton
           icon={Theme}

@@ -49,3 +49,5 @@
 - [ ] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
 - [ ] score input changing from controlled to unconrolled
 - [ ] cannot score < 0 in score input
+- [ ] @legendapp/state ?
+- [ ] undoredo functionality => reveal that a party can be a video => useVideo

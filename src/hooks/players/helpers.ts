@@ -3,6 +3,72 @@ import { BarData, LineData, Player, PieData } from "../../types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor, throwError } from "../../utils";
 
 const errorMsg = "Player not found";
+
+// HELPERS FUNCTIONS FOR BUILD CHARTS FROM SCRATCH
+//--
+export const buildAllLines = (players: Player[]) => {
+  const maxTurns = findMaxNbrTurns(players);
+  return {
+    labels:
+      maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
+    datasets:
+      players.length == 0
+        ? []
+        : players.map((p: Player) => {
+            return {
+              label: p.name,
+              data: p.history,
+              backgroundColor: p.color,
+              borderColor: p.color,
+            };
+          }) ?? [],
+  };
+};
+
+export const buildAllBars = (players: Player[]) => {
+  return {
+    labels: players.map((p) => p.name) ?? [],
+    datasets: [
+      {
+        label: "Max score",
+        data: players.map((p) => p.max) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        borderColor: players.map((p) => p.color) ?? [],
+        borderWidth: 2,
+      },
+      {
+        label: "Min score",
+        data: players.map((p) => p.min) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        borderColor: players.map((p) => p.color) ?? [],
+        borderWidth: 2,
+      },
+      {
+        label: "Average score",
+        data: players.map((p) => p.avg) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        borderColor: players.map((p) => p.color) ?? [],
+        borderWidth: 2,
+      },
+    ],
+  };
+};
+
+export const buildAllPies = (players: Player[]) => {
+  return {
+    labels: players.map((p) => p.name) ?? [],
+    datasets: [
+      {
+        label: "Victory points",
+        data: players.map((p) => p.victoryPtn) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        borderColor: players.map((p) => p.color) ?? [],
+        borderWidth: 2,
+      },
+    ],
+  };
+};
+
 // HELPERS FUNCTIONS FOR ADD_PLAYER
 //--
 
