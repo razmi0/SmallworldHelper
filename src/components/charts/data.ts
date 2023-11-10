@@ -62,10 +62,15 @@ export const lineOptions: ChartOptions<"line"> = {
 export const barOptions: ChartOptions<"bar"> = {
   responsive: true,
   maintainAspectRatio: false,
+  elements: {
+    bar: {
+      borderRadius: 4,
+    },
+  },
 
   scales: {
     x: {
-      display: false,
+      display: true,
       grid: {
         display: false,
       },
