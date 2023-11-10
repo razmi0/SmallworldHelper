@@ -63,7 +63,7 @@ export const buildAllPies = (players: Player[]) => {
         data: players.map((p) => p.victoryPtn) ?? [],
         backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
         borderColor: players.map((p) => p.color) ?? [],
-        borderWidth: 2,
+        borderWidth: 0,
       },
     ],
   };
@@ -414,7 +414,7 @@ export const fullReset = (): ResetStates => {
           data: [],
           backgroundColor: [],
           borderColor: [],
-          borderWidth: 2,
+          borderWidth: 0,
         },
       ],
     },
