@@ -138,6 +138,7 @@ export const SoftInput = ({
         onChange={onChange}
         onKeyUp={onKeyUp}
         value={value}
+        autoComplete="off"
       />
       <label htmlFor={subjectId} className="form__label">
         Score
