@@ -11,12 +11,14 @@
   flex-direction: column;
   justify-content: flex-start;
   flex-wrap: wrap;
+  gap: 25px;
 }
 
 .list-element-ctn {
   display: flex;
   flex-direction: column;
   max-height: 125px;
+  gap: 7px;
 }
 
 .player-text-ctn {
@@ -35,6 +37,14 @@
   min-width: 70px;
   display: flex;
   align-items: center;
+  /* position: absolute; */
+  /* transform: translate(100%, -8px); */
+}
+
+.utilities-input-ctn {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 3px;
 }
 
 /* MEDIA QUERIES */

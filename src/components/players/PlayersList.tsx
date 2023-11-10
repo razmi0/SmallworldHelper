@@ -84,50 +84,6 @@ const ARROW_DOWN = "ArrowDown";
 
 // COMPONENTS
 //--
-export const PlayerStatsContainer = ({ children }: ContainerProps) => {
-  return <section className={styles["players-ctn"]}>{children}</section>;
-};
-
-const PlayerListElement = ({ children }: ContainerProps) => {
-  return <li className={styles["list-element-ctn"]}>{children}</li>;
-};
-
-const PlayerTextContainer = ({ children }: ContainerProps) => {
-  return <div className={styles["player-text-ctn"]}>{children}</div>;
-};
-
-const PlayerText = ({ children, color }: { children: ReactNode; color: string }) => {
-  return (
-    <p style={{ color }} className={styles["player-text"]}>
-      {children}
-    </p>
-  );
-};
-
-const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
-  const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
-  const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
-  return (
-    <div className={styles["player-utilities-ctn"]}>
-      {isFocus && (
-        <>
-          <IconButton
-            onClick={resetWithViewTransition}
-            icon={Reset}
-            iconName="reset"
-            svgData={playerIconStyle}
-          />
-          <IconButton
-            onClick={removeWithViewTransition}
-            icon={Delete}
-            iconName="delete"
-            svgData={playerIconStyle}
-          />
-        </>
-      )}
-    </div>
-  );
-};
 
 export const PlayersList = ({ players, update, reset, remove, hideScore }: PlayerListType) => {
   const { isFocus, newScores } = useIntermediate();
@@ -196,7 +152,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
             <Flex>
               <PlayerTextContainer>
                 <IconHeading
-                  animationName="translate"
+                  animationName="rotate"
                   isHover={isFocus[i]}
                   color={color}
                   icon={Star}
@@ -207,22 +163,73 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
                 </PlayerText>
               </PlayerTextContainer>
               <Spacer />
-              <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
             </Flex>
-            <InputContainer>
-              <SoftInput
-                color={color}
-                onFocus={() => handleFocus(i)}
-                onBlur={() => handleBlur(i)}
-                onKeyUp={(e) => handleKeyUp(e, id, i)}
-                onChange={(e) => handleChangeScore(e, i)}
-                value={newScores[i] ? newScores[i] : ""}
-                subjectId={subjectId}
-              />
-            </InputContainer>
+            <UtilitiesInputContainer>
+              <InputContainer>
+                <SoftInput
+                  color={color}
+                  onFocus={() => handleFocus(i)}
+                  onBlur={() => handleBlur(i)}
+                  onKeyUp={(e) => handleKeyUp(e, id, i)}
+                  onChange={(e) => handleChangeScore(e, i)}
+                  value={newScores[i] ? newScores[i] : ""}
+                  subjectId={subjectId}
+                />
+              </InputContainer>
+              <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
+            </UtilitiesInputContainer>
           </PlayerListElement>
         );
       })}
     </ul>
+  );
+};
+
+export const PlayerStatsContainer = ({ children }: ContainerProps) => {
+  return <section className={styles["players-ctn"]}>{children}</section>;
+};
+
+const PlayerListElement = ({ children }: ContainerProps) => {
+  return <li className={styles["list-element-ctn"]}>{children}</li>;
+};
+
+const PlayerTextContainer = ({ children }: ContainerProps) => {
+  return <div className={styles["player-text-ctn"]}>{children}</div>;
+};
+
+const PlayerText = ({ children, color }: { children: ReactNode; color: string }) => {
+  return (
+    <p style={{ color }} className={styles["player-text"]}>
+      {children}
+    </p>
+  );
+};
+
+const UtilitiesInputContainer = ({ children }: ContainerProps) => {
+  return <div className={styles["utilities-input-ctn"]}>{children}</div>;
+};
+
+const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
+  const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
+  const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
+  return (
+    <div className={styles["player-utilities-ctn"]}>
+      {isFocus && (
+        <>
+          <IconButton
+            onClick={resetWithViewTransition}
+            icon={Reset}
+            iconName="reset"
+            svgData={playerIconStyle}
+          />
+          <IconButton
+            onClick={removeWithViewTransition}
+            icon={Delete}
+            iconName="delete"
+            svgData={playerIconStyle}
+          />
+        </>
+      )}
+    </div>
   );
 };

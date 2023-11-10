@@ -137,10 +137,10 @@ export const headingStarIconStyle: SvgDataType = {
   icons: {},
   animations: {
     rotate: {
-      delay: 1,
+      delay: 0.2,
       duration: 2,
       timing: "ease-in-out",
-      iteration: "1",
+      iteration: "infinite",
       direction: "alternate",
       name: "rotate",
       keyframes: `0%  {transform: rotate(0deg) }
