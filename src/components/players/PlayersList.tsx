@@ -98,6 +98,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
     if (onEnter(e)) {
       focusNextSoft(softs, e.currentTarget.id);
       update(id, newScores[i]);
+      setNewScores(i, 0);
     } else if (onBackspace(e)) {
       setNewScores(i, 0);
     }
