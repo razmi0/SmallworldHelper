@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, ChangeEvent, useEffect, useState, useCallback } from "react";
+import { ReactNode, KeyboardEvent, ChangeEvent, useCallback } from "react";
 import styles from "./_.module.css";
 import { ContainerProps, InputContainer } from "../containers/Containers";
 import { Player } from "../../types";
@@ -11,6 +11,9 @@ import { SoftInput } from "../Input";
 import { throwError, withViewTransition } from "../../utils";
 
 /* players, reset, remove, update, */
+// TYPES
+//--
+
 type PlayerListType = {
   children?: ReactNode;
   players: Player[];
@@ -27,6 +30,60 @@ type PlayerUtilitiesProps = {
   isFocus: boolean;
 };
 
+// HELPERS
+//--
+
+const allSofts = (name = '[name="soft-input"]') => {
+  return Array.from(document.querySelectorAll<HTMLInputElement>(name));
+};
+
+const findNextPlayer = (targetId: string): HTMLInputElement => {
+  const softs = allSofts();
+  const softIndex = softs.findIndex((soft) => soft.id === targetId);
+  if (softIndex === -1) {
+    throwError("SoftInput not found");
+  }
+  const nextSoftInput = softIndex + 1 < softs.length ? softs[softIndex + 1] : softs[0];
+  return nextSoftInput;
+};
+
+const findPrevPlayer = (targetId: string): HTMLInputElement => {
+  const softs = allSofts();
+  const softIndex = softs.findIndex((soft) => soft.id === targetId);
+  if (softIndex === -1) {
+    throwError("SoftInput not found");
+  }
+  const previousSoftInput = softIndex - 1 >= 0 ? softs[softIndex - 1] : softs[softs.length - 1];
+  return previousSoftInput;
+};
+
+const navigateTo = (element: HTMLElement) => {
+  element.focus();
+};
+
+const validateOnChange = (str: string) => {
+  if (str === "-") return str;
+  const valid = /^-?\d+$/.test(str);
+  if (!valid) return;
+  const num = Number(str);
+  if (isNaN(num)) return;
+  return num;
+};
+
+const isBackspace = (e: KeyboardEvent<HTMLInputElement>) => {
+  return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
+};
+
+const ENTER = "Enter";
+const BACKSPACE = "Backspace";
+const ARROW_UP = "ArrowUp";
+const ARROW_DOWN = "ArrowDown";
+// const ARROW_LEFT = "ArrowLeft";
+// const ARROW_RIGHT = "ArrowRight";
+// const TAB = "Tab";
+
+// COMPONENTS
+//--
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
   return <section className={styles["players-ctn"]}>{children}</section>;
 };
@@ -73,31 +130,51 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
 };
 
 export const PlayersList = ({ players, update, reset, remove, hideScore }: PlayerListType) => {
-  const [softs, setSofts] = useState<HTMLInputElement[]>([]);
-  const { booleanMap: isActive, newScores } = useIntermediate();
-  const { setBooleanMap, setNewScores } = useIntermediateDispatch();
+  const { isOnFocus: isFocus, newScores } = useIntermediate();
+  const { isOnFocus: isOnFocus, setNewScores } = useIntermediateDispatch();
 
-  useEffect(() => {
-    setSofts(() => allSofts());
-  }, [players]);
-
-  const handleBlur = (i: number) => {
-    withViewTransition(() => setBooleanMap(i, false));
+  const resetInput = (i: number) => {
     setNewScores(i, 0);
   };
 
+  const handleBlur = (i: number) => {
+    withViewTransition(() => isOnFocus(i, false));
+    resetInput(i);
+  };
+
   const handleFocus = (i: number) => {
-    withViewTransition(() => setBooleanMap(i, true));
+    withViewTransition(() => isOnFocus(i, true));
   };
 
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>, id: number, i: number) => {
-    if (isEnter(e)) {
-      focusNextSoft(softs, e.currentTarget.id);
-      if (e.currentTarget.value === "-") return;
-      update(id, newScores[i] as number);
-      setNewScores(i, 0);
-    } else if (isBackspace(e)) {
-      setNewScores(i, 0);
+    switch (e.key) {
+      case ENTER: {
+        navigateTo(findNextPlayer(e.currentTarget.id) /* DOM ID */);
+        if (e.currentTarget.value === "-") return;
+        update(id /* PLAYER ID */, newScores[i] as number);
+        resetInput(i);
+        break;
+      }
+
+      case BACKSPACE: {
+        if (isBackspace(e)) {
+          resetInput(i);
+        }
+        break;
+      }
+
+      case ARROW_UP: {
+        navigateTo(findPrevPlayer(e.currentTarget.id));
+        break;
+      }
+
+      case ARROW_DOWN: {
+        navigateTo(findNextPlayer(e.currentTarget.id));
+        break;
+      }
+
+      default:
+        break;
     }
   };
 
@@ -120,17 +197,17 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
               <PlayerTextContainer>
                 <IconHeading
                   animationName="translate"
-                  isHover={isActive[i]}
+                  isHover={isFocus[i]}
                   color={color}
                   icon={Star}
                   svgData={headingStarIconStyle}
                 />
-                <PlayerText color={isActive[i] ? color : "inherit"}>
+                <PlayerText color={isFocus[i] ? color : "inherit"}>
                   {name} : {hideScore ? "***" : victoryPtn}
                 </PlayerText>
               </PlayerTextContainer>
               <Spacer />
-              <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isActive[i]} />
+              <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
             </Flex>
             <InputContainer>
               <SoftInput
@@ -148,39 +225,4 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
       })}
     </ul>
   );
-};
-
-// HELPERS
-//--
-
-const allSofts = (name = '[name="soft-input"]') => {
-  return Array.from(document.querySelectorAll<HTMLInputElement>(name));
-};
-
-const focusNextSoft = (softs: HTMLInputElement[], targetId: string) => {
-  const softIndex = softs.findIndex((soft) => soft.id === targetId);
-  if (softIndex === -1) {
-    throwError("SoftInput not found");
-  }
-  const nextSoftInput = softIndex + 1 < softs.length ? softs[softIndex + 1] : softs[0];
-  nextSoftInput.focus();
-};
-
-const validateOnChange = (str: string) => {
-  if (str === "-") return str;
-  const valid = /^-?\d+$/.test(str);
-  console.log("valid", valid, "str", str);
-  if (!valid) return;
-  const num = Number(str);
-  console.log("num", num);
-  if (isNaN(num)) return;
-  return num;
-};
-
-const isEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-  return e.key === "Enter" && e.currentTarget.value.length > 0 ? true : false;
-};
-
-const isBackspace = (e: KeyboardEvent<HTMLInputElement>) => {
-  return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
 };
