@@ -11,14 +11,7 @@
 - [x] Add Bar Chart to sum up players's score data
 - [x] Pie chart for total shared scored
 - [x] Add Hide scores button
-- [x] Change player icon indicator to another icon & svg
-- [x] generator in utils to get color
-- [x] change layout when charts for players
-- [ ] if unFocus name input is empty, close the panel AddPlayer
-- [ ] if focus on x Player, highlight x elements in charts for this player
-- [ ] No two players can have the same name
-- [ ] Undo Button
-- [ ] Tooltip for each element of the nav
+- [ ] UndoRedo
 
 ## REFACTORING
 
@@ -35,6 +28,7 @@
 - [x] Nav
 - [x] PlayerList
 - [ ] AddPlayer
+- [ ] UndoRedo button
 
 ## BUGS & PROPOSITIONS
 
@@ -51,3 +45,11 @@
 - [ ] cannot score < 0 in score input
 - [ ] @legendapp/state ?
 - [ ] undoredo functionality => reveal that a party can be a video => useVideo
+- [x] Change player icon indicator to another icon & svg
+- [x] generator in utils to get color
+- [x] change layout when charts for players
+- [ ] if unFocus name input is empty, close the panel AddPlayer
+- [ ] if focus on x Player, highlight x elements in charts for this player
+- [ ] No two players can have the same name
+- [ ] Undo Button
+- [ ] Tooltip for each element of the nav
