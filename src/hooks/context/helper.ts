@@ -1,10 +1,12 @@
 // INITIAL STATES
 //--
 export const initialIntermediateState = {
-  booleanMap: (size: number): boolean[] => initBooleanMap(size),
+  isOnFocus: (size: number): boolean[] => initBooleanMap(size),
   newScores: (size: number): number[] => initNewScores(size),
   startScore: 0,
   newPlayerName: "",
+  savePlayers: false,
+  loadPlayers: false,
 };
 
 // HELPERS
@@ -28,16 +30,16 @@ export const resizeArray = <T>(originalArray: T[], newSize: number, fillValue: T
 // export const useIntermediateState = (size: number) => {
 //   const [state, dispatch] = useReducer(intermediateReducer, {
 //     ...initialIntermediateState,
-//     booleanMap: initBooleanMap(size),
+//     isOnFocus: initBooleanMap(size),
 //     newScores: initNewScores(size),
 //   });
 
 //   return {
-//     booleanMap: state.booleanMap,
+//     isOnFocus: state.isOnFocus,
 //     newScores: state.newScores,
 //     startScore: state.startScore,
 //     newPlayerName: state.newPlayerName,
-//     setBooleanMap: useCallback((index: number, value: boolean) => {
+//     isOnFocus: useCallback((index: number, value: boolean) => {
 //       dispatch({ type: "SET_BOOLEAN_MAP", payload: { index: index, value: value } });
 //     }, []),
 //     setNewScores: useCallback((index: number, newScore: number) => {

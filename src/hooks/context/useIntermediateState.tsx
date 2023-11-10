@@ -5,17 +5,21 @@ import { throwError } from "../../utils";
 type newScore = number | string;
 
 type IntermediateStates = {
-  booleanMap: boolean[]; // useMap
+  isOnFocus: boolean[]; // useMap
   newScores: newScore[]; // useMap
   startScore: number; // useIntermediateState
   newPlayerName: string; // useIntermediateState
+  savePlayers: boolean;
+  loadPlayers: boolean;
 };
 
 type IntermediateActions =
   | { type: "SET_BOOLEAN_MAP"; payload: { index: number; value: boolean } } // useMap
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: number | string } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useIntermediateState
-  | { type: "SET_START_SCORE"; payload: { score: number } }; // useIntermediateState
+  | { type: "SET_START_SCORE"; payload: { score: number } } // useIntermediateState
+  | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useIntermediateState
+  | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useIntermediateState
 
 type IntermediateDispatchContextType = (actions: IntermediateActions) => void;
 
@@ -31,17 +35,33 @@ const intermediateReducer = (
   action: IntermediateActions
 ): IntermediateStates => {
   switch (action.type) {
+    case "SET_SAVE_PLAYERS": {
+      const { payload } = action;
+      return {
+        ...state,
+        savePlayers: payload,
+      };
+    }
+
+    case "SET_LOAD_PLAYERS": {
+      const { payload } = action;
+      return {
+        ...state,
+        loadPlayers: payload,
+      };
+    }
+
     case "SET_BOOLEAN_MAP": {
       const { index, value } = action.payload;
-      let newBooleanMap = state.booleanMap;
+      let newBooleanMap = state.isOnFocus;
 
-      if (index >= state.booleanMap.length) {
-        newBooleanMap = resizeArray(state.booleanMap, index + 1, false);
+      if (index >= state.isOnFocus.length) {
+        newBooleanMap = resizeArray(state.isOnFocus, index + 1, false);
       }
 
       return {
         ...state,
-        booleanMap: newBooleanMap.map((item, i) => (i === index ? value : item)),
+        isOnFocus: newBooleanMap.map((item, i) => (i === index ? value : item)),
       };
     }
     case "SET_NEW_SCORES": {
@@ -84,7 +104,7 @@ export const IntermediateProvider = ({
 }) => {
   const [state, dispatch] = useReducer(intermediateReducer, {
     ...initialIntermediateState,
-    booleanMap: initBooleanMap(size),
+    isOnFocus: initBooleanMap(size),
     newScores: initNewScores(size),
   });
 
@@ -104,8 +124,8 @@ export const useIntermediate = () => {
   if (states === null) {
     throwError("useIntermediate must be used within a IntermediateProvider");
   }
-  const { booleanMap, newScores, startScore, newPlayerName } = states!;
-  return { booleanMap, newScores, startScore, newPlayerName };
+  const { isOnFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states!;
+  return { isOnFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
 };
 
 export const useIntermediateDispatch = () => {
@@ -113,7 +133,7 @@ export const useIntermediateDispatch = () => {
   if (dispatch === null) {
     throwError("useIntermediateDispatch must be used within a IntermediateProvider");
   }
-  const setBooleanMap = useCallback(
+  const isOnFocus = useCallback(
     (index: number, value: boolean) => {
       dispatch!({ type: "SET_BOOLEAN_MAP", payload: { index: index, value: value } });
     },
@@ -137,5 +157,25 @@ export const useIntermediateDispatch = () => {
     },
     [dispatch]
   );
-  return { setBooleanMap, setNewScores, setNewPlayerName, setStartScore };
+  const setSavePlayers = useCallback(
+    (payload: boolean) => {
+      dispatch!({ type: "SET_SAVE_PLAYERS", payload });
+    },
+    [dispatch]
+  );
+  const setLoadPlayers = useCallback(
+    (payload: boolean) => {
+      dispatch!({ type: "SET_LOAD_PLAYERS", payload });
+    },
+    [dispatch]
+  );
+
+  return {
+    isOnFocus,
+    setNewScores,
+    setNewPlayerName,
+    setStartScore,
+    setSavePlayers,
+    setLoadPlayers,
+  };
 };
