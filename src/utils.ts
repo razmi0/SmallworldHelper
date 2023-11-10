@@ -102,10 +102,10 @@ export const throwError = (msg: string) => {
   throw `${new Date().toLocaleTimeString("en-US")} :  ${msg}`;
 };
 
-export const withViewTransition = (fn: () => void) => {
+export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
   document.startViewTransition(() => {
     flushSync(() => {
-      fn();
+      fn(args);
     });
   });
 };
