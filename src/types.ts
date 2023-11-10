@@ -124,3 +124,12 @@ export interface IconButtonProps extends IconProps {
   animStartState?: string;
   onMouseEnter?: () => void;
 }
+
+export type PlayerState = {
+  players: Player[];
+  lines: LineData;
+  bars: BarData;
+  pies: PieData;
+};
+
+export type FullSetterType = [Player[], LineData, BarData, PieData];
