@@ -2,16 +2,18 @@ import { ReactNode, createContext, useCallback, useContext, useReducer } from "r
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helper";
 import { throwError } from "../../utils";
 
+type newScore = number | string;
+
 type IntermediateStates = {
   booleanMap: boolean[]; // useMap
-  newScores: number[]; // useMap
+  newScores: newScore[]; // useMap
   startScore: number; // useIntermediateState
   newPlayerName: string; // useIntermediateState
 };
 
 type IntermediateActions =
   | { type: "SET_BOOLEAN_MAP"; payload: { index: number; value: boolean } } // useMap
-  | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: number } } // useMap
+  | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: number | string } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useIntermediateState
   | { type: "SET_START_SCORE"; payload: { score: number } }; // useIntermediateState
 
@@ -118,7 +120,7 @@ export const useIntermediateDispatch = () => {
     [dispatch]
   );
   const setNewScores = useCallback(
-    (index: number, newScore: number) => {
+    (index: number, newScore: number | string) => {
       dispatch!({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
     },
     [dispatch]

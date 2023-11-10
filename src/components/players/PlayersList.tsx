@@ -8,13 +8,7 @@ import { headingStarIconStyle, playerIconStyle } from "../icons/data";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { Spacer, Flex } from "../Utils";
 import { SoftInput } from "../Input";
-import {
-  onBackspace,
-  onEnter,
-  throwError,
-  validateOnChange,
-  withViewTransition,
-} from "../../utils";
+import { throwError, withViewTransition } from "../../utils";
 
 /* players, reset, remove, update, */
 type PlayerListType = {
@@ -97,18 +91,19 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
   };
 
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>, id: number, i: number) => {
-    if (onEnter(e)) {
+    if (isEnter(e)) {
       focusNextSoft(softs, e.currentTarget.id);
-      update(id, newScores[i]);
+      if (e.currentTarget.value === "-") return;
+      update(id, newScores[i] as number);
       setNewScores(i, 0);
-    } else if (onBackspace(e)) {
+    } else if (isBackspace(e)) {
       setNewScores(i, 0);
     }
   };
 
   const handleChangeScore = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     const raw = e.currentTarget.value;
-    const newScore = validateOnChange(raw);
+    const newScore: string | number | undefined = validateOnChange(raw);
     if (!newScore) return;
     setNewScores(i, newScore);
   };
@@ -169,4 +164,23 @@ const focusNextSoft = (softs: HTMLInputElement[], targetId: string) => {
   }
   const nextSoftInput = softIndex + 1 < softs.length ? softs[softIndex + 1] : softs[0];
   nextSoftInput.focus();
+};
+
+const validateOnChange = (str: string) => {
+  if (str === "-") return str;
+  const valid = /^-?\d+$/.test(str);
+  console.log("valid", valid, "str", str);
+  if (!valid) return;
+  const num = Number(str);
+  console.log("num", num);
+  if (isNaN(num)) return;
+  return num;
+};
+
+const isEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+  return e.key === "Enter" && e.currentTarget.value.length > 0 ? true : false;
+};
+
+const isBackspace = (e: KeyboardEvent<HTMLInputElement>) => {
+  return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
 };
