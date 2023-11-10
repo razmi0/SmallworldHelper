@@ -7,20 +7,35 @@ import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "
 import { Nav } from "./components/nav/Nav";
 import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
+import { useEffect } from "react";
+import { saveToLocalStorage, getFromLocalStorage, throwError } from "./utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
   const { players, lines, bars, pies } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  const { newPlayerName, startScore } = useIntermediate();
-  const { setNewPlayerName, setStartScore } = useIntermediateDispatch();
+  const { newPlayerName, startScore, savePlayers, loadPlayers } = useIntermediate();
+  const { setNewPlayerName, setStartScore, setLoadPlayers, setSavePlayers } =
+    useIntermediateDispatch();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts } = toggleActions;
   const { isScoreHidden, isChartsOpen } = toggleStates;
 
   const { undo, redo, isUndoPossible, isRedoPossible } = useUndoRedo<Player[]>(players, setPlayers);
+
+  useEffect(() => {
+    if (savePlayers) {
+      saveToLocalStorage("players", players);
+      setSavePlayers(false);
+    } else if (loadPlayers) {
+      const storedPlayers = getFromLocalStorage("players");
+      if (!storedPlayers) throwError("No players found in local storage");
+      setLoadPlayers(false);
+      setPlayers(storedPlayers as Player[]);
+    }
+  }, [savePlayers, loadPlayers]);
 
   return (
     <MainContainer>
