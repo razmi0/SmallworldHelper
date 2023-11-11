@@ -21,7 +21,7 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps)
     onMouseLeave: () => setIsHover(false),
   };
 
-  console.log("isHover", isHover);
+  // console.log("isHover", isHover);
   console.log("animate", animate);
 
   const idxThemeColor = theme === "light" ? 0 : 1;
