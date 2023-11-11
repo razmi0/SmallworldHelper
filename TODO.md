@@ -13,7 +13,7 @@
 - [x] Add Hide scores button
 - [x] UndoRedo
 - [x] Save / Load
-- [ ] Keyboard navigation
+- [x] Keyboard navigation
 
 ## REFACTORING
 
