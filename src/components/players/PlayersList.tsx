@@ -1,7 +1,7 @@
 import { ReactNode, KeyboardEvent, ChangeEvent, useCallback } from "react";
 import styles from "./_.module.css";
 import { ContainerProps, InputContainer } from "../containers/Containers";
-import { Player } from "../../types";
+import { KeyboardNavigationIdType, Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
@@ -35,6 +35,8 @@ type PlayerUtilitiesProps = {
   reset: (id: number) => void;
   remove: (id: number) => void;
   isFocus: boolean;
+  datatype: KeyboardNavigationIdType;
+  onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
 };
 
 // COMPONENTS
@@ -57,13 +59,20 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
     withViewTransition(() => isOnFocus(i, true));
   };
 
-  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>, id: number, i: number) => {
+  const handleKeyUp = (
+    e: KeyboardEvent<HTMLInputElement | HTMLButtonElement>,
+    id: number,
+    i: number
+  ) => {
     switch (e.key) {
       case keys.ENTER: {
-        navigateTo(findNextPlayer(e.currentTarget.id) /* DOM ID */);
-        if (e.currentTarget.value === "-") return;
-        update(id /* PLAYER ID */, newScores[i] as number);
-        resetInput(i);
+        if (e.currentTarget.nodeName === "INPUT") {
+          if (e.currentTarget.value === "-") return;
+          update(id /* PLAYER ID */, newScores[i] as number);
+          resetInput(i);
+          navigateTo(findNextPlayer(e.currentTarget.id) /* DOM ID */);
+        }
+
         break;
       }
 
@@ -147,7 +156,16 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
                   datatype="soft-input"
                 />
               </InputContainer>
-              <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
+              <PlayerUtilities
+                id={id}
+                remove={remove}
+                reset={reset}
+                isFocus={isFocus[i]}
+                datatype="utility"
+                onKeyUp={(e) => {
+                  handleKeyUp(e, id, i);
+                }}
+              />
             </UtilitiesInputContainer>
           </PlayerListElement>
         );
@@ -180,7 +198,14 @@ const UtilitiesInputContainer = ({ children }: ContainerProps) => {
   return <div className={styles["utilities-input-ctn"]}>{children}</div>;
 };
 
-const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
+const PlayerUtilities = ({
+  id,
+  reset,
+  remove,
+  isFocus,
+  datatype,
+  onKeyUp,
+}: PlayerUtilitiesProps) => {
   const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
   isFocus = isDevEnv() ? true : false;
@@ -193,7 +218,8 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
             onClick={resetWithViewTransition}
             icon={Reset}
             iconName="reset"
-            datatype="utility"
+            datatype={datatype}
+            onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
             id={id + "." + 1}
           />
           <IconButton
@@ -201,7 +227,8 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
             onClick={removeWithViewTransition}
             icon={Delete}
             iconName="delete"
-            datatype="utility"
+            datatype={datatype}
+            onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
             id={id + "." + 2}
           />
         </>
