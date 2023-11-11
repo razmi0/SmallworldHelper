@@ -86,23 +86,26 @@ export type SvgDataType = {
   };
 };
 
+export type VariantType = "utility" | "nav" | "chart" | "player" | "heading" | "";
 export interface IconProps {
   icon: ComponentType<SvgProps>;
-  svgData: SvgDataType;
   iconName: IconName;
   sx?: React.CSSProperties;
   className?: string;
+  svgData?: SvgDataType;
+  variant?: VariantType;
 }
 
 export interface IconHeadingProps {
   icon: ComponentType<SvgProps>;
   color: string;
-  svgData: SvgDataType;
+  svgData?: SvgDataType;
   className?: string;
   bgColor?: string;
   animationName?: string;
   isHover?: boolean;
   i?: number;
+  variant?: VariantType;
 }
 
 export type IconName =
@@ -116,8 +119,9 @@ export type IconName =
   | "reset"
   | "delete";
 
+export type KeyboardNavigationIdType = "soft-input" | "utility";
+
 export interface IconButtonProps extends IconProps {
-  variant?: "utility" | "" | "nav" | "chart" | "player";
   onClick?: () => void;
   btnType?: "button" | "submit" | "reset";
   sx?: React.CSSProperties;
@@ -127,6 +131,7 @@ export interface IconButtonProps extends IconProps {
   id?: string | number;
   onFocus?: () => void;
   onBlur?: () => void;
+  datatype?: string;
 }
 
 export type PlayerState = {
