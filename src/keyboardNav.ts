@@ -25,6 +25,14 @@ const getNavigableElements = () => {
   return buildNavigableMatrice(navigables);
 };
 
+/**
+ * @returns [
+ *              [1, 2, 3],
+ *              [4, 5, 6],
+ *              [7, 8, 9],
+ *                 ...
+ *          ]
+ */
 const buildNavigableMatrice = (navigables: NavigableElement[]): NavigableElement[][] => {
   // [ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]
   const matrice = [];
@@ -39,12 +47,6 @@ const buildNavigableMatrice = (navigables: NavigableElement[]): NavigableElement
   matrice.push(row);
   return matrice;
 };
-
-// const getDatatypesElement = (datatype: KeyboardNavigationIdType) => {
-//   const query = `[datatype=${datatype}]`;
-//   const res = Array.from(document.querySelectorAll<NavigableElement>(query));
-//   return res;
-// };
 
 export const findNextPlayer = (targetId: string): NavigableElement => {
   const navigableMatrice = getNavigableElements();
@@ -96,5 +98,4 @@ export const findLeftUtils = (targetId: string): NavigableElement => {
 
 export const navigateTo = (element: HTMLElement) => {
   element.focus();
-  console.log("element", element);
 };
