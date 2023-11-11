@@ -1,6 +1,6 @@
 import { playerColors } from "../../components/icons/data";
 import { BarData, LineData, Player, PieData } from "../../types";
-import { addOpacityToHex, findMaxNbrTurns, getRandomColor, throw new Error } from "../../utils";
+import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "../../utils";
 
 const errorMsg = "Player not found";
 

@@ -1,6 +1,5 @@
 import { ReactNode, createContext, useCallback, useContext, useReducer } from "react";
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helper";
-import { throw new Error } from "../../utils";
 
 type newScore = number | string;
 

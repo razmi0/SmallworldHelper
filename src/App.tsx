@@ -8,7 +8,7 @@ import { Nav } from "./components/nav/Nav";
 import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
-import { saveToLocalStorage, getFromLocalStorage, throw new Error } from "./utils";
+import { saveToLocalStorage, getFromLocalStorage } from "./utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
