@@ -8,7 +8,7 @@ import { Nav } from "./components/nav/Nav";
 import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
-import { saveToLocalStorage, getFromLocalStorage, throwError } from "./utils";
+import { saveToLocalStorage, getFromLocalStorage, throw new Error } from "./utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
@@ -31,7 +31,7 @@ const App = () => {
       setSavePlayers(false);
     } else if (loadPlayers) {
       const storedPlayers = getFromLocalStorage("players");
-      if (!storedPlayers) throwError("No players found in local storage");
+      if (!storedPlayers) throw new Error("No players found in local storage");
       setLoadPlayers(false);
       setPlayers(storedPlayers as Player[]);
     }

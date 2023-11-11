@@ -97,10 +97,6 @@ export const findSum = (arr: number[]) => {
   return arr.reduce((a, b) => a + b, 0);
 };
 
-export const throwError = (msg: string) => {
-  throw `${new Date().toLocaleTimeString("en-US")} :  ${msg}`;
-};
-
 export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
   // document.startViewTransition(() => {
   //   flushSync(() => {

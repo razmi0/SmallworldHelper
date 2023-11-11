@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useCallback, useContext, useReducer } from "react";
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helper";
-import { throwError } from "../../utils";
+import { throw new Error } from "../../utils";
 
 type newScore = number | string;
 
@@ -122,7 +122,7 @@ export const IntermediateProvider = ({
 export const useIntermediate = () => {
   const states = useContext(IntermediateContext);
   if (states === null) {
-    throwError("useIntermediate must be used within a IntermediateProvider");
+    throw new Error("useIntermediate must be used within a IntermediateProvider");
   }
   const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states!;
   return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
@@ -131,7 +131,7 @@ export const useIntermediate = () => {
 export const useIntermediateDispatch = () => {
   const dispatch = useContext(IntermediateDispatchContext);
   if (dispatch === null) {
-    throwError("useIntermediateDispatch must be used within a IntermediateProvider");
+    throw new Error("useIntermediateDispatch must be used within a IntermediateProvider");
   }
   const isOnFocus = useCallback(
     (index: number, value: boolean) => {

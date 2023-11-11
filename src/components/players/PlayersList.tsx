@@ -4,23 +4,18 @@ import { ContainerProps, InputContainer } from "../containers/Containers";
 import { Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
-// import { headingStarIconStyle, UTILITY_STYLES } from "../icons/data";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { Spacer, Flex } from "../Utils";
 import { SoftInput } from "../Input";
 import { isDevEnv, withViewTransition } from "../../utils";
+import { keys, validateOnChange, isDeletable } from "./helpers";
 import {
-  keys,
-  validateOnChange,
   navigateTo,
   findNextPlayer,
   findPrevPlayer,
-  isDeletable,
   findRightUtils,
   findLeftUtils,
-  // findRightUtils,
-  // findLeftUtils,
-} from "./helpers";
+} from "../../keyboardNav";
 
 /* players, reset, remove, update, */
 // TYPES
