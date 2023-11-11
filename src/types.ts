@@ -117,12 +117,16 @@ export type IconName =
   | "delete";
 
 export interface IconButtonProps extends IconProps {
+  variant?: "utility" | "" | "nav" | "chart" | "player";
   onClick?: () => void;
   btnType?: "button" | "submit" | "reset";
   sx?: React.CSSProperties;
   animStartAt?: boolean;
   animStartState?: string;
   onMouseEnter?: () => void;
+  id?: string | number;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export type PlayerState = {

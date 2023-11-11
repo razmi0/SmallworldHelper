@@ -8,7 +8,19 @@ const getBgColor = (theme: "light" | "dark") => {
 
 export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps) => {
   const [isHover, setIsHover] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
   const { theme } = useTheme();
+
+  const animate = isFocus || isHover;
+
+  const events = {
+    onFocus: () => setIsFocus(true),
+    onBlur: () => setIsFocus(false),
+    onMouseEnter: () => setIsHover(true),
+    onMouseLeave: () => setIsHover(false),
+  };
+
+  console.log(isFocus, isHover);
 
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
@@ -21,21 +33,21 @@ export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps)
   if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData : ${color}`);
 
   if (svgData.filter) {
-    dropShadow = isHover
+    dropShadow = animate
       ? `drop-shadow(0px 0px ${svgData.filter[0]} ${color})`
       : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
-    transform = isHover ? `scale(${svgData.scale})` : "none";
+    transform = animate ? `scale(${svgData.scale})` : "none";
   }
 
   return (
     <div
       className={`icon-stat-ctn ${className || ""}`}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      {...events}
       style={{
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
+        border: `${animate ? "3px solid red" : "none"}`,
       }}
     >
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
@@ -93,6 +105,7 @@ export const IconHeading = ({
 };
 
 export const IconButton = ({
+  variant,
   onClick,
   btnType = "button",
   icon,
@@ -103,12 +116,20 @@ export const IconButton = ({
   animStartAt = false,
   animStartState = "none",
   onMouseEnter,
+  id,
+  onFocus,
+  onBlur,
 }: IconButtonProps) => {
   const transform = animStartAt ? animStartState : svgData.icons[iconName].transform?.();
   const zIndex = svgData.icons[iconName].zIndex;
   const transition = svgData.icons[iconName].transition?.();
+
   return (
     <button
+      onFocus={onFocus}
+      onBlur={onBlur}
+      id={id?.toString()}
+      datatype={variant}
       type={btnType}
       onMouseEnter={onMouseEnter}
       style={{

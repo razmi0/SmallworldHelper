@@ -116,7 +116,7 @@ export const iconStyle: SvgDataType = {
   },
 };
 
-export const playerIconStyle: SvgDataType = {
+export const utilityButtonSvg: SvgDataType = {
   size: ["35px", "35px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",

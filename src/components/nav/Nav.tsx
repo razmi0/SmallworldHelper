@@ -43,6 +43,7 @@ export const Nav = ({
     <header>
       <nav className={styles["nav-ctn"]} onMouseLeave={debouncedToggleOpenNav(false)}>
         <IconButton
+          variant="nav"
           icon={Menu}
           animStartAt={toggleStates.isNavOpen}
           iconName="menu"
@@ -51,6 +52,7 @@ export const Nav = ({
           onClick={debouncedToggleOpenNav(!isNavOpen)}
         />
         <IconButton
+          variant="nav"
           icon={Theme}
           animStartAt={isNavOpen}
           iconName="theme"
@@ -58,6 +60,7 @@ export const Nav = ({
           onClick={switchTheme}
         />
         <IconButton
+          variant="nav"
           icon={Load}
           animStartAt={isNavOpen}
           iconName="load"
@@ -65,6 +68,7 @@ export const Nav = ({
           onClick={() => setLoadPlayers(true)}
         />
         <IconButton
+          variant="nav"
           icon={Save}
           onClick={() => setSavePlayers(true)}
           animStartAt={isNavOpen}
@@ -72,6 +76,7 @@ export const Nav = ({
           svgData={iconStyle}
         />
         <IconButton
+          variant="nav"
           icon={AddPlayer}
           animStartAt={isNavOpen}
           iconName="addplayer"
@@ -79,6 +84,7 @@ export const Nav = ({
           onClick={toggleOpenAddPlayer}
         />
         <IconButton
+          variant="nav"
           icon={Chart}
           animStartAt={isNavOpen}
           iconName="chart"
@@ -86,6 +92,7 @@ export const Nav = ({
           onClick={() => withViewTransition(toggleOpenCharts)}
         />
         <IconButton
+          variant="nav"
           icon={isScoreHidden ? EyeClose : EyeOpen}
           animStartAt={isNavOpen}
           iconName="eyes"
