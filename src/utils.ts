@@ -1,4 +1,4 @@
-import { flushSync } from "react-dom";
+// import { flushSync } from "react-dom";
 
 export const getRandomColor = (opacity: number = 1) => {
   const randomRgba = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
@@ -102,11 +102,11 @@ export const throwError = (msg: string) => {
 };
 
 export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
-  document.startViewTransition(() => {
-    flushSync(() => {
-      fn(args);
-    });
-  });
+  // document.startViewTransition(() => {
+  //   flushSync(() => {
+  fn(args);
+  //   });
+  // });
 };
 
 type F<T extends unknown[] = unknown[]> = (...args: T) => unknown | void;
@@ -118,4 +118,8 @@ export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
       fn(...args);
     }, delay);
   };
+};
+
+export const isDevEnv = () => {
+  return import.meta.env.DEV ? true : false;
 };
