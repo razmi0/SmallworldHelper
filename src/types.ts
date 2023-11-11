@@ -131,7 +131,8 @@ export interface IconButtonProps extends IconProps {
   id?: string | number;
   onFocus?: () => void;
   onBlur?: () => void;
-  datatype?: string;
+  datatype?: KeyboardNavigationIdType;
+  onKeyUp?: (e: React.KeyboardEvent<HTMLButtonElement>) => void;
 }
 
 export type PlayerState = {
