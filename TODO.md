@@ -5,7 +5,7 @@
 - [x] Make the svgData type simple by implementing directly iconName and color as props for Icon component
 - [x] Add a reset player score button
 - [x] Add a delete player button
-- [x] Theme button
+- [x] Dark/Light mode
 - [x] Menu animation
 - [x] Add Line Chart to sum up players progression
 - [x] Add Bar Chart to sum up players's score data
