@@ -55,3 +55,6 @@
 - [ ] No two players can have the same name
 - [ ] Undo Button
 - [ ] Tooltip for each element of the nav
+- [ ] TEAMS
+- [ ] load multiple parties
+- [ ] Third col for ui (settings, theme, addplayer, save, load...)
