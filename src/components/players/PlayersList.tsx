@@ -4,11 +4,23 @@ import { ContainerProps, InputContainer } from "../containers/Containers";
 import { Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
-import { headingStarIconStyle, playerIconStyle } from "../icons/data";
+import { headingStarIconStyle, utilityButtonSvg } from "../icons/data";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { Spacer, Flex } from "../Utils";
 import { SoftInput } from "../Input";
-import { throwError, withViewTransition } from "../../utils";
+import { withViewTransition } from "../../utils";
+import {
+  keys,
+  validateOnChange,
+  navigateTo,
+  findNextPlayer,
+  findPrevPlayer,
+  isDeletable,
+  findRightUtils,
+  findLeftUtils,
+  // findRightUtils,
+  // findLeftUtils,
+} from "./helpers";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -29,58 +41,6 @@ type PlayerUtilitiesProps = {
   remove: (id: number) => void;
   isFocus: boolean;
 };
-
-// HELPERS
-//--
-
-const allSofts = (name = '[name="soft-input"]') => {
-  return Array.from(document.querySelectorAll<HTMLInputElement>(name));
-};
-
-const findNextPlayer = (targetId: string): HTMLInputElement => {
-  const softs = allSofts();
-  const softIndex = softs.findIndex((soft) => soft.id === targetId);
-  if (softIndex === -1) {
-    throwError("SoftInput not found");
-  }
-  const nextSoftInput = softIndex + 1 < softs.length ? softs[softIndex + 1] : softs[0];
-  return nextSoftInput;
-};
-
-const findPrevPlayer = (targetId: string): HTMLInputElement => {
-  const softs = allSofts();
-  const softIndex = softs.findIndex((soft) => soft.id === targetId);
-  if (softIndex === -1) {
-    throwError("SoftInput not found");
-  }
-  const previousSoftInput = softIndex - 1 >= 0 ? softs[softIndex - 1] : softs[softs.length - 1];
-  return previousSoftInput;
-};
-
-const navigateTo = (element: HTMLElement) => {
-  element.focus();
-};
-
-const validateOnChange = (str: string) => {
-  if (str === "-") return str;
-  const valid = /^-?\d+$/.test(str);
-  if (!valid) return;
-  const num = Number(str);
-  if (isNaN(num)) return;
-  return num;
-};
-
-const isBackspace = (e: KeyboardEvent<HTMLInputElement>) => {
-  return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
-};
-
-const ENTER = "Enter";
-const BACKSPACE = "Backspace";
-const ARROW_UP = "ArrowUp";
-const ARROW_DOWN = "ArrowDown";
-// const ARROW_LEFT = "ArrowLeft";
-// const ARROW_RIGHT = "ArrowRight";
-// const TAB = "Tab";
 
 // COMPONENTS
 //--
@@ -104,7 +64,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
 
   const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>, id: number, i: number) => {
     switch (e.key) {
-      case ENTER: {
+      case keys.ENTER: {
         navigateTo(findNextPlayer(e.currentTarget.id) /* DOM ID */);
         if (e.currentTarget.value === "-") return;
         update(id /* PLAYER ID */, newScores[i] as number);
@@ -112,20 +72,35 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
         break;
       }
 
-      case BACKSPACE: {
-        if (isBackspace(e)) {
+      case keys.BACKSPACE: {
+        if (isDeletable(e)) {
           resetInput(i);
         }
         break;
       }
 
-      case ARROW_UP: {
+      case keys.ARROW_UP: {
         navigateTo(findPrevPlayer(e.currentTarget.id));
         break;
       }
 
-      case ARROW_DOWN: {
+      case keys.ARROW_DOWN: {
         navigateTo(findNextPlayer(e.currentTarget.id));
+        break;
+      }
+
+      case keys.ARROW_RIGHT: {
+        navigateTo(findRightUtils(e.currentTarget.id));
+        break;
+      }
+
+      case keys.ARROW_LEFT: {
+        navigateTo(findLeftUtils(e.currentTarget.id));
+        break;
+      }
+
+      case keys.TAB: {
+        console.log("TAB");
         break;
       }
 
@@ -212,21 +187,26 @@ const UtilitiesInputContainer = ({ children }: ContainerProps) => {
 const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
   const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
+  isFocus = true;
   return (
     <div className={styles["player-utilities-ctn"]}>
       {isFocus && (
         <>
           <IconButton
+            variant={"utility"}
             onClick={resetWithViewTransition}
             icon={Reset}
             iconName="reset"
-            svgData={playerIconStyle}
+            svgData={utilityButtonSvg}
+            id={id + "." + 1}
           />
           <IconButton
+            variant={"utility"}
             onClick={removeWithViewTransition}
             icon={Delete}
             iconName="delete"
-            svgData={playerIconStyle}
+            svgData={utilityButtonSvg}
+            id={id + "." + 2}
           />
         </>
       )}
