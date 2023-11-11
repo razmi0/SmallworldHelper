@@ -79,7 +79,7 @@ const intermediateReducer = (
 
     case "SET_NEW_PLAYER_NAME": {
       const { name } = action.payload;
-      if (!name) return state;
+      if (!name && name.length !== 0) return state;
       return { ...state, newPlayerName: name };
     }
     case "SET_START_SCORE": {
