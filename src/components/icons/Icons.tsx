@@ -22,7 +22,7 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps)
   };
 
   // console.log("isHover", isHover);
-  console.log("animate", animate);
+  // console.log("animate", animate);
 
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
