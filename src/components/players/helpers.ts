@@ -13,7 +13,7 @@ export const keys = {
 // VALIDATION
 //--
 
-export const isDeletable = (e: KeyboardEvent<HTMLInputElement>) => {
+export const isDeletable = (e: KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
   return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
 };
 
