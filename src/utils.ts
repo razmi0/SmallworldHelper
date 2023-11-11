@@ -1,5 +1,7 @@
 // import { flushSync } from "react-dom";
 
+import { flushSync } from "react-dom";
+
 export const getRandomColor = (opacity: number = 1) => {
   const randomRgba = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
     Math.random() * 255
@@ -98,11 +100,16 @@ export const findSum = (arr: number[]) => {
 };
 
 export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
-  // document.startViewTransition(() => {
-  //   flushSync(() => {
-  fn(args);
-  //   });
-  // });
+  const isTransitionable = isDevEnv() && document.startViewTransition;
+  if (!isTransitionable) {
+    fn(args);
+  } else {
+    document.startViewTransition(() => {
+      flushSync(() => {
+        fn(args);
+      });
+    });
+  }
 };
 
 type F<T extends unknown[] = unknown[]> = (...args: T) => unknown | void;
