@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { useTheme } from "../../hooks";
-import { IconProps, IconButtonProps, IconHeadingProps, SvgProps } from "../../types";
+import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "../../types";
 import { getSvgData } from "./data";
 
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
+};
+
+const getFilter = (isHover: boolean, svgData: SvgDataType, color: string) => {
+  if (!svgData.filter) throw new Error(`Filter is missing in svgData`);
+  const dropShadow = isHover
+    ? `drop-shadow(0px 0px ${svgData.filter[0]} ${color})`
+    : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
+  const transform = isHover ? `scale(${svgData.scale})` : "none";
+  return { dropShadow, transform };
 };
 
 export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps) => {
@@ -68,24 +77,10 @@ export const IconHeading = ({
   animationName = "none",
   isHover = false,
 }: IconHeadingProps) => {
-  let dropShadow = "",
-    transform = "";
-
   const svgData = getSvgData(variant ?? "");
-
-  if (svgData.filter) {
-    dropShadow = isHover
-      ? `drop-shadow(0px 0px ${svgData.filter[0]} ${color})`
-      : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
-    transform = isHover ? `scale(${svgData.scale})` : "none";
-  }
-
-  const keyframes = svgData.animations?.[animationName].keyframes,
-    get =
-      svgData.animations?.[animationName].get ??
-      function () {
-        return "none";
-      };
+  const { dropShadow, transform } = getFilter(isHover, svgData, color);
+  const keyframes = svgData.animations?.[animationName].keyframes;
+  const get = svgData.animations?.[animationName].get ?? (() => "");
 
   return (
     <div
@@ -116,7 +111,6 @@ export const IconButton = ({
   onClick,
   btnType = "button",
   icon,
-  // svgData,
   iconName,
   sx,
   className,
@@ -126,6 +120,7 @@ export const IconButton = ({
   id,
   onFocus,
   onBlur,
+  onKeyUp,
 }: IconButtonProps) => {
   const svgData = getSvgData(variant ?? "");
   const transform = animStartAt ? animStartState : svgData?.icons[iconName].transform?.();
@@ -149,6 +144,7 @@ export const IconButton = ({
       }}
       onClick={onClick}
       className={className}
+      onKeyUp={onKeyUp}
     >
       <Icon icon={icon} variant={variant} iconName={iconName} />
     </button>
