@@ -1,5 +1,6 @@
 import { KeyboardEvent } from "react";
 import { throwError } from "../../utils";
+import { KeyboardNavigationIdType } from "../../types";
 
 export const keys = {
   ENTER: "Enter",
@@ -29,15 +30,16 @@ export const validateOnChange = (str: string) => {
 
 // KEYBOARD
 //--
-type InputName = '[name="soft-input"]' | '[datatype="utility"]';
-const allInputsType = (name: InputName) => {
-  const res = Array.from(document.querySelectorAll<HTMLInputElement>(name));
+type NavigableElement = HTMLInputElement | HTMLButtonElement;
+const getDatatypesElement = (datatype: KeyboardNavigationIdType) => {
+  const query = `[datatype=${datatype}]`;
+  const res = Array.from(document.querySelectorAll<NavigableElement>(query));
   console.log("res", res);
   return res;
 };
 
-export const findNextPlayer = (targetId: string): HTMLInputElement => {
-  const softs = allInputsType('[name="soft-input"]');
+export const findNextPlayer = (targetId: string): NavigableElement => {
+  const softs = getDatatypesElement("soft-input");
   const softIndex = softs.findIndex((soft) => soft.id === targetId);
   if (softIndex === -1) {
     throwError("SoftInput not found");
@@ -46,8 +48,8 @@ export const findNextPlayer = (targetId: string): HTMLInputElement => {
   return nextSoftInput;
 };
 
-export const findPrevPlayer = (targetId: string): HTMLInputElement => {
-  const softs = allInputsType('[name="soft-input"]');
+export const findPrevPlayer = (targetId: string): NavigableElement => {
+  const softs = getDatatypesElement("soft-input");
   const softIndex = softs.findIndex((soft) => soft.id === targetId);
   if (softIndex === -1) {
     throwError("SoftInput not found");
@@ -56,8 +58,8 @@ export const findPrevPlayer = (targetId: string): HTMLInputElement => {
   return previousSoftInput;
 };
 
-export const findRightUtils = (targetId: string): HTMLInputElement => {
-  const utils = allInputsType('[datatype="utility"]').filter((util) => util.id[0] === targetId[0]);
+export const findRightUtils = (targetId: string): NavigableElement => {
+  const utils = getDatatypesElement("utility").filter((util) => util.id[0] === targetId[0]);
   console.log("id", targetId);
   console.log("utils", utils);
 
@@ -69,8 +71,8 @@ export const findRightUtils = (targetId: string): HTMLInputElement => {
   return nextUtil;
 };
 
-export const findLeftUtils = (targetId: string): HTMLInputElement => {
-  const utils = allInputsType('[datatype="utility"]').filter((util) => util.id === targetId[0]);
+export const findLeftUtils = (targetId: string): NavigableElement => {
+  const utils = getDatatypesElement("utility").filter((util) => util.id === targetId[0]);
   console.log("id", targetId);
 
   const utilsIndex = utils.findIndex((util) => util.id === targetId[0]);

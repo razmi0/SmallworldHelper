@@ -1,26 +1,28 @@
 import { useState } from "react";
 import { useTheme } from "../../hooks";
 import { IconProps, IconButtonProps, IconHeadingProps, SvgProps } from "../../types";
+import { getSvgData } from "./data";
 
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
 };
 
-export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps) => {
-  const [isHover, setIsHover] = useState(false);
-  const [isFocus, setIsFocus] = useState(false);
+export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps) => {
   const { theme } = useTheme();
+  const [isHover, setIsHover] = useState(false);
+  // const [isFocus, setIsFocus] = useState(false);
 
-  const animate = isFocus || isHover;
+  const animate = isHover; // isFocus ||
+
+  const svgData = getSvgData(variant ?? "");
 
   const events = {
-    onFocus: () => setIsFocus(true),
-    onBlur: () => setIsFocus(false),
     onMouseEnter: () => setIsHover(true),
     onMouseLeave: () => setIsHover(false),
   };
 
-  console.log(isFocus, isHover);
+  console.log("isHover", isHover);
+  console.log("animate", animate);
 
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
@@ -42,12 +44,13 @@ export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps)
   return (
     <div
       className={`icon-stat-ctn ${className || ""}`}
-      {...events}
+      onMouseEnter={events.onMouseEnter}
+      onMouseLeave={events.onMouseLeave}
       style={{
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
-        border: `${animate ? "3px solid red" : "none"}`,
+        // border: `${isFocus ? "3px solid red" : "none"}`,
       }}
     >
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
@@ -58,7 +61,8 @@ export const Icon = ({ icon: SvgIcon, svgData, iconName, className }: IconProps)
 export const IconHeading = ({
   icon: SvgIcon,
   color,
-  svgData,
+  // svgData,
+  variant,
   className,
   bgColor = "transparent",
   animationName = "none",
@@ -66,6 +70,8 @@ export const IconHeading = ({
 }: IconHeadingProps) => {
   let dropShadow = "",
     transform = "";
+
+  const svgData = getSvgData(variant ?? "");
 
   if (svgData.filter) {
     dropShadow = isHover
@@ -106,10 +112,11 @@ export const IconHeading = ({
 
 export const IconButton = ({
   variant,
+  datatype,
   onClick,
   btnType = "button",
   icon,
-  svgData,
+  // svgData,
   iconName,
   sx,
   className,
@@ -120,16 +127,17 @@ export const IconButton = ({
   onFocus,
   onBlur,
 }: IconButtonProps) => {
-  const transform = animStartAt ? animStartState : svgData.icons[iconName].transform?.();
-  const zIndex = svgData.icons[iconName].zIndex;
-  const transition = svgData.icons[iconName].transition?.();
+  const svgData = getSvgData(variant ?? "");
+  const transform = animStartAt ? animStartState : svgData?.icons[iconName].transform?.();
+  const zIndex = svgData?.icons[iconName].zIndex;
+  const transition = svgData?.icons[iconName].transition?.();
 
   return (
     <button
       onFocus={onFocus}
       onBlur={onBlur}
       id={id?.toString()}
-      datatype={variant}
+      datatype={datatype}
       type={btnType}
       onMouseEnter={onMouseEnter}
       style={{
@@ -142,7 +150,7 @@ export const IconButton = ({
       onClick={onClick}
       className={className}
     >
-      <Icon icon={icon} svgData={svgData} iconName={iconName} />
+      <Icon icon={icon} variant={variant} iconName={iconName} />
     </button>
   );
 };

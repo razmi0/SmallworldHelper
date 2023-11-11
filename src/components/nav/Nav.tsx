@@ -12,7 +12,6 @@ import {
   Save,
   Theme,
 } from "../icons/Icons";
-import { iconStyle } from "../icons/data";
 import styles from "./_.module.css";
 
 type NavProps = {
@@ -47,7 +46,6 @@ export const Nav = ({
           icon={Menu}
           animStartAt={toggleStates.isNavOpen}
           iconName="menu"
-          svgData={iconStyle}
           onMouseEnter={debouncedToggleOpenNav(true)}
           onClick={debouncedToggleOpenNav(!isNavOpen)}
         />
@@ -56,7 +54,6 @@ export const Nav = ({
           icon={Theme}
           animStartAt={isNavOpen}
           iconName="theme"
-          svgData={iconStyle}
           onClick={switchTheme}
         />
         <IconButton
@@ -64,7 +61,6 @@ export const Nav = ({
           icon={Load}
           animStartAt={isNavOpen}
           iconName="load"
-          svgData={iconStyle}
           onClick={() => setLoadPlayers(true)}
         />
         <IconButton
@@ -73,14 +69,12 @@ export const Nav = ({
           onClick={() => setSavePlayers(true)}
           animStartAt={isNavOpen}
           iconName="save"
-          svgData={iconStyle}
         />
         <IconButton
           variant="nav"
           icon={AddPlayer}
           animStartAt={isNavOpen}
           iconName="addplayer"
-          svgData={iconStyle}
           onClick={toggleOpenAddPlayer}
         />
         <IconButton
@@ -88,7 +82,6 @@ export const Nav = ({
           icon={Chart}
           animStartAt={isNavOpen}
           iconName="chart"
-          svgData={iconStyle}
           onClick={() => withViewTransition(toggleOpenCharts)}
         />
         <IconButton
@@ -96,7 +89,6 @@ export const Nav = ({
           icon={isScoreHidden ? EyeClose : EyeOpen}
           animStartAt={isNavOpen}
           iconName="eyes"
-          svgData={iconStyle}
           onClick={toggleHideScore}
         />
       </nav>

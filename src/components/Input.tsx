@@ -7,8 +7,10 @@ import {
   MouseEventHandler,
 } from "react";
 import { add4dToHex } from "../utils";
+import { KeyboardNavigationIdType } from "../types";
 
 interface InputProps {
+  datatype?: KeyboardNavigationIdType;
   labelText?: string;
   subjectId: string;
   onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
@@ -111,6 +113,7 @@ export const SoftInput = ({
   color,
   onChange,
   onKeyUp,
+  datatype,
   value,
 }: InputProps) => {
   return (
@@ -127,12 +130,12 @@ export const SoftInput = ({
       `}
       </style>
       <input
+        datatype={datatype}
         onFocus={onFocus}
         onBlur={onBlur}
         className={`form__field--${subjectId} form__field--commun`}
         placeholder="Score"
         id={subjectId}
-        name="soft-input"
         style={sx}
         type="text"
         onChange={onChange}

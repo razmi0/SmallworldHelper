@@ -4,11 +4,11 @@ import { ContainerProps, InputContainer } from "../containers/Containers";
 import { Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
-import { headingStarIconStyle, utilityButtonSvg } from "../icons/data";
+// import { headingStarIconStyle, UTILITY_STYLES } from "../icons/data";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { Spacer, Flex } from "../Utils";
 import { SoftInput } from "../Input";
-import { withViewTransition } from "../../utils";
+import { isDevEnv, withViewTransition } from "../../utils";
 import {
   keys,
   validateOnChange,
@@ -131,7 +131,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
                   isHover={isFocus[i]}
                   color={color}
                   icon={Star}
-                  svgData={headingStarIconStyle}
+                  variant="heading"
                 />
                 <PlayerText color={isFocus[i] ? color : "inherit"}>
                   {name} : {hideScore ? "***" : victoryPtn}
@@ -149,6 +149,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
                   onChange={(e) => handleChangeScore(e, i)}
                   value={newScores[i] ? newScores[i] : ""}
                   subjectId={subjectId}
+                  datatype="soft-input"
                 />
               </InputContainer>
               <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
@@ -187,7 +188,7 @@ const UtilitiesInputContainer = ({ children }: ContainerProps) => {
 const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) => {
   const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
-  isFocus = true;
+  isFocus = isDevEnv() ? true : false;
   return (
     <div className={styles["player-utilities-ctn"]}>
       {isFocus && (
@@ -197,7 +198,7 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
             onClick={resetWithViewTransition}
             icon={Reset}
             iconName="reset"
-            svgData={utilityButtonSvg}
+            datatype="utility"
             id={id + "." + 1}
           />
           <IconButton
@@ -205,7 +206,7 @@ const PlayerUtilities = ({ id, reset, remove, isFocus }: PlayerUtilitiesProps) =
             onClick={removeWithViewTransition}
             icon={Delete}
             iconName="delete"
-            svgData={utilityButtonSvg}
+            datatype="utility"
             id={id + "." + 2}
           />
         </>

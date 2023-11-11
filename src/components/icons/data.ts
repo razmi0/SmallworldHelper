@@ -1,6 +1,8 @@
-import { SvgDataType } from "../../types";
+import { SvgDataType, VariantType } from "../../types";
 
-export const iconStyle: SvgDataType = {
+// ICON DATA FOR THE NAV MENU BUTTONS
+//--
+const NAV_STYLES: SvgDataType = {
   size: ["40px", "40px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
@@ -14,9 +16,9 @@ export const iconStyle: SvgDataType = {
         return `scale(1.2)`;
       },
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 0.8}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 0.8}s `
+          : NAV_STYLES.transition ?? "none";
       },
     },
     addplayer: {
@@ -24,13 +26,13 @@ export const iconStyle: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 4
+          (Number(NAV_STYLES.size[0].replace("px", "")) +
+            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 4
         }px)`,
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 4}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 4}s `
+          : NAV_STYLES.transition ?? "none";
       },
       zIndex: 6,
     },
@@ -39,13 +41,13 @@ export const iconStyle: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 3
+          (Number(NAV_STYLES.size[0].replace("px", "")) +
+            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 3
         }px)`,
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 3}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 3}s `
+          : NAV_STYLES.transition ?? "none";
       },
       zIndex: 7,
     },
@@ -54,13 +56,13 @@ export const iconStyle: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 2
+          (Number(NAV_STYLES.size[0].replace("px", "")) +
+            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 2
         }px)`,
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 2}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 2}s `
+          : NAV_STYLES.transition ?? "none";
       },
       zIndex: 8,
     },
@@ -69,13 +71,13 @@ export const iconStyle: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 1
+          (Number(NAV_STYLES.size[0].replace("px", "")) +
+            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 1
         }px)`,
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 1}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 1}s `
+          : NAV_STYLES.transition ?? "none";
       },
       zIndex: 9,
     },
@@ -88,13 +90,13 @@ export const iconStyle: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 5
+          (Number(NAV_STYLES.size[0].replace("px", "")) +
+            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 5
         }px)`,
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 5}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 5}s `
+          : NAV_STYLES.transition ?? "none";
       },
       zIndex: 5,
     },
@@ -103,20 +105,22 @@ export const iconStyle: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () =>
         `translate(-${
-          (Number(iconStyle.size[0].replace("px", "")) + Number(iconStyle.gap?.replace("px", "")) ||
-            1) * 6
+          (Number(NAV_STYLES.size[0].replace("px", "")) +
+            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 6
         }px)`,
       transition: () => {
-        return iconStyle.bezierParams
-          ? `transform ${iconStyle.bezierParams[0] * iconStyle.bezierParams[1] * 6}s `
-          : iconStyle.transition ?? "none";
+        return NAV_STYLES.bezierParams
+          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 6}s `
+          : NAV_STYLES.transition ?? "none";
       },
       zIndex: 4,
     },
   },
 };
 
-export const utilityButtonSvg: SvgDataType = {
+// ICON DATA FOR UTILITY BUTTONS IN PLAYERLIST COMPONENT
+//--
+const UTILITY_STYLES: SvgDataType = {
   size: ["35px", "35px"],
   filter: ["4px", "0px"],
   transition: "all 0.2s ease-in-out",
@@ -130,7 +134,9 @@ export const utilityButtonSvg: SvgDataType = {
   },
 };
 
-export const headingStarIconStyle: SvgDataType = {
+// ICON DATA FOR THE HEADING STAR IN PLAYERLIST COMPONENT
+//--
+const HEADING_STYLES: SvgDataType = {
   size: ["40px", "40px"],
   filter: ["7px", "2px"],
   transition: "all 1s ease-in-out",
@@ -147,7 +153,7 @@ export const headingStarIconStyle: SvgDataType = {
                   100% {transform: rotate(360deg)}`,
 
       get: () => {
-        return `${headingStarIconStyle.animations?.rotate.name} ${headingStarIconStyle.animations?.rotate.duration}s ${headingStarIconStyle.animations?.rotate.timing} ${headingStarIconStyle.animations?.rotate.delay}s ${headingStarIconStyle.animations?.rotate.iteration} ${headingStarIconStyle.animations?.rotate.direction}`;
+        return `${HEADING_STYLES.animations?.rotate.name} ${HEADING_STYLES.animations?.rotate.duration}s ${HEADING_STYLES.animations?.rotate.timing} ${HEADING_STYLES.animations?.rotate.delay}s ${HEADING_STYLES.animations?.rotate.iteration} ${HEADING_STYLES.animations?.rotate.direction}`;
       },
     },
     translate: {
@@ -160,7 +166,7 @@ export const headingStarIconStyle: SvgDataType = {
       keyframes:
         "0% {transform: translate(0px, 0px) ; transform: rotate(0deg)} 50% {transform : translate(0px, 5px)} 100% {transform: translate(0px, -5px) ; transform: rotate(360deg)}",
       get: () => {
-        return `${headingStarIconStyle.animations?.translate.name} ${headingStarIconStyle.animations?.translate.duration}s ${headingStarIconStyle.animations?.translate.timing} ${headingStarIconStyle.animations?.translate.delay}s ${headingStarIconStyle.animations?.translate.iteration} ${headingStarIconStyle.animations?.translate.direction}`;
+        return `${HEADING_STYLES.animations?.translate.name} ${HEADING_STYLES.animations?.translate.duration}s ${HEADING_STYLES.animations?.translate.timing} ${HEADING_STYLES.animations?.translate.delay}s ${HEADING_STYLES.animations?.translate.iteration} ${HEADING_STYLES.animations?.translate.direction}`;
       },
     },
   },
@@ -185,3 +191,19 @@ export const playerColors = [
   "#b5179e",
   "#90be6d",
 ];
+
+export const getSvgData = (variant: VariantType) => {
+  switch (variant) {
+    case "heading":
+      return HEADING_STYLES;
+
+    case "nav":
+      return NAV_STYLES;
+
+    case "utility":
+      return UTILITY_STYLES;
+
+    default:
+      return NAV_STYLES;
+  }
+};
