@@ -3,6 +3,8 @@ import { SvgDataType, VariantType } from "../../types";
 // Helpers
 //--
 
+const MAX_Z_INDEX = 20;
+
 const buildTransform = (index: number) => {
   return `translate(-${
     (Number(NAV_STYLES.size[0].replace("px", "")) + Number(NAV_STYLES.gap?.replace("px", "")) ||
@@ -16,8 +18,8 @@ const buildTransition = (index: number) => {
     : NAV_STYLES.transition ?? "none";
 };
 
-const zIndex = (maxZ: number, index: number) => {
-  return maxZ - index;
+const zIndex = (index: number) => {
+  return MAX_Z_INDEX - index;
 };
 
 // ICON DATA FOR THE NAV MENU BUTTONS
@@ -28,8 +30,6 @@ const NAV_STYLES: SvgDataType = {
   transition: "all 0.2s ease-in-out",
   gap: "5px",
   bezierParams: [0.4, 0.2],
-  nbrOfIcons: 6,
-  maxZIndex: 10,
   icons: {
     /* position 0 */
 
@@ -39,7 +39,7 @@ const NAV_STYLES: SvgDataType = {
         return `scale(1.2)`;
       },
       transition: () => buildTransition(0.8),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 0),
+      zIndex: () => zIndex(0),
     },
 
     /* position 1 */
@@ -49,7 +49,7 @@ const NAV_STYLES: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () => buildTransform(1),
       transition: () => buildTransition(1),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 1),
+      zIndex: () => zIndex(1),
     },
 
     /* position 2 */
@@ -59,7 +59,7 @@ const NAV_STYLES: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () => buildTransform(2),
       transition: () => buildTransition(2),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 2),
+      zIndex: () => zIndex(2),
     },
 
     /* position 3 */
@@ -69,7 +69,7 @@ const NAV_STYLES: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () => buildTransform(3),
       transition: () => buildTransition(3),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 3),
+      zIndex: () => zIndex(3),
     },
 
     /* position 4 */
@@ -79,7 +79,7 @@ const NAV_STYLES: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () => buildTransform(4),
       transition: () => buildTransition(4),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 4),
+      zIndex: () => zIndex(4),
     },
 
     /* position 5 */
@@ -89,7 +89,7 @@ const NAV_STYLES: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () => buildTransform(5),
       transition: () => buildTransition(5),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 5),
+      zIndex: () => zIndex(5),
     },
 
     /* position 6 */
@@ -99,10 +99,28 @@ const NAV_STYLES: SvgDataType = {
       color: ["#646cff", "#609dff"],
       transform: () => buildTransform(6),
       transition: () => buildTransition(6),
-      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 6),
+      zIndex: () => zIndex(6),
     },
 
     /* position 7 */
+
+    undo: {
+      index: 7,
+      color: ["#646cff", "#609dff"],
+      transform: () => buildTransform(7),
+      transition: () => buildTransition(7),
+      zIndex: () => zIndex(7),
+    },
+
+    /* position 8 */
+
+    redo: {
+      index: 8,
+      color: ["#646cff", "#609dff"],
+      transform: () => buildTransform(8),
+      transition: () => buildTransition(8),
+      zIndex: () => zIndex(8),
+    },
 
     // ADD MORE ICONS HERE
     //...
