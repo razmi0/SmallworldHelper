@@ -9,7 +9,7 @@ import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
 import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
-import { Clock } from "./components/Utils";
+import { Clock, Spacer } from "./components/Utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
@@ -38,7 +38,7 @@ const App = () => {
     }
   }, [savePlayers, loadPlayers]);
 
-  console.log(players);
+  // console.log(players);
 
   return (
     <MainContainer>
