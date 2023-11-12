@@ -78,6 +78,8 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
       past: past as T[],
       present: present as T,
       future: future as T[],
+      nbrOfUndos: past.length,
+      nbrOfRedos: future.length,
       isUndoPossible,
       isRedoPossible,
     },

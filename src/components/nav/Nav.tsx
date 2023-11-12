@@ -26,6 +26,8 @@ type NavProps = {
   redo: () => void;
   isUndoPossible: boolean;
   isRedoPossible: boolean;
+  nbrOfUndos: number;
+  nbrOfRedos: number;
 };
 
 export const Nav = ({
@@ -37,6 +39,8 @@ export const Nav = ({
   isScoreHidden,
   isUndoPossible,
   isRedoPossible,
+  nbrOfRedos,
+  nbrOfUndos,
 }: NavProps) => {
   const { switchTheme } = useSwitchTheme();
   const { toggleActions, toggleStates } = useToggle();
@@ -108,14 +112,18 @@ export const Nav = ({
           icon={Undo}
           iconName="undo"
           onClick={undo}
+          disabled={!isUndoPossible}
         />
+        <small style={{ position: "absolute" }}>{nbrOfUndos}</small>
         <IconButton
           variant="nav"
           animStartAt={isNavOpen}
           icon={Redo}
           iconName="redo"
           onClick={redo}
+          disabled={!isRedoPossible}
         />
+        <small style={{ position: "absolute" }}>{nbrOfRedos}</small>
       </nav>
     </Header>
   );

@@ -127,6 +127,7 @@ export type IconName =
 export type KeyboardNavigationIdType = "soft-input" | "utility";
 
 export interface IconButtonProps extends IconProps {
+  disabled?: boolean;
   onClick?: () => void;
   btnType?: "button" | "submit" | "reset";
   sx?: React.CSSProperties;

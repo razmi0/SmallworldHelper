@@ -108,6 +108,7 @@ export const IconHeading = ({
 };
 
 export const IconButton = ({
+  disabled,
   variant,
   datatype,
   onClick,
@@ -131,6 +132,7 @@ export const IconButton = ({
 
   return (
     <button
+      disabled={disabled}
       onFocus={onFocus}
       onBlur={onBlur}
       id={id?.toString()}

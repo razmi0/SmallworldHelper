@@ -26,7 +26,7 @@ const App = () => {
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
   const { undo, redo } = undoRedoActions;
-  const { isUndoPossible, isRedoPossible } = undoRedoStates;
+  const { isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos } = undoRedoStates;
 
   useEffect(() => {
     if (savePlayers) {
@@ -54,6 +54,8 @@ const App = () => {
         redo={redo}
         isUndoPossible={isUndoPossible}
         isRedoPossible={isRedoPossible}
+        nbrOfRedos={nbrOfRedos}
+        nbrOfUndos={nbrOfUndos}
       />
       <PlayerStatsContainer>
         <PlayersList
