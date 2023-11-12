@@ -9,6 +9,8 @@ import {
   IconButton,
   Load,
   Menu,
+  Undo,
+  Redo,
   Save,
   Theme,
 } from "../icons/Icons";
@@ -20,12 +22,16 @@ type NavProps = {
   toggleOpenCharts: () => void;
   toggleHideScore: () => void;
   isScoreHidden: boolean;
+  undo: () => void;
+  redo: () => void;
 };
 
 export const Nav = ({
   toggleHideScore,
   toggleOpenAddPlayer,
   toggleOpenCharts,
+  undo,
+  redo,
   isScoreHidden,
 }: NavProps) => {
   const { switchTheme } = useSwitchTheme();
@@ -91,6 +97,20 @@ export const Nav = ({
           icon={isScoreHidden ? EyeClose : EyeOpen}
           iconName="eyes"
           onClick={toggleHideScore}
+        />
+        <IconButton
+          variant="nav"
+          animStartAt={isNavOpen}
+          icon={Undo}
+          iconName="undo"
+          onClick={undo}
+        />
+        <IconButton
+          variant="nav"
+          animStartAt={isNavOpen}
+          icon={Redo}
+          iconName="redo"
+          onClick={redo}
         />
       </nav>
     </Header>

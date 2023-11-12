@@ -55,6 +55,8 @@ const App = () => {
         toggleOpenAddPlayer={openAddPlayer}
         toggleOpenCharts={openCharts}
         isScoreHidden={isScoreHidden}
+        undo={undo}
+        redo={redo}
       />
       <PlayerStatsContainer>
         <PlayersList
