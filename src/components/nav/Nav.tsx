@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useIntermediateDispatch, useSwitchTheme, useToggle } from "../../hooks";
+import { useIntermediateDispatch, useSwitchTheme, useToggle, useUndoRedo } from "../../hooks";
 import { debounce, withViewTransition } from "../../utils";
 import {
   AddPlayer,
@@ -24,6 +24,8 @@ type NavProps = {
   isScoreHidden: boolean;
   undo: () => void;
   redo: () => void;
+  isUndoPossible: boolean;
+  isRedoPossible: boolean;
 };
 
 export const Nav = ({
@@ -33,6 +35,8 @@ export const Nav = ({
   undo,
   redo,
   isScoreHidden,
+  isUndoPossible,
+  isRedoPossible,
 }: NavProps) => {
   const { switchTheme } = useSwitchTheme();
   const { toggleActions, toggleStates } = useToggle();
