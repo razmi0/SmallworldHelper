@@ -18,7 +18,7 @@ type ToggleActions =
 const initialToggleStates = {
   isNavOpen: false,
   isAddPlayerOpen: false,
-  isChartsOpen: false,
+  isChartsOpen: true,
   isScoreHidden: false,
 };
 
