@@ -1,5 +1,6 @@
-.players-ctn {
+.board-ctn {
   display: flex;
+  margin: 1rem 0;
 }
 
 .players-list-ctn {
@@ -18,6 +19,7 @@
   display: flex;
   flex-direction: column;
   max-height: 125px;
+  min-width: 250px;
   gap: 7px;
 }
 
@@ -48,6 +50,13 @@
 }
 
 /* MEDIA QUERIES */
+@media screen and (max-width: 600px) {
+  .board-ctn {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
 @media screen and (max-width: 472px) {
   .players-list-ctn {
     flex-direction: row !important;

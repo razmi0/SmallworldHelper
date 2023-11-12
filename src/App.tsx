@@ -38,6 +38,8 @@ const App = () => {
     }
   }, [savePlayers, loadPlayers]);
 
+  console.log(players);
+
   return (
     <MainContainer>
       {isDevEnv() && <Clock />}

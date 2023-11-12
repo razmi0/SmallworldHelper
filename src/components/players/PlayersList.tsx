@@ -5,7 +5,7 @@ import { KeyboardNavigationIdType, Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
-import { Spacer, Flex } from "../Utils";
+import { Flex } from "../Utils";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
 import { keys, validateOnChange, isDeletable } from "./helpers";
@@ -141,7 +141,6 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
                   {name} : {hideScore ? "***" : victoryPtn}
                 </PlayerText>
               </PlayerTextContainer>
-              <Spacer />
             </Flex>
             <UtilitiesInputContainer>
               <InputContainer>
@@ -175,7 +174,7 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
 };
 
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
-  return <section className={styles["players-ctn"]}>{children}</section>;
+  return <section className={styles["board-ctn"]}>{children}</section>;
 };
 
 const PlayerListElement = ({ children }: ContainerProps) => {

@@ -39,7 +39,7 @@ export const Nav = ({
   );
 
   return (
-    <header>
+    <header style={{ marginBottom: "2rem", width: "100%" }}>
       <nav className={styles["nav-ctn"]} onMouseLeave={debouncedToggleOpenNav(false)}>
         <IconButton
           variant="nav"
