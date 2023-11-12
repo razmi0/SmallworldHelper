@@ -34,7 +34,8 @@
 
 ## BUGS & PROPOSITIONS
 
-- [ ] Try to add a column to player list ( by 2)
+<!-- - [ ] Try to add a column to player list ( by 2) -->
+
 - [x] refacto css => module, tailwind, styled-components or just css files ?
 - [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon
 - [x] Refacto theme logic with context API and localstorage ?
@@ -42,9 +43,9 @@
 - [x] refacto setterStates to (prev) => ... instead of new = [...old]
 - [ ] reducer for transition ? => useTransition
 - [ ] reducer for lclStrg => useLocalStorage ?
-- [ ] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
-- [ ] score input changing from controlled to unconrolled
-- [ ] cannot score < 0 in score input
+- [x] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
+- [x] score input changing from controlled to unconrolled
+- [x] cannot score < 0 in score input
 - [ ] @legendapp/state ?
 - [ ] undoredo functionality => reveal that a party can be a video => useVideo
 - [x] Change player icon indicator to another icon & svg
