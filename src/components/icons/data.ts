@@ -21,7 +21,7 @@ export const PLAYER_COLORS = [
   "#577590",
   "#b5179e",
   "#90be6d",
-];
+] as const;
 
 export const getSvgData = (variant: VariantType) => {
   switch (variant) {
@@ -39,7 +39,7 @@ export const getSvgData = (variant: VariantType) => {
   }
 };
 
-const MAX_Z_INDEX = 20;
+const MAX_Z_INDEX = 20 as const;
 
 const buildTransform = (index: number) => {
   return `translate(-${
