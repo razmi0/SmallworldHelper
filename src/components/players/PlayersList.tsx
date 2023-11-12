@@ -7,7 +7,7 @@ import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { Spacer, Flex } from "../Utils";
 import { SoftInput } from "../Input";
-import { isDevEnv, withViewTransition } from "../../utils";
+import { withViewTransition } from "../../utils";
 import { keys, validateOnChange, isDeletable } from "./helpers";
 import {
   navigateTo,
@@ -208,31 +208,33 @@ const PlayerUtilities = ({
 }: PlayerUtilitiesProps) => {
   const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
-  isFocus = isDevEnv() ? true : false;
+  // isFocus = isDevEnv() ? true : false;
   return (
     <div className={styles["player-utilities-ctn"]}>
-      {isFocus && (
-        <>
-          <IconButton
-            variant={"utility"}
-            onClick={resetWithViewTransition}
-            icon={Reset}
-            iconName="reset"
-            datatype={datatype}
-            onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-            id={id + "." + 1}
-          />
-          <IconButton
-            variant={"utility"}
-            onClick={removeWithViewTransition}
-            icon={Delete}
-            iconName="delete"
-            datatype={datatype}
-            onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-            id={id + "." + 2}
-          />
-        </>
-      )}
+      <IconButton
+        sx={{
+          visibility: `${!isFocus ? "hidden" : "initial"}`,
+        }}
+        variant={"utility"}
+        onClick={resetWithViewTransition}
+        icon={Reset}
+        iconName="reset"
+        datatype={datatype}
+        onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
+        id={id + "." + 1}
+      />
+      <IconButton
+        sx={{
+          visibility: `${!isFocus ? "hidden" : "initial"}`,
+        }}
+        variant={"utility"}
+        onClick={removeWithViewTransition}
+        icon={Delete}
+        iconName="delete"
+        datatype={datatype}
+        onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
+        id={id + "." + 2}
+      />
     </div>
   );
 };

@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<Charts /> > should render charts correctly 1`] = `
+<section
+  class="charts-ctn"
+>
+  <figure
+    class="chart-ctn"
+    style="max-height: 250px; margin-top: 0px; margin-bottom: 0px;"
+  >
+    <canvas
+      height="150"
+      role="img"
+      width="300"
+    />
+  </figure>
+  <figure
+    class="chart-ctn"
+    style="max-height: 250px; margin-top: 0px; margin-bottom: 0px;"
+  >
+    <canvas
+      height="150"
+      role="img"
+      width="300"
+    />
+  </figure>
+  <figure
+    class="chart-ctn"
+    style="max-height: 250px; margin-top: 0px; margin-bottom: 0px;"
+  >
+    <canvas
+      height="150"
+      role="img"
+      width="300"
+    />
+  </figure>
+</section>
+`;

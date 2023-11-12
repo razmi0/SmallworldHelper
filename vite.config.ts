@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -12,5 +13,9 @@ export default defineConfig({
       "@Charts": path.resolve(__dirname, "./src/components/charts"),
       "@Components": path.resolve(__dirname, "./src/components"),
     },
+  },
+  test: {
+    includeSource: ["src/**/*.{js,ts,tsx}"],
+    environment: "jsdom",
   },
 });

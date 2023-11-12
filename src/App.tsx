@@ -8,7 +8,8 @@ import { Nav } from "./components/nav/Nav";
 import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
-import { saveToLocalStorage, getFromLocalStorage } from "./utils";
+import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
+import { Clock } from "./components/Utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
@@ -39,6 +40,8 @@ const App = () => {
 
   return (
     <MainContainer>
+      {isDevEnv() && <Clock />}
+
       <UndoRedo
         undo={undo}
         redo={redo}

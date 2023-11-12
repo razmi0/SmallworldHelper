@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTheme } from "../../hooks";
 import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "../../types";
 import { getSvgData } from "./data";
+import { debounce } from "../../utils";
 
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
@@ -16,6 +17,16 @@ const getFilter = (isHover: boolean, svgData: SvgDataType, color: string) => {
   return { dropShadow, transform };
 };
 
+const getColor = (iconName: string, svgData: SvgDataType, idxThemedColr: number) => {
+  if (!svgData.icons)
+    throw new Error(`Icon ${iconName} is missing an icon in svgData : ${svgData.icons}`);
+
+  const color = svgData.icons[iconName]?.color[idxThemedColr];
+
+  if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData : ${color}`);
+  return color;
+};
+
 export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps) => {
   const { theme } = useTheme();
   const [isHover, setIsHover] = useState(false);
@@ -26,29 +37,22 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps)
   const svgData = getSvgData(variant ?? "");
 
   const events = {
-    onMouseEnter: () => setIsHover(true),
-    onMouseLeave: () => setIsHover(false),
+    onMouseEnter: useCallback(
+      debounce(() => setIsHover(true), 200),
+      []
+    ),
+    onMouseLeave: useCallback(
+      debounce(() => setIsHover(false), 200),
+      []
+    ),
   };
-
-  // console.log("isHover", isHover);
-  // console.log("animate", animate);
 
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
-  let dropShadow = "",
-    transform = "";
 
-  if (!svgData.icons)
-    throw new Error(`Icon ${iconName} is missing an icon in svgData : ${svgData.icons}`);
-  const color = svgData.icons[iconName]?.color[idxThemeColor];
-  if (!color) throw new Error(`Icon ${iconName} is missing a color in svgData : ${color}`);
+  const color = getColor(iconName, svgData, idxThemeColor);
 
-  if (svgData.filter) {
-    dropShadow = animate
-      ? `drop-shadow(0px 0px ${svgData.filter[0]} ${color})`
-      : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
-    transform = animate ? `scale(${svgData.scale})` : "none";
-  }
+  const { dropShadow, transform } = getFilter(animate, svgData, color);
 
   return (
     <div
