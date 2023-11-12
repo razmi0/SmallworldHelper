@@ -13,6 +13,7 @@ import {
   Theme,
 } from "../icons/Icons";
 import styles from "./_.module.css";
+import { Header } from "../containers";
 
 type NavProps = {
   toggleOpenAddPlayer: () => void;
@@ -39,7 +40,7 @@ export const Nav = ({
   );
 
   return (
-    <header style={{ marginBottom: "2rem", width: "100%" }}>
+    <Header>
       <nav className={styles["nav-ctn"]} onMouseLeave={debouncedToggleOpenNav(false)}>
         <IconButton
           variant="nav"
@@ -86,12 +87,12 @@ export const Nav = ({
         />
         <IconButton
           variant="nav"
-          icon={isScoreHidden ? EyeClose : EyeOpen}
           animStartAt={isNavOpen}
+          icon={isScoreHidden ? EyeClose : EyeOpen}
           iconName="eyes"
           onClick={toggleHideScore}
         />
       </nav>
-    </header>
+    </Header>
   );
 };
