@@ -1,4 +1,4 @@
-import { playerColors } from "../../components/icons/data";
+import { PLAYER_COLORS } from "../../components/icons/data";
 import { BarData, LineData, Player, PieData } from "../../types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "../../utils";
 
@@ -80,7 +80,7 @@ export const buildBaseStats = (name: string, startScore: number, id: number) => 
     history: [startScore],
     addedScores: [startScore],
     rankChange: 0,
-    color: playerColors[id] ?? getRandomColor(),
+    color: PLAYER_COLORS[id] ?? getRandomColor(),
     max: startScore,
     min: startScore,
     avg: startScore,
