@@ -120,7 +120,9 @@ export type IconName =
   | "chart"
   | "eyes"
   | "reset"
-  | "delete";
+  | "delete"
+  | "undo"
+  | "redo";
 
 export type KeyboardNavigationIdType = "soft-input" | "utility";
 
