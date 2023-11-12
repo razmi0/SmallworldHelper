@@ -100,8 +100,7 @@ export const findSum = (arr: number[]) => {
 };
 
 export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
-  const isTransitionable = isDevEnv() && document.startViewTransition;
-  console.log("isTransitionable", isTransitionable);
+  const isTransitionable = document.startViewTransition;
   if (!isTransitionable) {
     fn(args);
   } else {
