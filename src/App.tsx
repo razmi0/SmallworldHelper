@@ -43,13 +43,6 @@ const App = () => {
   return (
     <MainContainer>
       {isDevEnv() && <Clock />}
-
-      {/* <UndoRedo
-        undo={undo}
-        redo={redo}
-        isUndoPossible={isUndoPossible}
-        isRedoPossible={isRedoPossible}
-      /> */}
       <Nav
         toggleHideScore={hideScore}
         toggleOpenAddPlayer={openAddPlayer}
