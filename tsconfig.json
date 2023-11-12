@@ -21,10 +21,5 @@
     "allowUmdGlobalAccess": true
   },
   "include": ["src"],
-  "path": {
-    "@Components": ["./src/components/*"],
-    "@Icons": ["./src/components/icons/*"],
-    "@Charts": ["./src/components/charts/*"]
-  },
   "references": [{ "path": "./tsconfig.node.json" }]
 }
