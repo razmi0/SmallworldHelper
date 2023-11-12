@@ -24,7 +24,9 @@ const App = () => {
   const { hideScore, openAddPlayer, openCharts } = toggleActions;
   const { isScoreHidden, isChartsOpen } = toggleStates;
 
-  const { undo, redo, isUndoPossible, isRedoPossible } = useUndoRedo<Player[]>(players, setPlayers);
+  const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
+  const { undo, redo } = undoRedoActions;
+  const { isUndoPossible, isRedoPossible } = undoRedoStates;
 
   useEffect(() => {
     if (savePlayers) {
@@ -50,6 +52,8 @@ const App = () => {
         isScoreHidden={isScoreHidden}
         undo={undo}
         redo={redo}
+        isUndoPossible={isUndoPossible}
+        isRedoPossible={isRedoPossible}
       />
       <PlayerStatsContainer>
         <PlayersList
@@ -112,31 +116,3 @@ const App = () => {
 };
 
 export default App;
-
-type UndoRedo = {
-  undo: () => void;
-  redo: () => void;
-  isUndoPossible: boolean;
-  isRedoPossible: boolean;
-};
-const UndoRedo = ({ undo, redo, isRedoPossible, isUndoPossible }: UndoRedo) => {
-  return (
-    <div>
-      <button
-        onClick={undo}
-        disabled={!isUndoPossible}
-        style={{ color: `${isUndoPossible ? "green" : "red"}` }}
-      >
-        Undo
-      </button>
-      <button
-        onClick={redo}
-        disabled={!isRedoPossible}
-        style={{ color: `${isRedoPossible ? "green" : "red"}` }}
-      >
-        Redo
-      </button>
-      <button>Add</button>
-    </div>
-  );
-};
