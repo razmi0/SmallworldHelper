@@ -1,7 +1,7 @@
 import { Input, InputButton } from "./components/Input";
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
-import { ChartContainer, MainContainer } from "./components/containers/Containers";
+import { ChartContainer, MainContainer } from "./components/containers";
 import { PlayerStatsContainer, PlayersList } from "./components/players/PlayersList";
 import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
 import { Nav } from "./components/nav/Nav";
@@ -9,7 +9,7 @@ import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
 import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
-import { Clock, Spacer } from "./components/Utils";
+import { Clock } from "./components/Utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
