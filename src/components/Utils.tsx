@@ -1,11 +1,12 @@
-import { ReactNode, CSSProperties, useState } from "react";
+import { ReactNode, CSSProperties, useState, useId } from "react";
 
 type FlexProps = {
   children: ReactNode;
   sx?: CSSProperties;
 };
 export const Spacer = ({ sx }: { sx?: CSSProperties }) => {
-  return <div style={{ ...sx, flex: 1 }}></div>;
+  const id = useId() + "_spacer";
+  return <div style={{ ...sx, flex: 1 }} id={id}></div>;
 };
 export const Flex = ({ children, sx }: FlexProps) => {
   return <div style={{ ...sx, display: "flex" }}>{children}</div>;
