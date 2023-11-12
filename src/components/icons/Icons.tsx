@@ -30,7 +30,6 @@ const getColor = (iconName: string, svgData: SvgDataType, idxThemedColr: number)
 export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps) => {
   const { theme } = useTheme();
   const [isHover, setIsHover] = useState(false);
-  // const [isFocus, setIsFocus] = useState(false);
 
   const animate = isHover; // isFocus ||
 
@@ -63,7 +62,6 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps)
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
-        // border: `${isFocus ? "3px solid red" : "none"}`,
       }}
     >
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
