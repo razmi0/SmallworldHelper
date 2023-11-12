@@ -11,9 +11,10 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  /* justify-content: flex-start; */
   flex-wrap: wrap;
-  gap: 25px;
+  /* gap: 25px; */
+  justify-content: space-evenly;
 }
 
 .list-element-ctn {
@@ -27,6 +28,7 @@
 
 .player-text-ctn {
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   font-weight: bold;
   font-size: 30px;
