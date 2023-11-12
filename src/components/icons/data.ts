@@ -1,5 +1,25 @@
 import { SvgDataType, VariantType } from "../../types";
 
+// Helpers
+//--
+
+const buildTransform = (index: number) => {
+  return `translate(-${
+    (Number(NAV_STYLES.size[0].replace("px", "")) + Number(NAV_STYLES.gap?.replace("px", "")) ||
+      1) * index
+  }px)`;
+};
+
+const buildTransition = (index: number) => {
+  return NAV_STYLES.bezierParams
+    ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * index}s `
+    : NAV_STYLES.transition ?? "none";
+};
+
+const zIndex = (maxZ: number, index: number) => {
+  return maxZ - index;
+};
+
 // ICON DATA FOR THE NAV MENU BUTTONS
 //--
 const NAV_STYLES: SvgDataType = {
@@ -8,113 +28,84 @@ const NAV_STYLES: SvgDataType = {
   transition: "all 0.2s ease-in-out",
   gap: "5px",
   bezierParams: [0.4, 0.2],
+  nbrOfIcons: 6,
+  maxZIndex: 10,
   icons: {
+    /* position 0 */
+
     menu: {
       color: ["#646cff", "#609dff"],
-      zIndex: 10,
       transform: () => {
         return `scale(1.2)`;
       },
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 0.8}s `
-          : NAV_STYLES.transition ?? "none";
-      },
+      transition: () => buildTransition(0.8),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 0),
     },
-    addplayer: {
-      // 4
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(NAV_STYLES.size[0].replace("px", "")) +
-            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 4
-        }px)`,
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 4}s `
-          : NAV_STYLES.transition ?? "none";
-      },
-      zIndex: 6,
-    },
-    save: {
-      // 3
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(NAV_STYLES.size[0].replace("px", "")) +
-            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 3
-        }px)`,
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 3}s `
-          : NAV_STYLES.transition ?? "none";
-      },
-      zIndex: 7,
-    },
-    load: {
-      // 2
-      color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(NAV_STYLES.size[0].replace("px", "")) +
-            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 2
-        }px)`,
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 2}s `
-          : NAV_STYLES.transition ?? "none";
-      },
-      zIndex: 8,
-    },
+
+    /* position 1 */
+
     theme: {
-      // 1
+      index: 1,
       color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(NAV_STYLES.size[0].replace("px", "")) +
-            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 1
-        }px)`,
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 1}s `
-          : NAV_STYLES.transition ?? "none";
-      },
-      zIndex: 9,
+      transform: () => buildTransform(1),
+      transition: () => buildTransition(1),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 1),
     },
-    addscore: {
-      // unused
+
+    /* position 2 */
+
+    load: {
+      index: 2,
       color: ["#646cff", "#609dff"],
+      transform: () => buildTransform(2),
+      transition: () => buildTransition(2),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 2),
     },
+
+    /* position 3 */
+
+    save: {
+      index: 3,
+      color: ["#646cff", "#609dff"],
+      transform: () => buildTransform(3),
+      transition: () => buildTransition(3),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 3),
+    },
+
+    /* position 4 */
+
+    addplayer: {
+      index: 4,
+      color: ["#646cff", "#609dff"],
+      transform: () => buildTransform(4),
+      transition: () => buildTransition(4),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 4),
+    },
+
+    /* position 5 */
+
     chart: {
-      // 5
+      index: 5,
       color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(NAV_STYLES.size[0].replace("px", "")) +
-            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 5
-        }px)`,
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 5}s `
-          : NAV_STYLES.transition ?? "none";
-      },
-      zIndex: 5,
+      transform: () => buildTransform(5),
+      transition: () => buildTransition(5),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 5),
     },
+
+    /* position 6 */
+
     eyes: {
-      //6
+      index: 6,
       color: ["#646cff", "#609dff"],
-      transform: () =>
-        `translate(-${
-          (Number(NAV_STYLES.size[0].replace("px", "")) +
-            Number(NAV_STYLES.gap?.replace("px", "")) || 1) * 6
-        }px)`,
-      transition: () => {
-        return NAV_STYLES.bezierParams
-          ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * 6}s `
-          : NAV_STYLES.transition ?? "none";
-      },
-      zIndex: 4,
+      transform: () => buildTransform(6),
+      transition: () => buildTransition(6),
+      zIndex: () => zIndex(NAV_STYLES.maxZIndex ?? 10, 6),
     },
+
+    /* position 7 */
+
+    // ADD MORE ICONS HERE
+    //...
   },
 };
 
