@@ -1,3 +1,4 @@
+// import { describe, it, expect } from "vitest";
 import { KeyboardNavigationIdType } from "./types";
 
 // HELPERS
@@ -85,17 +86,48 @@ export const findLeftUtils = (targetId: string): NavigableElement => {
   const navigableMatrice = getNavigableElements();
   const currentPlayer = Number(targetId[0]);
   const currentUtil = Number(targetId[2]);
+
   if (isNaN(currentUtil)) {
     // we are on player[currentplayer][0] so we go to player[currentPlayer][2]
     return navigableMatrice[currentPlayer][2];
   }
+
   // we are on player[currentplayer][currentUtil] so we go to player[currentPlayer][currentUtil - 1]
   // except if we are on the first element [0] of the row we jump to the last element
-  const prevUtilIndex =
-    currentUtil - 1 >= 0 ? currentUtil - 1 : navigableMatrice[currentPlayer].length - 1;
-  return navigableMatrice[currentPlayer][prevUtilIndex];
+  const nextTargetIndex = goLastOrFirstIndex(
+    currentUtil,
+    navigableMatrice[currentPlayer].length,
+    "left"
+  );
+  // const prevUtilIndex =
+  // currentUtil - 1 >= 0 ? currentUtil - 1 : navigableMatrice[currentPlayer].length - 1;
+  return navigableMatrice[currentPlayer][nextTargetIndex];
 };
 
 export const navigateTo = (element: HTMLElement) => {
   element.focus();
 };
+
+// const returnNbrFromId = (id: string) => {
+//   const idArray = id
+//     .split(".")
+//     .filter((el) => !isNaN(Number(el)))
+//     .map((el) => Number(el));
+
+//   return idArray;
+// };
+
+const goLastOrFirstIndex = (currentIndex: number, size: number, direction: "left" | "right") => {
+  if (direction === "right") {
+    return currentIndex + 1 < size ? currentIndex + 1 : 0;
+  }
+  return currentIndex - 1 >= 0 ? currentIndex - 1 : size - 1;
+};
+
+// describe("returnNbrFromId", () => {
+//   it("should return an array of number", () => {
+//     const id = "1.1";
+//     const result = returnNbrFromId(id);
+//     expect(result).toBe([1, 1]);
+//   });
+// });

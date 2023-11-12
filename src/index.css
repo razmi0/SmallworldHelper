@@ -79,10 +79,6 @@ p {
   width: 100%;
 }
 
-*:focus {
-  background-color: #43aa8b !important;
-}
-
 .form__field--commun {
   font-family: inherit;
   width: 100%;
