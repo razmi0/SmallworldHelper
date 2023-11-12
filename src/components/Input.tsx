@@ -108,8 +108,9 @@ export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputEle
 export const SoftInput = ({
   subjectId,
   sx,
-  onFocus,
-  onBlur,
+  // isFocus,
+  // onFocus,
+  // onBlur,
   color,
   onChange,
   onKeyUp,
@@ -131,8 +132,8 @@ export const SoftInput = ({
       </style>
       <input
         datatype={datatype}
-        onFocus={onFocus}
-        onBlur={onBlur}
+        // onFocus={onFocus}
+        // onBlur={onBlur}
         className={`form__field--${subjectId} form__field--commun`}
         placeholder="Score"
         id={subjectId}
