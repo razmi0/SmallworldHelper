@@ -124,6 +124,7 @@ export const SoftInput = ({
         .form__field--${subjectId}:focus {
           border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
           border-image-slice: 1;
+          color: ${color};
         }
         .form__field--${subjectId}:focus ~ .form__label {
           color: ${color};
@@ -145,7 +146,7 @@ export const SoftInput = ({
         autoComplete="off"
       />
       <label htmlFor={subjectId} className="form__label">
-        Score
+        Add score
       </label>
     </div>
   );

@@ -5,7 +5,7 @@ import { KeyboardNavigationIdType, Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
-import { Flex, Spacer } from "../Utils";
+import { Spacer } from "../Utils";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
 import { keys, validateOnChange, isDeletable } from "./helpers";

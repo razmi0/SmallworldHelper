@@ -97,7 +97,7 @@ export const findLeftUtils = (targetId: string): NavigableElement => {
 };
 
 export const navigateTo = (element: HTMLElement) => {
-  console.log(element);
+  // console.log(element);
   element.focus();
 };
 
