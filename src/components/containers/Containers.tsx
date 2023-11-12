@@ -1,9 +1,6 @@
 import { ReactNode } from "react";
 import styles from "./_.module.css";
-
-export type ContainerProps = {
-  children: ReactNode;
-};
+import { ContainerProps } from "../../types";
 
 export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
   const childrenArr = Array.isArray(children) ? children : [children];
@@ -19,8 +16,10 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
                 maxHeight: "250px",
                 marginTop: "0px",
                 marginBottom: "0px",
+                paddingLeft: "1.2rem",
+                paddingRight: "1.2rem",
               }}
-              className="chart-ctn"
+              className="chart-ctn bg-grey-alpha"
             >
               {child}
             </figure>
@@ -28,6 +27,10 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
         })}
     </section>
   );
+};
+
+export const Header = ({ children }: { children: React.ReactNode }) => {
+  return <header className={styles["header-ctn"]}>{children}</header>;
 };
 
 export const MainContainer = ({ children }: ContainerProps) => {

@@ -1,4 +1,4 @@
-import { ComponentType } from "react";
+import { ComponentType, ReactNode } from "react";
 
 export type Player = {
   id: number;
@@ -56,6 +56,7 @@ export type SvgProps = {
 };
 
 export type SvgDataType = {
+  nbrOfIcons?: number;
   size: [string, string]; // width, height in px
   filter?: [string, string]; // dropshadow
   scale?: string; // scale factor for the dropshadow
@@ -63,13 +64,15 @@ export type SvgDataType = {
   bezierParams?: [number, number]; // bezier factor for the animation
   gap?: string; // gap between icons in px
   subscribeColors?: () => Generator<string, never, string>;
+  maxZIndex?: number;
   icons: {
     [key: string]: {
+      index?: number;
       color: [string, string]; // light dark
       label?: string; // label of the icon
       transform?: () => string;
       transition?: () => string;
-      zIndex?: number;
+      zIndex?: () => number;
     };
   };
   animations?: {
@@ -143,3 +146,7 @@ export type PlayerState = {
 };
 
 export type FullSetterType = [Player[], LineData, BarData, PieData];
+
+export type ContainerProps = {
+  children: ReactNode;
+};

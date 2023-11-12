@@ -6,8 +6,15 @@
   align-items: center;
   justify-content: flex-start;
 }
+
 .input-ctn {
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+.header-ctn {
+  margin-bottom: 1.3rem;
+  width: 100%;
+  /* display: flex; */
 }
