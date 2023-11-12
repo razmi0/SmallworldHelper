@@ -69,14 +69,18 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
   const isRedoPossible = future && future.length > 0;
 
   return {
-    present: present as T,
-    setState,
-    undo,
-    redo,
-    past: past as T[],
-    future: future as T[],
-    isUndoPossible,
-    isRedoPossible,
+    undoRedoActions: {
+      undo,
+      redo,
+      setState,
+    },
+    undoRedoStates: {
+      past: past as T[],
+      present: present as T,
+      future: future as T[],
+      isUndoPossible,
+      isRedoPossible,
+    },
   };
 };
 
