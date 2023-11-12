@@ -4,6 +4,8 @@ import { KeyboardNavigationIdType } from "./types";
 // HELPERS
 //--
 
+const GROUP_OF_PLAYER_INPUTS_SIZE = 3;
+
 /**
  * @important For the moment datatype attribute is only used for keyboard navigation so be carefull
  * ( see if I implement custom attr like navigeable for exemple)
@@ -39,7 +41,7 @@ const buildNavigableMatrice = (navigables: NavigableElement[]): NavigableElement
   const matrice = [];
   let row = [];
   for (let i = 0; i < navigables.length; i++) {
-    if (i % 3 === 0 && i !== 0) {
+    if (i % GROUP_OF_PLAYER_INPUTS_SIZE === 0 && i !== 0) {
       matrice.push(row);
       row = [];
     }
@@ -52,18 +54,14 @@ const buildNavigableMatrice = (navigables: NavigableElement[]): NavigableElement
 export const findNextPlayer = (targetId: string): NavigableElement => {
   const navigableMatrice = getNavigableElements();
   const currentPlayer = Number(targetId[0]);
-
-  // we jump to player[currentPlayer + 1][0] except if currentPlayer === matrice.length -1 we jump to the first player
-  const nextPlayerIndex = currentPlayer + 1 < navigableMatrice.length ? currentPlayer + 1 : 0;
+  const nextPlayerIndex = goLastOrFirstIndex(currentPlayer, navigableMatrice.length, "right");
   return navigableMatrice[nextPlayerIndex][0];
 };
 
 export const findPrevPlayer = (targetId: string): NavigableElement => {
   const navigableMatrice = getNavigableElements();
   const currentPlayer = Number(targetId[0]);
-
-  // we jump to player[currentPlayer - 1][O] except if currentPlayer === 0 we jump to the last player
-  const prevPlayerIndex = currentPlayer - 1 >= 0 ? currentPlayer - 1 : navigableMatrice.length - 1;
+  const prevPlayerIndex = goLastOrFirstIndex(currentPlayer, navigableMatrice.length, "left");
   return navigableMatrice[prevPlayerIndex][0];
 };
 
@@ -72,14 +70,14 @@ export const findRightUtils = (targetId: string): NavigableElement => {
   const currentPlayer = Number(targetId[0]);
   const currentUtil = Number(targetId[2]);
   if (isNaN(currentUtil)) {
-    // we are on player[currentplayer][0] so we go to player[currentPlayer][1]
     return navigableMatrice[currentPlayer][1];
   }
-  // we are on player[currentplayer][currentUtil] so we go to player[currentPlayer][currentUtil + 1]
-  // except if we are on the last util of the row we jump to the [0] element
-  const nextUtilIndex =
-    currentUtil + 1 < navigableMatrice[currentPlayer].length ? currentUtil + 1 : 0;
-  return navigableMatrice[currentPlayer][nextUtilIndex];
+  const nextTargetIndex = goLastOrFirstIndex(
+    currentUtil,
+    navigableMatrice[currentPlayer].length,
+    "right"
+  );
+  return navigableMatrice[currentPlayer][nextTargetIndex];
 };
 
 export const findLeftUtils = (targetId: string): NavigableElement => {
@@ -88,23 +86,18 @@ export const findLeftUtils = (targetId: string): NavigableElement => {
   const currentUtil = Number(targetId[2]);
 
   if (isNaN(currentUtil)) {
-    // we are on player[currentplayer][0] so we go to player[currentPlayer][2]
     return navigableMatrice[currentPlayer][2];
   }
-
-  // we are on player[currentplayer][currentUtil] so we go to player[currentPlayer][currentUtil - 1]
-  // except if we are on the first element [0] of the row we jump to the last element
   const nextTargetIndex = goLastOrFirstIndex(
     currentUtil,
     navigableMatrice[currentPlayer].length,
     "left"
   );
-  // const prevUtilIndex =
-  // currentUtil - 1 >= 0 ? currentUtil - 1 : navigableMatrice[currentPlayer].length - 1;
   return navigableMatrice[currentPlayer][nextTargetIndex];
 };
 
 export const navigateTo = (element: HTMLElement) => {
+  console.log(element);
   element.focus();
 };
 
