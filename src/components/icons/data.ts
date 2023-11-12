@@ -3,6 +3,42 @@ import { SvgDataType, VariantType } from "../../types";
 // Helpers
 //--
 
+export const PLAYER_COLORS = [
+  "#f9c74f",
+  "#3a0ca3",
+  "#f94144",
+  "#f3722c",
+  "#43aa8b",
+  "#4cc9f0",
+  "#4d908e",
+  "#4361ee",
+  "#f72585",
+  "#4895ef",
+  "#560bad",
+  "#277da1",
+  "#3f37c9",
+  "#f8961e",
+  "#577590",
+  "#b5179e",
+  "#90be6d",
+];
+
+export const getSvgData = (variant: VariantType) => {
+  switch (variant) {
+    case "heading":
+      return HEADING_STYLES;
+
+    case "nav":
+      return NAV_STYLES;
+
+    case "utility":
+      return UTILITY_STYLES;
+
+    default:
+      return NAV_STYLES;
+  }
+};
+
 const MAX_Z_INDEX = 20;
 
 const buildTransform = (index: number) => {
@@ -179,40 +215,4 @@ const HEADING_STYLES: SvgDataType = {
       },
     },
   },
-};
-
-export const playerColors = [
-  "#f9c74f",
-  "#3a0ca3",
-  "#f94144",
-  "#f3722c",
-  "#43aa8b",
-  "#4cc9f0",
-  "#4d908e",
-  "#4361ee",
-  "#f72585",
-  "#4895ef",
-  "#560bad",
-  "#277da1",
-  "#3f37c9",
-  "#f8961e",
-  "#577590",
-  "#b5179e",
-  "#90be6d",
-];
-
-export const getSvgData = (variant: VariantType) => {
-  switch (variant) {
-    case "heading":
-      return HEADING_STYLES;
-
-    case "nav":
-      return NAV_STYLES;
-
-    case "utility":
-      return UTILITY_STYLES;
-
-    default:
-      return NAV_STYLES;
-  }
 };
