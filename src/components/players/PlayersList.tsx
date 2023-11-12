@@ -1,7 +1,7 @@
 import { ReactNode, KeyboardEvent, ChangeEvent, useCallback } from "react";
 import styles from "./_.module.css";
-import { ContainerProps, InputContainer } from "../containers/Containers";
-import { KeyboardNavigationIdType, Player } from "../../types";
+import { InputContainer } from "../containers";
+import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
@@ -54,7 +54,6 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
     isOnFocus(i, false);
     resetInput(i);
   }, []);
-
   const handleFocus = useCallback((i: number) => {
     isOnFocus(i, true);
   }, []);
@@ -184,7 +183,7 @@ interface PlayerListElementProps extends ContainerProps {
 }
 const PlayerListElement = ({ children, onFocus, onBlur }: PlayerListElementProps) => {
   return (
-    <li onFocus={onFocus} onBlur={onBlur} className={styles["list-element-ctn"]}>
+    <li onFocus={onFocus} onBlur={onBlur} className={styles["list-element-ctn"] + " bg-grey-alpha"}>
       {children}
     </li>
   );
