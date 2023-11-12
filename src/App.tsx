@@ -44,12 +44,12 @@ const App = () => {
     <MainContainer>
       {isDevEnv() && <Clock />}
 
-      <UndoRedo
+      {/* <UndoRedo
         undo={undo}
         redo={redo}
         isUndoPossible={isUndoPossible}
         isRedoPossible={isRedoPossible}
-      />
+      /> */}
       <Nav
         toggleHideScore={hideScore}
         toggleOpenAddPlayer={openAddPlayer}
