@@ -5,7 +5,7 @@ import { KeyboardNavigationIdType, Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
-import { Flex } from "../Utils";
+import { Flex, Spacer } from "../Utils";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
 import { keys, validateOnChange, isDeletable } from "./helpers";
@@ -50,14 +50,14 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
     setNewScores(i, 0);
   };
 
-  const handleBlur = (i: number) => {
-    withViewTransition(() => isOnFocus(i, false));
+  const handleBlur = useCallback((i: number) => {
+    isOnFocus(i, false);
     resetInput(i);
-  };
+  }, []);
 
-  const handleFocus = (i: number) => {
-    withViewTransition(() => isOnFocus(i, true));
-  };
+  const handleFocus = useCallback((i: number) => {
+    isOnFocus(i, true);
+  }, []);
 
   const handleKeyUp = (
     e: KeyboardEvent<HTMLInputElement | HTMLButtonElement>,
@@ -127,44 +127,45 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
         const subjectId = `${id}_${name.toLowerCase()}`;
 
         return (
-          <PlayerListElement key={id}>
-            <Flex>
-              <PlayerTextContainer>
-                <IconHeading
-                  animationName="rotate"
-                  isHover={isFocus[i]}
-                  color={color}
-                  icon={Star}
-                  variant="heading"
-                />
-                <PlayerText color={isFocus[i] ? color : "inherit"}>
-                  {name} : {hideScore ? "***" : victoryPtn}
-                </PlayerText>
-              </PlayerTextContainer>
-            </Flex>
+          <PlayerListElement
+            key={subjectId}
+            onFocus={() => handleFocus(i)}
+            onBlur={() => handleBlur(i)}
+          >
+            <PlayerTextContainer>
+              <IconHeading
+                animationName="rotate"
+                isHover={isFocus[i]}
+                color={color}
+                icon={Star}
+                variant="heading"
+              />
+              <PlayerText color={isFocus[i] ? color : "inherit"}>
+                {name} : {hideScore ? "***" : victoryPtn}
+              </PlayerText>
+            </PlayerTextContainer>
+            <Spacer />
             <UtilitiesInputContainer>
               <InputContainer>
                 <SoftInput
                   color={color}
-                  onFocus={() => handleFocus(i)}
-                  onBlur={() => handleBlur(i)}
                   onKeyUp={(e) => handleKeyUp(e, id, i)}
                   onChange={(e) => handleChangeScore(e, i)}
                   value={newScores[i] ? newScores[i] : ""}
                   subjectId={subjectId}
                   datatype="soft-input"
                 />
+                <PlayerUtilities
+                  id={id}
+                  remove={remove}
+                  reset={reset}
+                  isFocus={isFocus[i]}
+                  datatype="utility"
+                  onKeyUp={(e) => {
+                    handleKeyUp(e, id, i);
+                  }}
+                />
               </InputContainer>
-              <PlayerUtilities
-                id={id}
-                remove={remove}
-                reset={reset}
-                isFocus={isFocus[i]}
-                datatype="utility"
-                onKeyUp={(e) => {
-                  handleKeyUp(e, id, i);
-                }}
-              />
             </UtilitiesInputContainer>
           </PlayerListElement>
         );
@@ -177,8 +178,16 @@ export const PlayerStatsContainer = ({ children }: ContainerProps) => {
   return <section className={styles["board-ctn"]}>{children}</section>;
 };
 
-const PlayerListElement = ({ children }: ContainerProps) => {
-  return <li className={styles["list-element-ctn"]}>{children}</li>;
+interface PlayerListElementProps extends ContainerProps {
+  onFocus: () => void;
+  onBlur: () => void;
+}
+const PlayerListElement = ({ children, onFocus, onBlur }: PlayerListElementProps) => {
+  return (
+    <li onFocus={onFocus} onBlur={onBlur} className={styles["list-element-ctn"]}>
+      {children}
+    </li>
+  );
 };
 
 const PlayerTextContainer = ({ children }: ContainerProps) => {
@@ -207,7 +216,7 @@ const PlayerUtilities = ({
 }: PlayerUtilitiesProps) => {
   const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
-  // isFocus = isDevEnv() ? true : false;
+
   return (
     <div className={styles["player-utilities-ctn"]}>
       <IconButton

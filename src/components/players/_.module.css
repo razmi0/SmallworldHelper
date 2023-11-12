@@ -1,6 +1,7 @@
 .board-ctn {
   display: flex;
   margin: 1rem 0;
+  width: 100%;
 }
 
 .players-list-ctn {
@@ -17,10 +18,11 @@
 
 .list-element-ctn {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   max-height: 125px;
   min-width: 250px;
   gap: 7px;
+  align-items: flex-end;
 }
 
 .player-text-ctn {
