@@ -4,16 +4,29 @@ import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } f
 import { getSvgData } from "./data";
 import { debounce } from "../../utils";
 
+const DISABLED_COLOR = "#b5179e";
+
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "#bdbdc7" : "#636367";
 };
 
-const getFilter = (isHover: boolean, svgData: SvgDataType, color: string) => {
+const getFilter = (
+  isHover: boolean,
+  svgData: SvgDataType,
+  color: string,
+  disabled: boolean = false
+) => {
   if (!svgData.filter) throw new Error(`Filter is missing in svgData`);
+  const filterHover = svgData.filter[0];
+  const filter = svgData.filter[1];
+  const finalColor = disabled ? DISABLED_COLOR : color;
+
   const dropShadow = isHover
-    ? `drop-shadow(0px 0px ${svgData.filter[0]} ${color})`
-    : `drop-shadow(0px 0px ${svgData.filter[1]} ${color})`;
-  const transform = isHover ? `scale(${svgData.scale})` : "none";
+    ? `drop-shadow(0px 0px ${filterHover} ${finalColor})`
+    : `drop-shadow(0px 0px ${filter} ${finalColor})`;
+
+  const transform = isHover ? `scale(${svgData.scale})` : "none"; // ;
+
   return { dropShadow, transform };
 };
 
@@ -51,7 +64,7 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
 
   const color = getColor(iconName, svgData, idxThemeColor);
 
-  const { dropShadow, transform } = getFilter(animate, svgData, color);
+  const { dropShadow, transform } = getFilter(animate, svgData, color, disabled);
 
   return (
     <div
@@ -64,7 +77,7 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
         transition: svgData.transition ?? "none",
       }}
     >
-      <SvgIcon color={!disabled ? color : "#b5179e"} size={svgData.size} bgColor={bgColor} />
+      <SvgIcon color={disabled ? DISABLED_COLOR : color} size={svgData.size} bgColor={bgColor} />
     </div>
   );
 };
