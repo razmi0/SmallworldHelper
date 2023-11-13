@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { forwardRef, useCallback, useState, CSSProperties } from "react";
 import { useTheme } from "../../hooks";
 import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "../../types";
 import { getSvgData } from "./data";
@@ -107,53 +107,53 @@ export const IconHeading = ({
   );
 };
 
-export const IconButton = ({
-  disabled,
-  variant,
-  datatype,
-  onClick,
-  btnType = "button",
-  icon,
-  iconName,
-  sx,
-  className,
-  animStartAt = false,
-  animStartState = "none",
-  onMouseEnter,
-  id,
-  onFocus,
-  onBlur,
-  onKeyUp,
-}: IconButtonProps) => {
-  const svgData = getSvgData(variant ?? "");
-  const transform = animStartAt ? animStartState : svgData?.icons[iconName].transform?.();
-  const zIndex = svgData?.icons[iconName].zIndex?.();
-  const transition = svgData?.icons[iconName].transition?.();
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  (
+    {
+      disabled,
+      variant,
+      datatype,
+      onClick,
+      icon,
+      iconName,
+      sx,
+      animStartAt = false,
+      animStartState = "none",
+      ...rest
+    },
+    ref
+  ) => {
+    const svgData = getSvgData(variant ?? "");
+    const transform = animStartAt ? animStartState : svgData?.icons[iconName].transform?.();
+    const zIndex = svgData?.icons[iconName].zIndex?.();
+    const transition = svgData?.icons[iconName].transition?.();
 
-  return (
-    <button
-      disabled={disabled}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      id={id?.toString()}
-      datatype={datatype}
-      type={btnType}
-      onMouseEnter={onMouseEnter}
-      style={{
-        cursor: "pointer",
-        transform: `${transform}`,
-        transition: `${transition}`,
-        zIndex: `${zIndex}`,
-        ...sx,
-      }}
-      onClick={onClick}
-      className={className}
-      onKeyUp={onKeyUp}
-    >
-      <Icon icon={icon} variant={variant} iconName={iconName} />
-    </button>
-  );
-};
+    // merging with sx
+    const styles: CSSProperties = {
+      cursor: "pointer",
+      transform: transform ?? "none",
+      transition: transition ?? "none",
+      zIndex: zIndex ?? "auto",
+      ...sx,
+    };
+
+    return (
+      <button
+        ref={ref}
+        disabled={disabled}
+        onClick={onClick}
+        style={styles}
+        type="button"
+        datatype={datatype}
+        {...rest} // className, onMouseEnter, id, onFocus, onBlur, onKeyUp ...
+      >
+        <Icon icon={icon} variant={variant} iconName={iconName} />
+      </button>
+    );
+  }
+);
+
+IconButton.displayName = "IconButton";
 
 export const Undo = ({ color, size, bgColor }: SvgProps) => {
   return (

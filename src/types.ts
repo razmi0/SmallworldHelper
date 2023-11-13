@@ -1,4 +1,4 @@
-import { ComponentType, ReactNode } from "react";
+import { ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
 
 export type Player = {
   id: number;
@@ -126,19 +126,11 @@ export type IconName =
 
 export type KeyboardNavigationIdType = "soft-input" | "utility";
 
-export interface IconButtonProps extends IconProps {
-  disabled?: boolean;
-  onClick?: () => void;
-  btnType?: "button" | "submit" | "reset";
-  sx?: React.CSSProperties;
+export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, IconProps {
+  datatype?: string; // not a standard button attribute ?
+  btnType?: string;
   animStartAt?: boolean;
   animStartState?: string;
-  onMouseEnter?: () => void;
-  id?: string | number;
-  onFocus?: () => void;
-  onBlur?: () => void;
-  datatype?: KeyboardNavigationIdType;
-  onKeyUp?: (e: React.KeyboardEvent<HTMLButtonElement>) => void;
 }
 
 export type PlayerState = {
@@ -152,4 +144,20 @@ export type FullSetterType = [Player[], LineData, BarData, PieData];
 
 export type ContainerProps = {
   children: ReactNode;
+};
+
+export type UndoRedoActions<T> = {
+  undo: () => void;
+  redo: () => void;
+  setState: (newState: T) => void;
+};
+
+export type UndoRedoStates<T> = {
+  past: T[];
+  present: T;
+  future: T[];
+  nbrOfUndos: number;
+  nbrOfRedos: number;
+  isUndoPossible: boolean;
+  isRedoPossible: boolean;
 };

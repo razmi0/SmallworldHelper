@@ -1,7 +1,7 @@
 // use-undo-redo.js
 
 import { useEffect, useReducer } from "react";
-
+import { UndoRedoStates, UndoRedoActions } from "../types";
 type HistoryState<T> = {
   past: T[];
   present: T;
@@ -72,7 +72,7 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
       undo,
       redo,
       setState,
-    },
+    } as UndoRedoActions<T>,
     undoRedoStates: {
       past: past as T[],
       present: present as T,
@@ -81,7 +81,7 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
       nbrOfRedos: future.length,
       isUndoPossible,
       isRedoPossible,
-    },
+    } as UndoRedoStates<T>,
   };
 };
 
