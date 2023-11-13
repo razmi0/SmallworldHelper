@@ -31,6 +31,7 @@
 - [x] PlayerList
 - [ ] AddPlayer
 - [ ] UndoRedo button
+- [ ] keyboard Navigation fetch element in the dom not virtual dom (slower)
 
 ## BUGS & PROPOSITIONS
 
