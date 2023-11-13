@@ -41,7 +41,7 @@ export const Nav = ({
   const { openNav } = toggleActions;
   const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
 
-  const { isRedoPossible, isUndoPossible, nbrOfRedos, nbrOfUndos } = undoRedoStates;
+  const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
 
   const debouncedToggleOpenNav = useCallback(
@@ -110,7 +110,6 @@ export const Nav = ({
           onClick={undo}
           disabled={!isUndoPossible}
         />
-        <small style={{ position: "absolute" }}>{nbrOfUndos}</small>
         <IconButton
           variant="nav"
           animStartAt={isNavOpen}
@@ -119,7 +118,6 @@ export const Nav = ({
           onClick={redo}
           disabled={!isRedoPossible}
         />
-        <small style={{ position: "absolute" }}>{nbrOfRedos}</small>
       </nav>
     </Header>
   );
