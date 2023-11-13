@@ -48,12 +48,8 @@ const App = () => {
         toggleOpenAddPlayer={openAddPlayer}
         toggleOpenCharts={openCharts}
         isScoreHidden={isScoreHidden}
-        undo={undo}
-        redo={redo}
-        isUndoPossible={isUndoPossible}
-        isRedoPossible={isRedoPossible}
-        nbrOfRedos={nbrOfRedos}
-        nbrOfUndos={nbrOfUndos}
+        undoRedoStates={{ isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos }}
+        undoRedoActions={{ undo, redo }}
       />
       <PlayerStatsContainer>
         <PlayersList

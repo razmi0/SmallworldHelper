@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useIntermediateDispatch, useSwitchTheme, useToggle, useUndoRedo } from "../../hooks";
+import { useIntermediateDispatch, useSwitchTheme, useToggle } from "../../hooks";
 import { debounce, withViewTransition } from "../../utils";
 import {
   AddPlayer,
@@ -16,37 +16,33 @@ import {
 } from "../icons/Icons";
 import styles from "./_.module.css";
 import { Header } from "../containers";
+import { Player, UndoRedoActions, UndoRedoStates } from "../../types";
 
 type NavProps = {
   toggleOpenAddPlayer: () => void;
   toggleOpenCharts: () => void;
   toggleHideScore: () => void;
   isScoreHidden: boolean;
-  undo: () => void;
-  redo: () => void;
-  isUndoPossible: boolean;
-  isRedoPossible: boolean;
-  nbrOfUndos: number;
-  nbrOfRedos: number;
+  undoRedoStates: Omit<UndoRedoStates<Player[]>, "future" | "present" | "past">;
+  undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
 };
 
 export const Nav = ({
   toggleHideScore,
   toggleOpenAddPlayer,
   toggleOpenCharts,
-  undo,
-  redo,
+  undoRedoStates,
+  undoRedoActions,
   isScoreHidden,
-  isUndoPossible,
-  isRedoPossible,
-  nbrOfRedos,
-  nbrOfUndos,
 }: NavProps) => {
   const { switchTheme } = useSwitchTheme();
   const { toggleActions, toggleStates } = useToggle();
   const { isNavOpen } = toggleStates;
   const { openNav } = toggleActions;
   const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
+
+  const { isRedoPossible, isUndoPossible, nbrOfRedos, nbrOfUndos } = undoRedoStates;
+  const { undo, redo } = undoRedoActions;
 
   const debouncedToggleOpenNav = useCallback(
     (arg: boolean) => debounce(() => openNav(arg), 100),
