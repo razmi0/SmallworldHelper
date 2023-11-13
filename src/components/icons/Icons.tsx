@@ -27,7 +27,7 @@ const getColor = (iconName: string, svgData: SvgDataType, idxThemedColr: number)
   return color;
 };
 
-export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps) => {
+export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconProps) => {
   const { theme } = useTheme();
   const [isHover, setIsHover] = useState(false);
 
@@ -64,7 +64,7 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant }: IconProps)
         transition: svgData.transition ?? "none",
       }}
     >
-      <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
+      <SvgIcon color={!disabled ? color : "#b5179e"} size={svgData.size} bgColor={bgColor} />
     </div>
   );
 };
@@ -147,7 +147,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         datatype={datatype}
         {...rest} // className, onMouseEnter, id, onFocus, onBlur, onKeyUp ...
       >
-        <Icon icon={icon} variant={variant} iconName={iconName} />
+        <Icon icon={icon} variant={variant} iconName={iconName} disabled={disabled} />
       </button>
     );
   }
