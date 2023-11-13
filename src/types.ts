@@ -97,6 +97,7 @@ export interface IconProps {
   className?: string;
   svgData?: SvgDataType;
   variant?: VariantType;
+  disabled?: boolean;
 }
 
 export interface IconHeadingProps {
