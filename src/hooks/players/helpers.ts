@@ -8,7 +8,6 @@ const errorMsg = "Player not found";
 //--
 export const buildAllLines = (players: Player[]) => {
   const maxTurns = findMaxNbrTurns(players);
-  console.log("buildAllLines");
   return {
     labels:
       maxTurns == 0 ? [] : Array.from({ length: maxTurns }, (_, i) => (i + 1).toString()) ?? [],
@@ -27,8 +26,6 @@ export const buildAllLines = (players: Player[]) => {
 };
 
 export const buildAllBars = (players: Player[]) => {
-  console.log("buildAllBars");
-
   return {
     labels: players.map((p) => p.name) ?? [],
     datasets: [
@@ -58,7 +55,6 @@ export const buildAllBars = (players: Player[]) => {
 };
 
 export const buildAllPies = (players: Player[]) => {
-  console.log("buildAllPies");
   return {
     labels: players.map((p) => p.name) ?? [],
     datasets: [
