@@ -37,11 +37,11 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
 
   const events = {
     onMouseEnter: useCallback(
-      debounce(() => setIsHover(true), 200),
+      debounce(() => setIsHover(true), 100),
       []
     ),
     onMouseLeave: useCallback(
-      debounce(() => setIsHover(false), 200),
+      debounce(() => setIsHover(false), 100),
       []
     ),
   };
