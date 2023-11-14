@@ -4,22 +4,22 @@ import { SvgDataType, VariantType } from "../../types";
 //--
 
 export const PLAYER_COLORS = [
-  "#f9c74f",
-  "#4cc9f0",
-  "#f94144",
-  "#f3722c",
-  "#43aa8b",
-  "#4d908e",
-  "#4361ee",
-  "#f72585",
-  "#4895ef",
-  "#560bad",
-  "#277da1",
-  "#3f37c9",
-  "#f8961e",
+  "#F9C74F",
+  "#4CC9F0",
+  "#F94144",
+  "#F3722C",
+  "#43AA8B",
+  "#4D908E",
+  "#4361EE",
+  "#F72585",
+  "#4895EF",
+  "#560BAD",
+  "#277DA1",
+  "#3F37C9",
+  "#F8961E",
   "#577590",
-  "#b5179e",
-  "#90be6d",
+  "#B5179E",
+  "#90BE6D",
 ] as const;
 
 export const getSvgData = (variant: VariantType) => {
