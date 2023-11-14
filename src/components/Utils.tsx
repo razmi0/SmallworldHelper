@@ -1,4 +1,5 @@
 import { ReactNode, CSSProperties, useState, useId } from "react";
+import { AddPlayer, IconButton } from "../components/icons/Icons";
 
 type FlexProps = {
   children: ReactNode;
@@ -60,5 +61,45 @@ export const UndoRedo = ({ undo, redo, isRedoPossible, isUndoPossible }: UndoRed
       </button>
       <button>Add</button>
     </div>
+  );
+};
+
+type FreshStartButtonProps = {
+  isNavOpen: boolean;
+  toggleOpenAddPlayer: () => void;
+  isAddPlayerOpen: boolean;
+  hasPlayers: boolean;
+};
+export const FreshStartButton = ({
+  isNavOpen,
+  toggleOpenAddPlayer,
+  isAddPlayerOpen,
+  hasPlayers,
+}: FreshStartButtonProps) => {
+  return (
+    <>
+      {!hasPlayers && !isAddPlayerOpen && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <h3>Start by adding a player and a start score, good game !</h3>
+          <IconButton
+            style={{ transform: "translate(0, 0) scale(1.3)", cursor: "pointer" }}
+            variant="nav"
+            icon={AddPlayer}
+            animStartAt={isNavOpen}
+            iconName="addplayer"
+            onClick={toggleOpenAddPlayer}
+          />
+        </div>
+      )}
+    </>
   );
 };

@@ -9,7 +9,7 @@ import { useUndoRedo } from "./hooks";
 import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
 import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
-import { Clock } from "./components/Utils";
+import { Clock, FreshStartButton } from "./components/Utils";
 import { AddPlayer } from "./components/addplayer/AddPlayer";
 
 const App = () => {
@@ -41,33 +41,41 @@ const App = () => {
   }, [savePlayers, loadPlayers]);
 
   return (
-    <MainContainer>
-      {isDevEnv() && <Clock />}
-      <Nav
-        toggleHideScore={hideScore}
-        toggleOpenAddPlayer={openAddPlayer}
-        toggleOpenCharts={openCharts}
-        isScoreHidden={isScoreHidden}
-        undoRedoStates={{ isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos }}
-        undoRedoActions={{ undo, redo }}
-      />
-
-      <PlayerStatsContainer>
-        <PlayersList
-          hideScore={isScoreHidden}
-          players={players}
-          reset={resetScore}
-          remove={removePlayer}
-          update={updateScore}
+    <>
+      <MainContainer>
+        {isDevEnv() && <Clock />}
+        <Nav
+          toggleHideScore={hideScore}
+          toggleOpenAddPlayer={openAddPlayer}
+          toggleOpenCharts={openCharts}
+          isScoreHidden={isScoreHidden}
+          undoRedoStates={{ isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos }}
+          undoRedoActions={{ undo, redo }}
         />
-        <ChartContainer isOpen={isChartsOpen && players.length > 0}>
-          <Line data={lines} options={lineOptions} />
-          <Bar data={bars} options={barOptions} />
-          <Pie data={pies} options={pieOptions} />
-        </ChartContainer>
-      </PlayerStatsContainer>
-      {toggleStates.isAddPlayerOpen && <AddPlayer addPlayer={addPlayer} />}
-    </MainContainer>
+
+        <PlayerStatsContainer>
+          <PlayersList
+            hideScore={isScoreHidden}
+            players={players}
+            reset={resetScore}
+            remove={removePlayer}
+            update={updateScore}
+          />
+          <ChartContainer isOpen={isChartsOpen && players.length > 0}>
+            <Line data={lines} options={lineOptions} />
+            <Bar data={bars} options={barOptions} />
+            <Pie data={pies} options={pieOptions} />
+          </ChartContainer>
+        </PlayerStatsContainer>
+        {toggleStates.isAddPlayerOpen && <AddPlayer addPlayer={addPlayer} />}
+      </MainContainer>
+      <FreshStartButton
+        isNavOpen={toggleStates.isNavOpen}
+        toggleOpenAddPlayer={openAddPlayer}
+        hasPlayers={players.length > 0}
+        isAddPlayerOpen={toggleStates.isAddPlayerOpen}
+      />
+    </>
   );
 };
 

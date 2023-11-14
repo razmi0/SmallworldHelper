@@ -172,7 +172,7 @@ const NAV_STYLES: SvgDataType = {
 //--
 const UTILITY_STYLES: SvgDataType = {
   size: ["35px", "35px"],
-  filter: ["4px", "0px"],
+  filter: ["4px", "2px"],
   transition: "all 0.2s ease-in-out",
   icons: {
     delete: {
