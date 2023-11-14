@@ -216,7 +216,7 @@ const PlayerUtilities = ({
   const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
 
-  const visibility = isFocus ? "hidden" : "initial";
+  const visibility = !isFocus ? "hidden" : "initial";
 
   return (
     <div className={styles["player-utilities-ctn"]}>
