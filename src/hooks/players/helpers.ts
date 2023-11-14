@@ -192,7 +192,7 @@ export const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = bars.datasets.map((dataset, i) => {
     const newData = [...dataset.data];
-    newData[index] = i === 0 ? updatedPlayer.max : i === 1 ? updatedPlayer.min : updatedPlayer.avg;
+    newData[index] = i === 0 ? updatedPlayer.max : i === 1 ? updatedPlayer.avg : updatedPlayer.min;
     return {
       ...dataset,
       data: newData,
