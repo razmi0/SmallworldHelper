@@ -29,14 +29,26 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
   );
 };
 
-export const Header = ({ children }: { children: React.ReactNode }) => {
-  return <header className={styles["header-ctn"]}>{children}</header>;
+export const Header = ({ children, ...rest }: ContainerProps) => {
+  return (
+    <header className={styles["header-ctn"]} {...rest}>
+      {children}
+    </header>
+  );
 };
 
-export const MainContainer = ({ children }: ContainerProps) => {
-  return <div className={styles["main-ctn"]}>{children}</div>;
+export const MainContainer = ({ children, ...rest }: ContainerProps) => {
+  return (
+    <div className={styles["main-ctn"]} {...rest}>
+      {children}
+    </div>
+  );
 };
 
-export const InputContainer = ({ children }: ContainerProps) => {
-  return <div className={styles["input-ctn"]}>{children}</div>;
+export const InputContainer = ({ children, ...rest }: ContainerProps) => {
+  return (
+    <div className={styles["input-ctn"]} {...rest}>
+      {children}
+    </div>
+  );
 };
