@@ -59,6 +59,12 @@ const zIndex = (index: number) => {
 
 // ICON DATA FOR THE NAV MENU BUTTONS
 //--
+
+/**
+ * @description This is the data structure for the icons in the nav menu.
+ *              positions increment from left to right to match the order of the buttons in the nav menu
+ *              and subsequent translate factor animation.
+ */
 const NAV_STYLES: SvgDataType = {
   size: ["40px", "40px"],
   filter: ["4px", "0px"],
@@ -187,16 +193,15 @@ const HEADING_STYLES: SvgDataType = {
   icons: {},
   animations: {
     rotate: {
-      delay: 0.2,
+      name: "rotate",
       duration: 2,
       timing: "ease-in-out",
+      delay: 0.2,
       iteration: "infinite",
       direction: "alternate",
-      name: "rotate",
       keyframes: `0%  {transform: rotate(0deg) }
                   100% {transform: rotate(360deg)}`,
-
-      get: () => {
+      getAnimation: () => {
         return `${HEADING_STYLES.animations?.rotate.name} ${HEADING_STYLES.animations?.rotate.duration}s ${HEADING_STYLES.animations?.rotate.timing} ${HEADING_STYLES.animations?.rotate.delay}s ${HEADING_STYLES.animations?.rotate.iteration} ${HEADING_STYLES.animations?.rotate.direction}`;
       },
     },
@@ -209,7 +214,7 @@ const HEADING_STYLES: SvgDataType = {
       name: "translate",
       keyframes:
         "0% {transform: translate(0px, 0px) ; transform: rotate(0deg)} 50% {transform : translate(0px, 5px)} 100% {transform: translate(0px, -5px) ; transform: rotate(360deg)}",
-      get: () => {
+      getAnimation: () => {
         return `${HEADING_STYLES.animations?.translate.name} ${HEADING_STYLES.animations?.translate.duration}s ${HEADING_STYLES.animations?.translate.timing} ${HEADING_STYLES.animations?.translate.delay}s ${HEADING_STYLES.animations?.translate.iteration} ${HEADING_STYLES.animations?.translate.direction}`;
       },
     },

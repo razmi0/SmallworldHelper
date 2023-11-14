@@ -64,6 +64,8 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
 
   const color = getColor(iconName, svgData, idxThemeColor);
 
+  if (iconName === "delete" || iconName === "reset") console.log("animate", animate);
+
   const { dropShadow, transform } = getFilter(animate, svgData, color, disabled);
 
   return (
@@ -95,7 +97,7 @@ export const IconHeading = ({
   const svgData = getSvgData(variant ?? "");
   const { dropShadow, transform } = getFilter(isHover, svgData, color);
   const keyframes = svgData.animations?.[animationName].keyframes;
-  const get = svgData.animations?.[animationName].get ?? (() => "");
+  const getAnimation = svgData.animations?.[animationName].getAnimation ?? (() => {});
 
   return (
     <div
@@ -105,7 +107,7 @@ export const IconHeading = ({
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
-        animation: isHover ? `${get()}` : "none",
+        animation: isHover ? `${getAnimation()}` : "none",
       }}
     >
       <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />

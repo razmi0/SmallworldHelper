@@ -73,6 +73,7 @@ export type SvgDataType = {
       transform?: () => string;
       transition?: () => string;
       zIndex?: () => number;
+      getAnimation?: () => string;
     };
   };
   animations?: {
@@ -84,7 +85,7 @@ export type SvgDataType = {
       iteration: string;
       direction: string;
       keyframes?: string;
-      get?: () => string;
+      getAnimation?: () => string;
     };
   };
 };
