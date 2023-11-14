@@ -70,7 +70,9 @@ export const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => 
 type HistoryItem = {
   history: number[];
 };
-export const findMaxNbrTurns = (arr: HistoryItem[] | []) => {
+type HistoryItems = readonly HistoryItem[];
+
+export const findMaxNbrTurns = (arr: HistoryItems | []) => {
   if (arr.length === 0) return 0;
   let max = arr[0].history.length;
   for (let i = 0; i < arr.length; i++) {
