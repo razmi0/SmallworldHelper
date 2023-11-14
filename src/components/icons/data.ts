@@ -5,11 +5,10 @@ import { SvgDataType, VariantType } from "../../types";
 
 export const PLAYER_COLORS = [
   "#f9c74f",
-  "#3a0ca3",
+  "#4cc9f0",
   "#f94144",
   "#f3722c",
   "#43aa8b",
-  "#4cc9f0",
   "#4d908e",
   "#4361ee",
   "#f72585",

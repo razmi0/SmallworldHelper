@@ -44,9 +44,15 @@ type PlayerAction =
 const initialPlayerStates = {
   players: getFromLocalStorage<Player[]>("players", []),
   startScore: 0,
+
+  /* lineData not stored at the moment */
   lineData: () =>
     getFromLocalStorage<LineData>("lineData", buildAllLines(initialPlayerStates.players)),
+
+  /* barData not stored at the moment */
   barData: () => getFromLocalStorage<BarData>("barData", buildAllBars(initialPlayerStates.players)),
+
+  /* pieData not stored at the moment */
   pieData: () => getFromLocalStorage<PieData>("pieData", buildAllPies(initialPlayerStates.players)),
 };
 
@@ -59,7 +65,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
   switch (type) {
     case "ADD_PLAYER": {
       const { name, startScore } = payload;
-      const newPlayer = buildBaseStats(name, startScore, players.length /*id*/);
+      const newPlayer = buildBaseStats(name, startScore, players.length /* => id*/);
       return {
         ...state,
         players: [...players, newPlayer],
