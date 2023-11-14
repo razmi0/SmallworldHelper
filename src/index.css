@@ -104,7 +104,6 @@ p {
   color: transparent;
 }
 .form__field--commun:placeholder-shown ~ .form__label {
-  font-size: 15px;
   cursor: text;
   top: 6px;
 }
