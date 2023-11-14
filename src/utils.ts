@@ -10,35 +10,47 @@ export const getRandomColor = (opacity: number = 1) => {
   return rgbaToHex(randomRgba);
 };
 
-export const rgbaToHex = (orig: string) => {
-  let a: string;
+const rgbaToHex = (orig: string) => {
+  let a = "ff"; // Default alpha value at full opacity
   const rgb = orig.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i);
   const alpha = ((rgb && rgb[4]) || "").trim();
-  let hex = rgb
-    ? parseInt(rgb[1], 10).toString(16).slice(1) +
-      parseInt(rgb[2], 10).toString(16).slice(1) +
-      parseInt(rgb[3], 10).toString(16).slice(1)
+
+  // Convert RGB to Hex and pad with zeroes if necessary
+  const hex = rgb
+    ? (
+        (1 << 24) +
+        (parseInt(rgb[1], 10) << 16) +
+        (parseInt(rgb[2], 10) << 8) +
+        parseInt(rgb[3], 10)
+      )
+        .toString(16)
+        .slice(1)
     : orig;
 
+  // Convert alpha from range 0-1 to 0-255 then to hex, padding with zeroes if necessary
   if (alpha !== "") {
-    a = alpha;
-  } else {
-    a = "01"; // Default alpha value
+    a = Math.round(parseFloat(alpha) * 255).toString(16);
+    a = a.length === 1 ? "0" + a : a;
   }
-  // Multiply before converting to HEX
-  a = (parseInt(a, 16) * 255).toString(16).slice(1);
-  hex = hex + a;
 
-  return "#" + hex;
+  return "#" + (hex + a).toUpperCase();
 };
 
-export const hexToRgba = (hex: string, opacity: number = 1) => {
-  const bigint = parseInt(hex.replace("#", ""), 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
+export const hexToRgba = (hex: string, opacity = 1) => {
+  hex = hex.replace("#", "");
+  // Parse the hex color
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
 
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  // If there is an alpha value in the hex color, use it by converting to decimal
+  let a = opacity;
+  if (hex.length === 8) {
+    a = parseInt(hex.slice(6, 8), 16) / 255;
+  }
+
+  // Return the rgba color with the opacity
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
 };
 
 /** Add 4d at the end of an hex */
