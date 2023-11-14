@@ -14,10 +14,13 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
               key={i}
               style={{
                 maxHeight: "250px",
+                marginRight: "0px",
+                marginLeft: "0px",
                 marginTop: "0px",
                 marginBottom: "0px",
                 paddingLeft: "1.2rem",
                 paddingRight: "1.2rem",
+                maxWidth: "450px",
               }}
               className="chart-ctn bg-grey-alpha"
             >

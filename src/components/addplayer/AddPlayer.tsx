@@ -1,9 +1,10 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { SoftInput } from "../Input";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { ContainerProps } from "../../types";
 import styles from "./_.module.css";
 import { validateOnChange } from "../players/helpers";
+import { withViewTransition } from "../../utils";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
@@ -12,9 +13,16 @@ export const AddPlayer = ({ addPlayer }: AddPlayerProps) => {
   const { newPlayerName, startScore } = useIntermediate();
   const { setNewPlayerName, setStartScore } = useIntermediateDispatch();
 
+  const addPlayerActionWithViewTransition = useCallback(() => {
+    withViewTransition(() => {
+      addPlayer(newPlayerName, startScore);
+      setNewPlayerName("");
+    });
+  }, [newPlayerName, startScore]);
+
   const handleInputValidation = () => {
-    addPlayer(newPlayerName, startScore);
-    setNewPlayerName("");
+    if (!newPlayerName) return;
+    addPlayerActionWithViewTransition();
   };
 
   const handleStartScoreChange = (e: ChangeEvent<HTMLInputElement>) => {
