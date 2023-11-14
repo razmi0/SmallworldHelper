@@ -1,4 +1,4 @@
-import { Input, InputButton } from "./components/Input";
+// import { Input, InputButton } from "./components/Input";
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import { ChartContainer, MainContainer } from "./components/containers";
@@ -10,15 +10,15 @@ import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
 import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
 import { Clock } from "./components/Utils";
+import { AddPlayer } from "./components/addplayer/AddPlayer";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
   const { players, lines, bars, pies } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  const { newPlayerName, startScore, savePlayers, loadPlayers } = useIntermediate();
-  const { setNewPlayerName, setStartScore, setLoadPlayers, setSavePlayers } =
-    useIntermediateDispatch();
+  const { savePlayers, loadPlayers } = useIntermediate();
+  const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts } = toggleActions;
@@ -51,6 +51,7 @@ const App = () => {
         undoRedoStates={{ isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos }}
         undoRedoActions={{ undo, redo }}
       />
+
       <PlayerStatsContainer>
         <PlayersList
           hideScore={isScoreHidden}
@@ -65,48 +66,7 @@ const App = () => {
           <Pie data={pies} options={pieOptions} />
         </ChartContainer>
       </PlayerStatsContainer>
-      {/* == ADD PLAYER == */}
-      {toggleStates.isAddPlayerOpen && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            transform: "translate(35px)",
-            gap: "5px",
-          }}
-        >
-          <InputButton
-            labelText="Name"
-            subjectId="newPlayer"
-            btnText="Confirm"
-            onEnter={() => {
-              addPlayer(newPlayerName, startScore);
-              setNewPlayerName("");
-            }}
-            onChange={(e) => setNewPlayerName(e.currentTarget.value)}
-            value={newPlayerName}
-            onClick={() => {
-              addPlayer(newPlayerName, startScore);
-              setNewPlayerName("");
-            }}
-          />
-          <div style={{ transform: "translate(-37px" }}>
-            <Input
-              labelText="Start score"
-              subjectId="startScore"
-              onChange={(e) => {
-                setStartScore(
-                  isNaN(Number(e.currentTarget.value)) ? 0 : Number(e.currentTarget.value)
-                );
-              }}
-              value={startScore}
-              onEnter={() => addPlayer(newPlayerName, startScore)}
-            />
-          </div>
-        </div>
-        // </div>
-      )}
+      {toggleStates.isAddPlayerOpen && <AddPlayer addPlayer={addPlayer} />}
     </MainContainer>
   );
 };
