@@ -30,14 +30,13 @@ const getNavigableElements = () => {
 
 /**
  * @returns [
- *              [1, 2, 3],
- *              [4, 5, 6],
- *              [7, 8, 9],
- *                 ...
+ *              [input 1, button 2, button 3],
+ *              [input 4, button 5, button 6],
+ *              [input 7, button 8, button 9],
+ *                         ....
  *          ]
  */
 const buildNavigableMatrice = (navigables: NavigableElement[]): NavigableElement[][] => {
-  // [ [1, 2, 3], [4, 5, 6], [7, 8, 9] ]
   const matrice = [];
   let row = [];
   for (let i = 0; i < navigables.length; i++) {
@@ -97,18 +96,9 @@ export const findLeftUtils = (targetId: string): NavigableElement => {
 };
 
 export const navigateTo = (element: HTMLElement) => {
-  // console.log(element);
+  console.log(element.nodeName);
   element.focus();
 };
-
-// const returnNbrFromId = (id: string) => {
-//   const idArray = id
-//     .split(".")
-//     .filter((el) => !isNaN(Number(el)))
-//     .map((el) => Number(el));
-
-//   return idArray;
-// };
 
 const goLastOrFirstIndex = (currentIndex: number, size: number, direction: "left" | "right") => {
   if (direction === "right") {
@@ -116,11 +106,3 @@ const goLastOrFirstIndex = (currentIndex: number, size: number, direction: "left
   }
   return currentIndex - 1 >= 0 ? currentIndex - 1 : size - 1;
 };
-
-// describe("returnNbrFromId", () => {
-//   it("should return an array of number", () => {
-//     const id = "1.1";
-//     const result = returnNbrFromId(id);
-//     expect(result).toBe([1, 1]);
-//   });
-// });
