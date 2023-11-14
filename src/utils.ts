@@ -1,5 +1,3 @@
-// import { flushSync } from "react-dom";
-
 import { flushSync } from "react-dom";
 
 export const getRandomColor = (opacity: number = 1) => {
