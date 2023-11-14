@@ -123,7 +123,7 @@ export const useIntermediate = () => {
   if (states === null) {
     throw new Error("useIntermediate must be used within a IntermediateProvider");
   }
-  const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states!;
+  const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
   return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
 };
 
