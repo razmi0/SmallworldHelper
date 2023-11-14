@@ -12,7 +12,7 @@ const __TEST_RGBA_COLORS = [
   "rgba(255, 255, 0, 1)",
   "rgba(0, 255, 255, 1)",
   "rgba(255, 0, 255, 1)",
-];
+] as const;
 const __TEST_HEX_COLORS = [
   "#000000FF",
   "#FFFFFFFF",
@@ -22,12 +22,12 @@ const __TEST_HEX_COLORS = [
   "#FFFF00FF",
   "#00FFFFFF",
   "#FF00FFFF",
-];
-const __TEST_FIND_MAX_LENGTH_HISTORY_ITEM: HistoryItem[] = [
+] as const;
+const __TEST_FIND_MAX_LENGTH_HISTORY_ITEM: HistoryItems = [
   { history: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
   { history: [1, 2, 3, 4] },
   { history: [1, 2, 3, 4, 5, 6, 7] },
-];
+] as const;
 // TESTED FUNCTIONS
 //--
 const getRandomColor = (opacity: number = 1) => {
@@ -138,9 +138,11 @@ describe("addOpacityToHex", () => {
 });
 
 type HistoryItem = {
-  history: number[];
+  history: readonly number[];
 };
-const findMaxNbrTurns = (arr: HistoryItem[] | []) => {
+type HistoryItems = readonly HistoryItem[];
+
+const findMaxNbrTurns = (arr: HistoryItems | []) => {
   if (arr.length === 0) return 0;
   let max = arr[0].history.length;
   for (let i = 0; i < arr.length; i++) {
