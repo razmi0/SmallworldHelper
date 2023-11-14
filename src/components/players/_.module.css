@@ -18,7 +18,6 @@
   flex-wrap: wrap;
   gap: 25px;
   max-width: 500px;
-  /* justify-content: space-evenly; */
 }
 
 .list-element-ctn {
@@ -28,8 +27,6 @@
   min-width: 250px;
   gap: 7px;
   align-items: flex-end;
-  /* align-items: center; */
-  /*  */
 }
 
 .player-text-ctn {
@@ -49,13 +46,10 @@
   min-width: 70px;
   display: flex;
   align-items: center;
-  /* position: absolute; */
-  /* transform: translate(100%, -8px); */
 }
 
 .utilities-input-ctn {
   display: flex;
-  /* flex-direction: column; */
   gap: 3px;
 }
 
