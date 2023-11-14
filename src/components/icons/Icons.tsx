@@ -65,14 +65,6 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
   const color = getColor(iconName, svgData, idxThemeColor);
 
   const { dropShadow, transform } = getFilter(animate, svgData, color, disabled);
-  if (iconName === "delete" || iconName === "reset") {
-    console.log(iconName);
-    console.log("animate", animate);
-    console.log("color", color);
-    console.log("dropShadow", dropShadow);
-    console.log("transform", transform);
-    console.log("-----");
-  }
 
   return (
     <div

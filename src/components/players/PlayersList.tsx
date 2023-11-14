@@ -42,7 +42,14 @@ type PlayerUtilitiesProps = {
 // COMPONENTS
 //--
 
-export const PlayersList = ({ players, update, reset, remove, hideScore }: PlayerListType) => {
+export const PlayersList = ({
+  players,
+  update,
+  reset,
+  remove,
+  hideScore,
+  children,
+}: PlayerListType) => {
   const { isFocus, newScores } = useIntermediate();
   const { isOnFocus, setNewScores } = useIntermediateDispatch();
 
@@ -120,57 +127,64 @@ export const PlayersList = ({ players, update, reset, remove, hideScore }: Playe
   };
 
   return (
-    <ul className={styles["players-list-ctn"]}>
-      {players.map((player, i) => {
-        const { name, victoryPtn, id, color } = player;
-        const subjectId = `${id}_${name.toLowerCase()}`;
+    <ListWrapper>
+      <ul className={styles["players-list-ctn"]}>
+        {players.map((player, i) => {
+          const { name, victoryPtn, id, color } = player;
+          const subjectId = `${id}_${name.toLowerCase()}`;
 
-        return (
-          <PlayerListElement
-            key={subjectId}
-            onFocus={() => handleFocus(i)}
-            onBlur={() => handleBlur(i)}
-          >
-            <PlayerTextContainer>
-              <IconHeading
-                animationName="rotate"
-                isHover={isFocus[i]}
-                color={color}
-                icon={Star}
-                variant="heading"
-              />
-              <PlayerText color={isFocus[i] ? color : "inherit"}>
-                {name} : {hideScore ? "***" : victoryPtn}
-              </PlayerText>
-            </PlayerTextContainer>
-            <Spacer />
-            <UtilitiesInputContainer>
-              <InputContainer>
-                <SoftInput
+          return (
+            <PlayerListElement
+              key={subjectId}
+              onFocus={() => handleFocus(i)}
+              onBlur={() => handleBlur(i)}
+            >
+              <PlayerTextContainer>
+                <IconHeading
+                  animationName="rotate"
+                  isHover={isFocus[i]}
                   color={color}
-                  onKeyUp={(e) => handleKeyUp(e, id, i)}
-                  onChange={(e) => handleChangeScore(e, i)}
-                  value={newScores[i] ? newScores[i] : ""}
-                  subjectId={subjectId}
-                  datatype="soft-input"
+                  icon={Star}
+                  variant="heading"
                 />
-                <PlayerUtilities
-                  id={id}
-                  remove={remove}
-                  reset={reset}
-                  isFocus={isFocus[i]}
-                  datatype="utility"
-                  onKeyUp={(e) => {
-                    handleKeyUp(e, id, i);
-                  }}
-                />
-              </InputContainer>
-            </UtilitiesInputContainer>
-          </PlayerListElement>
-        );
-      })}
-    </ul>
+                <PlayerText color={isFocus[i] ? color : "inherit"}>
+                  {name} : {hideScore ? "***" : victoryPtn}
+                </PlayerText>
+              </PlayerTextContainer>
+              <Spacer />
+              <UtilitiesInputContainer>
+                <InputContainer>
+                  <SoftInput
+                    color={color}
+                    onKeyUp={(e) => handleKeyUp(e, id, i)}
+                    onChange={(e) => handleChangeScore(e, i)}
+                    value={newScores[i] ? newScores[i] : ""}
+                    subjectId={subjectId}
+                    datatype="soft-input"
+                  />
+                  <PlayerUtilities
+                    id={id}
+                    remove={remove}
+                    reset={reset}
+                    isFocus={isFocus[i]}
+                    datatype="utility"
+                    onKeyUp={(e) => {
+                      handleKeyUp(e, id, i);
+                    }}
+                  />
+                </InputContainer>
+              </UtilitiesInputContainer>
+            </PlayerListElement>
+          );
+        })}
+      </ul>
+      {children}
+    </ListWrapper>
   );
+};
+
+const ListWrapper = ({ children }: ContainerProps) => {
+  return <div className={styles["players-list-ctn-wrapper"]}>{children}</div>;
 };
 
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
