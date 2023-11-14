@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
+import { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
 
 export type Player = {
   id: number;
@@ -143,9 +143,9 @@ export type PlayerState = {
 
 export type FullSetterType = [Player[], LineData, BarData, PieData];
 
-export type ContainerProps = {
+export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-};
+}
 
 export type UndoRedoActions<T> = {
   undo: () => void;
