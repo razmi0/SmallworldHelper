@@ -4,6 +4,7 @@
   width: 100%;
   justify-content: space-between;
   gap: 20px;
+  max-width: 1000px;
 }
 
 .players-list-ctn {
@@ -16,6 +17,7 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   gap: 25px;
+  max-width: 500px;
   /* justify-content: space-evenly; */
 }
 

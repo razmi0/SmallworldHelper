@@ -20,7 +20,7 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
                 marginBottom: "0px",
                 paddingLeft: "1.2rem",
                 paddingRight: "1.2rem",
-                maxWidth: "450px",
+                width: "100%",
               }}
               className="chart-ctn bg-grey-alpha"
             >
