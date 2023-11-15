@@ -11,7 +11,7 @@
   color-scheme: light dark;
   color: var(--light-color);
 
-  --light-color: #ffffde;
+  --light-color: #ffffff;
   --dark-color: #242424;
   --dark-icon: #609dff;
   --primary-color: #646cff;
@@ -34,19 +34,22 @@
   text-align: center;
   height: 100%;
 }
-* {
-  box-sizing: border-box;
+*,
+::after,
+::before {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font-size: inherit;
+  outline: none;
 }
 
 body {
   margin: 2px;
   height: 100vh;
   width: 100vw;
-  /* max-width: 100%; */
-  /* max-height: 100%; */
-  /* display: flex; */
 }
 
 h1 {
@@ -59,30 +62,33 @@ p {
   all: unset;
 }
 
-.bg-grey-alpha {
-  --color: #72727230;
-  border-radius: calc(0.5rem * 1.5);
-  background-color: var(--color);
-  padding: 1rem 0.5rem;
-  background: linear-gradient(204.97deg, var(--color) -0.15%, rgba(69, 77, 82, 0.36) 99.16%);
+.grainy::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 7px;
+  background: url(https://grainy-gradients.vercel.app/noise.svg);
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: -20;
+}
+.global-grainy {
+  position: relative;
+  border-radius: 7px;
+  width: 240px;
+  height: 125px;
   overflow: hidden;
 }
 
-/* .frPku {
-  background: linear-gradient(
-    204.97deg,
-    rgba(69, 81, 82, 0.047) -0.15%,
-    rgba(69, 77, 82, 0.36) 99.16%
-  );
+.lin-dark::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: linear-gradient(41deg, rgb(16, 16, 18, 0.5) 0%, rgb(9, 9, 12, 1) 100%);
+  pointer-events: none;
+  /* mix-blend-mode: lighten; */
+  z-index: -10;
 }
-.giSmKY {
-  position: relative;
-  border-radius: 7px;
-  width: 212px;
-  height: 354px;
-  transition: background 0.25s ease 0s;
-  overflow: hidden;
-} */
 .icon-stat-ctn {
   display: flex;
   place-content: center;
@@ -102,8 +108,9 @@ p {
 }
 .form__group {
   position: relative;
-  padding: 0px 5px;
-  padding-top: 0px;
+  /* padding: 0px 5px; */
+  padding-left: 0px;
+  padding-right: 5px;
   width: 100%;
 }
 
@@ -142,6 +149,7 @@ p {
   /* font-size: 20px; */
   color: #9b9b9b;
   pointer-events: none;
+  text-shadow: 0px 0px 2px;
 }
 .form__field--commun:focus ~ .form__label {
   position: absolute;
