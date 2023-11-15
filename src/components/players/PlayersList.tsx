@@ -196,12 +196,13 @@ interface PlayerListElementProps extends ContainerProps {
   onBlur: () => void;
 }
 const PlayerListElement = ({ children, onFocus, onBlur }: PlayerListElementProps) => {
+  const classes = `${styles["list-element-ctn"]} frPku giSmKY`;
   return (
-    <li onFocus={onFocus} onBlur={onBlur} className={styles["list-element-ctn"] + " bg-grey-alpha"}>
+    <li onFocus={onFocus} onBlur={onBlur} className={classes}>
       {children}
     </li>
   );
-};
+}; // " bg-grey-alpha"
 
 const PlayerTextContainer = ({ children }: ContainerProps) => {
   return <div className={styles["player-text-ctn"]}>{children}</div>;

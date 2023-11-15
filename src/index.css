@@ -44,8 +44,6 @@ body {
   margin: 2px;
   height: 100vh;
   width: 100vw;
-  overflow-x: hidden;
-  overflow-y: hidden;
   /* max-width: 100%; */
   /* max-height: 100%; */
   /* display: flex; */
@@ -66,9 +64,25 @@ p {
   border-radius: calc(0.5rem * 1.5);
   background-color: var(--color);
   padding: 1rem 0.5rem;
-  /* z-index: -100; */
+  background: linear-gradient(204.97deg, var(--color) -0.15%, rgba(69, 77, 82, 0.36) 99.16%);
+  overflow: hidden;
 }
 
+/* .frPku {
+  background: linear-gradient(
+    204.97deg,
+    rgba(69, 81, 82, 0.047) -0.15%,
+    rgba(69, 77, 82, 0.36) 99.16%
+  );
+}
+.giSmKY {
+  position: relative;
+  border-radius: 7px;
+  width: 212px;
+  height: 354px;
+  transition: background 0.25s ease 0s;
+  overflow: hidden;
+} */
 .icon-stat-ctn {
   display: flex;
   place-content: center;

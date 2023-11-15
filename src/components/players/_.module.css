@@ -46,6 +46,8 @@
 .player-text {
   transition: color 0.3s ease-in-out;
   white-space: nowrap;
+  /* offset-x | offset-y | blur-radius | color */
+  text-shadow: 0px 0px 2px;
 }
 
 .player-utilities-ctn {
