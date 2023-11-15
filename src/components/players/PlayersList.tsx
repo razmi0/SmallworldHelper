@@ -5,7 +5,6 @@ import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
 import { IconButton, IconHeading } from "../icons/Icons";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
-import { Spacer } from "../Utils";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
 import { keys, validateOnChange, isDeletable } from "./helpers";
@@ -140,18 +139,18 @@ export const PlayersList = ({
               onBlur={() => handleBlur(i)}
             >
               <PlayerTextContainer>
-                <IconHeading
-                  animationName="rotate"
-                  isHover={isFocus[i]}
-                  color={color}
-                  icon={Star}
-                  variant="heading"
-                />
+                <PlayerText color={isFocus[i] ? color : "inherit"}>{name}</PlayerText>
                 <PlayerText color={isFocus[i] ? color : "inherit"}>
-                  {name} : {hideScore ? "***" : victoryPtn}
+                  <IconHeading
+                    animationName="rotate"
+                    isHover={isFocus[i]}
+                    color={color}
+                    icon={Star}
+                    variant="heading"
+                  />
+                  {hideScore ? "***" : victoryPtn}
                 </PlayerText>
               </PlayerTextContainer>
-              <Spacer />
               <UtilitiesInputContainer>
                 <InputContainer>
                   <SoftInput
@@ -196,7 +195,7 @@ interface PlayerListElementProps extends ContainerProps {
   onBlur: () => void;
 }
 const PlayerListElement = ({ children, onFocus, onBlur }: PlayerListElementProps) => {
-  const classes = `${styles["list-element-ctn"]} frPku giSmKY`;
+  const classes = `${styles["list-element-ctn"]} grainy lin-dark global-grainy`;
   return (
     <li onFocus={onFocus} onBlur={onBlur} className={classes}>
       {children}
@@ -210,9 +209,9 @@ const PlayerTextContainer = ({ children }: ContainerProps) => {
 
 const PlayerText = ({ children, color }: { children: ReactNode; color: string }) => {
   return (
-    <p style={{ color }} className={styles["player-text"]}>
+    <div style={{ color }} className={styles["player-text"]}>
       {children}
-    </p>
+    </div>
   );
 };
 
