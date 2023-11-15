@@ -52,7 +52,6 @@ const App = () => {
         undoRedoActions={{ undo, redo }}
       />
       <FreshStartButton
-        isNavOpen={toggleStates.isNavOpen}
         toggleOpenAddPlayer={openAddPlayer}
         hasPlayers={players.length > 0}
         isAddPlayerOpen={toggleStates.isAddPlayerOpen}
