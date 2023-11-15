@@ -89,6 +89,9 @@ p {
   /* mix-blend-mode: lighten; */
   z-index: -10;
 }
+.shadow-ctn {
+  box-shadow: 0px 3px 3px rgb(0, 0, 0);
+}
 .icon-stat-ctn {
   display: flex;
   place-content: center;
@@ -105,6 +108,7 @@ p {
   width: 100%;
   justify-content: space-around;
   max-width: 450px;
+  /* padding: 10px 10px; */
 }
 .form__group {
   position: relative;

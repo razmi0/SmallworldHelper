@@ -45,25 +45,25 @@ export type PieProps = {
 };
 
 export const Line = ({ data, options, theme = "dark" }: LineProps) => {
-  if (options.plugins?.tooltip) {
-    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
-    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
-  }
+  // if (options.plugins?.tooltip) {
+  //   options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
+  //   options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
+  // }
   return <ChartLine data={data} options={options} />;
 };
 
 export const Pie = ({ data, options, theme = "dark" }: PieProps) => {
-  if (options.plugins?.tooltip) {
-    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
-    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
-  }
+  // if (options.plugins?.tooltip) {
+  //   options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
+  //   options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
+  // }
   return <ChartPie data={data} options={options} />;
 };
 
 export const Bar = ({ data, options, theme = "dark" }: BarProps) => {
-  if (options.plugins?.tooltip) {
-    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
-    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
-  }
+  // if (options.plugins?.tooltip) {
+  //   options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
+  //   options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
+  // }
   return <ChartBar options={options} data={data} />;
 };

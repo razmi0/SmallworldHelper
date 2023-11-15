@@ -195,7 +195,7 @@ interface PlayerListElementProps extends ContainerProps {
   onBlur: () => void;
 }
 const PlayerListElement = ({ children, onFocus, onBlur }: PlayerListElementProps) => {
-  const classes = `${styles["list-element-ctn"]} grainy lin-dark global-grainy`;
+  const classes = `${styles["list-element-ctn"]} grainy lin-dark global-grainy shadow-ctn`;
   return (
     <li onFocus={onFocus} onBlur={onBlur} className={classes}>
       {children}
