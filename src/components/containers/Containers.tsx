@@ -18,11 +18,13 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
                 marginLeft: "0px",
                 marginTop: "0px",
                 marginBottom: "0px",
-                paddingLeft: "1.2rem",
-                paddingRight: "1.2rem",
+                // paddingLeft: "1.2rem",
+                // paddingRight: "1.2rem",
+                padding: "1.2rem",
                 width: "100%",
+                height: "100%",
               }}
-              className="chart-ctn bg-grey-alpha"
+              className="grainy lin-dark global-grainy shadow-ctn"
             >
               {child}
             </figure>

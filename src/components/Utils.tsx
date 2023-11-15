@@ -65,13 +65,12 @@ export const UndoRedo = ({ undo, redo, isRedoPossible, isUndoPossible }: UndoRed
 };
 
 type FreshStartButtonProps = {
-  isNavOpen: boolean;
+  isNavOpen?: boolean;
   toggleOpenAddPlayer: () => void;
   isAddPlayerOpen: boolean;
   hasPlayers: boolean;
 };
 export const FreshStartButton = ({
-  isNavOpen,
   toggleOpenAddPlayer,
   isAddPlayerOpen,
   hasPlayers,
@@ -87,14 +86,16 @@ export const FreshStartButton = ({
             alignItems: "center",
             width: "100%",
             height: "100%",
+            gap: 20,
           }}
         >
-          <h3>Start by adding a player and a start score, good game !</h3>
+          <h3 style={{ fontSize: "1.3rem" }}>
+            Start by adding a player and a start score, good game !
+          </h3>
           <IconButton
-            style={{ transform: "translate(0, 0) scale(1.3)", cursor: "pointer" }}
+            style={{ cursor: "pointer", transform: "scale(1.2)" }}
             variant="nav"
             icon={AddPlayer}
-            animStartAt={isNavOpen}
             iconName="addplayer"
             onClick={toggleOpenAddPlayer}
           />

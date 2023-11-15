@@ -53,5 +53,6 @@ export const AddPlayer = ({ addPlayer }: AddPlayerProps) => {
 };
 
 const AddPlayerContainer = ({ children }: ContainerProps) => {
-  return <div className={styles["addplayer-ctn"] + " bg-grey-alpha"}>{children}</div>;
+  const classes = `${styles["addplayer-ctn"]} grainy lin-dark global-grainy shadow-ctn`;
+  return <div className={classes}>{children}</div>;
 };

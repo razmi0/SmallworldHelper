@@ -44,26 +44,14 @@ export type PieProps = {
   theme?: "light" | "dark";
 };
 
-export const Line = ({ data, options, theme = "dark" }: LineProps) => {
-  if (options.plugins?.tooltip) {
-    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
-    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
-  }
+export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
   return <ChartLine data={data} options={options} />;
 };
 
-export const Pie = ({ data, options, theme = "dark" }: PieProps) => {
-  if (options.plugins?.tooltip) {
-    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
-    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
-  }
+export const Pie = ({ data, options /* theme = "dark" */ }: PieProps) => {
   return <ChartPie data={data} options={options} />;
 };
 
-export const Bar = ({ data, options, theme = "dark" }: BarProps) => {
-  if (options.plugins?.tooltip) {
-    options.plugins.tooltip.backgroundColor = theme === "dark" ? "#242424" : "#ffffde";
-    options.plugins.tooltip.bodyColor = theme === "dark" ? "#ffffde" : "#242424";
-  }
+export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
   return <ChartBar options={options} data={data} />;
 };

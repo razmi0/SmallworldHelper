@@ -7,7 +7,7 @@ import { debounce } from "../../utils";
 const DISABLED_COLOR = "#b5179e";
 
 const getBgColor = (theme: "light" | "dark") => {
-  return theme === "light" ? "#bdbdc7" : "#636367";
+  return theme === "light" ? "transparent" : "transparent";
 };
 
 const getFilter = (

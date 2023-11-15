@@ -1,6 +1,5 @@
-import { useCallback } from "react";
-import { useIntermediateDispatch, useSwitchTheme, useToggle } from "../../hooks";
-import { debounce, withViewTransition } from "../../utils";
+import { useIntermediateDispatch, useSwitchTheme } from "../../hooks";
+import { withViewTransition } from "../../utils";
 import {
   AddPlayer,
   Chart,
@@ -8,7 +7,6 @@ import {
   EyeOpen,
   IconButton,
   Load,
-  Menu,
   Undo,
   Redo,
   Save,
@@ -36,41 +34,18 @@ export const Nav = ({
   isScoreHidden,
 }: NavProps) => {
   const { switchTheme } = useSwitchTheme();
-  const { toggleActions, toggleStates } = useToggle();
-  const { isNavOpen } = toggleStates;
-  const { openNav } = toggleActions;
   const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
 
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
 
-  const debouncedToggleOpenNav = useCallback(
-    (arg: boolean) => debounce(() => openNav(arg), 100),
-    [openNav]
-  );
-
   return (
     <Header>
-      <nav className={styles["nav-ctn"]} onMouseLeave={debouncedToggleOpenNav(false)}>
-        <IconButton
-          variant="nav"
-          icon={Menu}
-          animStartAt={toggleStates.isNavOpen}
-          iconName="menu"
-          onMouseEnter={debouncedToggleOpenNav(true)}
-          onClick={debouncedToggleOpenNav(!isNavOpen)}
-        />
-        <IconButton
-          variant="nav"
-          icon={Theme}
-          animStartAt={isNavOpen}
-          iconName="theme"
-          onClick={switchTheme}
-        />
+      <nav className={styles["nav-ctn"]}>
+        <IconButton variant="nav" icon={Theme} iconName="theme" onClick={switchTheme} />
         <IconButton
           variant="nav"
           icon={Load}
-          animStartAt={isNavOpen}
           iconName="load"
           onClick={() => setLoadPlayers(true)}
         />
@@ -78,33 +53,28 @@ export const Nav = ({
           variant="nav"
           icon={Save}
           onClick={() => setSavePlayers(true)}
-          animStartAt={isNavOpen}
           iconName="save"
         />
         <IconButton
           variant="nav"
           icon={AddPlayer}
-          animStartAt={isNavOpen}
           iconName="addplayer"
           onClick={toggleOpenAddPlayer}
         />
         <IconButton
           variant="nav"
           icon={Chart}
-          animStartAt={isNavOpen}
           iconName="chart"
           onClick={() => withViewTransition(toggleOpenCharts)}
         />
         <IconButton
           variant="nav"
-          animStartAt={isNavOpen}
           icon={isScoreHidden ? EyeClose : EyeOpen}
           iconName="eyes"
           onClick={toggleHideScore}
         />
         <IconButton
           variant="nav"
-          animStartAt={isNavOpen}
           icon={Undo}
           iconName="undo"
           onClick={undo}
@@ -112,7 +82,6 @@ export const Nav = ({
         />
         <IconButton
           variant="nav"
-          animStartAt={isNavOpen}
           icon={Redo}
           iconName="redo"
           onClick={redo}

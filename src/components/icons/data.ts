@@ -38,25 +38,6 @@ export const getSvgData = (variant: VariantType) => {
   }
 };
 
-const MAX_Z_INDEX = 20 as const;
-
-const buildTransform = (index: number) => {
-  return `translate(-${
-    (Number(NAV_STYLES.size[0].replace("px", "")) + Number(NAV_STYLES.gap?.replace("px", "")) ||
-      1) * index
-  }px)`;
-};
-
-const buildTransition = (index: number) => {
-  return NAV_STYLES.bezierParams
-    ? `transform ${NAV_STYLES.bezierParams[0] * NAV_STYLES.bezierParams[1] * index}s `
-    : NAV_STYLES.transition ?? "none";
-};
-
-const zIndex = (index: number) => {
-  return MAX_Z_INDEX - index;
-};
-
 // ICON DATA FOR THE NAV MENU BUTTONS
 //--
 
@@ -67,7 +48,7 @@ const zIndex = (index: number) => {
  */
 const NAV_STYLES: SvgDataType = {
   size: ["40px", "40px"],
-  filter: ["4px", "2px"],
+  filter: ["13px", "5px"],
   transition: "all 0.2s ease-in-out",
   gap: "5px",
   bezierParams: [0.4, 0.2],
@@ -76,11 +57,6 @@ const NAV_STYLES: SvgDataType = {
 
     menu: {
       color: ["#646cff", "#609dff"],
-      transform: () => {
-        return `scale(1.2)`;
-      },
-      transition: () => buildTransition(0.8),
-      zIndex: () => zIndex(0),
     },
 
     /* position 1 */
@@ -88,9 +64,6 @@ const NAV_STYLES: SvgDataType = {
     theme: {
       index: 1,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(1),
-      transition: () => buildTransition(1),
-      zIndex: () => zIndex(1),
     },
 
     /* position 2 */
@@ -98,9 +71,6 @@ const NAV_STYLES: SvgDataType = {
     load: {
       index: 2,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(2),
-      transition: () => buildTransition(2),
-      zIndex: () => zIndex(2),
     },
 
     /* position 3 */
@@ -108,9 +78,6 @@ const NAV_STYLES: SvgDataType = {
     save: {
       index: 3,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(3),
-      transition: () => buildTransition(3),
-      zIndex: () => zIndex(3),
     },
 
     /* position 4 */
@@ -118,9 +85,6 @@ const NAV_STYLES: SvgDataType = {
     addplayer: {
       index: 4,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(4),
-      transition: () => buildTransition(4),
-      zIndex: () => zIndex(4),
     },
 
     /* position 5 */
@@ -128,9 +92,6 @@ const NAV_STYLES: SvgDataType = {
     chart: {
       index: 5,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(5),
-      transition: () => buildTransition(5),
-      zIndex: () => zIndex(5),
     },
 
     /* position 6 */
@@ -138,9 +99,6 @@ const NAV_STYLES: SvgDataType = {
     eyes: {
       index: 6,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(6),
-      transition: () => buildTransition(6),
-      zIndex: () => zIndex(6),
     },
 
     /* position 7 */
@@ -148,9 +106,6 @@ const NAV_STYLES: SvgDataType = {
     undo: {
       index: 7,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(7),
-      transition: () => buildTransition(7),
-      zIndex: () => zIndex(7),
     },
 
     /* position 8 */
@@ -158,9 +113,6 @@ const NAV_STYLES: SvgDataType = {
     redo: {
       index: 8,
       color: ["#646cff", "#609dff"],
-      transform: () => buildTransform(8),
-      transition: () => buildTransition(8),
-      zIndex: () => zIndex(8),
     },
 
     // ADD MORE ICONS HERE
@@ -171,7 +123,7 @@ const NAV_STYLES: SvgDataType = {
 // ICON DATA FOR UTILITY BUTTONS IN PLAYERLIST COMPONENT
 //--
 const UTILITY_STYLES: SvgDataType = {
-  size: ["35px", "35px"],
+  size: ["25px", "25px"],
   filter: ["4px", "1px"],
   transition: "all 0.2s ease-in-out",
   icons: {
@@ -188,7 +140,7 @@ const UTILITY_STYLES: SvgDataType = {
 //--
 const HEADING_STYLES: SvgDataType = {
   size: ["40px", "40px"],
-  filter: ["7px", "2px"],
+  filter: ["15px", "30px"], // [blur, spread]
   transition: "all 1s ease-in-out",
   icons: {},
   animations: {
