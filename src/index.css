@@ -47,7 +47,7 @@
 }
 
 body {
-  margin: 2px;
+  /* margin: 2px; */
   height: 100vh;
   width: 100vw;
 }
@@ -67,7 +67,7 @@ p {
   position: absolute;
   inset: 1px;
   border-radius: 7px;
-  background: url(https://grainy-gradients.vercel.app/noise.svg);
+  background: url(noise.svg);
   pointer-events: none;
   opacity: 0.3;
   z-index: -20;
