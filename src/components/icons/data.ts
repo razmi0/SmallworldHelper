@@ -171,7 +171,7 @@ const NAV_STYLES: SvgDataType = {
 // ICON DATA FOR UTILITY BUTTONS IN PLAYERLIST COMPONENT
 //--
 const UTILITY_STYLES: SvgDataType = {
-  size: ["35px", "35px"],
+  size: ["25px", "25px"],
   filter: ["4px", "1px"],
   transition: "all 0.2s ease-in-out",
   icons: {
@@ -188,7 +188,7 @@ const UTILITY_STYLES: SvgDataType = {
 //--
 const HEADING_STYLES: SvgDataType = {
   size: ["40px", "40px"],
-  filter: ["7px", "2px"],
+  filter: ["15px", "30px"], // [blur, spread]
   transition: "all 1s ease-in-out",
   icons: {},
   animations: {
