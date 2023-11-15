@@ -90,7 +90,7 @@ p {
   z-index: -10;
 }
 .shadow-ctn {
-  box-shadow: 0px 3px 3px rgb(0, 0, 0);
+  box-shadow: 0px 1px 1px rgb(0, 0, 0);
 }
 .icon-stat-ctn {
   display: flex;
