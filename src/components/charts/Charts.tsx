@@ -44,14 +44,14 @@ export type PieProps = {
   theme?: "light" | "dark";
 };
 
-export const Line = ({ data, options, theme = "dark" }: LineProps) => {
+export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
   return <ChartLine data={data} options={options} />;
 };
 
-export const Pie = ({ data, options, theme = "dark" }: PieProps) => {
+export const Pie = ({ data, options /* theme = "dark" */ }: PieProps) => {
   return <ChartPie data={data} options={options} />;
 };
 
-export const Bar = ({ data, options, theme = "dark" }: BarProps) => {
+export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
   return <ChartBar options={options} data={data} />;
 };
