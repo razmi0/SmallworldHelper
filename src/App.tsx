@@ -1,7 +1,6 @@
 // import { Input, InputButton } from "./components/Input";
-import { Line, Bar, Pie } from "./components/charts/Charts";
-import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
-import { ChartContainer, MainContainer } from "./components/containers";
+import { Charts } from "./components/charts/Charts";
+import { MainContainer } from "./components/containers";
 import { PlayerStatsContainer, Board } from "./components/players/PlayerBoard";
 import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
 import { Nav } from "./components/nav/Nav";
@@ -66,11 +65,7 @@ const App = () => {
         >
           {toggleStates.isAddPlayerOpen && <AddPlayer addPlayer={addPlayer} />}
         </Board>
-        <ChartContainer isOpen={isChartsOpen && players.length > 0}>
-          <Line data={lines} options={lineOptions} />
-          <Bar data={bars} options={barOptions} />
-          <Pie data={pies} options={pieOptions} />
-        </ChartContainer>
+        <Charts isOpen={isChartsOpen && players.length > 0} lines={lines} bars={bars} pies={pies} />
       </PlayerStatsContainer>
     </MainContainer>
   );
