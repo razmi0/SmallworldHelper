@@ -7,14 +7,7 @@ import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
-import { keys, validateOnChange, isDeletable } from "./helpers";
-import {
-  navigateTo,
-  findNextPlayer,
-  findPrevPlayer,
-  findRightUtils,
-  findLeftUtils,
-} from "../../keyboardNav";
+import { keys, validateOnChange, isDeletable, navigateTo } from "./helpers";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -34,7 +27,7 @@ type PlayerUtilitiesProps = {
   reset: (id: number) => void;
   remove: (id: number) => void;
   isFocus: boolean;
-  datatype: KeyboardNavigationIdType;
+  datatype?: KeyboardNavigationIdType;
   onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
 };
 
@@ -58,7 +51,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     isOnFocus(i, true);
   }, []);
   const handleClicked = useCallback((i: number) => {
-    isOnFocus(i, !isFocus[i]);
+    isOnFocus(i, true);
   }, []);
 
   const handleKeyUp = (
@@ -72,9 +65,8 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
           if (e.currentTarget.value === "-") return;
           update(id /* PLAYER ID */, newScores[i] as number);
           resetInput(i);
-          navigateTo(findNextPlayer(e.currentTarget.id) /* DOM ID */);
+          navigateTo(inputs.current[i + 1]);
         }
-
         break;
       }
 
@@ -86,27 +78,12 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
       }
 
       case keys.ARROW_UP: {
-        navigateTo(findPrevPlayer(e.currentTarget.id));
+        navigateTo(inputs.current[i - 1]);
         break;
       }
 
       case keys.ARROW_DOWN: {
-        navigateTo(findNextPlayer(e.currentTarget.id));
-        break;
-      }
-
-      case keys.ARROW_RIGHT: {
-        navigateTo(findRightUtils(e.currentTarget.id));
-        break;
-      }
-
-      case keys.ARROW_LEFT: {
-        navigateTo(findLeftUtils(e.currentTarget.id));
-        break;
-      }
-
-      case keys.TAB: {
-        console.log("TAB");
+        navigateTo(inputs.current[i + 1]);
         break;
       }
 
@@ -134,56 +111,59 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
           {players.map((player, i) => {
             const { name, victoryPtn, id, color } = player;
             const pseudoName = `${id}_${name.toLowerCase()}`;
+            const finalColor = isFocus[i] ? color : "inherit";
+            const softValue = newScores[i] ? newScores[i] : "";
 
             return (
-              <PlayerListElement
+              <FocusManager
                 key={pseudoName}
-                onFocus={() => handleFocus(i)}
                 onBlur={() => handleBlur(i)}
+                onFocus={() => handleFocus(i)}
                 onClick={() => handleClicked(i)}
               >
-                <PlayerTextContainer>
-                  <PlayerText color={isFocus[i] ? color : "inherit"}>{name}</PlayerText>
-                  <PlayerText color={isFocus[i] ? color : "inherit"}>
-                    <IconHeading
-                      animationName="rotate"
-                      isHover={isFocus[i]}
-                      color={color}
-                      icon={Star}
-                      variant="heading"
-                    />
-                    {hideScore ? "***" : victoryPtn}
-                  </PlayerText>
-                </PlayerTextContainer>
-                <UtilitiesInputContainer>
-                  <InputContainer>
-                    <SoftInput
-                      ref={(element) => manageRefs(element, i)}
-                      color={color}
-                      onKeyUp={(event) => handleKeyUp(event, id, i)}
-                      onChange={(event) => handleChangeScore(event, i)}
-                      value={newScores[i] ? newScores[i] : ""}
-                      pseudoName={pseudoName}
-                      datatype="soft-input"
-                    />
-                    <PlayerUtilities
-                      id={id}
-                      remove={remove}
-                      reset={reset}
-                      isFocus={isFocus[i]}
-                      datatype="utility"
-                      onKeyUp={(e) => {
-                        handleKeyUp(e, id, i);
-                      }}
-                    />
-                  </InputContainer>
-                </UtilitiesInputContainer>
-              </PlayerListElement>
+                <PlayerListElement>
+                  <PlayerTextContainer>
+                    <PlayerText color={finalColor}>{name}</PlayerText>
+                    <PlayerText color={finalColor}>
+                      <IconHeading
+                        animationName="rotate"
+                        isHover={isFocus[i]}
+                        color={color}
+                        icon={Star}
+                        variant="heading"
+                      />
+                      {hideScore ? "***" : victoryPtn}
+                    </PlayerText>
+                  </PlayerTextContainer>
+                  <UtilitiesInputContainer>
+                    <InputContainer>
+                      <SoftInput
+                        ref={(element) => manageRefs(element, i)}
+                        color={color}
+                        onKeyUp={(event) => handleKeyUp(event, id, i)}
+                        onChange={(event) => handleChangeScore(event, i)}
+                        value={softValue}
+                        pseudoName={pseudoName}
+                        datatype="soft-input"
+                      />
+                      <PlayerUtilities
+                        id={id}
+                        remove={remove}
+                        reset={reset}
+                        isFocus={isFocus[i]}
+                        onKeyUp={(event) => {
+                          handleKeyUp(event, id, i);
+                        }}
+                      />
+                    </InputContainer>
+                  </UtilitiesInputContainer>
+                </PlayerListElement>
+              </FocusManager>
             );
           })}
         </ul>
+        {children}
       </ListWrapper>
-      {children}
     </>
   );
 };
@@ -196,19 +176,23 @@ export const PlayerStatsContainer = ({ children }: ContainerProps) => {
   return <section className={styles["board-ctn"]}>{children}</section>;
 };
 
-interface PlayerListElementProps extends ContainerProps {
+interface FocusManagerProps extends ContainerProps {
   onFocus: () => void;
   onBlur: () => void;
   onClick: () => void;
 }
-const PlayerListElement = ({ children, onFocus, onBlur, onClick }: PlayerListElementProps) => {
+const PlayerListElement = ({ children }: ContainerProps) => {
   const classes = `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn `;
+  return <div className={classes}>{children}</div>;
+};
+
+const FocusManager = ({ children, onFocus, onBlur, onClick }: FocusManagerProps) => {
   return (
-    <li onFocus={onFocus} onBlur={onBlur} onClick={onClick} className={classes}>
+    <li onFocus={onFocus} onBlur={onBlur} onClick={onClick} style={{ listStyle: "none" }}>
       {children}
     </li>
   );
-}; // " bg-grey-alpha"
+};
 
 const PlayerTextContainer = ({ children }: ContainerProps) => {
   return <div className={styles["player-text-ctn"]}>{children}</div>;
@@ -238,6 +222,7 @@ const PlayerUtilities = ({
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
 
   const visibility = !isFocus ? "hidden" : "initial";
+  const finalDatatype = datatype ? datatype : "";
 
   return (
     <div className={styles["player-utilities-ctn"]}>
@@ -249,7 +234,7 @@ const PlayerUtilities = ({
         onClick={resetWithViewTransition}
         icon={Reset}
         iconName="reset"
-        datatype={datatype}
+        datatype={finalDatatype}
         onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
         id={id + "." + 1}
       />
@@ -261,7 +246,7 @@ const PlayerUtilities = ({
         onClick={removeWithViewTransition}
         icon={Delete}
         iconName="delete"
-        datatype={datatype}
+        datatype={finalDatatype}
         onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
         id={id + "." + 2}
       />

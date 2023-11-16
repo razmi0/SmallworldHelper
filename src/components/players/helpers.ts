@@ -1,5 +1,7 @@
 import { KeyboardEvent } from "react";
 
+// KEYBOARD NAVIGATION
+//--
 export const keys = {
   ENTER: "Enter",
   BACKSPACE: "Backspace",
@@ -10,6 +12,9 @@ export const keys = {
   TAB: "Tab",
 };
 
+export const navigateTo = (element: HTMLElement) => {
+  element.focus();
+};
 // VALIDATION
 //--
 

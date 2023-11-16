@@ -139,3 +139,14 @@ export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
 export const isDevEnv = () => {
   return import.meta.env.DEV ? true : false;
 };
+
+export const goLastOrFirstIndex = (
+  currentIndex: number,
+  size: number,
+  direction: "left" | "right"
+) => {
+  if (direction === "right") {
+    return currentIndex + 1 < size ? currentIndex + 1 : 0;
+  }
+  return currentIndex - 1 >= 0 ? currentIndex - 1 : size - 1;
+};
