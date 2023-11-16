@@ -76,11 +76,6 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
-        //
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
       }}
     >
       <SvgIcon color={disabled ? DISABLED_COLOR : color} size={svgData.size} bgColor={bgColor} />
@@ -113,7 +108,7 @@ const IconTooltip = ({
         <span
           style={{
             position: "absolute",
-            bottom: "-20px",
+            bottom: "-19px",
             width: `${size[0]}`,
             height: "fit-content",
             padding: "3px",
