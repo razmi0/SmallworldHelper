@@ -8,6 +8,7 @@ import { Star, Reset, Delete } from "../icons/Icons";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
 import { keys, validateOnChange, isDeletable, navigateTo } from "./helpers";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -39,6 +40,14 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   const { isOnFocus, setNewScores } = useIntermediateDispatch();
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 
+  useClickOutside(inputs, () => {
+    inputs.current.map((input) => {
+      if (input) {
+        input.blur();
+      }
+    });
+  });
+
   const resetInput = (i: number) => {
     setNewScores(i, 0);
   };
@@ -51,7 +60,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     isOnFocus(i, true);
   }, []);
   const handleClicked = useCallback((i: number) => {
-    isOnFocus(i, true);
+    isOnFocus(i, !isFocus[i]);
   }, []);
 
   const handleKeyUp = (
@@ -65,7 +74,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
           if (e.currentTarget.value === "-") return;
           update(id /* PLAYER ID */, newScores[i] as number);
           resetInput(i);
-          navigateTo(inputs.current[i + 1]);
+          navigateTo(inputs.current, i, "NEXT");
         }
         break;
       }
@@ -78,12 +87,12 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
       }
 
       case keys.ARROW_UP: {
-        navigateTo(inputs.current[i - 1]);
+        navigateTo(inputs.current, i, "PREV");
         break;
       }
 
       case keys.ARROW_DOWN: {
-        navigateTo(inputs.current[i + 1]);
+        navigateTo(inputs.current, i, "NEXT");
         break;
       }
 
@@ -101,7 +110,8 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
     if (element) inputs.current[i] = element;
-    if (isFocus[i]) navigateTo(inputs.current[i]);
+    if (isFocus[i]) navigateTo(inputs.current, i);
+    return element;
   };
 
   return (
@@ -144,7 +154,6 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
                         onChange={(event) => handleChangeScore(event, i)}
                         value={softValue}
                         pseudoName={pseudoName}
-                        datatype="soft-input"
                       />
                       <PlayerUtilities
                         id={id}

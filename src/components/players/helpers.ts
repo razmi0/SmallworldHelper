@@ -12,9 +12,26 @@ export const keys = {
   TAB: "Tab",
 };
 
-export const navigateTo = (element: HTMLElement) => {
-  element.focus();
+export const navigateTo = (
+  matrice: HTMLElement[],
+  currentIndex: number,
+  direction: "PREV" | "NEXT" | "" = ""
+) => {
+  switch (direction) {
+    case "PREV":
+      currentIndex - 1 >= 0
+        ? matrice[currentIndex - 1].focus()
+        : matrice[matrice.length - 1].focus();
+      break;
+    case "NEXT":
+      currentIndex + 1 < matrice.length ? matrice[currentIndex + 1].focus() : matrice[0].focus();
+      break;
+    default:
+      matrice[currentIndex].focus();
+      break;
+  }
 };
+
 // VALIDATION
 //--
 
@@ -30,3 +47,6 @@ export const validateOnChange = (str: string) => {
   if (isNaN(num)) return;
   return num;
 };
+
+// BLUR FOCUS LOGIC
+//--
