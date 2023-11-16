@@ -126,63 +126,65 @@ export const PlayersList = ({
   };
 
   return (
-    <ListWrapper>
-      <ul className={styles["players-list-ctn"]}>
-        {players.map((player, i) => {
-          const { name, victoryPtn, id, color } = player;
-          const subjectId = `${id}_${name.toLowerCase()}`;
+    <>
+      <BoardWrapper>
+        <ul className={styles["players-list-ctn"]}>
+          {players.map((player, i) => {
+            const { name, victoryPtn, id, color } = player;
+            const subjectId = `${id}_${name.toLowerCase()}`;
 
-          return (
-            <PlayerListElement
-              key={subjectId}
-              onFocus={() => handleFocus(i)}
-              onBlur={() => handleBlur(i)}
-            >
-              <PlayerTextContainer>
-                <PlayerText color={isFocus[i] ? color : "inherit"}>{name}</PlayerText>
-                <PlayerText color={isFocus[i] ? color : "inherit"}>
-                  <IconHeading
-                    animationName="rotate"
-                    isHover={isFocus[i]}
-                    color={color}
-                    icon={Star}
-                    variant="heading"
-                  />
-                  {hideScore ? "***" : victoryPtn}
-                </PlayerText>
-              </PlayerTextContainer>
-              <UtilitiesInputContainer>
-                <InputContainer>
-                  <SoftInput
-                    color={color}
-                    onKeyUp={(e) => handleKeyUp(e, id, i)}
-                    onChange={(e) => handleChangeScore(e, i)}
-                    value={newScores[i] ? newScores[i] : ""}
-                    subjectId={subjectId}
-                    datatype="soft-input"
-                  />
-                  <PlayerUtilities
-                    id={id}
-                    remove={remove}
-                    reset={reset}
-                    isFocus={isFocus[i]}
-                    datatype="utility"
-                    onKeyUp={(e) => {
-                      handleKeyUp(e, id, i);
-                    }}
-                  />
-                </InputContainer>
-              </UtilitiesInputContainer>
-            </PlayerListElement>
-          );
-        })}
-      </ul>
+            return (
+              <PlayerListElement
+                key={subjectId}
+                onFocus={() => handleFocus(i)}
+                onBlur={() => handleBlur(i)}
+              >
+                <PlayerTextContainer>
+                  <PlayerText color={isFocus[i] ? color : "inherit"}>{name}</PlayerText>
+                  <PlayerText color={isFocus[i] ? color : "inherit"}>
+                    <IconHeading
+                      animationName="rotate"
+                      isHover={isFocus[i]}
+                      color={color}
+                      icon={Star}
+                      variant="heading"
+                    />
+                    {hideScore ? "***" : victoryPtn}
+                  </PlayerText>
+                </PlayerTextContainer>
+                <UtilitiesInputContainer>
+                  <InputContainer>
+                    <SoftInput
+                      color={color}
+                      onKeyUp={(e) => handleKeyUp(e, id, i)}
+                      onChange={(e) => handleChangeScore(e, i)}
+                      value={newScores[i] ? newScores[i] : ""}
+                      subjectId={subjectId}
+                      datatype="soft-input"
+                    />
+                    <PlayerUtilities
+                      id={id}
+                      remove={remove}
+                      reset={reset}
+                      isFocus={isFocus[i]}
+                      datatype="utility"
+                      onKeyUp={(e) => {
+                        handleKeyUp(e, id, i);
+                      }}
+                    />
+                  </InputContainer>
+                </UtilitiesInputContainer>
+              </PlayerListElement>
+            );
+          })}
+        </ul>
+      </BoardWrapper>
       {children}
-    </ListWrapper>
+    </>
   );
 };
 
-const ListWrapper = ({ children }: ContainerProps) => {
+const BoardWrapper = ({ children }: ContainerProps) => {
   return <div className={styles["players-list-ctn-wrapper"]}>{children}</div>;
 };
 

@@ -2,7 +2,7 @@
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import { ChartContainer, MainContainer } from "./components/containers";
-import { PlayerStatsContainer, PlayersList } from "./components/players/PlayersList";
+import { PlayerStatsContainer, PlayersList } from "./components/players/PlayersBoard";
 import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
 import { Nav } from "./components/nav/Nav";
 import { useUndoRedo } from "./hooks";
@@ -10,7 +10,7 @@ import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
 import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
 import { Clock, FreshStartButton } from "./components/Utils";
-import { AddPlayer } from "./components/addplayer/AddPlayer";
+import { AddPlayer } from "./components/players/addplayer/AddPlayer";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();

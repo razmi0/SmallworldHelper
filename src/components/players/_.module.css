@@ -1,6 +1,7 @@
 .players-list-ctn-wrapper {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 30px;
 }
 
@@ -11,6 +12,8 @@
   justify-content: center;
   gap: 20px;
   max-width: 1000px;
+  max-height: 75vh;
+  overflow-y: hidden;
 }
 
 .players-list-ctn {
