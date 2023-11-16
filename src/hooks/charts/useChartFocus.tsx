@@ -50,6 +50,7 @@ export const useChartFocus = () => {
 
   useEffect(() => {
     focusOnPlayerChart(chartState, isFocus);
+    return () => {};
   }, [isFocus, chartState]);
 
   return {

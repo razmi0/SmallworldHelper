@@ -37,6 +37,7 @@ const App = () => {
       setLoadPlayers(false);
       setPlayers(storedPlayers as Player[]);
     }
+    return () => {};
   }, [savePlayers, loadPlayers]);
 
   return (

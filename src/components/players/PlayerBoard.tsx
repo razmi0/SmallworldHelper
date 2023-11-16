@@ -7,7 +7,7 @@ import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
-import { keys, validateOnChange, isDeletable, navigateTo } from "./helpers";
+import { keys, validateOnChange, isDeletable, navigateTo, blurInput } from "./helpers";
 import { useClickOutside } from "../../hooks/useClickOutside";
 
 /* players, reset, remove, update, */
@@ -40,13 +40,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   const { isOnFocus, setNewScores } = useIntermediateDispatch();
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 
-  useClickOutside(inputs, () => {
-    inputs.current.map((input) => {
-      if (input) {
-        input.blur();
-      }
-    });
-  });
+  useClickOutside(inputs, () => blurInput(inputs.current));
 
   const resetInput = (i: number) => {
     setNewScores(i, 0);
