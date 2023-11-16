@@ -1,4 +1,9 @@
-import { describe, it, expect, vitest } from "vitest";
+import { cleanup } from "@testing-library/react";
+import { describe, it, expect, vitest, beforeEach } from "vitest";
+
+beforeEach(() => {
+  cleanup();
+});
 
 // TESTED VARS HELPERS
 //--
@@ -107,8 +112,9 @@ describe("hexToRgba", () => {
   });
 });
 
-/** Add 4d at the end of an hex */
+/** Add 4d at the end of an unsafe hex string */
 const add4dToHex = (color: string = "#fff") => {
+  if (color.length > 7) color = color.slice(0, 7);
   return color + "4d";
 };
 
@@ -117,15 +123,22 @@ describe("add4dToHex", () => {
     const str = add4dToHex("#fff");
     expect(str).toMatch("#fff4d");
   });
+  it("should return a string with 4d at the end", () => {
+    const str = add4dToHex("#fffffffffff");
+    expect(str).toMatch("#ffffff4d");
+  });
 });
 
+/** Add opacity to an unsafe hex string */
 const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => {
   color = color.replace("#", "");
+  if (color.length > 6) color = color.slice(0, 6);
   opacity = Math.min(1, Math.max(0, opacity));
   const alphaHex = Math.round(opacity * 255)
     .toString(16)
     .toUpperCase();
-  const alphaChannel = alphaHex.length === 1 ? `0${alphaHex}` : alphaHex;
+  const alphaChannel =
+    alphaHex.length === 1 ? `0${alphaHex}` : alphaHex.length > 2 ? "FF" : alphaHex;
   const colorWithAlpha = `#${color}${alphaChannel}`;
   return colorWithAlpha;
 };
@@ -134,6 +147,11 @@ describe("addOpacityToHex", () => {
   it("should return a string with 80 at the end", () => {
     const str = addOpacityToHex("#fff", 0.5);
     expect(str).toMatch("#fff80");
+  });
+
+  it("should return a string with 80 at the end", () => {
+    const str = addOpacityToHex("#ffffffffff", 0.5);
+    expect(str).toMatch("#ffffff80");
   });
 });
 

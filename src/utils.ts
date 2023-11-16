@@ -51,18 +51,22 @@ export const hexToRgba = (hex: string, opacity = 1) => {
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 };
 
-/** Add 4d at the end of an hex */
+/** Add 4d at the end of an unsafe hex like string */
 export const add4dToHex = (color: string = "#fff") => {
+  if (color.length > 7) color = color.slice(0, 7);
   return color + "4d";
 };
 
+/** Add 4d at the end of an unsafe hex like string */
 export const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => {
   color = color.replace("#", "");
+  if (color.length > 6) color = color.slice(0, 6);
   opacity = Math.min(1, Math.max(0, opacity));
   const alphaHex = Math.round(opacity * 255)
     .toString(16)
     .toUpperCase();
-  const alphaChannel = alphaHex.length === 1 ? `0${alphaHex}` : alphaHex;
+  const alphaChannel =
+    alphaHex.length === 1 ? `0${alphaHex}` : alphaHex.length > 2 ? "FF" : alphaHex;
   const colorWithAlpha = `#${color}${alphaChannel}`;
   return colorWithAlpha;
 };
