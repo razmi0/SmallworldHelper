@@ -1,3 +1,4 @@
+import { ChartData, ChartOptions } from "chart.js";
 import { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
 
 export type Player = {
@@ -44,6 +45,24 @@ export type PieData = {
     borderColor: string[];
     borderWidth: number;
   }[];
+};
+
+export type LineProps = {
+  data: ChartData<"line">;
+  options: ChartOptions<"line">;
+  theme?: "light" | "dark";
+};
+
+export type BarProps = {
+  data: ChartData<"bar">;
+  options: ChartOptions<"bar">;
+  theme?: "light" | "dark";
+};
+
+export type PieProps = {
+  data: ChartData<"pie">;
+  options: ChartOptions<"pie">;
+  theme?: "light" | "dark";
 };
 
 // ICONS

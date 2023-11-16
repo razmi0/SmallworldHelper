@@ -7,15 +7,15 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartData,
-  ChartOptions,
   ArcElement,
   BarElement,
+  ChartData,
 } from "chart.js";
 import { Line as ChartLine, Pie as ChartPie, Bar as ChartBar } from "react-chartjs-2";
 import { useIntermediate } from "../../hooks";
 import { addOpacityToHex } from "../../utils";
 import { useEffect, useState } from "react";
+import { LineProps, BarProps, PieProps } from "../../types";
 
 ChartJS.register(
   CategoryScale,
@@ -28,24 +28,6 @@ ChartJS.register(
   ArcElement,
   BarElement
 );
-
-export type LineProps = {
-  data: ChartData<"line">;
-  options: ChartOptions<"line">;
-  theme?: "light" | "dark";
-};
-
-export type BarProps = {
-  data: ChartData<"bar">;
-  options: ChartOptions<"bar">;
-  theme?: "light" | "dark";
-};
-
-export type PieProps = {
-  data: ChartData<"pie">;
-  options: ChartOptions<"pie">;
-  theme?: "light" | "dark";
-};
 
 export const focusOnPlayerLine = (isFocus: boolean[], data: ChartData<"line">) => {
   const playerFocusedIndex = isFocus.findIndex((isF) => isF);
