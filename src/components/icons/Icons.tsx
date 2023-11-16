@@ -10,6 +10,12 @@ const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "transparent" : "transparent";
 };
 
+const getMessage = (iconName: string, svgData: SvgDataType) => {
+  const message = svgData.icons[iconName]?.message;
+  if (!message) return null;
+  return message;
+};
+
 const getFilter = (
   isHover: boolean,
   svgData: SvgDataType,
@@ -41,13 +47,10 @@ const getColor = (iconName: string, svgData: SvgDataType, idxThemedColr: number)
 };
 
 export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconProps) => {
-  const { theme } = useTheme();
   const [isHover, setIsHover] = useState(false);
-
-  const animate = isHover; // isFocus ||
+  const { theme } = useTheme();
 
   const svgData = getSvgData(variant ?? "");
-
   const events = {
     onMouseEnter: useCallback(
       debounce(() => setIsHover(true), 100),
@@ -58,13 +61,11 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
       []
     ),
   };
-
   const idxThemeColor = theme === "light" ? 0 : 1;
   const bgColor = getBgColor(theme);
-
   const color = getColor(iconName, svgData, idxThemeColor);
-
-  const { dropShadow, transform } = getFilter(animate, svgData, color, disabled);
+  const { dropShadow, transform } = getFilter(isHover, svgData, color, disabled);
+  const message = getMessage(iconName, svgData);
 
   return (
     <div
@@ -75,10 +76,57 @@ export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: 
         filter: dropShadow ?? "none",
         transform: transform ?? "none",
         transition: svgData.transition ?? "none",
+        //
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <SvgIcon color={disabled ? DISABLED_COLOR : color} size={svgData.size} bgColor={bgColor} />
+      {message && (
+        <IconTooltip isOpen={isHover} size={svgData.size}>
+          {message}
+        </IconTooltip>
+      )}
     </div>
+  );
+};
+
+type IconTooltipProps = {
+  isOpen: boolean;
+  theme?: "light" | "dark";
+  children?: React.ReactNode;
+  size?: [string, string];
+};
+
+const IconTooltip = ({
+  isOpen,
+  children,
+  // theme = "light",
+  size = ["auto", "auto"],
+}: IconTooltipProps) => {
+  const classes = "";
+  return (
+    <>
+      {isOpen && (
+        <span
+          style={{
+            position: "absolute",
+            bottom: "-20px",
+            width: `${size[0]}`,
+            height: "fit-content",
+            padding: "3px",
+            whiteSpace: "nowrap",
+            overflow: "visible",
+            fontSize: "0.8rem",
+          }}
+          className={classes}
+        >
+          {children}
+        </span>
+      )}
+    </>
   );
 };
 
@@ -220,7 +268,6 @@ export const Redo = ({ color, size, bgColor }: SvgProps) => {
 export const Load = ({ color, size, bgColor }: SvgProps) => {
   return (
     <svg width={size[0]} height={size[1]} viewBox="-9.6 -9.6 67.20 67.20" fill="none">
-      <title>Load</title>
       <g strokeWidth="0" transform="translate(0,0), scale(1)">
         <path
           transform="translate(-9.6, -9.6), scale(4.2)"
@@ -275,7 +322,6 @@ export const Load = ({ color, size, bgColor }: SvgProps) => {
 export const Save = ({ color, size, bgColor }: SvgProps) => {
   return (
     <svg width={size[0]} height={size[1]} viewBox="-9.6 -9.6 67.20 67.20" fill="none">
-      <title>Save</title>
       <g strokeWidth="0">
         <path
           transform="translate(-9.6, -9.6), scale(4.2)"
@@ -362,7 +408,6 @@ export const AddScore = ({ color, size }: SvgProps) => {
 export const AddPlayer = ({ color, size, bgColor }: SvgProps) => {
   return (
     <svg fill={color} width={size[0]} height={size[1]} viewBox="-4.8 -4.8 33.60 33.60">
-      <title>Add a player</title>
       <g strokeWidth="0">
         <path
           transform="translate(-4.8, -4.8), scale(2.1)"
@@ -501,7 +546,6 @@ export const EyeOpen = ({ color, size, bgColor }: SvgProps) => {
       </g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
-        <title>eye-open</title>
         <g>
           <g>
             <rect width="48" height="48" fill="none"></rect>
@@ -529,7 +573,6 @@ export const EyeClose = ({ color, size, bgColor }: SvgProps) => {
       </g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
-        <title>eye-close</title>
         <g>
           <g>
             <rect width="48" height="48" fill="none"></rect>

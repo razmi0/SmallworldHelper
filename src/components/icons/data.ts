@@ -57,6 +57,7 @@ const NAV_STYLES: SvgDataType = {
 
     menu: {
       color: ["#646cff", "#609dff"],
+      message: "Open menu",
     },
 
     /* position 1 */
@@ -64,6 +65,7 @@ const NAV_STYLES: SvgDataType = {
     theme: {
       index: 1,
       color: ["#646cff", "#609dff"],
+      message: "Toggle theme",
     },
 
     /* position 2 */
@@ -71,6 +73,7 @@ const NAV_STYLES: SvgDataType = {
     load: {
       index: 2,
       color: ["#646cff", "#609dff"],
+      message: "Load last session",
     },
 
     /* position 3 */
@@ -78,6 +81,7 @@ const NAV_STYLES: SvgDataType = {
     save: {
       index: 3,
       color: ["#646cff", "#609dff"],
+      message: "Save session",
     },
 
     /* position 4 */
@@ -85,6 +89,7 @@ const NAV_STYLES: SvgDataType = {
     addplayer: {
       index: 4,
       color: ["#646cff", "#609dff"],
+      message: "Add player",
     },
 
     /* position 5 */
@@ -92,6 +97,7 @@ const NAV_STYLES: SvgDataType = {
     chart: {
       index: 5,
       color: ["#646cff", "#609dff"],
+      message: "Toggle chart",
     },
 
     /* position 6 */
@@ -99,6 +105,7 @@ const NAV_STYLES: SvgDataType = {
     eyes: {
       index: 6,
       color: ["#646cff", "#609dff"],
+      message: "Hide scores",
     },
 
     /* position 7 */
@@ -106,6 +113,7 @@ const NAV_STYLES: SvgDataType = {
     undo: {
       index: 7,
       color: ["#646cff", "#609dff"],
+      message: "Undo",
     },
 
     /* position 8 */
@@ -113,6 +121,7 @@ const NAV_STYLES: SvgDataType = {
     redo: {
       index: 8,
       color: ["#646cff", "#609dff"],
+      message: "Redo",
     },
 
     // ADD MORE ICONS HERE

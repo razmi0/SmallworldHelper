@@ -74,6 +74,7 @@ export type SvgDataType = {
       transition?: () => string;
       zIndex?: () => number;
       getAnimation?: () => string;
+      message?: string;
     };
   };
   animations?: {
@@ -99,6 +100,7 @@ export interface IconProps {
   svgData?: SvgDataType;
   variant?: VariantType;
   disabled?: boolean;
+  message?: string;
 }
 
 export interface IconHeadingProps {
