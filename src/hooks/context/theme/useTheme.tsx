@@ -60,7 +60,7 @@ const body = document.querySelector("body")!;
 const setStyles = (theme: ThemeState) => {
   const isDark = theme === "dark";
 
-  body.className = `${styles["bg-img-square-size"]} ${
+  body.className = `${styles["body-no-settings"]} ${
     isDark ? styles["dark-body"] : styles["light-body"]
   }`;
 };
