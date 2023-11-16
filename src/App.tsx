@@ -2,7 +2,7 @@
 import { Line, Bar, Pie } from "./components/charts/Charts";
 import { lineOptions, barOptions, pieOptions } from "./components/charts/data";
 import { ChartContainer, MainContainer } from "./components/containers";
-import { PlayerStatsContainer, PlayersList } from "./components/players/PlayersBoard";
+import { PlayerStatsContainer, Board } from "./components/players/PlayerBoard";
 import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
 import { Nav } from "./components/nav/Nav";
 import { useUndoRedo } from "./hooks";
@@ -57,7 +57,7 @@ const App = () => {
         isAddPlayerOpen={toggleStates.isAddPlayerOpen}
       />
       <PlayerStatsContainer>
-        <PlayersList
+        <Board
           hideScore={isScoreHidden}
           players={players}
           reset={resetScore}
@@ -65,7 +65,7 @@ const App = () => {
           update={updateScore}
         >
           {toggleStates.isAddPlayerOpen && <AddPlayer addPlayer={addPlayer} />}
-        </PlayersList>
+        </Board>
         <ChartContainer isOpen={isChartsOpen && players.length > 0}>
           <Line data={lines} options={lineOptions} />
           <Bar data={bars} options={barOptions} />
