@@ -36,14 +36,14 @@ export const AddPlayer = ({ addPlayer }: AddPlayerProps) => {
     <AddPlayerContainer>
       <SoftInput
         label="Name"
-        subjectId="0_addPlayer"
+        pseudoName="0_addPlayer"
         onEnter={handleInputValidation}
         onChange={(e) => setNewPlayerName(e.currentTarget.value)}
         value={newPlayerName}
       />
       <SoftInput
         label="Start score"
-        subjectId="0_startScore"
+        pseudoName="0_startScore"
         onChange={(e) => handleStartScoreChange(e)}
         value={startScore ? startScore : ""}
         onEnter={handleInputValidation}

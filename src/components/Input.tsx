@@ -5,7 +5,7 @@ import { KeyboardNavigationIdType } from "../types";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   datatype?: KeyboardNavigationIdType;
   label?: string;
-  subjectId: string;
+  pseudoName: string;
   onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
   children?: ReactNode;
   sx?: CSSProperties;
@@ -20,7 +20,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 // }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ onEnter, children, subjectId, label: labelText, ...rest }, ref) => {
+  ({ onEnter, children, pseudoName, label: labelText, ...rest }, ref) => {
     const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
       if (onEnter && e.key === "Enter") {
         onEnter(e);
@@ -29,7 +29,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div style={{ display: "flex", alignItems: "center" }}>
-        <label style={{ marginRight: "3px" }} htmlFor={subjectId}>
+        <label style={{ marginRight: "3px" }} htmlFor={pseudoName}>
           {labelText}
         </label>
         {children}
@@ -38,8 +38,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {...rest}
           minLength={1}
           type="text"
-          name={subjectId}
-          id={subjectId}
+          name={pseudoName}
+          id={pseudoName}
           onKeyUp={(e) => handleEnter(e)}
         />
       </div>
@@ -49,7 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 // export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputElement>> = ({
 //   onEnter = () => {},
 //   children,
-//   subjectId,
+//   pseudoName,
 //   label : labelText,
 //   btnText,
 //   onClick = () => {},
@@ -63,7 +63,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
 //   return (
 //     <div style={{ display: "flex", alignItems: "center" }}>
-//       <label style={{ marginRight: "3px" }} htmlFor={subjectId}>
+//       <label style={{ marginRight: "3px" }} htmlFor={pseudoName}>
 //         {labelText}
 //       </label>
 //       {children}
@@ -72,8 +72,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 //         value={value}
 //         minLength={1}
 //         type="text"
-//         name={subjectId}
-//         id={subjectId}
+//         name={pseudoName}
+//         id={pseudoName}
 //         onKeyUp={(e) => handleEnter(e)}
 //       />
 //       <button
@@ -90,7 +90,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 // };
 
 export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
-  ({ subjectId, sx, color, datatype, value, onEnter, label = "Add score", ...rest }, ref) => {
+  ({ pseudoName, sx, color, datatype, value, onEnter, label = "Add score", ...rest }, ref) => {
     const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
       if (onEnter && e.key === "Enter") {
         onEnter(e);
@@ -100,12 +100,12 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
       <div className="form__group">
         <style>
           {`
-        .form__field--${subjectId}:focus {
+        .form__field--${pseudoName}:focus {
           border-image: linear-gradient(to right, ${color}, ${add4dToHex(color)});
           border-image-slice: 1;
           color: ${color};
         }
-        .form__field--${subjectId}:focus ~ .form__label {
+        .form__field--${pseudoName}:focus ~ .form__label {
           color: ${color};
         }
       `}
@@ -114,8 +114,8 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           datatype={datatype}
           onKeyUp={(e) => handleEnter(e)}
-          className={`form__field--${subjectId} form__field--commun`}
-          id={subjectId}
+          className={`form__field--${pseudoName} form__field--commun`}
+          id={pseudoName}
           style={sx}
           type="text"
           placeholder={label}
@@ -123,7 +123,7 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
           autoComplete="off"
           {...rest}
         />
-        <label htmlFor={subjectId} className="form__label">
+        <label htmlFor={pseudoName} className="form__label">
           {label}
         </label>
       </div>
