@@ -20,6 +20,7 @@
     "noFallthroughCasesInSwitch": true,
     "allowUmdGlobalAccess": true
   },
+  "type": ["vitest/globals"],
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
