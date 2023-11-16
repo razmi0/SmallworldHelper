@@ -12,6 +12,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   theme?: "light" | "dark";
   color?: string;
   value?: number | string;
+  isFocus?: boolean;
 }
 
 // interface InputButtonProps extends InputProps {
@@ -46,48 +47,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
-// export const InputButton: FC<InputButtonProps & InputHTMLAttributes<HTMLInputElement>> = ({
-//   onEnter = () => {},
-//   children,
-//   pseudoName,
-//   label : labelText,
-//   btnText,
-//   onClick = () => {},
-//   value,
-// }: InputButtonProps) => {
-//   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-//     if (onEnter && e.key === "Enter") {
-//       onEnter(e);
-//     }
-//   };
-
-//   return (
-//     <div style={{ display: "flex", alignItems: "center" }}>
-//       <label style={{ marginRight: "3px" }} htmlFor={pseudoName}>
-//         {labelText}
-//       </label>
-//       {children}
-//       <input
-//         onChange={onChange}
-//         value={value}
-//         minLength={1}
-//         type="text"
-//         name={pseudoName}
-//         id={pseudoName}
-//         onKeyUp={(e) => handleEnter(e)}
-//       />
-//       <button
-//         onClick={onClick}
-//         style={{
-//           transform: "translate(-5px, 25px)",
-//           zIndex: 1,
-//         }}
-//       >
-//         {btnText}
-//       </button>
-//     </div>
-//   );
-// };
 
 export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
   ({ pseudoName, sx, color, datatype, value, onEnter, label = "Add score", ...rest }, ref) => {
@@ -96,6 +55,7 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
         onEnter(e);
       }
     };
+
     return (
       <div className="form__group">
         <style>
