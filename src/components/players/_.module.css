@@ -30,12 +30,16 @@
 }
 
 .list-element-ctn {
+  gap: 7px;
+}
+
+.board-card {
   display: flex;
   flex-direction: column;
   max-height: 125px;
   min-width: 250px;
   width: 300px;
-  gap: 7px;
+
   align-items: flex-start;
   justify-content: center;
   padding: 15px;
@@ -72,7 +76,16 @@
 }
 
 .addplayer-ctn {
-  display: flex;
+  /* display: flex;
+  flex-direction: column;
+  max-height: 125px;
+  min-width: 250px;
+  width: 300px; */
+  gap: 12px;
+  /* align-items: flex-start; */
+  /* justify-content: center; */
+  /* padding: 15px; */
+  /* display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
@@ -80,7 +93,7 @@
   width: fit-content;
   height: fit-content;
   min-width: 200px;
-  padding: 15px;
+  padding: 15px; */
 }
 
 button[datatype="utility"]:focus {

@@ -53,6 +53,6 @@ export const AddPlayer = ({ addPlayer }: AddPlayerProps) => {
 };
 
 const AddPlayerContainer = ({ children }: ContainerProps) => {
-  const classes = `${styles["addplayer-ctn"]} grainy lin-dark global-grainy shadow-ctn`;
+  const classes = `${styles["board-card"]} ${styles["addplayer-ctn"]} grainy lin-dark global-grainy shadow-ctn`;
   return <div className={classes}>{children}</div>;
 };

@@ -202,7 +202,7 @@ interface PlayerListElementProps extends ContainerProps {
   onClick: () => void;
 }
 const PlayerListElement = ({ children, onFocus, onBlur, onClick }: PlayerListElementProps) => {
-  const classes = `grainy lin-dark global-grainy shadow-ctn ${styles["list-element-ctn"]}`;
+  const classes = `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn `;
   return (
     <li onFocus={onFocus} onBlur={onBlur} onClick={onClick} className={classes}>
       {children}

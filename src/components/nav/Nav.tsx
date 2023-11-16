@@ -59,7 +59,7 @@ export const Nav = ({
           variant="nav"
           icon={AddPlayer}
           iconName="addplayer"
-          onClick={toggleOpenAddPlayer}
+          onClick={() => withViewTransition(toggleOpenAddPlayer)}
         />
         <IconButton
           variant="nav"
