@@ -122,8 +122,9 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     setNewScores(i, newScore);
   };
 
-  const manageFocus = (i: number) => {
-    navigateTo(inputs.current[i]);
+  const manageRefs = (element: HTMLInputElement | null, i: number) => {
+    if (element) inputs.current[i] = element;
+    if (isFocus[i]) navigateTo(inputs.current[i]);
   };
 
   return (
@@ -157,13 +158,10 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
                 <UtilitiesInputContainer>
                   <InputContainer>
                     <SoftInput
-                      ref={(el) => {
-                        inputs.current[i] = el as HTMLInputElement;
-                        if (isFocus[i] && el) manageFocus(i);
-                      }}
+                      ref={(element) => manageRefs(element, i)}
                       color={color}
-                      onKeyUp={(e) => handleKeyUp(e, id, i)}
-                      onChange={(e) => handleChangeScore(e, i)}
+                      onKeyUp={(event) => handleKeyUp(event, id, i)}
+                      onChange={(event) => handleChangeScore(event, i)}
                       value={newScores[i] ? newScores[i] : ""}
                       pseudoName={pseudoName}
                       datatype="soft-input"

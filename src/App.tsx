@@ -10,7 +10,7 @@ import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
 import { saveToLocalStorage, getFromLocalStorage, isDevEnv } from "./utils";
 import { Clock, FreshStartButton } from "./components/Utils";
-import { AddPlayer } from "./components/players/addplayer/AddPlayer";
+import { AddPlayer } from "./components/players/AddPlayer";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
