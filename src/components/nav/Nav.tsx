@@ -1,4 +1,4 @@
-import { useIntermediateDispatch, useSwitchTheme } from "../../hooks";
+import { useIntermediateDispatch /* useSwitchTheme */ } from "../../hooks";
 import { withViewTransition } from "../../utils";
 import {
   AddPlayer,
@@ -10,7 +10,7 @@ import {
   Undo,
   Redo,
   Save,
-  Theme,
+  // Theme,
 } from "../icons/Icons";
 import styles from "./_.module.css";
 import { Header } from "../containers";
@@ -33,7 +33,7 @@ export const Nav = ({
   undoRedoActions,
   isScoreHidden,
 }: NavProps) => {
-  const { switchTheme } = useSwitchTheme();
+  // const { switchTheme } = useSwitchTheme();
   const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
 
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
@@ -42,7 +42,7 @@ export const Nav = ({
   return (
     <Header>
       <nav className={styles["nav-ctn"]}>
-        <IconButton variant="nav" icon={Theme} iconName="theme" onClick={switchTheme} />
+        {/* <IconButton variant="nav" icon={Theme} iconName="theme" onClick={switchTheme} /> */}
         <IconButton
           variant="nav"
           icon={Load}
