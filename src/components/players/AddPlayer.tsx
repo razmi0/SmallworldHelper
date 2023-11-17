@@ -8,8 +8,9 @@ import { withViewTransition } from "../../utils";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
+  isOpen: boolean;
 };
-export const AddPlayer = ({ addPlayer }: AddPlayerProps) => {
+export const AddPlayer = ({ addPlayer, isOpen }: AddPlayerProps) => {
   const { newPlayerName, startScore } = useIntermediate();
   const { setNewPlayerName, setStartScore } = useIntermediateDispatch();
 
@@ -33,22 +34,26 @@ export const AddPlayer = ({ addPlayer }: AddPlayerProps) => {
   };
 
   return (
-    <AddPlayerContainer>
-      <SoftInput
-        label="Name"
-        pseudoName="0_addPlayer"
-        onEnter={handleInputValidation}
-        onChange={(e) => setNewPlayerName(e.currentTarget.value)}
-        value={newPlayerName}
-      />
-      <SoftInput
-        label="Start score"
-        pseudoName="0_startScore"
-        onChange={(e) => handleStartScoreChange(e)}
-        value={startScore ? startScore : ""}
-        onEnter={handleInputValidation}
-      />
-    </AddPlayerContainer>
+    <>
+      {isOpen && (
+        <AddPlayerContainer>
+          <SoftInput
+            label="Name"
+            pseudoName="0_addPlayer"
+            onEnter={handleInputValidation}
+            onChange={(e) => setNewPlayerName(e.currentTarget.value)}
+            value={newPlayerName}
+          />
+          <SoftInput
+            label="Start score"
+            pseudoName="0_startScore"
+            onChange={(e) => handleStartScoreChange(e)}
+            value={startScore ? startScore : ""}
+            onEnter={handleInputValidation}
+          />
+        </AddPlayerContainer>
+      )}
+    </>
   );
 };
 
