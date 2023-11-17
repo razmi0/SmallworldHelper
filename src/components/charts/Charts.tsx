@@ -17,6 +17,7 @@ import { useChartFocus } from "../../hooks/charts/useChartFocus";
 import { barOptions, lineOptions, pieOptions } from "../charts/data";
 import { ChartContainer } from "../containers/Containers";
 import { useEffect } from "react";
+import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 
 ChartJS.register(
   CategoryScale,
@@ -49,7 +50,18 @@ type ChartProps = {
   pies: ChartData<"pie">;
 };
 export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
+  const { isFocus } = useIntermediate();
+  const { focusActions } = useIntermediateDispatch();
+  const { resetFocus } = focusActions;
   const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
+  const noFocus = isFocus.every((isFocused) => !isFocused);
+
+  const id = setInterval(() => {
+    if (isFocus.some((isFocused) => isFocused)) {
+      resetFocus();
+    }
+    clearInterval(id);
+  }, 40000);
 
   useEffect(() => {
     setChartState({ lines, bars, pies });
@@ -57,9 +69,9 @@ export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
 
   return (
     <ChartContainer isOpen={isOpen}>
-      <Line data={focusedLines} options={lineOptions} />
-      <Bar data={focusedBars} options={barOptions} />
-      <Pie data={focusedPies} options={pieOptions} />
+      <Line data={noFocus ? lines : focusedLines} options={lineOptions} />
+      <Bar data={noFocus ? bars : focusedBars} options={barOptions} />
+      <Pie data={noFocus ? pies : focusedPies} options={pieOptions} />
     </ChartContainer>
   );
 };
