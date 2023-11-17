@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useReducer, useCallback } from "react";
-import { getFromLocalStorage, saveToLocalStorage } from "../@Utils";
+import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
 import styles from "./_.module.css";
 
 type ThemeState = "light" | "dark";
