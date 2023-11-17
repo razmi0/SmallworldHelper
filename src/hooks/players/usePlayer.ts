@@ -41,7 +41,7 @@ type PlayerAction =
 
 // INITIAL STATES
 // --
-const initialPlayerStates = {
+export const initialPlayerStates = {
   players: getFromLocalStorage<Player[]>("players", []),
   startScore: 0,
 

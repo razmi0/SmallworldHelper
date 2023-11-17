@@ -1,3 +1,5 @@
+import { MutableRefObject, useEffect, useRef } from "react";
+import { Line as ChartLine, Pie as ChartPie, Bar as ChartBar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,15 +9,15 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartData,
-  ChartOptions,
   ArcElement,
   BarElement,
+  ChartData,
 } from "chart.js";
-import { Line as ChartLine, Pie as ChartPie, Bar as ChartBar } from "react-chartjs-2";
-import { useIntermediate } from "../../hooks";
-import { addOpacityToHex } from "../../utils";
-import { useEffect, useState } from "react";
+import { useChartFocus } from "../../hooks/charts/useChartFocus";
+import { useIntermediate, useIntermediateDispatch } from "../../hooks";
+import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, pieOptions } from "../charts/data";
+import { ChartContainer } from "../containers/Containers";
+import { LineProps, BarProps, PieProps } from "../../types";
 
 ChartJS.register(
   CategoryScale,
@@ -29,108 +31,53 @@ ChartJS.register(
   BarElement
 );
 
-export type LineProps = {
-  data: ChartData<"line">;
-  options: ChartOptions<"line">;
-  theme?: "light" | "dark";
-};
-
-export type BarProps = {
-  data: ChartData<"bar">;
-  options: ChartOptions<"bar">;
-  theme?: "light" | "dark";
-};
-
-export type PieProps = {
-  data: ChartData<"pie">;
-  options: ChartOptions<"pie">;
-  theme?: "light" | "dark";
-};
-
-export const focusOnPlayerLine = (isFocus: boolean[], data: ChartData<"line">) => {
-  const playerFocusedIndex = isFocus.findIndex((isF) => isF);
-  if (playerFocusedIndex === -1 || !data) {
-    return data;
-  }
-  const newDatasets = data.datasets.map((dataset, i) => {
-    const playerColor = dataset.backgroundColor as string;
-    const playerBorderColor = dataset.borderColor as string;
-    if (i === playerFocusedIndex) {
-      return {
-        ...dataset,
-        backgroundColor: addOpacityToHex(playerColor),
-        borderColor: addOpacityToHex(playerBorderColor),
-      };
-    } else {
-      return {
-        ...dataset,
-        backgroundColor: addOpacityToHex(playerColor, 0.1),
-        borderColor: addOpacityToHex(playerBorderColor, 0.1),
-      };
-    }
-  });
-  return { ...data, datasets: newDatasets };
-};
-
-export const focusOnPlayerPie = (isFocus: boolean[], data: ChartData<"pie">) => {
-  const playerFocusedIndex = isFocus.findIndex((isF) => isF);
-  if (playerFocusedIndex === -1 || data.datasets.length === 0) {
-    return data;
-  }
-  const colors = data.datasets[0].backgroundColor as string[];
-  const newColors = colors.map((color, i) =>
-    i !== playerFocusedIndex ? addOpacityToHex(color, 0.1) : color
-  );
-  const newDatasets = data.datasets.map((dataset) => {
-    return { ...dataset, backgroundColor: newColors };
-  });
-  return { ...data, datasets: newDatasets };
-};
-
-export const focusOnPlayerBar = (isFocus: boolean[], data: ChartData<"bar">) => {
-  const playerFocusedIndex = isFocus.findIndex((isF) => isF);
-  if (playerFocusedIndex === -1 || data.datasets.length === 0) {
-    return data;
-  }
-  const newDatasets = data.datasets.map((dataset) => {
-    const playersColors = dataset.backgroundColor as string[];
-    const newColors = playersColors.map((color, j) =>
-      j !== playerFocusedIndex ? addOpacityToHex(color, 0.1) : color
-    );
-    return { ...dataset, backgroundColor: newColors, borderColor: newColors };
-  });
-  return { ...data, datasets: newDatasets };
-};
-
 export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
-  const { isFocus } = useIntermediate();
-  const [treatedData, setTreatedData] = useState<ChartData<"line">>(data);
-
-  useEffect(() => {
-    setTreatedData(focusOnPlayerLine(isFocus, data));
-  }, [isFocus]);
-
-  return <ChartLine data={treatedData} options={options} />;
+  return <ChartLine data={data} options={options} />;
 };
 
 export const Pie = ({ data, options /* theme = "dark" */ }: PieProps) => {
-  const { isFocus } = useIntermediate();
-  const [treatedData, setTreatedData] = useState<ChartData<"pie">>(data);
-
-  useEffect(() => {
-    setTreatedData(focusOnPlayerPie(isFocus, data));
-  }, [isFocus]);
-
-  return <ChartPie data={treatedData} options={options} />;
+  return <ChartPie data={data} options={options} />;
 };
 
 export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
+  return <ChartBar data={data} options={options} />;
+};
+
+type ChartProps = {
+  isOpen: boolean;
+  lines: ChartData<"line">;
+  bars: ChartData<"bar">;
+  pies: ChartData<"pie">;
+};
+export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
   const { isFocus } = useIntermediate();
-  const [treatedData, setTreatedData] = useState<ChartData<"bar">>(data);
+  const { focusActions } = useIntermediateDispatch();
+  const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
+  const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
+  const { resetFocus } = focusActions;
 
   useEffect(() => {
-    setTreatedData(focusOnPlayerBar(isFocus, data));
-  }, [isFocus]);
+    setChartState({ lines, bars, pies });
+  }, [lines, bars, pies]);
 
-  return <ChartBar data={treatedData} options={options} />;
+  useEffect(() => {
+    const handleResetFocus = () => {
+      if (isFocus.some((isFocused) => isFocused)) resetFocus();
+      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    };
+    intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
+    return () => {
+      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    };
+  }, [isFocus, resetFocus]);
+
+  const noFocus = isFocus.every((isFocused) => !isFocused);
+
+  return (
+    <ChartContainer isOpen={isOpen}>
+      <Line data={noFocus ? lines : focusedLines} options={lineOptions} />
+      <Bar data={noFocus ? bars : focusedBars} options={barOptions} />
+      <Pie data={noFocus ? pies : focusedPies} options={pieOptions} />
+    </ChartContainer>
+  );
 };

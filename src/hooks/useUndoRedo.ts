@@ -52,6 +52,7 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
   useEffect(() => {
     if (externalState !== present) updateExternalState(present);
   }, [present]);
+
   useEffect(
     () => {
       if (externalState !== present) setState(externalState);

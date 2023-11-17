@@ -1,5 +1,7 @@
 import { ChartOptions, ChartType, Tooltip, TooltipPositionerFunction } from "chart.js";
 
+export const TIME_BEFORE_RESET_FOCUS = 5000;
+
 declare module "chart.js" {
   interface TooltipPositionerMap {
     topleft: TooltipPositionerFunction<ChartType>;

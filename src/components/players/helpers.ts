@@ -50,3 +50,11 @@ export const validateOnChange = (str: string) => {
 
 // BLUR FOCUS LOGIC
 //--
+
+export const blurInput = (inputsRefs: HTMLInputElement[]) => {
+  inputsRefs.map((input) => {
+    if (input) {
+      input.blur();
+    }
+  });
+};

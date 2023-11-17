@@ -73,7 +73,7 @@ const NAV_STYLES: SvgDataType = {
     load: {
       index: 2,
       color: ["#646cff", "#609dff"],
-      message: "Load last session",
+      message: "Load session",
     },
 
     /* position 3 */
@@ -113,7 +113,7 @@ const NAV_STYLES: SvgDataType = {
     undo: {
       index: 7,
       color: ["#646cff", "#609dff"],
-      message: "Undo",
+      message: "Undo action",
     },
 
     /* position 8 */
@@ -121,7 +121,7 @@ const NAV_STYLES: SvgDataType = {
     redo: {
       index: 8,
       color: ["#646cff", "#609dff"],
-      message: "Redo",
+      message: "Redo action",
     },
 
     // ADD MORE ICONS HERE

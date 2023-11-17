@@ -50,7 +50,7 @@ export const useSwitchTheme = () => {
 };
 
 const initTheme = () => {
-  const systemMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  const systemMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "dark";
   const localMode = getFromLocalStorage("__smallWorld_th", false) as ThemeState | false;
   setStyles(localMode || systemMode);
   return localMode || systemMode;

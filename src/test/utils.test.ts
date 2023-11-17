@@ -98,7 +98,7 @@ const hexToRgba = (hex: string, opacity = 1) => {
   // If there is an alpha value in the hex color, use it by converting to decimal
   let a = opacity;
   if (hex.length === 8) {
-    a = parseInt(hex.slice(6, 8), 16) / 255;
+    a = Number((parseInt(hex.slice(6, 8), 16) / 255).toFixed(2));
   }
 
   // Return the rgba color with the opacity
@@ -145,13 +145,35 @@ const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => {
 
 describe("addOpacityToHex", () => {
   it("should return a string with 80 at the end", () => {
-    const str = addOpacityToHex("#fff", 0.5);
-    expect(str).toMatch("#fff80");
+    const str = addOpacityToHex("#ffff", 0.5);
+    expect(str).toEqual("#ffff80");
   });
 
   it("should return a string with 80 at the end", () => {
     const str = addOpacityToHex("#ffffffffff", 0.5);
-    expect(str).toMatch("#ffffff80");
+    expect(str).toEqual("#ffffff80");
+  });
+});
+
+const removeOpacityFromHex = (color = "#fff") => {
+  const newColor = color.slice(0, 7);
+  return newColor;
+};
+
+describe("removeOpacityToHex", () => {
+  it("should return a string without the alpha & uppercase", () => {
+    const str = removeOpacityFromHex("#ffffff80");
+    expect(str).toEqual("#ffffff");
+  });
+
+  it("should return a string without the alpha & uppercase", () => {
+    const str = removeOpacityFromHex("#ffffff80");
+    expect(str).toEqual("#ffffff");
+  });
+
+  it("should return the same string", () => {
+    const str = removeOpacityFromHex("#243564");
+    expect(str).toEqual("#243564");
   });
 });
 

@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, ChangeEvent, useCallback, useRef } from "react";
+import { ReactNode, KeyboardEvent, ChangeEvent, useCallback, useRef, useEffect } from "react";
 import styles from "./_.module.css";
 import { InputContainer } from "../containers";
 import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
@@ -7,7 +7,7 @@ import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { Star, Reset, Delete } from "../icons/Icons";
 import { SoftInput } from "../Input";
 import { withViewTransition } from "../../utils";
-import { keys, validateOnChange, isDeletable, navigateTo } from "./helpers";
+import { keys, validateOnChange, isDeletable, navigateTo, blurInput } from "./helpers";
 import { useClickOutside } from "../../hooks/useClickOutside";
 
 /* players, reset, remove, update, */
@@ -37,16 +37,16 @@ type PlayerUtilitiesProps = {
 
 export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
   const { isFocus, newScores } = useIntermediate();
-  const { isOnFocus, setNewScores } = useIntermediateDispatch();
+  const { setNewScores, focusActions } = useIntermediateDispatch();
+  const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 
-  useClickOutside(inputs, () => {
-    inputs.current.map((input) => {
-      if (input) {
-        input.blur();
-      }
-    });
-  });
+  useClickOutside(inputs, () => blurInput(inputs.current));
+
+  useEffect(() => {
+    inputs.current = new Array(players.length).fill("");
+    setIsOnFocus(players.length, false);
+  }, [players.length]);
 
   const resetInput = (i: number) => {
     setNewScores(i, 0);
@@ -110,8 +110,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
     if (element) inputs.current[i] = element;
-    if (isFocus[i]) navigateTo(inputs.current, i);
-    return element;
+    if (isFocus[i] && element) navigateTo(inputs.current, i);
   };
 
   return (

@@ -71,6 +71,10 @@ export const addOpacityToHex = (color: string = "#fff", opacity: number = 1) => 
   return colorWithAlpha;
 };
 
+export const removeOpacityFromHex = (color = "#fff") => {
+  const newColor = color.slice(0, 7);
+  return newColor;
+};
 type HistoryItem = {
   history: number[];
 };
