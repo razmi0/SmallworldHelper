@@ -19,10 +19,8 @@ export const initNewScores = (size: number) => {
 };
 
 export const resizeArray = <T>(originalArray: T[], newSize: number, fillValue: T): T[] => {
-  return [
-    ...originalArray.slice(0, newSize),
-    ...new Array(Math.max(newSize - originalArray.length, 0)).fill(fillValue),
-  ];
+  const newArr = new Array(Math.max(newSize - originalArray.length, 0)).fill(fillValue);
+  return [...originalArray.slice(0, newSize), ...newArr];
 };
 
 // HOOK from reducer
