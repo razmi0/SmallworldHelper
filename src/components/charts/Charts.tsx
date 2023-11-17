@@ -1,3 +1,5 @@
+import { MutableRefObject, useEffect, useRef } from "react";
+import { Line as ChartLine, Pie as ChartPie, Bar as ChartBar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,13 +13,11 @@ import {
   BarElement,
   ChartData,
 } from "chart.js";
-import { Line as ChartLine, Pie as ChartPie, Bar as ChartBar } from "react-chartjs-2";
-import { LineProps, BarProps, PieProps } from "../../types";
 import { useChartFocus } from "../../hooks/charts/useChartFocus";
-import { barOptions, lineOptions, pieOptions } from "../charts/data";
-import { ChartContainer } from "../containers/Containers";
-import { useEffect } from "react";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
+import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, pieOptions } from "../charts/data";
+import { ChartContainer } from "../containers/Containers";
+import { LineProps, BarProps, PieProps } from "../../types";
 
 ChartJS.register(
   CategoryScale,
@@ -52,20 +52,26 @@ type ChartProps = {
 export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
   const { isFocus } = useIntermediate();
   const { focusActions } = useIntermediateDispatch();
-  const { resetFocus } = focusActions;
   const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
-  const noFocus = isFocus.every((isFocused) => !isFocused);
-
-  const id = setInterval(() => {
-    if (isFocus.some((isFocused) => isFocused)) {
-      resetFocus();
-    }
-    clearInterval(id);
-  }, 40000);
+  const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
+  const { resetFocus } = focusActions;
 
   useEffect(() => {
     setChartState({ lines, bars, pies });
   }, [lines, bars, pies]);
+
+  useEffect(() => {
+    const handleResetFocus = () => {
+      if (isFocus.some((isFocused) => isFocused)) resetFocus();
+      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    };
+    intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
+    return () => {
+      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    };
+  }, [isFocus, resetFocus]);
+
+  const noFocus = isFocus.every((isFocused) => !isFocused);
 
   return (
     <ChartContainer isOpen={isOpen}>

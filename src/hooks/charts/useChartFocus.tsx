@@ -4,7 +4,7 @@ import { useIntermediate } from "../";
 import { initialPlayerStates } from "../players/usePlayer";
 import { ChartData } from "chart.js";
 
-type ChartsDataStates = {
+export type ChartsDataStates = {
   lines: ChartData<"line">;
   bars: ChartData<"bar">;
   pies: ChartData<"pie">;
@@ -19,7 +19,6 @@ const chartFocusReducer = (state: ChartsDataStates, action: ChartFocusActions) =
   switch (action.type) {
     case "FOCUS_ON_PLAYER_CHART": {
       const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
-      if (focusedIndex === -1) return state;
       const focusedBar = focusOnBar(focusedIndex, chartData.bars as ChartData<"bar">);
       const focusedLine = focusOnLine(focusedIndex, chartData.lines as ChartData<"line">);
       const focusedPie = focusOnPie(focusedIndex, chartData.pies as ChartData<"pie">);
@@ -53,10 +52,6 @@ export const useChartFocus = () => {
   useEffect(() => {
     focusOnPlayerChart(chartState, isFocus);
   }, [isFocus, chartState]);
-
-  if (isFocus.every((f) => !f)) {
-    console.log(`All false ${isFocus} & length : ${isFocus.length}`);
-  } else console.log(isFocus);
 
   return {
     focusedLines: chartData.lines,
