@@ -37,7 +37,6 @@ const App = () => {
       setLoadPlayers(false);
       setPlayers(storedPlayers as Player[]);
     }
-    return () => {};
   }, [savePlayers, loadPlayers]);
 
   return (
@@ -64,7 +63,7 @@ const App = () => {
           remove={removePlayer}
           update={updateScore}
         >
-          {toggleStates.isAddPlayerOpen && <AddPlayer addPlayer={addPlayer} />}
+          <AddPlayer addPlayer={addPlayer} isOpen={toggleStates.isAddPlayerOpen} />
         </Board>
         <Charts isOpen={isChartsOpen && players.length > 0} lines={lines} bars={bars} pies={pies} />
       </PlayerStatsContainer>
