@@ -22,8 +22,8 @@
 - [x] implement custom hook for update line & bar based on changed detected in players
 - [x] study the use of useId()
 - [ ] install and config postcss with autoprefixer
-- [x] reducer for newPlayer startScore (useIntermediateState)
-- [x] reducer for newScores boolean map (useIntermediateMap)
+- [x] reducer for newPlayer startScore (useMidState)
+- [x] reducer for newScores boolean map (useMidStateMap)
 - [x] reducer for togglers => useToggle
 - [x] reducer for theme => useTheme (context)
 - [x] Nav
