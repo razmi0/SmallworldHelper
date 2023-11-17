@@ -1,7 +1,5 @@
 // import { Input, InputButton } from "./components/Input";
-import { useEffect } from "react";
-import { useUndoRedo, usePlayer, useToggle, useMidState, useMidAction } from "@Hooks";
-import { saveToLocalStorage, getFromLocalStorage } from "@Utils";
+import { useUndoRedo, usePlayer, useToggle, useLocalStorage } from "@Hooks";
 import {
   MainContainer,
   PlayerStatsContainer,
@@ -18,28 +16,15 @@ const App = () => {
   const { players, lines, bars, pies } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  const { savePlayers, loadPlayers } = useMidState();
-  const { setLoadPlayers, setSavePlayers } = useMidAction();
+  useLocalStorage("players", players, setPlayers);
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts } = toggleActions;
   const { isScoreHidden, isChartsOpen } = toggleStates;
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
-  const { undo, redo } = undoRedoActions;
-  const { isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos } = undoRedoStates;
 
-  useEffect(() => {
-    if (savePlayers) {
-      saveToLocalStorage("players", players);
-      setSavePlayers(false);
-    } else if (loadPlayers) {
-      const storedPlayers = getFromLocalStorage("players");
-      if (!storedPlayers) throw new Error("No players found in local storage");
-      setLoadPlayers(false);
-      setPlayers(storedPlayers as Player[]);
-    }
-  }, [savePlayers, loadPlayers]);
+  const hasPlayer = players.length > 0;
 
   return (
     <MainContainer>
@@ -49,12 +34,12 @@ const App = () => {
         toggleOpenAddPlayer={openAddPlayer}
         toggleOpenCharts={openCharts}
         isScoreHidden={isScoreHidden}
-        undoRedoStates={{ isUndoPossible, isRedoPossible, nbrOfRedos, nbrOfUndos }}
-        undoRedoActions={{ undo, redo }}
+        undoRedoStates={undoRedoStates}
+        undoRedoActions={undoRedoActions}
       />
       <FreshStartButton
         toggleOpenAddPlayer={openAddPlayer}
-        hasPlayers={players.length > 0}
+        hasPlayers={hasPlayer}
         isAddPlayerOpen={toggleStates.isAddPlayerOpen}
       />
       <PlayerStatsContainer>
