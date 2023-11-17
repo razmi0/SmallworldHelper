@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, ChangeEvent, useCallback, useRef } from "react";
+import { ReactNode, KeyboardEvent, ChangeEvent, useCallback, useRef, useEffect } from "react";
 import styles from "./_.module.css";
 import { InputContainer } from "../containers";
 import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
@@ -41,6 +41,11 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 
   useClickOutside(inputs, () => blurInput(inputs.current));
+
+  useEffect(() => {
+    inputs.current = new Array(players.length).fill("");
+    console.log("inputs.length", inputs.current.length);
+  }, [players.length]);
 
   const resetInput = (i: number) => {
     setNewScores(i, 0);
@@ -104,8 +109,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
     if (element) inputs.current[i] = element;
-    if (isFocus[i]) navigateTo(inputs.current, i);
-    return element;
+    if (isFocus[i] && element) navigateTo(inputs.current, i);
   };
 
   return (
