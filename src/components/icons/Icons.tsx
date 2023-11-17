@@ -3,6 +3,7 @@ import { useTheme } from "../../hooks";
 import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "../../types";
 import { getSvgData } from "./data";
 import { debounce } from "../../utils";
+import styles from "./_.module.css";
 
 const DISABLED_COLOR = "#b5179e";
 
@@ -101,23 +102,11 @@ const IconTooltip = ({
   // theme = "light",
   size = ["auto", "auto"],
 }: IconTooltipProps) => {
-  const classes = "";
+  const classes = `${styles["icon-tooltip"]}`;
   return (
     <>
       {isOpen && (
-        <span
-          style={{
-            position: "absolute",
-            bottom: "-19px",
-            width: `${size[0]}`,
-            height: "fit-content",
-            padding: "3px",
-            whiteSpace: "nowrap",
-            overflow: "visible",
-            fontSize: "0.8rem",
-          }}
-          className={classes}
-        >
+        <span style={{ width: `${size[0]}` }} className={classes}>
           {children}
         </span>
       )}
