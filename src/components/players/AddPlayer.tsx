@@ -1,10 +1,10 @@
 import { ChangeEvent, useCallback } from "react";
-import { SoftInput } from "../Inputs";
-import { useMidState, useMidAction } from "../../hooks";
-import { ContainerProps } from "@Types";
-import styles from "./_.module.css";
+import { SoftInput } from "@Components";
+import { useMidState, useMidAction } from "@Hooks";
 import { validateOnChange } from "./helpers";
 import { withViewTransition } from "@Utils";
+import { ContainerProps } from "@Types";
+import styles from "./_.module.css";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;

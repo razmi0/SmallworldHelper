@@ -1,13 +1,13 @@
 import { useReducer, useCallback, useEffect, useState } from "react";
 import { focusOnBar, focusOnLine, focusOnPie } from "./helper";
-import { useMidState } from "../";
+import { useMidState } from "@Hooks";
 import { initialPlayerStates } from "../players/usePlayer";
 import { ChartData } from "chart.js";
 
 export type ChartsDataStates = {
   lines: ChartData<"line">;
-  bars: ChartData<"bar">;
   pies: ChartData<"pie">;
+  bars: ChartData<"bar">;
 };
 type ChartFocusActions = {
   type: "FOCUS_ON_PLAYER_CHART";

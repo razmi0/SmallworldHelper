@@ -1,4 +1,4 @@
-import { useMidAction /* useSwitchTheme */ } from "../../hooks";
+import { useMidAction /* useSwitchTheme */ } from "@Hooks";
 import {
   Header,
   IconAddPlayer,
