@@ -1,0 +1,11 @@
+.icon-tooltip {
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  height: fit-content;
+  padding: 3px;
+  white-space: nowrap;
+  overflow: visible;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
