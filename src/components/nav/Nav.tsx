@@ -33,7 +33,6 @@ export const Nav = ({
   undoRedoActions,
   isScoreHidden,
 }: NavProps) => {
-  // const { switchTheme } = useSwitchTheme();
   const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
 
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
