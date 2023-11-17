@@ -22,25 +22,22 @@
 - [x] implement custom hook for update line & bar based on changed detected in players
 - [x] study the use of useId()
 - [ ] install and config postcss with autoprefixer
-- [ ] Move playerBaseStats related states to a context for better scalability with charts ( useChart custom hook)
 - [x] reducer for newPlayer startScore (useIntermediateState)
 - [x] reducer for newScores boolean map (useIntermediateMap)
 - [x] reducer for togglers => useToggle
 - [x] reducer for theme => useTheme (context)
 - [x] Nav
 - [x] PlayerList
-- [ ] AddPlayer
+- [x] AddPlayer
 - [x] UndoRedo button
-- [ ] keyboard Navigation fetch element in the dom not virtual dom (slower)
+- [x] keyboard Navigation fetch element in the dom not virtual dom (slower)
 
 ## BUGS & PROPOSITIONS
 
-<!-- - [ ] Try to add a column to player list ( by 2) -->
-
 - [x] refacto css => module, tailwind, styled-components or just css files ?
-- [ ] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon
+- [x] Refacto icon logic (hopefully no icons components and just plain HTML svgs : <a>https://www.jacobparis.com/content/svg-icons</a> or think about make just a class Icon
 - [x] Refacto theme logic with context API and localstorage ?
-- [ ] Change add player to more designed menu on click
+- [x] Change add player to more designed menu on click
 - [x] refacto setterStates to (prev) => ... instead of new = [...old]
 - [ ] reducer for transition ? => useTransition
 - [ ] reducer for lclStrg => useLocalStorage ?
@@ -48,15 +45,15 @@
 - [x] score input changing from controlled to unconrolled
 - [x] cannot score < 0 in score input
 - [ ] @legendapp/state ?
-- [ ] undoredo functionality => reveal that a party can be a video => useVideo
+- [x] undoredo functionality => reveal that a party can be a video => useVideo
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color
 - [x] change layout when charts for players
 - [ ] if unFocus name input is empty, close the panel AddPlayer
-- [ ] if focus on x Player, highlight x elements in charts for this player
+- [x] if focus on x Player, highlight x elements in charts for this player
 - [ ] No two players can have the same name
-- [ ] Undo Button
-- [ ] Tooltip for each element of the nav
+- [x] Undo Button
+- [x] Tooltip for each element of the nav
 - [ ] TEAMS
 - [ ] load multiple parties
 - [ ] Third col for ui (settings, theme, addplayer, save, load...)
