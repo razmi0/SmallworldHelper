@@ -30,7 +30,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   width: 100%;
   text-align: center;
   height: 100%;
@@ -69,7 +69,7 @@ p {
   position: absolute;
   inset: 1px;
   border-radius: var(--std-card-radius);
-  background: url(noise.svg);
+  background: url(/noise.svg);
   pointer-events: none;
   opacity: 0.3;
   z-index: -20;
