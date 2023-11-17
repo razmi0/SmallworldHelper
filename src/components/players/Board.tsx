@@ -1,14 +1,11 @@
-import { ReactNode, KeyboardEvent, ChangeEvent, useCallback, useRef, useEffect } from "react";
-import styles from "./_.module.css";
-import { InputContainer } from "../containers";
-import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
-import { IconButton, IconHeading } from "../icons/Icons";
-import { useIntermediate, useIntermediateDispatch } from "../../hooks";
-import { Star, Reset, Delete } from "../icons/Icons";
-import { SoftInput } from "../Input";
+import { ChangeEvent, KeyboardEvent, ReactNode, useCallback, useEffect, useRef } from "react";
+import { useClickOutside, useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { withViewTransition } from "../../utils";
-import { keys, validateOnChange, isDeletable, navigateTo, blurInput } from "./helpers";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { SoftInput } from "../Inputs";
+import { InputContainer, Delete, IconButton, IconHeading, Reset, Star } from "../";
+import { blurInput, isDeletable, keys, navigateTo, validateOnChange } from "./helpers";
+import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
+import styles from "./_.module.css";
 
 /* players, reset, remove, update, */
 // TYPES

@@ -1,7 +1,7 @@
 import { useIntermediateDispatch /* useSwitchTheme */ } from "../../hooks";
-import { withViewTransition } from "../../utils";
 import {
-  AddPlayer,
+  Header,
+  IconAddPlayer,
   Chart,
   EyeClose,
   EyeOpen,
@@ -10,11 +10,10 @@ import {
   Undo,
   Redo,
   Save,
-  // Theme,
-} from "../icons/Icons";
-import styles from "./_.module.css";
-import { Header } from "../containers";
+} from "../";
+import { withViewTransition } from "../../utils";
 import { Player, UndoRedoActions, UndoRedoStates } from "../../types";
+import styles from "./_.module.css";
 
 type NavProps = {
   toggleOpenAddPlayer: () => void;
@@ -56,7 +55,7 @@ export const Nav = ({
         />
         <IconButton
           variant="nav"
-          icon={AddPlayer}
+          icon={IconAddPlayer}
           iconName="addplayer"
           onClick={() => withViewTransition(toggleOpenAddPlayer)}
         />

@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback } from "react";
-import { SoftInput } from "../Input";
+import { SoftInput } from "../Inputs";
 import { useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { ContainerProps } from "../../types";
 import styles from "./_.module.css";

@@ -1,5 +1,5 @@
 import { ReactNode, CSSProperties, useState, useId } from "react";
-import { AddPlayer, IconButton } from "../components/icons/Icons";
+import { IconAddPlayer, IconButton } from "../components";
 
 type FlexProps = {
   children: ReactNode;
@@ -95,7 +95,7 @@ export const FreshStartButton = ({
           <IconButton
             style={{ cursor: "pointer", transform: "scale(1.2)" }}
             variant="nav"
-            icon={AddPlayer}
+            icon={IconAddPlayer}
             iconName="addplayer"
             onClick={toggleOpenAddPlayer}
           />

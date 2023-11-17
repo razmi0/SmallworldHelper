@@ -13,10 +13,9 @@ import {
   BarElement,
   ChartData,
 } from "chart.js";
-import { useChartFocus } from "../../hooks/charts/useChartFocus";
-import { useIntermediate, useIntermediateDispatch } from "../../hooks";
+import { useChartFocus, useIntermediate, useIntermediateDispatch } from "../../hooks";
 import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, pieOptions } from "../charts/data";
-import { ChartContainer } from "../containers/Containers";
+import { ChartContainer } from "../";
 import { LineProps, BarProps, PieProps } from "../../types";
 
 ChartJS.register(

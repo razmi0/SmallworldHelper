@@ -1,15 +1,23 @@
 // import { Input, InputButton } from "./components/Input";
-import { Charts } from "./components/charts/Charts";
-import { MainContainer } from "./components/containers";
-import { PlayerStatsContainer, Board } from "./components/players/Board";
-import { usePlayer, useToggle, useIntermediate, useIntermediateDispatch } from "./hooks";
-import { Nav } from "./components/nav/Nav";
-import { useUndoRedo } from "./hooks";
-import { Player } from "./types"; // BarData, LineData, PieData,
 import { useEffect } from "react";
+import {
+  useUndoRedo,
+  usePlayer,
+  useToggle,
+  useIntermediate,
+  useIntermediateDispatch,
+} from "./hooks";
 import { saveToLocalStorage, getFromLocalStorage } from "./utils";
-import { FreshStartButton } from "./components/Utils";
-import { AddPlayer } from "./components/players/AddPlayer";
+import {
+  MainContainer,
+  PlayerStatsContainer,
+  Board,
+  Nav,
+  Charts,
+  AddPlayer,
+  FreshStartButton,
+} from "./components";
+import { Player } from "./types"; // BarData, LineData, PieData,
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
