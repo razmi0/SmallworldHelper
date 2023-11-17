@@ -1,5 +1,5 @@
 import { useReducer, useCallback, useEffect, useState } from "react";
-import { focusOnPlayerBar, focusOnPlayerLine, focusOnPlayerPie } from "./helper";
+import { focusOnBar, focusOnLine, focusOnPie } from "./helper";
 import { useIntermediate } from "../";
 import { initialPlayerStates } from "../players/usePlayer";
 import { ChartData } from "chart.js";
@@ -18,9 +18,11 @@ const chartFocusReducer = (state: ChartsDataStates, action: ChartFocusActions) =
   const { chartData, isFocus } = action.payload;
   switch (action.type) {
     case "FOCUS_ON_PLAYER_CHART": {
-      const focusedBar = focusOnPlayerBar(isFocus, chartData.bars as ChartData<"bar">);
-      const focusedLine = focusOnPlayerLine(isFocus, chartData.lines as ChartData<"line">);
-      const focusedPie = focusOnPlayerPie(isFocus, chartData.pies as ChartData<"pie">);
+      const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
+      if (focusedIndex === -1) return state;
+      const focusedBar = focusOnBar(focusedIndex, chartData.bars as ChartData<"bar">);
+      const focusedLine = focusOnLine(focusedIndex, chartData.lines as ChartData<"line">);
+      const focusedPie = focusOnPie(focusedIndex, chartData.pies as ChartData<"pie">);
 
       return {
         ...state,
@@ -50,8 +52,11 @@ export const useChartFocus = () => {
 
   useEffect(() => {
     focusOnPlayerChart(chartState, isFocus);
-    return () => {};
   }, [isFocus, chartState]);
+
+  if (isFocus.every((f) => !f)) {
+    console.log(`All false ${isFocus} & length : ${isFocus.length}`);
+  } else console.log(isFocus);
 
   return {
     focusedLines: chartData.lines,
