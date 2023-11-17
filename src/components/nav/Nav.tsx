@@ -15,12 +15,14 @@ import { withViewTransition } from "@Utils";
 import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 import styles from "./_.module.css";
 
+type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
+
 type NavProps = {
   toggleOpenAddPlayer: () => void;
   toggleOpenCharts: () => void;
   toggleHideScore: () => void;
   isScoreHidden: boolean;
-  undoRedoStates: Omit<UndoRedoStates<Player[]>, "future" | "present" | "past">;
+  undoRedoStates: NavUndoRedoStates;
   undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
 };
 

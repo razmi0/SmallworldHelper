@@ -53,24 +53,29 @@ export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
   const { focusActions } = useMidAction();
   const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
+  // const counterRef = useRef([] as number[]);
   const { resetFocus } = focusActions;
 
+  /* BUG infinite if too much spamming on undo redo button */
   useEffect(() => {
     setChartState({ lines, bars, pies });
-  }, [lines, bars, pies]);
+  }, []);
+
+  const handleResetFocus = () => {
+    if (isFocus.some((isFocused) => isFocused)) resetFocus(); // only one focused
+    if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+  };
 
   useEffect(() => {
-    const handleResetFocus = () => {
-      if (isFocus.some((isFocused) => isFocused)) resetFocus();
-      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
-    };
     intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
     return () => {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
     };
-  }, [isFocus, resetFocus]);
+  }, [isFocus]);
 
   const noFocus = isFocus.every((isFocused) => !isFocused);
+  // counterRef.current.push(1);
+  // if (counterRef.current.length % 5 === 0) console.log("Charts" + counterRef.current.length);
 
   return (
     <ChartContainer isOpen={isOpen}>

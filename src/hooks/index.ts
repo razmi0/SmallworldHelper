@@ -5,6 +5,7 @@ import { useToggle } from "./useToggle";
 import { useUndoRedo } from "./useUndoRedo";
 import { useClickOutside } from "./useClickOutside";
 import { useChartFocus } from "./charts/useChartFocus";
+import { useLocalStorage } from "./useLocalStorage";
 
 /* PROVIDERS */
 import { IntermediateProvider } from "./context/useMid";
@@ -27,6 +28,7 @@ export {
   /* PLAYERS */
   usePlayer,
   /* OTHER */
+  useLocalStorage,
   useUndoRedo,
   useToggle,
   useClickOutside,

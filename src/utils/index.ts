@@ -2,6 +2,7 @@ import {
   add4dToHex,
   addOpacityToHex,
   debounce,
+  throttle,
   findAverage,
   findMax,
   findMaxNbrTurns,
@@ -36,7 +37,8 @@ export {
   findMin,
   findSum,
   findMaxNbrTurns,
-  /* OTHER */
+  /* HIGH ORDER FUNCTION */
   withViewTransition,
   debounce,
+  throttle,
 };
