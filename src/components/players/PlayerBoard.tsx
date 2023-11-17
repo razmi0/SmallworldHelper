@@ -37,14 +37,15 @@ type PlayerUtilitiesProps = {
 
 export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
   const { isFocus, newScores } = useIntermediate();
-  const { isOnFocus, setNewScores } = useIntermediateDispatch();
+  const { setNewScores, focusActions } = useIntermediateDispatch();
+  const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 
   useClickOutside(inputs, () => blurInput(inputs.current));
 
   useEffect(() => {
     inputs.current = new Array(players.length).fill("");
-    console.log("inputs.length", inputs.current.length);
+    setIsOnFocus(players.length, false);
   }, [players.length]);
 
   const resetInput = (i: number) => {
