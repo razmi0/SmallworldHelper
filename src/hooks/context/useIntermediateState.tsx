@@ -4,6 +4,9 @@ import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } 
 type newScore = number | string;
 
 type IntermediateStates = {
+  /**
+   * @description inputs tracker
+   */
   isFocus: boolean[]; // useMap
   newScores: newScore[]; // useMap
   startScore: number; // useIntermediateState
@@ -13,7 +16,9 @@ type IntermediateStates = {
 };
 
 type IntermediateActions =
-  | { type: "SET_BOOLEAN_MAP"; payload: { index: number; value: boolean } } // useMap
+  | { type: "CHANGE_FOCUS"; payload: { index: number; value: boolean } } // useMap
+  | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
+  | { type: "RESET_FOCUS" } // useMap
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: number | string } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useIntermediateState
   | { type: "SET_START_SCORE"; payload: { score: number } } // useIntermediateState
@@ -50,7 +55,7 @@ const intermediateReducer = (
       };
     }
 
-    case "SET_BOOLEAN_MAP": {
+    case "CHANGE_FOCUS": {
       const { index, value } = action.payload;
       let newBooleanMap = state.isFocus;
 
@@ -63,6 +68,23 @@ const intermediateReducer = (
         isFocus: newBooleanMap.map((item, i) => (i === index ? value : item)),
       };
     }
+
+    case "CHANGE_FOCUS_LENGTH": {
+      const { newLength, fillValue } = action.payload;
+      return {
+        ...state,
+        isFocus: resizeArray(state.isFocus, newLength, fillValue),
+        newScores: resizeArray(state.newScores, newLength, 0),
+      };
+    }
+
+    case "RESET_FOCUS": {
+      return {
+        ...state,
+        isFocus: state.isFocus.map(() => false),
+      };
+    }
+
     case "SET_NEW_SCORES": {
       const { index, newScore } = action.payload;
       let newNewScores = state.newScores;
@@ -132,12 +154,28 @@ export const useIntermediateDispatch = () => {
   if (dispatch === null) {
     throw new Error("useIntermediateDispatch must be used within a IntermediateProvider");
   }
+
   const isOnFocus = useCallback(
     (index: number, value: boolean) => {
-      dispatch!({ type: "SET_BOOLEAN_MAP", payload: { index: index, value: value } });
+      dispatch!({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
     },
     [dispatch]
   );
+
+  const setIsOnFocus = useCallback(
+    (newLength: number, fillValue: boolean) => {
+      dispatch!({
+        type: "CHANGE_FOCUS_LENGTH",
+        payload: { newLength: newLength, fillValue: fillValue },
+      });
+    },
+    [dispatch]
+  );
+
+  const resetFocus = useCallback(() => {
+    dispatch!({ type: "RESET_FOCUS" });
+  }, [dispatch]);
+
   const setNewScores = useCallback(
     (index: number, newScore: number | string) => {
       dispatch!({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
@@ -170,7 +208,7 @@ export const useIntermediateDispatch = () => {
   );
 
   return {
-    isOnFocus,
+    focusActions: { resetFocus, isOnFocus, setIsOnFocus }, // as [typeof isOnFocus, typeof setIsOnFocus]
     setNewScores,
     setNewPlayerName,
     setStartScore,
