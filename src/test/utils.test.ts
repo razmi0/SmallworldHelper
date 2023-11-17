@@ -155,6 +155,30 @@ describe("addOpacityToHex", () => {
   });
 });
 
+const removeOpacityToHex = (color = "#fff") => {
+  color = color.replace("#", "");
+  if (color.length > 6) color = color.slice(0, 6);
+  const colorNoAlpha = `#${color}`;
+  return colorNoAlpha;
+};
+
+describe("removeOpacityToHex", () => {
+  it("should return a string without the alpha", () => {
+    const str = removeOpacityToHex("#fff80");
+    expect(str).toMatch("#fff");
+  });
+
+  it("should return a string without the alpha", () => {
+    const str = removeOpacityToHex("#ffffff80");
+    expect(str).toMatch("#ffffff");
+  });
+
+  it("should return the same string", () => {
+    const str = removeOpacityToHex("#243564");
+    expect(str).toMatch("#243564");
+  });
+});
+
 type HistoryItem = {
   history: readonly number[];
 };
