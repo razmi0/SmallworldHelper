@@ -169,8 +169,8 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
               </FocusManager>
             );
           })}
+          {children}
         </ul>
-        {children}
       </ListWrapper>
     </>
   );
