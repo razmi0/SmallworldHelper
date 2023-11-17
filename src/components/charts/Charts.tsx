@@ -53,7 +53,6 @@ export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
 
   useEffect(() => {
     setChartState({ lines, bars, pies });
-    return () => {};
   }, [lines, bars, pies]);
 
   return (

@@ -51,13 +51,11 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
   // STATE SYNC WITH EXTERNAL STATE (CURRENTLY playersStates)
   useEffect(() => {
     if (externalState !== present) updateExternalState(present);
-    return () => {};
   }, [present]);
 
   useEffect(
     () => {
       if (externalState !== present) setState(externalState);
-      return () => {};
     },
     /* DONT CHANGE */ [externalState]
   );
