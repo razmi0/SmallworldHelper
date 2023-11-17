@@ -1,6 +1,6 @@
 import { ChartContainer, Header, InputContainer, MainContainer } from "./containers/Containers";
-import { Input, SoftInput } from "./Inputs";
-import { Clock, Flex, FreshStartButton, Spacer, UndoRedo } from "./Utils";
+import { Input, SoftInput } from "./utils/Inputs";
+import { Clock, Flex, FreshStartButton, Spacer, UndoRedo } from "./utils/Utils";
 import { Bar, Charts, Line, Pie } from "./charts/Charts";
 import {
   AddPlayer as IconAddPlayer,
