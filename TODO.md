@@ -57,3 +57,4 @@
 - [ ] TEAMS
 - [ ] load multiple parties
 - [ ] Third col for ui (settings, theme, addplayer, save, load...)
+- [ ] chart BUG infinite if too much spamming on undo redo button
