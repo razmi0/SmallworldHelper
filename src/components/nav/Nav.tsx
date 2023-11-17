@@ -1,4 +1,4 @@
-import { useIntermediateDispatch /* useSwitchTheme */ } from "../../hooks";
+import { useMidAction /* useSwitchTheme */ } from "../../hooks";
 import {
   Header,
   IconAddPlayer,
@@ -10,9 +10,9 @@ import {
   Undo,
   Redo,
   Save,
-} from "../";
-import { withViewTransition } from "../../utils";
-import { Player, UndoRedoActions, UndoRedoStates } from "../../types";
+} from "@Components";
+import { withViewTransition } from "@Utils";
+import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 import styles from "./_.module.css";
 
 type NavProps = {
@@ -32,7 +32,7 @@ export const Nav = ({
   undoRedoActions,
   isScoreHidden,
 }: NavProps) => {
-  const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
+  const { setLoadPlayers, setSavePlayers } = useMidAction();
 
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;

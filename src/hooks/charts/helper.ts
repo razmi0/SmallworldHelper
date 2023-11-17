@@ -1,5 +1,5 @@
 import { ChartData } from "chart.js";
-import { addOpacityToHex, removeOpacityFromHex } from "../../utils";
+import { addOpacityToHex, removeOpacityFromHex } from "@Utils";
 
 const OPACITY_UNFOCUS_FACTOR = 0.05;
 

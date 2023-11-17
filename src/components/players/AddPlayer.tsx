@@ -1,18 +1,18 @@
 import { ChangeEvent, useCallback } from "react";
 import { SoftInput } from "../Inputs";
-import { useIntermediate, useIntermediateDispatch } from "../../hooks";
-import { ContainerProps } from "../../types";
+import { useMidState, useMidAction } from "../../hooks";
+import { ContainerProps } from "@Types";
 import styles from "./_.module.css";
 import { validateOnChange } from "./helpers";
-import { withViewTransition } from "../../utils";
+import { withViewTransition } from "@Utils";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
   isOpen: boolean;
 };
 export const AddPlayer = ({ addPlayer, isOpen }: AddPlayerProps) => {
-  const { newPlayerName, startScore } = useIntermediate();
-  const { setNewPlayerName, setStartScore } = useIntermediateDispatch();
+  const { newPlayerName, startScore } = useMidState();
+  const { setNewPlayerName, setStartScore } = useMidAction();
 
   const addPlayerActionWithViewTransition = useCallback(() => {
     withViewTransition(() => {

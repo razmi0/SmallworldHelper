@@ -1,7 +1,7 @@
 // use-undo-redo.js
 
 import { useEffect, useReducer } from "react";
-import { UndoRedoStates, UndoRedoActions } from "../types";
+import { UndoRedoStates, UndoRedoActions } from "@Types";
 type HistoryState<T> = {
   past: T[];
   present: T;

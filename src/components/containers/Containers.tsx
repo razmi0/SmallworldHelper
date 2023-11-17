@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import styles from "./_.module.css";
-import { ContainerProps } from "../../types";
+import { ContainerProps } from "@Types";
 
 export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
   const childrenArr = Array.isArray(children) ? children : [children];

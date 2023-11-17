@@ -1,5 +1,5 @@
 import { ReactNode, CSSProperties, useState, useId } from "react";
-import { IconAddPlayer, IconButton } from "../components";
+import { IconAddPlayer, IconButton } from "@Components";
 
 type FlexProps = {
   children: ReactNode;

@@ -1,10 +1,17 @@
 import { ChangeEvent, KeyboardEvent, ReactNode, useCallback, useEffect, useRef } from "react";
-import { useClickOutside, useIntermediate, useIntermediateDispatch } from "../../hooks";
-import { withViewTransition } from "../../utils";
-import { SoftInput } from "../Inputs";
-import { InputContainer, Delete, IconButton, IconHeading, Reset, Star } from "../";
+import { useClickOutside, useMidState, useMidAction } from "@Hooks";
+import { withViewTransition } from "@Utils";
+import {
+  SoftInput,
+  InputContainer,
+  Delete,
+  IconButton,
+  IconHeading,
+  Reset,
+  Star,
+} from "@Components";
 import { blurInput, isDeletable, keys, navigateTo, validateOnChange } from "./helpers";
-import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
+import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
 import styles from "./_.module.css";
 
 /* players, reset, remove, update, */
@@ -33,8 +40,8 @@ type PlayerUtilitiesProps = {
 //--
 
 export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
-  const { isFocus, newScores } = useIntermediate();
-  const { setNewScores, focusActions } = useIntermediateDispatch();
+  const { isFocus, newScores } = useMidState();
+  const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 

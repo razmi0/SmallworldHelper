@@ -25,7 +25,7 @@ export const resizeArray = <T>(originalArray: T[], newSize: number, fillValue: T
 
 // HOOK from reducer
 //--
-// export const useIntermediateState = (size: number) => {
+// export const useMidState = (size: number) => {
 //   const [state, dispatch] = useReducer(intermediateReducer, {
 //     ...initialIntermediateState,
 //     isOnFocus: initBooleanMap(size),

@@ -1,7 +1,7 @@
 // IMPORTS
 // --
 import { useCallback, useReducer } from "react";
-import { BarData, LineData, PieData, Player, PlayerState } from "../../types";
+import { BarData, LineData, PieData, Player, PlayerState } from "@Types";
 import {
   buildAllLines,
   buildAllBars,
@@ -24,7 +24,7 @@ import {
   updatePies,
   updatePlayersStats,
 } from "./helpers";
-import { getFromLocalStorage } from "../../utils";
+import { getFromLocalStorage } from "@Utils";
 
 // TYPES
 // --

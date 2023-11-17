@@ -9,8 +9,8 @@ type IntermediateStates = {
    */
   isFocus: boolean[]; // useMap
   newScores: newScore[]; // useMap
-  startScore: number; // useIntermediateState
-  newPlayerName: string; // useIntermediateState
+  startScore: number; // useMidState
+  newPlayerName: string; // useMidState
   savePlayers: boolean;
   loadPlayers: boolean;
 };
@@ -20,10 +20,10 @@ type IntermediateActions =
   | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
   | { type: "RESET_FOCUS" } // useMap
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: number | string } } // useMap
-  | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useIntermediateState
-  | { type: "SET_START_SCORE"; payload: { score: number } } // useIntermediateState
-  | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useIntermediateState
-  | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useIntermediateState
+  | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useMidState
+  | { type: "SET_START_SCORE"; payload: { score: number } } // useMidState
+  | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useMidState
+  | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useMidState
 
 type IntermediateDispatchContextType = (actions: IntermediateActions) => void;
 
@@ -140,19 +140,19 @@ export const IntermediateProvider = ({
 
 // HOOKS
 //--
-export const useIntermediate = () => {
+export const useMidState = () => {
   const states = useContext(IntermediateContext);
   if (states === null) {
-    throw new Error("useIntermediate must be used within a IntermediateProvider");
+    throw new Error("useMidState must be used within a IntermediateProvider");
   }
   const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
   return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
 };
 
-export const useIntermediateDispatch = () => {
+export const useMidAction = () => {
   const dispatch = useContext(IntermediateDispatchContext);
   if (dispatch === null) {
-    throw new Error("useIntermediateDispatch must be used within a IntermediateProvider");
+    throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
   const isOnFocus = useCallback(

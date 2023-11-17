@@ -13,10 +13,10 @@ import {
   BarElement,
   ChartData,
 } from "chart.js";
-import { useChartFocus, useIntermediate, useIntermediateDispatch } from "../../hooks";
+import { useChartFocus, useMidState, useMidAction } from "@Hooks";
 import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, pieOptions } from "../charts/data";
-import { ChartContainer } from "../";
-import { LineProps, BarProps, PieProps } from "../../types";
+import { ChartContainer } from "@Components";
+import { LineProps, BarProps, PieProps } from "@Types";
 
 ChartJS.register(
   CategoryScale,
@@ -49,8 +49,8 @@ type ChartProps = {
   pies: ChartData<"pie">;
 };
 export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
-  const { isFocus } = useIntermediate();
-  const { focusActions } = useIntermediateDispatch();
+  const { isFocus } = useMidState();
+  const { focusActions } = useMidAction();
   const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
   const { resetFocus } = focusActions;

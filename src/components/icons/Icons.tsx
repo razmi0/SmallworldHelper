@@ -1,8 +1,8 @@
 import { forwardRef, useCallback, useState, CSSProperties } from "react";
-import { useTheme } from "../../hooks";
-import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "../../types";
+import { useTheme } from "@Hooks";
+import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "@Types";
 import { getSvgData } from "./data";
-import { debounce } from "../../utils";
+import { debounce } from "@Utils";
 import styles from "./_.module.css";
 
 const DISABLED_COLOR = "#b5179e";

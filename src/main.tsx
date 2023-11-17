@@ -1,8 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import "./index.css";
-import { ThemeProvider } from "./hooks/context/theme/useTheme.tsx";
-import { IntermediateProvider } from "./hooks/context/useIntermediateState.tsx";
+import "@Styles";
+import { IntermediateProvider, ThemeProvider } from "@Hooks";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <ThemeProvider>

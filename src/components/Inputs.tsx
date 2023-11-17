@@ -1,6 +1,6 @@
 import { KeyboardEvent, ReactNode, CSSProperties, forwardRef, InputHTMLAttributes } from "react";
-import { add4dToHex } from "../utils";
-import { KeyboardNavigationIdType } from "../types";
+import { add4dToHex } from "@Utils";
+import { KeyboardNavigationIdType } from "@Types";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   datatype?: KeyboardNavigationIdType;

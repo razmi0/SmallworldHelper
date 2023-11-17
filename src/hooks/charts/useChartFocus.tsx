@@ -1,6 +1,6 @@
 import { useReducer, useCallback, useEffect, useState } from "react";
 import { focusOnBar, focusOnLine, focusOnPie } from "./helper";
-import { useIntermediate } from "../";
+import { useMidState } from "../";
 import { initialPlayerStates } from "../players/usePlayer";
 import { ChartData } from "chart.js";
 
@@ -42,7 +42,7 @@ export const useChartFocus = () => {
     bars: initialPlayerStates.barData(),
     pies: initialPlayerStates.pieData(),
   });
-  const { isFocus } = useIntermediate();
+  const { isFocus } = useMidState();
   const [chartState, setChartState] = useState<ChartsDataStates>(chartData);
 
   const focusOnPlayerChart = useCallback((chartData: ChartsDataStates, isFocus: boolean[]) => {

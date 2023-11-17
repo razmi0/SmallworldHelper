@@ -1,4 +1,4 @@
-import { SvgDataType, VariantType } from "../../types";
+import { SvgDataType, VariantType } from "@Types";
 
 // Helpers
 //--
