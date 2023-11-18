@@ -1,13 +1,15 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import "./index.css";
-import { ThemeProvider } from "./hooks/context/theme/useTheme.tsx";
-import { IntermediateProvider } from "./hooks/context/useIntermediateState.tsx";
+import "@Styles";
+import { IntermediateProvider, ThemeProvider } from "@Hooks";
+import { StrictMode } from "react";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <IntermediateProvider>
-      <App />
-    </IntermediateProvider>
-  </ThemeProvider>
+  <StrictMode>
+    <ThemeProvider>
+      <IntermediateProvider>
+        <App />
+      </IntermediateProvider>
+    </ThemeProvider>
+  </StrictMode>
 );

@@ -1,14 +1,26 @@
-import { ReactNode, KeyboardEvent, ChangeEvent, useCallback, useRef, useEffect } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+} from "react";
+import { useClickOutside, useMidState, useMidAction } from "@Hooks";
+import { withViewTransition } from "@Utils";
+import {
+  SoftInput,
+  InputContainer,
+  Delete,
+  IconButton,
+  IconHeading,
+  Reset,
+  Star,
+} from "@Components";
+import { blurInput, isDeletable, keys, navigateTo, validateOnChange } from "./helpers";
+import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
 import styles from "./_.module.css";
-import { InputContainer } from "../containers";
-import { ContainerProps, KeyboardNavigationIdType, Player } from "../../types";
-import { IconButton, IconHeading } from "../icons/Icons";
-import { useIntermediate, useIntermediateDispatch } from "../../hooks";
-import { Star, Reset, Delete } from "../icons/Icons";
-import { SoftInput } from "../Input";
-import { withViewTransition } from "../../utils";
-import { keys, validateOnChange, isDeletable, navigateTo, blurInput } from "./helpers";
-import { useClickOutside } from "../../hooks/useClickOutside";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -36,8 +48,8 @@ type PlayerUtilitiesProps = {
 //--
 
 export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
-  const { isFocus, newScores } = useIntermediate();
-  const { setNewScores, focusActions } = useIntermediateDispatch();
+  const { isFocus, newScores } = useMidState();
+  const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
 
@@ -114,70 +126,79 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   };
 
   return (
-    <>
-      <ListWrapper>
-        <ul className={styles["players-list-ctn"]}>
-          {players.map((player, i) => {
-            const { name, victoryPtn, id, color } = player;
-            const pseudoName = `${id}_${name.toLowerCase()}`;
-            const finalColor = isFocus[i] ? color : "inherit";
-            const softValue = newScores[i] ? newScores[i] : "";
+    <BoardView>
+      <ul className={styles["players-list-ctn"]}>
+        {players.map((player, i) => {
+          const { name, victoryPtn, id, color } = player;
+          const pseudoName = `${id}_${name.toLowerCase()}`;
+          const finalColor = isFocus[i] ? color : "inherit";
+          const softValue = newScores[i] ? newScores[i] : "";
 
-            return (
-              <FocusManager
-                key={pseudoName}
-                onBlur={() => handleBlur(i)}
-                onFocus={() => handleFocus(i)}
-                onClick={() => handleClicked(i)}
-              >
-                <PlayerListElement>
-                  <PlayerTextContainer>
-                    <PlayerText color={finalColor}>{name}</PlayerText>
-                    <PlayerText color={finalColor}>
-                      <IconHeading
-                        animationName="rotate"
-                        isHover={isFocus[i]}
-                        color={color}
-                        icon={Star}
-                        variant="heading"
-                      />
-                      {hideScore ? "***" : victoryPtn}
-                    </PlayerText>
-                  </PlayerTextContainer>
-                  <UtilitiesInputContainer>
-                    <InputContainer>
-                      <SoftInput
-                        ref={(element) => manageRefs(element, i)}
-                        color={color}
-                        onKeyUp={(event) => handleKeyUp(event, id, i)}
-                        onChange={(event) => handleChangeScore(event, i)}
-                        value={softValue}
-                        pseudoName={pseudoName}
-                      />
-                      <PlayerUtilities
-                        id={id}
-                        remove={remove}
-                        reset={reset}
-                        isFocus={isFocus[i]}
-                        onKeyUp={(event) => {
-                          handleKeyUp(event, id, i);
-                        }}
-                      />
-                    </InputContainer>
-                  </UtilitiesInputContainer>
-                </PlayerListElement>
-              </FocusManager>
-            );
-          })}
-          {children}
-        </ul>
-      </ListWrapper>
-    </>
+          return (
+            <FocusManager
+              key={pseudoName}
+              onBlur={() => handleBlur(i)}
+              onFocus={() => handleFocus(i)}
+              onClick={() => handleClicked(i)}
+            >
+              <PlayerListElement>
+                <PlayerTextContainer>
+                  <PlayerText color={finalColor}>{name}</PlayerText>
+                  <PlayerText color={finalColor}>
+                    <IconHeading
+                      animationName="rotate"
+                      isHover={isFocus[i]}
+                      color={color}
+                      icon={Star}
+                      variant="heading"
+                    />
+                    {hideScore ? "***" : victoryPtn}
+                  </PlayerText>
+                </PlayerTextContainer>
+                <UtilitiesInputContainer>
+                  <InputContainer>
+                    <SoftInput
+                      ref={(element) => manageRefs(element, i)}
+                      color={color}
+                      onKeyUp={(event) => handleKeyUp(event, id, i)}
+                      onChange={(event) => handleChangeScore(event, i)}
+                      value={softValue}
+                      pseudoName={pseudoName}
+                    />
+                    <PlayerUtilities
+                      id={id}
+                      remove={remove}
+                      reset={reset}
+                      isFocus={isFocus[i]}
+                      onKeyUp={(event) => {
+                        handleKeyUp(event, id, i);
+                      }}
+                    />
+                  </InputContainer>
+                </UtilitiesInputContainer>
+              </PlayerListElement>
+            </FocusManager>
+          );
+        })}
+      </ul>
+      {children}
+    </BoardView>
   );
 };
 
-const ListWrapper = ({ children }: ContainerProps) => {
-  return <div className={styles["players-list-ctn-wrapper"]}>{children}</div>;
+const BoardView = ({ children }: ContainerProps) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: "1rem",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      {children}
+    </div>
+  );
 };
 
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
@@ -190,8 +211,46 @@ interface FocusManagerProps extends ContainerProps {
   onClick: () => void;
 }
 const PlayerListElement = ({ children }: ContainerProps) => {
+  const id = useId().replace(/:/g, "");
   const classes = `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn `;
-  return <div className={classes}>{children}</div>;
+
+  // ${duration.toFixed(2)}s
+
+  // @keyframes view-transition-translate-${id} {
+  //   from {
+  //     display: initial;
+  //   }
+  // }
+
+  const viewTransition = `
+    @keyframes unset-${id} {
+      from {
+        display: initial;
+
+      }
+    }
+    ::view-transition-new(player-card-${id}) {
+      animation-name: unset-${id};
+    }
+    ::view-transition-old(player-card-${id}) {
+      display: none;
+    }
+
+    #${id} {
+      view-transition-name: player-card-${id};
+    }
+
+  
+  `;
+
+  return (
+    <>
+      <div id={id} className={classes}>
+        {children}
+      </div>
+      <style>{viewTransition}</style>
+    </>
+  );
 };
 
 const FocusManager = ({ children, onFocus, onBlur, onClick }: FocusManagerProps) => {

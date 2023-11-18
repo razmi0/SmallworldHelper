@@ -13,11 +13,10 @@ import {
   BarElement,
   ChartData,
 } from "chart.js";
-import { useChartFocus } from "../../hooks/charts/useChartFocus";
-import { useIntermediate, useIntermediateDispatch } from "../../hooks";
+import { useChartFocus, useMidState, useMidAction } from "@Hooks";
 import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, pieOptions } from "../charts/data";
-import { ChartContainer } from "../containers/Containers";
-import { LineProps, BarProps, PieProps } from "../../types";
+import { ChartContainer } from "@Components";
+import { LineProps, BarProps, PieProps } from "@Types";
 
 ChartJS.register(
   CategoryScale,
@@ -32,11 +31,19 @@ ChartJS.register(
 );
 
 export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
-  return <ChartLine data={data} options={options} />;
+  return (
+    <>
+      <ChartLine data={data} options={options} />
+    </>
+  );
 };
 
 export const Pie = ({ data, options /* theme = "dark" */ }: PieProps) => {
-  return <ChartPie data={data} options={options} />;
+  return (
+    <>
+      <ChartPie data={data} options={options} />
+    </>
+  );
 };
 
 export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
@@ -50,28 +57,33 @@ type ChartProps = {
   pies: ChartData<"pie">;
 };
 export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
-  const { isFocus } = useIntermediate();
-  const { focusActions } = useIntermediateDispatch();
+  const { isFocus } = useMidState();
+  const { focusActions } = useMidAction();
   const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
+  // const counterRef = useRef([] as number[]);
   const { resetFocus } = focusActions;
 
+  /* BUG infinite if too much spamming on undo redo button */
   useEffect(() => {
     setChartState({ lines, bars, pies });
-  }, [lines, bars, pies]);
+  }, []);
+
+  const handleResetFocus = () => {
+    if (isFocus.some((isFocused) => isFocused)) resetFocus(); // only one focused
+    if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+  };
 
   useEffect(() => {
-    const handleResetFocus = () => {
-      if (isFocus.some((isFocused) => isFocused)) resetFocus();
-      if (intervalIdRef.current) clearInterval(intervalIdRef.current);
-    };
     intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
     return () => {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
     };
-  }, [isFocus, resetFocus]);
+  }, [isFocus]);
 
   const noFocus = isFocus.every((isFocused) => !isFocused);
+  // counterRef.current.push(1);
+  // if (counterRef.current.length % 5 === 0) console.log("Charts" + counterRef.current.length);
 
   return (
     <ChartContainer isOpen={isOpen}>

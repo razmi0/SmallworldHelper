@@ -7,7 +7,7 @@ const NEW_LENGTH_2 = 2;
 const NEW_LENGTH_3 = 3;
 const EXPECTED_ARRAY = [false, false, false, false, false];
 
-/* .test in useIntermediate hook to resize numbers of players  */
+/* .test in useMidState hook to resize numbers of players  */
 export const resizeArray = <T>(originalArray: T[], newSize: number, fillValue: T): T[] => {
   return [
     ...originalArray.slice(0, newSize),

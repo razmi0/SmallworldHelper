@@ -1,7 +1,7 @@
-import { useIntermediateDispatch /* useSwitchTheme */ } from "../../hooks";
-import { withViewTransition } from "../../utils";
+import { useMidAction /* useSwitchTheme */ } from "@Hooks";
 import {
-  AddPlayer,
+  Header,
+  IconAddPlayer,
   Chart,
   EyeClose,
   EyeOpen,
@@ -10,18 +10,19 @@ import {
   Undo,
   Redo,
   Save,
-  // Theme,
-} from "../icons/Icons";
+} from "@Components";
+import { withViewTransition } from "@Utils";
+import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 import styles from "./_.module.css";
-import { Header } from "../containers";
-import { Player, UndoRedoActions, UndoRedoStates } from "../../types";
+
+type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 
 type NavProps = {
-  toggleOpenAddPlayer: () => void;
+  toggleOpenAddPlayer: (newState?: boolean) => void;
   toggleOpenCharts: () => void;
   toggleHideScore: () => void;
   isScoreHidden: boolean;
-  undoRedoStates: Omit<UndoRedoStates<Player[]>, "future" | "present" | "past">;
+  undoRedoStates: NavUndoRedoStates;
   undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
 };
 
@@ -33,7 +34,7 @@ export const Nav = ({
   undoRedoActions,
   isScoreHidden,
 }: NavProps) => {
-  const { setLoadPlayers, setSavePlayers } = useIntermediateDispatch();
+  const { setLoadPlayers, setSavePlayers } = useMidAction();
 
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
@@ -56,7 +57,7 @@ export const Nav = ({
         />
         <IconButton
           variant="nav"
-          icon={AddPlayer}
+          icon={IconAddPlayer}
           iconName="addplayer"
           onClick={() => withViewTransition(toggleOpenAddPlayer)}
         />

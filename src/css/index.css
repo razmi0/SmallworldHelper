@@ -35,6 +35,7 @@
   text-align: center;
   height: 100%;
 }
+
 *,
 ::after,
 ::before {
@@ -113,8 +114,8 @@ p {
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  justify-content: space-around;
-  max-width: 450px;
+  /* justify-content: space-around; */
+  /* max-width: 450px; */
   /* padding: 10px 10px; */
 }
 .form__group {

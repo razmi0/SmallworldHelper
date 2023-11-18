@@ -91,15 +91,23 @@ export const findMaxNbrTurns = (arr: HistoryItems | []) => {
   return max;
 };
 
-export const saveToLocalStorage = <T>(key: string, value: T) => {
-  window.localStorage.setItem(key, JSON.stringify(value));
+export const saveToLocalStorage = <T>(key: string, value: T): void => {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    throw new Error("Error saving to localStorage: " + error);
+  }
 };
 /**
  * @param defaultValue: default value if nothing is found in localStorage
  */
 export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T): T => {
-  const storedValue = window.localStorage.getItem(key);
-  return storedValue !== null ? (JSON.parse(storedValue) as T) : defaultValue;
+  try {
+    const storedValue = window.localStorage.getItem(key);
+    return storedValue !== null ? (JSON.parse(storedValue) as T) : defaultValue;
+  } catch (error) {
+    throw new Error("Error getting from localStorage: " + error);
+  }
 };
 
 export const findAverage = (arr: number[]) => {
@@ -125,7 +133,7 @@ export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
     fn(args);
   } else {
     document.startViewTransition(() => {
-      console.log("viewTranstion happening");
+      console.log("viewTransition happening");
       flushSync(() => {
         fn(args);
       });
@@ -144,6 +152,22 @@ export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
   };
 };
 
+export const throttle = <T extends unknown[]>(fn: F<T>, delay: number) => {
+  let isThrottled = false;
+  return function (...args: T) {
+    if (isThrottled) return;
+    isThrottled = true;
+    fn(...args);
+    setTimeout(() => {
+      isThrottled = false;
+    }, delay);
+  };
+};
+
+export const isProdEnv = () => {
+  return import.meta.env.PROD;
+};
+
 export const isDevEnv = () => {
-  return import.meta.env.DEV ? true : false;
+  return import.meta.env.DEV;
 };
