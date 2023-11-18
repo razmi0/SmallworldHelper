@@ -32,22 +32,26 @@ ChartJS.register(
 
 export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
   return (
-    <>
+    <div>
       <ChartLine data={data} options={options} />
-    </>
+    </div>
   );
 };
 
 export const Doughnut = ({ data, options /* theme = "dark" */ }: DonutProps) => {
   return (
-    <>
+    <div>
       <ChartDonut data={data} options={options} />
-    </>
+    </div>
   );
 };
 
 export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
-  return <ChartBar data={data} options={options} />;
+  return (
+    <div>
+      <ChartBar data={data} options={options} />
+    </div>
+  );
 };
 
 type ChartProps = {

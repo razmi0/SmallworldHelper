@@ -29,7 +29,6 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
               }}
               className="grainy lin-dark global-grainy shadow-ctn"
             >
-              <style>{}</style>
               {child}
             </figure>
           );
