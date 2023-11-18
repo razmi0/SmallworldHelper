@@ -39,6 +39,10 @@
   padding: 15px;
 }
 
+.utility-card {
+  filter: brightness(0.9) saturate(1.2);
+}
+
 .player-text-ctn {
   display: flex;
   flex-direction: row;

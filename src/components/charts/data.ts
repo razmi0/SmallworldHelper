@@ -26,7 +26,7 @@ export const lineOptions: ChartOptions<"line"> = {
       borderWidth: 3,
     },
   },
-  maintainAspectRatio: false,
+  // maintainAspectRatio: false,
   scales: {
     x: {
       display: true,
@@ -71,7 +71,7 @@ export const barOptions: ChartOptions<"bar"> = {
     delay: 300,
   },
   responsive: true,
-  maintainAspectRatio: false,
+  // maintainAspectRatio: false,
   elements: {
     bar: {
       borderRadius: 4,
@@ -124,8 +124,9 @@ export const donutOptions: ChartOptions<"doughnut"> = {
   animation: {
     delay: 400,
   },
+  cutout: "80%",
   responsive: true,
-  maintainAspectRatio: false,
+  // maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,

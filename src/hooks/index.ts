@@ -4,7 +4,6 @@ import { useTheme, useSwitchTheme } from "./context/theme/useTheme";
 import { useToggle } from "./useToggle";
 import { useUndoRedo } from "./useUndoRedo";
 import { useClickOutside } from "./useClickOutside";
-import { useChartFocus } from "./charts/useChartFocus";
 import { useLocalStorage } from "./useLocalStorage";
 
 /* PROVIDERS */
@@ -24,7 +23,6 @@ export {
   useTheme,
   useSwitchTheme,
   /* CHART */
-  useChartFocus,
   /* PLAYERS */
   usePlayer,
   /* OTHER */

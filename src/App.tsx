@@ -10,6 +10,7 @@ import {
   FreshStartButton,
 } from "@Components";
 import { Player } from "@Types"; // BarData, LineData, DonutData,
+import { useMemo } from "react";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
@@ -25,6 +26,10 @@ const App = () => {
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
 
   const hasPlayer = players.length > 0;
+
+  useMemo(() => {
+    // newPresent(players)
+  }, [players]);
 
   return (
     <MainContainer>
@@ -49,18 +54,17 @@ const App = () => {
           reset={resetScore}
           remove={removePlayer}
           update={updateScore}
-        >
-          <AddPlayer
-            addPlayer={addPlayer}
-            isOpen={toggleStates.isAddPlayerOpen}
-            toggleOpenAddPlayer={openAddPlayer}
-          />
-        </Board>
+        ></Board>
         <Charts
           isOpen={isChartsOpen && players.length > 0}
           lines={lines}
           bars={bars}
           donuts={donuts}
+        />
+        <AddPlayer
+          addPlayer={addPlayer}
+          isOpen={toggleStates.isAddPlayerOpen}
+          toggleOpenAddPlayer={openAddPlayer}
         />
       </PlayerStatsContainer>
     </MainContainer>
