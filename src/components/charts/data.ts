@@ -9,6 +9,9 @@ declare module "chart.js" {
 }
 
 export const lineOptions: ChartOptions<"line"> = {
+  animation: {
+    delay: 400,
+  },
   responsive: true,
   elements: {
     point: {
@@ -62,6 +65,9 @@ export const lineOptions: ChartOptions<"line"> = {
 };
 
 export const barOptions: ChartOptions<"bar"> = {
+  animation: {
+    delay: 600,
+  },
   responsive: true,
   maintainAspectRatio: false,
   elements: {
@@ -112,6 +118,9 @@ export const barOptions: ChartOptions<"bar"> = {
 };
 
 export const pieOptions: ChartOptions<"pie"> = {
+  animation: {
+    delay: 800,
+  },
   responsive: true,
   maintainAspectRatio: false,
   plugins: {

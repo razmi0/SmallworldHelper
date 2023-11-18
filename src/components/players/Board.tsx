@@ -225,16 +225,19 @@ const PlayerListElement = ({ children }: ContainerProps) => {
     }
     @keyframes player-card-animation {
       0% {
-        transform: translate(0, 0);
         opacity : 1;
+        scale : 1;
+        filter: blur(0px);
       }
       50% {
-        transform: translate(1%,0);
         opacity : 0.6;
+        scale : 0.98;
+        filter: blur(1px);
       }
       100% {
         opacity : 1;
-        transform: translate(0, 0);
+        scale : 1;
+        filter: blur(0px);
       }
     }
   `;
