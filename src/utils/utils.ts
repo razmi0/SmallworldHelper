@@ -133,7 +133,7 @@ export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
     fn(args);
   } else {
     document.startViewTransition(() => {
-      console.log("viewTranstion happening");
+      console.log("viewTransition happening");
       flushSync(() => {
         fn(args);
       });
