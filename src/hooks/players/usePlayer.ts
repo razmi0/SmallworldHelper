@@ -1,27 +1,27 @@
 // IMPORTS
 // --
 import { useCallback, useReducer } from "react";
-import { BarData, LineData, PieData, Player, PlayerState } from "@Types";
+import { BarData, LineData, DonutData, Player, PlayerState } from "@Types";
 import {
   buildAllLines,
   buildAllBars,
-  buildAllPies,
+  buildAlldonuts,
   buildBaseStats,
   buildNewBars,
   buildNewLines,
-  buildNewPies,
+  buildNewdonuts,
   removeBar,
   removeLine,
-  removePie,
+  removedonut,
   removePlayer,
   resetBar,
   resetLine,
-  resetPie,
+  resetdonut,
   resetPlayersStats,
   fullReset,
   updateBars,
   updateLines,
-  updatePies,
+  updatedonuts,
   updatePlayersStats,
 } from "./helpers";
 import { getFromLocalStorage } from "@Utils";
@@ -52,15 +52,16 @@ export const initialPlayerStates = {
   /* barData not stored at the moment */
   barData: () => getFromLocalStorage<BarData>("barData", buildAllBars(initialPlayerStates.players)),
 
-  /* pieData not stored at the moment */
-  pieData: () => getFromLocalStorage<PieData>("pieData", buildAllPies(initialPlayerStates.players)),
+  /* DonutData not stored at the moment */
+  DonutData: () =>
+    getFromLocalStorage<DonutData>("DonutData", buildAlldonuts(initialPlayerStates.players)),
 };
 
 // REDUCER
 // --
 const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
   const { type, payload } = action;
-  const { players, lines, bars, pies } = state;
+  const { players, lines, bars, donuts } = state;
 
   switch (type) {
     case "ADD_PLAYER": {
@@ -71,7 +72,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
         players: [...players, newPlayer],
         lines: buildNewLines(lines, newPlayer),
         bars: buildNewBars(bars, newPlayer),
-        pies: buildNewPies(pies, newPlayer),
+        donuts: buildNewdonuts(donuts, newPlayer),
       };
     }
 
@@ -85,7 +86,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
         players: rmPlayers,
         lines: removeLine(lines, rmPlayer.name),
         bars: removeBar(bars, rmPlayer.name),
-        pies: removePie(pies, rmPlayer.name),
+        donuts: removedonut(donuts, rmPlayer.name),
       };
     }
 
@@ -97,7 +98,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
         players: newPlayers,
         lines: resetLine(lines, newPlayer.name, newPlayers),
         bars: resetBar(bars, newPlayer.name),
-        pies: resetPie(pies, newPlayer.name),
+        donuts: resetdonut(donuts, newPlayer.name),
       };
     }
 
@@ -109,7 +110,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
         players: updatedPlayers,
         lines: updateLines(lines, updatedPlayer, updatedPlayers),
         bars: updateBars(bars, updatedPlayer),
-        pies: updatePies(pies, updatedPlayer),
+        donuts: updatedonuts(donuts, updatedPlayer),
       };
     }
 
@@ -120,7 +121,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
         players,
         lines: buildAllLines(players),
         bars: buildAllBars(players),
-        pies: buildAllPies(players),
+        donuts: buildAlldonuts(players),
       };
     }
 
@@ -136,7 +137,7 @@ export const usePlayer = () => {
     players: initialPlayerStates.players,
     lines: initialPlayerStates.lineData(),
     bars: initialPlayerStates.barData(),
-    pies: initialPlayerStates.pieData(),
+    donuts: initialPlayerStates.DonutData(),
   });
 
   /**

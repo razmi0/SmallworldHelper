@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef } from "react";
-import { Line as ChartLine, Pie as ChartPie, Bar as ChartBar } from "react-chartjs-2";
+import { Line as ChartLine, Doughnut as ChartDonut, Bar as ChartBar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,9 +14,9 @@ import {
   ChartData,
 } from "chart.js";
 import { useChartFocus, useMidState, useMidAction } from "@Hooks";
-import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, pieOptions } from "../charts/data";
+import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "../charts/data";
 import { ChartContainer } from "@Components";
-import { LineProps, BarProps, PieProps } from "@Types";
+import { LineProps, BarProps, DonutProps } from "@Types";
 
 ChartJS.register(
   CategoryScale,
@@ -38,10 +38,10 @@ export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
   );
 };
 
-export const Pie = ({ data, options /* theme = "dark" */ }: PieProps) => {
+export const Doughnut = ({ data, options /* theme = "dark" */ }: DonutProps) => {
   return (
     <>
-      <ChartPie data={data} options={options} />
+      <ChartDonut data={data} options={options} />
     </>
   );
 };
@@ -54,18 +54,18 @@ type ChartProps = {
   isOpen: boolean;
   lines: ChartData<"line">;
   bars: ChartData<"bar">;
-  pies: ChartData<"pie">;
+  donuts: ChartData<"doughnut">;
 };
-export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
+export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   const { isFocus } = useMidState();
   const { focusActions } = useMidAction();
-  const { focusedBars, focusedLines, focusedPies, setChartState } = useChartFocus();
+  const { focusedBars, focusedLines, focuseddonuts, setChartState } = useChartFocus();
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
   const { resetFocus } = focusActions;
 
   useEffect(() => {
-    setChartState({ lines, bars, pies });
-  }, [lines, bars, pies]);
+    setChartState({ lines, bars, donuts });
+  }, [lines, bars, donuts]);
 
   const handleResetFocus = () => {
     if (isFocus.some((isFocused) => isFocused)) resetFocus(); // only one focused
@@ -85,7 +85,7 @@ export const Charts = ({ isOpen, lines, bars, pies }: ChartProps) => {
     <ChartContainer isOpen={isOpen}>
       <Line data={noFocus ? lines : focusedLines} options={lineOptions} />
       <Bar data={noFocus ? bars : focusedBars} options={barOptions} />
-      <Pie data={noFocus ? pies : focusedPies} options={pieOptions} />
+      <Doughnut data={noFocus ? donuts : focuseddonuts} options={donutOptions} />
     </ChartContainer>
   );
 };

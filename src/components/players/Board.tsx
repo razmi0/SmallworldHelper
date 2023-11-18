@@ -225,17 +225,15 @@ const PlayerListElement = ({ children }: ContainerProps) => {
     }
     @keyframes player-card-animation {
       0% {
-        opacity : 1;
         scale : 1;
         filter: blur(0px);
       }
       50% {
-        opacity : 0.6;
-        scale : 0.98;
+        scale : 1.1;
         filter: blur(1px);
+        filter : brightness(1.1);
       }
       100% {
-        opacity : 1;
         scale : 1;
         filter: blur(0px);
       }

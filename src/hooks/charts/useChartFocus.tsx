@@ -1,12 +1,12 @@
 import { useReducer, useCallback, useEffect, useState } from "react";
-import { focusOnBar, focusOnLine, focusOnPie } from "./helper";
+import { focusOnBar, focusOnLine, focusOndonut } from "./helper";
 import { useMidState } from "@Hooks";
 import { initialPlayerStates } from "../players/usePlayer";
 import { ChartData } from "chart.js";
 
 export type ChartsDataStates = {
   lines: ChartData<"line">;
-  pies: ChartData<"pie">;
+  donuts: ChartData<"doughnut">;
   bars: ChartData<"bar">;
 };
 type ChartFocusActions = {
@@ -21,13 +21,13 @@ const chartFocusReducer = (state: ChartsDataStates, action: ChartFocusActions) =
       const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
       const focusedBar = focusOnBar(focusedIndex, chartData.bars as ChartData<"bar">);
       const focusedLine = focusOnLine(focusedIndex, chartData.lines as ChartData<"line">);
-      const focusedPie = focusOnPie(focusedIndex, chartData.pies as ChartData<"pie">);
+      const focuseddonut = focusOndonut(focusedIndex, chartData.donuts as ChartData<"doughnut">);
 
       return {
         ...state,
         bars: focusedBar,
         lines: focusedLine,
-        pies: focusedPie,
+        donuts: focuseddonut,
       };
     }
 
@@ -40,7 +40,7 @@ export const useChartFocus = () => {
   const [chartData, dispatch] = useReducer(chartFocusReducer, {
     lines: initialPlayerStates.lineData(),
     bars: initialPlayerStates.barData(),
-    pies: initialPlayerStates.pieData(),
+    donuts: initialPlayerStates.DonutData(),
   });
   const { isFocus } = useMidState();
   const [chartState, setChartState] = useState<ChartsDataStates>(chartData);
@@ -56,7 +56,7 @@ export const useChartFocus = () => {
   return {
     focusedLines: chartData.lines,
     focusedBars: chartData.bars,
-    focusedPies: chartData.pies,
+    focuseddonuts: chartData.donuts,
     setChartState,
   };
 };

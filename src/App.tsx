@@ -9,11 +9,11 @@ import {
   AddPlayer,
   FreshStartButton,
 } from "@Components";
-import { Player } from "@Types"; // BarData, LineData, PieData,
+import { Player } from "@Types"; // BarData, LineData, DonutData,
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
-  const { players, lines, bars, pies } = playersStates;
+  const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
   useLocalStorage("players", players, setPlayers);
@@ -56,7 +56,12 @@ const App = () => {
             toggleOpenAddPlayer={openAddPlayer}
           />
         </Board>
-        <Charts isOpen={isChartsOpen && players.length > 0} lines={lines} bars={bars} pies={pies} />
+        <Charts
+          isOpen={isChartsOpen && players.length > 0}
+          lines={lines}
+          bars={bars}
+          donuts={donuts}
+        />
       </PlayerStatsContainer>
     </MainContainer>
   );

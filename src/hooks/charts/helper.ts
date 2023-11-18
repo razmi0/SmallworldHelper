@@ -24,7 +24,7 @@ export const focusOnLine = (index: number, data: ChartData<"line">) => {
   return { ...data, datasets: newDatasets };
 };
 
-export const focusOnPie = (index: number, data: ChartData<"pie">) => {
+export const focusOndonut = (index: number, data: ChartData<"doughnut">) => {
   const colors = data.datasets[0].backgroundColor as string[];
   const newColors = colors.map((color, i) =>
     i !== index ? addOpacityToHex(color, OPACITY_UNFOCUS_FACTOR) : removeOpacityFromHex(color)

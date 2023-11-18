@@ -36,7 +36,7 @@ export type BarData = {
   }[];
 };
 
-export type PieData = {
+export type DonutData = {
   labels: string[];
   datasets: {
     label: string;
@@ -59,9 +59,9 @@ export type BarProps = {
   theme?: "light" | "dark";
 };
 
-export type PieProps = {
-  data: ChartData<"pie">;
-  options: ChartOptions<"pie">;
+export type DonutProps = {
+  data: ChartData<"doughnut">;
+  options: ChartOptions<"doughnut">;
   theme?: "light" | "dark";
 };
 
@@ -160,10 +160,10 @@ export type PlayerState = {
   players: Player[];
   lines: LineData;
   bars: BarData;
-  pies: PieData;
+  donuts: DonutData;
 };
 
-export type FullSetterType = [Player[], LineData, BarData, PieData];
+export type FullSetterType = [Player[], LineData, BarData, DonutData];
 
 export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;

@@ -1,5 +1,5 @@
 import { PLAYER_COLORS } from "../../components/icons/data";
-import { BarData, LineData, Player, PieData } from "@Types";
+import { BarData, LineData, Player, DonutData } from "@Types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils";
 
 const errorMsg = "Player not found";
@@ -54,7 +54,7 @@ export const buildAllBars = (players: Player[]) => {
   };
 };
 
-export const buildAllPies = (players: Player[]) => {
+export const buildAlldonuts = (players: Player[]) => {
   return {
     labels: players.map((p) => p.name) ?? [],
     datasets: [
@@ -118,8 +118,8 @@ export const buildNewBars = (bars: BarData, newPlayer: Player) => {
   };
 };
 
-export const buildNewPies = (pies: PieData, newPlayer: Player) => {
-  const { datasets, labels } = pies;
+export const buildNewdonuts = (donuts: DonutData, newPlayer: Player) => {
+  const { datasets, labels } = donuts;
   return {
     labels: [...labels, newPlayer.name],
     datasets: [
@@ -204,10 +204,10 @@ export const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
   };
 };
 
-export const updatePies = (pies: PieData, updatedPlayer: Player): PieData => {
-  const index = pies.labels.findIndex((label) => label === updatedPlayer.name);
+export const updatedonuts = (donuts: DonutData, updatedPlayer: Player): DonutData => {
+  const index = donuts.labels.findIndex((label) => label === updatedPlayer.name);
   if (index === -1) throw new Error(errorMsg);
-  const newDatasets = pies.datasets.map((dataset) => {
+  const newDatasets = donuts.datasets.map((dataset) => {
     const newData = [...dataset.data];
     newData[index] = updatedPlayer.victoryPtn;
     return {
@@ -216,7 +216,7 @@ export const updatePies = (pies: PieData, updatedPlayer: Player): PieData => {
     };
   });
   return {
-    labels: [...pies.labels], // This spread is not necessary labels are not being mutated
+    labels: [...donuts.labels], // This spread is not necessary labels are not being mutated
     datasets: newDatasets,
   };
 };
@@ -275,10 +275,10 @@ export const resetBar = (bars: BarData, name: Player["name"]): BarData => {
   };
 };
 
-export const resetPie = (pies: PieData, name: Player["name"]): PieData => {
-  const index = pies.labels.findIndex((label) => label === name);
+export const resetdonut = (donuts: DonutData, name: Player["name"]): DonutData => {
+  const index = donuts.labels.findIndex((label) => label === name);
   if (index === -1) throw new Error(errorMsg);
-  const newDatasets = pies.datasets.map((dataset) => {
+  const newDatasets = donuts.datasets.map((dataset) => {
     const newData = [...dataset.data];
     newData[index] = 0;
     return {
@@ -287,7 +287,7 @@ export const resetPie = (pies: PieData, name: Player["name"]): PieData => {
     };
   });
   return {
-    labels: pies.labels,
+    labels: donuts.labels,
     datasets: newDatasets,
   };
 };
@@ -335,10 +335,10 @@ export const removeBar = (bars: BarData, name: Player["name"]): BarData => {
   };
 };
 
-export const removePie = (pies: PieData, name: Player["name"]): PieData => {
-  const index = pies.labels.findIndex((label) => label === name);
+export const removedonut = (donuts: DonutData, name: Player["name"]): DonutData => {
+  const index = donuts.labels.findIndex((label) => label === name);
   if (index === -1) throw new Error(errorMsg);
-  const newDatasets = pies.datasets.map((dataset) => {
+  const newDatasets = donuts.datasets.map((dataset) => {
     const newData = [...dataset.data];
     const newBackgroundColor = [...dataset.backgroundColor];
     const newBorderColor = [...dataset.borderColor];
@@ -353,7 +353,7 @@ export const removePie = (pies: PieData, name: Player["name"]): PieData => {
     };
   });
   return {
-    labels: pies.labels.filter((label) => label !== name),
+    labels: donuts.labels.filter((label) => label !== name),
     datasets: newDatasets,
   };
 };
@@ -362,9 +362,9 @@ type ResetStates = {
   players: Player[];
   lines: LineData;
   bars: BarData;
-  pies: PieData;
+  donuts: DonutData;
 };
-// RESET ALL STATES (PLAYERS, LINES, BARS, PIES)
+// RESET ALL STATES (PLAYERS, LINES, BARS, donutS)
 //--
 export const fullReset = (): ResetStates => {
   return {
@@ -406,7 +406,7 @@ export const fullReset = (): ResetStates => {
         },
       ],
     },
-    pies: {
+    donuts: {
       labels: [],
       datasets: [
         {

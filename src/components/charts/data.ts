@@ -1,16 +1,18 @@
-import { ChartOptions, ChartType, Tooltip, TooltipPositionerFunction } from "chart.js";
+import { ChartOptions } from "chart.js";
 
 export const TIME_BEFORE_RESET_FOCUS = 40000;
 
-declare module "chart.js" {
-  interface TooltipPositionerMap {
-    topleft: TooltipPositionerFunction<ChartType>;
-  }
-}
+// declare module "chart.js" {
+//   interface TooltipPositionerMap {
+//     topleft: TooltipPositionerFunction<ChartType>;
+//   }
+// }
 
 export const lineOptions: ChartOptions<"line"> = {
+  spanGaps: true,
+  normalized: true,
   animation: {
-    delay: 400,
+    delay: 200,
   },
   responsive: true,
   elements: {
@@ -54,7 +56,6 @@ export const lineOptions: ChartOptions<"line"> = {
           return ` ${context.dataset.label || ""} : ${Math.floor(context.parsed.y) || 0}`;
         },
       },
-      position: "topleft",
       usePointStyle: true,
       bodyFont: {
         size: 13,
@@ -65,8 +66,9 @@ export const lineOptions: ChartOptions<"line"> = {
 };
 
 export const barOptions: ChartOptions<"bar"> = {
+  normalized: true,
   animation: {
-    delay: 600,
+    delay: 300,
   },
   responsive: true,
   maintainAspectRatio: false,
@@ -100,7 +102,6 @@ export const barOptions: ChartOptions<"bar"> = {
           return ` ${context.dataset.label || ""} : ${Math.floor(context.parsed.y) || 0}`;
         },
       },
-      position: "topleft",
       usePointStyle: true,
       bodyFont: {
         size: 13,
@@ -117,9 +118,11 @@ export const barOptions: ChartOptions<"bar"> = {
   },
 };
 
-export const pieOptions: ChartOptions<"pie"> = {
+export const donutOptions: ChartOptions<"doughnut"> = {
+  normalized: true,
+  spacing: 3,
   animation: {
-    delay: 800,
+    delay: 400,
   },
   responsive: true,
   maintainAspectRatio: false,
@@ -127,12 +130,15 @@ export const pieOptions: ChartOptions<"pie"> = {
     legend: {
       display: false,
     },
+    decimation: {
+      enabled: true,
+    },
   },
 };
 
-Tooltip.positioners.topleft = () => {
-  return {
-    x: 40,
-    y: 0,
-  };
-};
+// Tooltip.positioners.topleft = () => {
+//   return {
+//     x: 40,
+//     y: 0,
+//   };
+// };
