@@ -58,7 +58,6 @@ export const useToggle = () => {
     ...initialToggleStates,
   });
 
-  // Group action creators
   const toggleActions = {
     hideScore: useCallback(() => dispatch({ type: "TOGGLE_HIDE_SCORE" }), []),
     openAddPlayer: useCallback(

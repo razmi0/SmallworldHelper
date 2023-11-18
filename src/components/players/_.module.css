@@ -23,14 +23,6 @@
   /* max-width: 500px; */
 }
 
-::view-transition-new(add-player) {
-  animation-name: unset;
-}
-
-::view-transition-old(add-player) {
-  display: none;
-}
-
 .list-element-ctn {
   gap: 7px;
 }
@@ -79,7 +71,27 @@
 
 .addplayer-ctn {
   gap: 12px;
-  view-transition-name: add-player;
+  view-transition-name: add-player-vt;
+}
+
+::view-transition-new(add-player-vt) {
+  animation-name: add-player-animation;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+  animation-direction: alternate;
+}
+
+::view-transition-old(add-player-vt) {
+  display: none;
+}
+
+@keyframes add-player-animation {
+  0% {
+    transform: translateY(-50vh);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 button[datatype="utility"]:focus {

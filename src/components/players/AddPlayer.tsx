@@ -18,7 +18,7 @@ export const AddPlayer = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerP
 
   useClickOutside(ref, () => {
     if (isOpen) {
-      toggleOpenAddPlayer();
+      toggleWithViewTransition();
     }
   });
 
@@ -39,6 +39,10 @@ export const AddPlayer = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerP
     const newScore: string | number | undefined = validateOnChange(raw);
     if (!newScore) return;
     setStartScore(Number(newScore));
+  };
+
+  const toggleWithViewTransition = () => {
+    withViewTransition(toggleOpenAddPlayer);
   };
 
   return (

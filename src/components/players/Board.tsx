@@ -211,44 +211,45 @@ interface FocusManagerProps extends ContainerProps {
   onClick: () => void;
 }
 const PlayerListElement = ({ children }: ContainerProps) => {
-  const id = useId().replace(/:/g, "");
+  const id = useId().replace(/:/g, "_");
+  const duration = Math.max(Math.random(), 0.5).toFixed(2);
   const classes = `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn `;
-
-  // ${duration.toFixed(2)}s
-
-  // @keyframes view-transition-translate-${id} {
-  //   from {
-  //     display: initial;
-  //   }
-  // }
-
   const viewTransition = `
-    @keyframes unset-${id} {
-      from {
-        display: initial;
-
-      }
+    ::view-transition-new(player-card${id}) {
+      animation-duration: ${duration}s;
+      animation-fill-mode: fowards;
+      animation-name: player-card-animation;
     }
-    ::view-transition-new(player-card-${id}) {
-      animation-name: unset-${id};
-    }
-    ::view-transition-old(player-card-${id}) {
+    ::view-transition-old(player-card${id}) {
       display: none;
     }
-
-    #${id} {
-      view-transition-name: player-card-${id};
+    @keyframes player-card-animation {
+      0% {
+        transform: translate(0, 0);
+        opacity : 1;
+      }
+      50% {
+        transform: translate(1%,0);
+        opacity : 0.6;
+      }
+      100% {
+        opacity : 1;
+        transform: translate(0, 0);
+      }
     }
-
-  
   `;
 
   return (
     <>
-      <div id={id} className={classes}>
+      <style>{viewTransition}</style>
+      <div
+        className={classes}
+        style={{
+          viewTransitionName: `player-card${id}`,
+        }}
+      >
         {children}
       </div>
-      <style>{viewTransition}</style>
     </>
   );
 };
