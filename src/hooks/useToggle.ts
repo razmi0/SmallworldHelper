@@ -9,7 +9,7 @@ type ToggleState = {
 
 type ToggleActions =
   | { type: "TOGGLE_HIDE_SCORE" }
-  | { type: "TOGGLE_OPEN_ADD_PLAYER" }
+  | { type: "TOGGLE_OPEN_ADD_PLAYER"; payload?: boolean }
   | { type: "TOGGLE_OPEN_NAV"; payload?: boolean }
   | { type: "TOGGLE_OPEN_CHARTS" };
 
@@ -31,7 +31,9 @@ const toggleReducer = (state: ToggleState, action: ToggleActions): ToggleState =
     }
 
     case "TOGGLE_OPEN_ADD_PLAYER": {
-      return { ...state, isAddPlayerOpen: !state.isAddPlayerOpen };
+      return action.payload
+        ? { ...state, isAddPlayerOpen: action.payload }
+        : { ...state, isAddPlayerOpen: !state.isAddPlayerOpen };
     }
 
     case "TOGGLE_OPEN_NAV": {
@@ -59,7 +61,10 @@ export const useToggle = () => {
   // Group action creators
   const toggleActions = {
     hideScore: useCallback(() => dispatch({ type: "TOGGLE_HIDE_SCORE" }), []),
-    openAddPlayer: useCallback(() => dispatch({ type: "TOGGLE_OPEN_ADD_PLAYER" }), []),
+    openAddPlayer: useCallback(
+      (newState?: boolean) => dispatch({ type: "TOGGLE_OPEN_ADD_PLAYER", payload: newState }),
+      []
+    ),
     openNav: useCallback(
       (newState?: boolean) => dispatch({ type: "TOGGLE_OPEN_NAV", payload: newState }),
       []

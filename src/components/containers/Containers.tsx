@@ -1,9 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import styles from "./_.module.css";
 import { ContainerProps } from "@Types";
 
 export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
   const childrenArr = Array.isArray(children) ? children : [children];
+  const id = useId().replace(/:/g, (Math.random() * 1000).toFixed(1));
+
   return (
     <section className="charts-ctn">
       {isOpen &&
@@ -11,6 +13,7 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
         childrenArr.map((child, i) => {
           return (
             <figure
+              id={id}
               key={i}
               style={{
                 maxHeight: "250px",
@@ -26,6 +29,7 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
               }}
               className="grainy lin-dark global-grainy shadow-ctn"
             >
+              <style>{}</style>
               {child}
             </figure>
           );

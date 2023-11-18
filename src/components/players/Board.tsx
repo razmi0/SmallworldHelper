@@ -180,11 +180,6 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
             </FocusManager>
           );
         })}
-        <li
-          style={{
-            listStyle: "none",
-          }}
-        ></li>
       </ul>
       {children}
     </BoardView>
@@ -217,47 +212,43 @@ interface FocusManagerProps extends ContainerProps {
 }
 const PlayerListElement = ({ children }: ContainerProps) => {
   const id = useId().replace(/:/g, "");
-  const duration = Math.random() + 0.5;
   const classes = `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn `;
+
+  // ${duration.toFixed(2)}s
+
+  // @keyframes view-transition-translate-${id} {
+  //   from {
+  //     display: initial;
+  //   }
+  // }
+
+  const viewTransition = `
+    @keyframes unset-${id} {
+      from {
+        display: initial;
+
+      }
+    }
+    ::view-transition-new(player-card-${id}) {
+      animation-name: unset-${id};
+    }
+    ::view-transition-old(player-card-${id}) {
+      display: none;
+    }
+
+    #${id} {
+      view-transition-name: player-card-${id};
+    }
+
+  
+  `;
+
   return (
     <>
       <div id={id} className={classes}>
         {children}
       </div>
-      <style>
-        {`
-          ::view-transition-new(player-card-${id}) {
-              animation-name: view-transition-translate;
-              animation-duration: ${duration}s;
-            }
-          ::view-transition-old(player-card-${id}) {
-              display : none;
-              transition: display ${duration}s;
-            }
-
-            #${id} {
-              view-transition-name: player-card-${id};
-            }
-
-            @keyframes view-transition-translate {
-
-              0% {
-                opacity: inherit;
-              }
-              50% {
-                display: none;
-              }
-              75% {
-                transform: translateX(-200%);
-                opacity: 0;
-              }
-              100% {
-                opacity: 1;
-              }
-            }
-            
-        `}
-      </style>
+      <style>{viewTransition}</style>
     </>
   );
 };

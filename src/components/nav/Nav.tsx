@@ -18,7 +18,7 @@ import styles from "./_.module.css";
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 
 type NavProps = {
-  toggleOpenAddPlayer: () => void;
+  toggleOpenAddPlayer: (newState?: boolean) => void;
   toggleOpenCharts: () => void;
   toggleHideScore: () => void;
   isScoreHidden: boolean;

@@ -50,7 +50,11 @@ const App = () => {
           remove={removePlayer}
           update={updateScore}
         >
-          <AddPlayer addPlayer={addPlayer} isOpen={toggleStates.isAddPlayerOpen} />
+          <AddPlayer
+            addPlayer={addPlayer}
+            isOpen={toggleStates.isAddPlayerOpen}
+            toggleOpenAddPlayer={openAddPlayer}
+          />
         </Board>
         <Charts isOpen={isChartsOpen && players.length > 0} lines={lines} bars={bars} pies={pies} />
       </PlayerStatsContainer>

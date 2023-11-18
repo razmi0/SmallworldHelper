@@ -31,11 +31,19 @@ ChartJS.register(
 );
 
 export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
-  return <ChartLine data={data} options={options} />;
+  return (
+    <>
+      <ChartLine data={data} options={options} />
+    </>
+  );
 };
 
 export const Pie = ({ data, options /* theme = "dark" */ }: PieProps) => {
-  return <ChartPie data={data} options={options} />;
+  return (
+    <>
+      <ChartPie data={data} options={options} />
+    </>
+  );
 };
 
 export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
