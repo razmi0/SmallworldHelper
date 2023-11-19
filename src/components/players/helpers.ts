@@ -38,6 +38,7 @@ export const navigateTo = (
 //--
 
 export const isDeletable = (e: KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
+  if (!e.currentTarget.value) return false;
   return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
 };
 
