@@ -1,4 +1,12 @@
-import { ReactNode, CSSProperties, useState, useId, ElementType, KeyboardEvent } from "react";
+import {
+  ReactNode,
+  CSSProperties,
+  useState,
+  useId,
+  ElementType,
+  KeyboardEvent,
+  forwardRef,
+} from "react";
 import { IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
 
@@ -27,6 +35,16 @@ interface KeyboardManagerProps extends ContainerProps {
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   as?: ElementType;
 }
+
+export const RefManager = forwardRef<HTMLDivElement, ContainerProps>(({ children }, ref) => {
+  const id = `${useId()}_refManager`;
+  return (
+    <div id={id} ref={ref}>
+      {children}
+    </div>
+  );
+});
+
 export const KeyboardManager = ({
   as: Element = "div",
   children,

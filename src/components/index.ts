@@ -8,6 +8,7 @@ import {
   UndoRedo,
   FocusManager,
   KeyboardManager,
+  RefManager,
 } from "./utils/Utils";
 import { Bar, Charts, Line, Doughnut } from "./charts/Charts";
 import {
@@ -48,8 +49,10 @@ export {
   FreshStartButton,
   Spacer,
   UndoRedo,
+  /* MANAGERS */
   FocusManager,
   KeyboardManager,
+  RefManager,
   /* CHARTS */
   Bar,
   Charts,

@@ -1,5 +1,5 @@
-import { ChangeEvent, MutableRefObject, forwardRef, useCallback, useRef } from "react";
-import { KeyboardManager, SoftInput } from "@Components";
+import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
+import { KeyboardManager, RefManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside } from "@Hooks";
 import { keys, validateIntOnChange } from "./helpers";
 import { withViewTransition } from "@Utils";
@@ -27,7 +27,7 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
     withViewTransition(() => {
       addPlayer(newPlayerName, startScore as number);
       setNewPlayerName("");
-      setStartScore(0);
+      resetScoreInput();
     });
   }, [newPlayerName, startScore]);
 
@@ -45,6 +45,7 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
 
   const toggleCard = () => {
     withViewTransition(toggleOpenAddPlayer);
+    resetScoreInput();
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,19 +58,15 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
     if (e.key === keys.BACKSPACE) {
       if (startScore.toString().length === 1) {
         resetScoreInput();
-        console.log("reset");
       }
     }
   };
 
   const resetScoreInput = () => {
-    console.log("reset");
     setStartScore(0);
   };
 
   const finalStartScore = startScore ? startScore : "";
-  console.log("finalStartScore", finalStartScore);
-  console.log("startScore", startScore);
 
   return (
     <RefManager ref={ref}>
@@ -94,10 +91,6 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
     </RefManager>
   );
 };
-
-const RefManager = forwardRef<HTMLDivElement, ContainerProps>(({ children }, ref) => {
-  return <div ref={ref}>{children}</div>;
-});
 
 const AddPlayerContainer = ({ children }: ContainerProps) => {
   const classes = `${styles["board-card"]} ${styles["addplayer-ctn"]} ${styles["utility-card"]} grainy lin-dark global-grainy shadow-ctn `;
