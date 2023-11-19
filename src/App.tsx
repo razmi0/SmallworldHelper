@@ -1,5 +1,12 @@
 // import { Input, InputButton } from "./components/Input";
-import { useUndoRedo, usePlayer, useToggle, useLocalStorage } from "@Hooks";
+import {
+  useUndoRedo,
+  usePlayer,
+  useToggle,
+  useLocalStorage,
+  useMidAction,
+  useMidState,
+} from "@Hooks";
 import {
   MainContainer,
   PlayerStatsContainer,
@@ -10,14 +17,16 @@ import {
   FreshStartButton,
 } from "@Components";
 import { Player } from "@Types"; // BarData, LineData, DonutData,
-import { useMemo } from "react";
+import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
+import { useEffect } from "react";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
   const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  useLocalStorage("players", players, setPlayers);
+  const { setLoadPlayers, setSavePlayers } = useMidAction();
+  const { loadPlayers, savePlayers } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts } = toggleActions;
@@ -27,9 +36,18 @@ const App = () => {
 
   const hasPlayer = players.length > 0;
 
-  useMemo(() => {
-    // newPresent(players)
-  }, [players]);
+  useEffect(() => {
+    const loadedPlayers = manageStorage(
+      loadPlayers,
+      savePlayers,
+      setLoadPlayers,
+      setSavePlayers,
+      players
+    );
+    if (loadedPlayers) {
+      setPlayers(loadedPlayers);
+    }
+  }, [loadPlayers, savePlayers]);
 
   return (
     <MainContainer>
@@ -72,3 +90,28 @@ const App = () => {
 };
 
 export default App;
+// loadPlayers, savePlayers, setLoadPlayers, setSavePlayers, setPlayers, players
+const manageStorage = (
+  load: boolean,
+  save: boolean,
+  setLoad: (value: boolean) => void,
+  setSave: (value: boolean) => void,
+  payload: Player[]
+) => {
+  if (load) {
+    setLoad(true);
+    try {
+      const storedData = getFromLocalStorage<Player[]>("players");
+      return storedData;
+    } catch (error) {
+      throw new Error("No players found in local storage");
+    }
+  } else if (save) {
+    setSave(false);
+    try {
+      saveToLocalStorage<Player[]>("players", payload);
+    } catch (error) {
+      throw new Error("Unable to save players to local storage");
+    }
+  }
+};

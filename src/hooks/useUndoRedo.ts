@@ -49,11 +49,11 @@ export const useUndoRedo = <T>(externalState: T, updateExternalState: (newStates
   // STATE SYNC  playersStates
   useEffect(() => {
     if (externalState !== present) updateExternalState(present);
-  }, [present]);
+  }, [present, updateExternalState]);
 
   useEffect(() => {
     if (externalState !== present) setState(externalState);
-  }, [externalState /* DONT CHANGE */]);
+  }, [externalState /* DONT CHANGE * /* DONT CHANGE */]);
 
   const setState = (newState: T) => dispatch({ type: SET_STATE, payload: newState });
   const undo = () => dispatch({ type: UNDO });

@@ -4,33 +4,31 @@ import { useMidAction, useMidState } from "@Hooks";
 
 export const useLocalStorage = <T>(
   key: string,
-  externalState: T,
-  updateExternalState: (newState: T) => void
+  external: T
+  // updateExternal: (newState: T) => void
 ) => {
-  const [save, setSave] = useState(externalState);
+  const [save, setSave] = useState(external);
 
   const { setLoadPlayers, setSavePlayers } = useMidAction();
   const { loadPlayers, savePlayers } = useMidState();
 
   useEffect(() => {
-    if (externalState !== save) setSave(externalState);
-  }, [externalState]);
-
-  useEffect(() => {
-    if (externalState !== save) updateExternalState(save);
-  }, [save]);
-
-  useEffect(() => {
+    setSave(external);
     if (savePlayers) {
       saveToLocalStorage(key, save);
       setSavePlayers(false);
     } else if (loadPlayers) {
-      const storedData = getFromLocalStorage(key);
-      if (!storedData) throw new Error("No players found in local storage");
-      setLoadPlayers(false);
-      setSave(storedData as T);
+      try {
+        const storedData = getFromLocalStorage(key);
+        setSave(storedData as T);
+        setLoadPlayers(false);
+      } catch (error) {
+        throw new Error("No players found in local storage");
+      }
     }
   }, [savePlayers, loadPlayers]);
+
+  return { save };
 };
 // type LocalStorageReducerAction<T> =
 //   | { type: "SAVE"; payload: { key: string; data: T } }

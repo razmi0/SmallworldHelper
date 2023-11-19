@@ -165,9 +165,9 @@ p {
 }
 .form__field--commun:focus ~ .form__label {
   position: absolute;
-  top: -14px;
+  top: -10px;
   display: block;
-  transition: 0.2s;
+  transition: 0.3s ease-out;
   font-size: 0.7rem;
 }
 /* reset input */
