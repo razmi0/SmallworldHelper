@@ -48,6 +48,10 @@
   outline: none;
 }
 
+li {
+  list-style: none;
+}
+
 body {
   /* margin: 2px; */
   height: 100vh;
@@ -168,7 +172,7 @@ p {
   top: -10px;
   display: block;
   transition: 0.3s ease-out;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 /* reset input */
 .form__field--commun:required,
