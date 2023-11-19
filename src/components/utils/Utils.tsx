@@ -33,12 +33,8 @@ export const KeyboardManager = ({
   onKeyUp,
   onKeyDown,
 }: KeyboardManagerProps) => {
-  const newOnKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log(e);
-    onKeyUp(e);
-  };
   return (
-    <Element onKeyUp={newOnKeyUp} onKeyDown={onKeyDown}>
+    <Element onKeyUp={onKeyUp} onKeyDown={onKeyDown}>
       {children}
     </Element>
   );
