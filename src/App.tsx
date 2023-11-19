@@ -1,4 +1,4 @@
-// import { Input, InputButton } from "./components/Input";
+import { useEffect } from "react";
 import { useUndoRedo, usePlayer, useToggle, useMidAction, useMidState } from "@Hooks";
 import {
   MainContainer,
@@ -9,9 +9,8 @@ import {
   AddPlayer,
   FreshStartButton,
 } from "@Components";
-import { Player } from "@Types"; // BarData, LineData, DonutData,
-import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
-import { useEffect } from "react";
+import { Player } from "@Types";
+import { manageStorage } from "@Utils";
 
 const App = () => {
   const { playersStates, playersActions } = usePlayer();
@@ -83,28 +82,3 @@ const App = () => {
 };
 
 export default App;
-// loadPlayers, savePlayers, setLoadPlayers, setSavePlayers, setPlayers, players
-const manageStorage = (
-  load: boolean,
-  save: boolean,
-  setLoad: (value: boolean) => void,
-  setSave: (value: boolean) => void,
-  payload: Player[]
-) => {
-  if (load) {
-    setLoad(false);
-    try {
-      const storedData = getFromLocalStorage<Player[]>("players");
-      return storedData;
-    } catch (error) {
-      throw new Error("No players found in local storage");
-    }
-  } else if (save) {
-    setSave(false);
-    try {
-      saveToLocalStorage<Player[]>("players", payload);
-    } catch (error) {
-      throw new Error("Unable to save players to local storage");
-    }
-  }
-};

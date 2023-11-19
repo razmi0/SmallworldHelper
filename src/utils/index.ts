@@ -1,3 +1,4 @@
+import { manageStorage } from "./storage";
 import {
   add4dToHex,
   addOpacityToHex,
@@ -41,4 +42,6 @@ export {
   withViewTransition,
   debounce,
   throttle,
+  /* STORAGE */
+  manageStorage,
 };
