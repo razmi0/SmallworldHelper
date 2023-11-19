@@ -1,4 +1,5 @@
-import { KeyboardEvent } from "react";
+import { KeyboardEvent, createRef } from "react";
+import styles from "./_.module.css";
 
 // KEYBOARD NAVIGATION
 //--
@@ -59,3 +60,39 @@ export const blurInput = (inputsRefs: HTMLInputElement[]) => {
     }
   });
 };
+
+export const initInputsRefs = (size: number) => {
+  return new Array(size)
+    .fill(null)
+    .map(() => createRef<HTMLInputElement>()) as unknown as HTMLInputElement[];
+};
+
+// UI
+//--
+export const getCardStyles = () => {
+  return `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn`;
+};
+
+export const getCardViewTransition = (id: string, duration: string) => `
+  ::view-transition-new(player-card${id}) {
+    animation-duration: ${duration}s;
+    animation-fill-mode: forwards;
+    animation-name: player-card-animation;
+  }
+  ::view-transition-old(player-card${id}) {
+    display: none;
+  }
+  @keyframes player-card-animation {
+    0% {
+      scale: 1;
+    }
+    50% {
+      scale: 1.01;
+      opacity: 0.95;
+    }
+    100% {
+      scale: 1;
+      opacity: 1;
+    }
+  }
+`;

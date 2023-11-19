@@ -18,7 +18,16 @@ import {
   Reset,
   Star,
 } from "@Components";
-import { blurInput, isDeletable, keys, navigateTo, validateOnChange } from "./helpers";
+import {
+  blurInput,
+  getCardStyles,
+  getCardViewTransition,
+  initInputsRefs,
+  isDeletable,
+  keys,
+  navigateTo,
+  validateOnChange,
+} from "./helpers";
 import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
 import styles from "./_.module.css";
 
@@ -51,12 +60,12 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   const { isFocus, newScores } = useMidState();
   const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
-  const inputs = useRef<HTMLInputElement[]>(new Array(players.length).fill(""));
+  const inputs = useRef(initInputsRefs(players.length));
 
   useClickOutside(inputs, () => blurInput(inputs.current));
 
   useEffect(() => {
-    inputs.current = new Array(players.length).fill("");
+    inputs.current = initInputsRefs(players.length);
     setIsOnFocus(players.length, false);
   }, [players.length]);
 
@@ -146,7 +155,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
               onFocus={() => handleFocus(i)}
               onClick={() => handleClicked(i)}
             >
-              <PlayerListElement>
+              <PlayerCard>
                 <PlayerTextContainer>
                   <PlayerText color={finalColor}>{name}</PlayerText>
                   <PlayerText color={finalColor}>
@@ -181,7 +190,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
                     />
                   </InputContainer>
                 </UtilitiesInputContainer>
-              </PlayerListElement>
+              </PlayerCard>
             </FocusManager>
           );
         })}
@@ -215,34 +224,11 @@ interface FocusManagerProps extends ContainerProps {
   onBlur: () => void;
   onClick: () => void;
 }
-const PlayerListElement = ({ children }: ContainerProps) => {
+const PlayerCard = ({ children }: ContainerProps) => {
   const id = useId().replace(/:/g, "_");
   const duration = Math.max(Math.random(), 0.5).toFixed(2);
-  const classes = `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn `;
-  const viewTransition = `
-    ::view-transition-new(player-card${id}) {
-      animation-duration: ${duration}s;
-      animation-fill-mode: fowards;
-      animation-name: player-card-animation;
-    }
-    ::view-transition-old(player-card${id}) {
-      display: none;
-    }
-    @keyframes player-card-animation {
-      0% {
-        scale : 1;
-     }
-      50% {
-        scale : 1.01;
-        opacity : 0.95;
-      }
-      100% {
-        scale : 1;
-        opacity : 1;
-
-      }
-    }
-  `;
+  const classes = getCardStyles();
+  const viewTransition = getCardViewTransition(id, duration);
 
   return (
     <>
