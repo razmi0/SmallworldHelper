@@ -6,7 +6,7 @@ import {
   Board,
   Nav,
   Charts,
-  AddPlayer,
+  AddPlayerCard,
   FreshStartButton,
 } from "@Components";
 import { Player } from "@Types";
@@ -17,7 +17,8 @@ const App = () => {
   const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  const { setLoadPlayers, setSavePlayers } = useMidAction();
+  const { storageActions } = useMidAction();
+  const { setLoadPlayers, setSavePlayers } = storageActions;
   const { loadPlayers, savePlayers } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
@@ -46,6 +47,7 @@ const App = () => {
       {/* {isDevEnv() && <Clock />} */}
       <Nav
         toggleHideScore={hideScore}
+        storageActions={storageActions}
         toggleOpenAddPlayer={openAddPlayer}
         toggleOpenCharts={openCharts}
         isScoreHidden={isScoreHidden}
@@ -64,14 +66,14 @@ const App = () => {
           reset={resetScore}
           remove={removePlayer}
           update={updateScore}
-        ></Board>
+        />
         <Charts
           isOpen={isChartsOpen && players.length > 0}
           lines={lines}
           bars={bars}
           donuts={donuts}
         />
-        <AddPlayer
+        <AddPlayerCard
           addPlayer={addPlayer}
           isOpen={toggleStates.isAddPlayerOpen}
           toggleOpenAddPlayer={openAddPlayer}

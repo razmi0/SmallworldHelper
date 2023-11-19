@@ -1,15 +1,15 @@
 import { ReactNode, createContext, useCallback, useContext, useReducer } from "react";
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helper";
 
-type newScore = number | string;
+type newScoreType = number | string; // string => transitional value of input === "-"
 
 type IntermediateStates = {
   /**
    * @description inputs tracker
    */
   isFocus: boolean[]; // useMap
-  newScores: newScore[]; // useMap
-  startScore: number; // useMidState
+  newScores: newScoreType[]; // useMap
+  startScore: newScoreType; // useMidState
   newPlayerName: string; // useMidState
   savePlayers: boolean;
   loadPlayers: boolean;
@@ -19,9 +19,9 @@ type IntermediateActions =
   | { type: "CHANGE_FOCUS"; payload: { index: number; value: boolean } } // useMap
   | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
   | { type: "RESET_FOCUS" } // useMap
-  | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: number | string } } // useMap
+  | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: newScoreType } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useMidState
-  | { type: "SET_START_SCORE"; payload: { score: number } } // useMidState
+  | { type: "SET_START_SCORE"; payload: { score: newScoreType } } // useMidState
   | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useMidState
   | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useMidState
 
@@ -87,15 +87,15 @@ const intermediateReducer = (
 
     case "SET_NEW_SCORES": {
       const { index, newScore } = action.payload;
-      let newNewScores = state.newScores;
+      let newScores = state.newScores;
 
       if (index >= state.newScores.length) {
-        newNewScores = resizeArray(state.newScores, index + 1, 0);
+        newScores = resizeArray(state.newScores, index + 1, 0);
       }
 
       return {
         ...state,
-        newScores: newNewScores.map((score, i) => (i === index ? newScore : score)),
+        newScores: newScores.map((score, i) => (i === index ? newScore : score)),
       };
     }
 
@@ -106,7 +106,7 @@ const intermediateReducer = (
     }
     case "SET_START_SCORE": {
       const { score } = action.payload;
-      if (!score) return state;
+      if (!score && score !== 0) return state;
       return { ...state, startScore: score };
     }
     default:
@@ -155,64 +155,41 @@ export const useMidAction = () => {
     throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
-  const isOnFocus = useCallback(
-    (index: number, value: boolean) => {
-      dispatch!({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
-    },
-    [dispatch]
-  );
+  const isOnFocus = useCallback((index: number, value: boolean) => {
+    dispatch({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
+  }, []);
 
-  const setIsOnFocus = useCallback(
-    (newLength: number, fillValue: boolean) => {
-      dispatch!({
-        type: "CHANGE_FOCUS_LENGTH",
-        payload: { newLength: newLength, fillValue: fillValue },
-      });
-    },
-    [dispatch]
-  );
+  const setIsOnFocus = useCallback((newLength: number, fillValue: boolean) => {
+    dispatch({
+      type: "CHANGE_FOCUS_LENGTH",
+      payload: { newLength: newLength, fillValue: fillValue },
+    });
+  }, []);
 
   const resetFocus = useCallback(() => {
-    dispatch!({ type: "RESET_FOCUS" });
-  }, [dispatch]);
+    dispatch({ type: "RESET_FOCUS" });
+  }, []);
 
-  const setNewScores = useCallback(
-    (index: number, newScore: number | string) => {
-      dispatch!({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
-    },
-    [dispatch]
-  );
-  const setNewPlayerName = useCallback(
-    (name: string) => {
-      dispatch!({ type: "SET_NEW_PLAYER_NAME", payload: { name: name } });
-    },
-    [dispatch]
-  );
-  const setStartScore = useCallback(
-    (score: number) => {
-      dispatch!({ type: "SET_START_SCORE", payload: { score: score } });
-    },
-    [dispatch]
-  );
-  const setSavePlayers = useCallback(
-    (payload: boolean) => {
-      dispatch!({ type: "SET_SAVE_PLAYERS", payload });
-    },
-    [dispatch]
-  );
-  const setLoadPlayers = useCallback(
-    (payload: boolean) => {
-      dispatch!({ type: "SET_LOAD_PLAYERS", payload });
-    },
-    [dispatch]
-  );
+  const setNewScores = useCallback((index: number, newScore: number | string) => {
+    dispatch({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
+  }, []);
+  const setNewPlayerName = useCallback((name: string) => {
+    dispatch({ type: "SET_NEW_PLAYER_NAME", payload: { name: name } });
+  }, []);
+  const setStartScore = useCallback((score: newScoreType) => {
+    dispatch({ type: "SET_START_SCORE", payload: { score: score } });
+  }, []);
+  const setSavePlayers = useCallback((payload: boolean) => {
+    dispatch({ type: "SET_SAVE_PLAYERS", payload });
+  }, []);
+  const setLoadPlayers = useCallback((payload: boolean) => {
+    dispatch({ type: "SET_LOAD_PLAYERS", payload });
+  }, []);
 
   return {
     focusActions: { resetFocus, isOnFocus, setIsOnFocus }, // as [typeof isOnFocus, typeof setIsOnFocus]
+    addPlayerActions: { setNewPlayerName, setStartScore },
+    storageActions: { setSavePlayers, setLoadPlayers },
     setNewScores,
-    setNewPlayerName,
-    setStartScore,
-    setSavePlayers,
-    setLoadPlayers,
   };
 };

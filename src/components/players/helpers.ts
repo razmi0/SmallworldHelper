@@ -42,7 +42,7 @@ export const isDeletable = (e: KeyboardEvent<HTMLInputElement | HTMLButtonElemen
   return e.key === "Backspace" && e.currentTarget.value.length === 1 ? true : false;
 };
 
-export const validateOnChange = (str: string) => {
+export const validateIntOnChange = (str: string) => {
   if (str === "-") return str;
   const valid = /^-?\d+$/.test(str);
   if (!valid) return;

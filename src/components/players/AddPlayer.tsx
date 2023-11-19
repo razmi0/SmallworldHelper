@@ -1,7 +1,7 @@
 import { ChangeEvent, MutableRefObject, forwardRef, useCallback, useRef } from "react";
 import { KeyboardManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside } from "@Hooks";
-import { validateOnChange } from "./helpers";
+import { keys, validateIntOnChange } from "./helpers";
 import { withViewTransition } from "@Utils";
 import { ContainerProps } from "@Types";
 import styles from "./_.module.css";
@@ -11,46 +11,65 @@ type AddPlayerProps = {
   isOpen: boolean;
   toggleOpenAddPlayer: () => void;
 };
-export const AddPlayer = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerProps) => {
+export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerProps) => {
   const { newPlayerName, startScore } = useMidState();
-  const { setNewPlayerName, setStartScore } = useMidAction();
+  const { addPlayerActions } = useMidAction();
+  const { setNewPlayerName, setStartScore } = addPlayerActions;
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
 
   useClickOutside(ref, () => {
     if (isOpen) {
-      toggleWithViewTransition();
+      toggleCard();
     }
   });
 
-  const addPlayerActionWithViewTransition = useCallback(() => {
+  const addPlayerAction = useCallback(() => {
     withViewTransition(() => {
-      addPlayer(newPlayerName, startScore);
+      addPlayer(newPlayerName, startScore as number);
       setNewPlayerName("");
+      setStartScore(0);
     });
   }, [newPlayerName, startScore]);
 
   const handleInputValidation = () => {
     if (!newPlayerName) return;
-    addPlayerActionWithViewTransition();
+    addPlayerAction();
   };
 
   const handleStartScoreChange = (e: ChangeEvent<HTMLInputElement>) => {
     const raw = e.currentTarget.value;
-    const newScore: string | number | undefined = validateOnChange(raw);
+    const newScore: string | number | undefined = validateIntOnChange(raw);
     if (!newScore) return;
-    setStartScore(Number(newScore));
+    setStartScore(newScore);
   };
 
-  const toggleWithViewTransition = () => {
+  const toggleCard = () => {
     withViewTransition(toggleOpenAddPlayer);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Escape") {
-      console.log("escape");
-      toggleWithViewTransition();
+    if (e.key === keys.ESCAPE) {
+      toggleCard();
+    }
+    if (e.key === keys.ENTER) {
+      handleInputValidation();
+    }
+    if (e.key === keys.BACKSPACE) {
+      if (startScore.toString().length === 1) {
+        resetScoreInput();
+        console.log("reset");
+      }
     }
   };
+
+  const resetScoreInput = () => {
+    console.log("reset");
+    setStartScore(0);
+  };
+
+  const finalStartScore = startScore ? startScore : "";
+  console.log("finalStartScore", finalStartScore);
+  console.log("startScore", startScore);
 
   return (
     <RefManager ref={ref}>
@@ -60,7 +79,6 @@ export const AddPlayer = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerP
             <SoftInput
               label="Name"
               pseudoName="0_addPlayer"
-              onEnter={handleInputValidation}
               onChange={(e) => setNewPlayerName(e.currentTarget.value)}
               value={newPlayerName}
             />
@@ -68,8 +86,7 @@ export const AddPlayer = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerP
               label="Start score"
               pseudoName="0_startScore"
               onChange={(e) => handleStartScoreChange(e)}
-              value={startScore ? startScore : ""}
-              onEnter={handleInputValidation}
+              value={finalStartScore}
             />
           </AddPlayerContainer>
         </KeyboardManager>

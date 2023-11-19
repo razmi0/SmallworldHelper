@@ -30,7 +30,7 @@ import {
   Undo,
 } from "./icons/Icons";
 import { Nav } from "./nav/Nav";
-import { AddPlayer } from "./players/AddPlayer";
+import { AddPlayerCard } from "./players/AddPlayer";
 import { Board, PlayerStatsContainer } from "./players/Board";
 
 export {
@@ -78,5 +78,5 @@ export {
   /* PLAYERS */
   Board,
   PlayerStatsContainer,
-  AddPlayer,
+  AddPlayerCard,
 };

@@ -28,7 +28,7 @@ import {
   isDeletable,
   keys,
   navigateTo,
-  validateOnChange,
+  validateIntOnChange,
 } from "./helpers";
 import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
 import styles from "./_.module.css";
@@ -136,7 +136,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 
   const handleChangeScore = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     const raw = e.currentTarget.value;
-    const newScore: string | number | undefined = validateOnChange(raw);
+    const newScore: string | number | undefined = validateIntOnChange(raw);
     if (!newScore) return;
     setNewScores(i, newScore);
   };

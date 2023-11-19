@@ -24,6 +24,7 @@ type NavProps = {
   isScoreHidden: boolean;
   undoRedoStates: NavUndoRedoStates;
   undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
+  storageActions: ReturnType<typeof useMidAction>["storageActions"];
 };
 
 export const Nav = ({
@@ -33,16 +34,15 @@ export const Nav = ({
   undoRedoStates,
   undoRedoActions,
   isScoreHidden,
+  storageActions,
 }: NavProps) => {
-  const { setLoadPlayers, setSavePlayers } = useMidAction();
-
+  const { setLoadPlayers, setSavePlayers } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
 
   return (
     <Header>
       <nav className={styles["nav-ctn"]}>
-        {/* <IconButton variant="nav" icon={Theme} iconName="theme" onClick={switchTheme} /> */}
         <IconButton
           variant="nav"
           icon={Load}
