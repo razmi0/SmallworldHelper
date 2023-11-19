@@ -72,7 +72,7 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
     <RefManager ref={ref}>
       {isOpen && (
         <KeyboardManager onKeyUp={handleKeyUp}>
-          <AddPlayerContainer>
+          <AddPlayerInputsContainer>
             <SoftInput
               label="Name"
               pseudoName="0_addPlayer"
@@ -85,14 +85,14 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
               onChange={(e) => handleStartScoreChange(e)}
               value={finalStartScore}
             />
-          </AddPlayerContainer>
+          </AddPlayerInputsContainer>
         </KeyboardManager>
       )}
     </RefManager>
   );
 };
 
-const AddPlayerContainer = ({ children }: ContainerProps) => {
+const AddPlayerInputsContainer = ({ children }: ContainerProps) => {
   const classes = `${styles["board-card"]} ${styles["addplayer-ctn"]} ${styles["utility-card"]} grainy lin-dark global-grainy shadow-ctn `;
   return <div className={classes}>{children}</div>;
 };

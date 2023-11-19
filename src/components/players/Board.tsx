@@ -222,7 +222,7 @@ export const PlayerStatsContainer = ({ children }: ContainerProps) => {
 
 const PlayerCard = ({ children }: ContainerProps) => {
   const id = useId().replace(/:/g, "_");
-  const duration = Math.max(Math.random(), 0.5).toFixed(2);
+  const duration = Math.max(Math.random(), 1).toFixed(2);
   const classes = getCardStyles();
   const viewTransition = getCardViewTransition(id, duration);
 

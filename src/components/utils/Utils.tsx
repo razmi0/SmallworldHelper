@@ -23,8 +23,9 @@ export const FocusManager = ({
   onClick,
   as: Element = "div",
 }: FocusManagerProps) => {
+  const id = `${useId()}_focus_manager`;
   return (
-    <Element onFocus={onFocus} onBlur={onBlur} onClick={onClick}>
+    <Element id={id} onFocus={onFocus} onBlur={onBlur} onClick={onClick}>
       {children}
     </Element>
   );
@@ -37,9 +38,16 @@ interface KeyboardManagerProps extends ContainerProps {
 }
 
 export const RefManager = forwardRef<HTMLDivElement, ContainerProps>(({ children }, ref) => {
-  const id = `${useId()}_refManager`;
+  const id = `${useId()}_ref_manager`;
   return (
-    <div id={id} ref={ref}>
+    <div
+      id={id}
+      ref={ref}
+      style={{
+        width: "fit-content",
+        height: "fit-content",
+      }}
+    >
       {children}
     </div>
   );
@@ -51,8 +59,9 @@ export const KeyboardManager = ({
   onKeyUp,
   onKeyDown,
 }: KeyboardManagerProps) => {
+  const id = `${useId()}_keyboard_manager`;
   return (
-    <Element onKeyUp={onKeyUp} onKeyDown={onKeyDown}>
+    <Element id={id} onKeyUp={onKeyUp} onKeyDown={onKeyDown}>
       {children}
     </Element>
   );
