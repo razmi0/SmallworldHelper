@@ -108,6 +108,11 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
         break;
       }
 
+      case keys.ESCAPE: {
+        resetInput(i);
+        break;
+      }
+
       default:
         break;
     }
