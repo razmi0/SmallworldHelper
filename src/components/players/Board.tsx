@@ -17,6 +17,8 @@ import {
   IconHeading,
   Reset,
   Star,
+  FocusManager,
+  KeyboardManager,
 } from "@Components";
 import {
   blurInput,
@@ -77,9 +79,11 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     isOnFocus(i, false);
     resetInput(i);
   }, []);
+
   const handleFocus = useCallback((i: number) => {
     isOnFocus(i, true);
   }, []);
+
   const handleClicked = useCallback((i: number) => {
     isOnFocus(i, !isFocus[i]);
   }, []);
@@ -91,16 +95,16 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   ) => {
     switch (e.key) {
       case keys.ENTER: {
-        if (e.currentTarget.nodeName === "INPUT") {
-          if (e.currentTarget.value === "-") return;
-          update(id /* PLAYER ID */, newScores[i] as number);
-          resetInput(i);
-          navigateTo(inputs.current, i, "NEXT");
-        }
+        console.log("enter : ", e.currentTarget.nodeName);
+        if (e.currentTarget.value === "-") return;
+        update(id /* PLAYER ID */, newScores[i] as number);
+        resetInput(i);
+        navigateTo(inputs.current, i, "NEXT");
         break;
       }
 
       case keys.BACKSPACE: {
+        console.log("backspace : ", e.currentTarget.nodeName);
         if (isDeletable(e)) {
           resetInput(i);
         }
@@ -108,16 +112,19 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
       }
 
       case keys.ARROW_UP: {
+        console.log("arrow up : ", e.currentTarget.nodeName);
         navigateTo(inputs.current, i, "PREV");
         break;
       }
 
       case keys.ARROW_DOWN: {
+        console.log("arrow down : ", e.currentTarget.nodeName);
         navigateTo(inputs.current, i, "NEXT");
         break;
       }
 
       case keys.ESCAPE: {
+        console.log("escape : ", e.currentTarget.nodeName);
         resetInput(i);
         break;
       }
@@ -154,43 +161,37 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
               onBlur={() => handleBlur(i)}
               onFocus={() => handleFocus(i)}
               onClick={() => handleClicked(i)}
+              as="li"
             >
-              <PlayerCard>
-                <PlayerTextContainer>
-                  <PlayerText color={finalColor}>{name}</PlayerText>
-                  <PlayerText color={finalColor}>
-                    <IconHeading
-                      animationName="rotate"
-                      isHover={isFocus[i]}
-                      color={color}
-                      icon={Star}
-                      variant="heading"
-                    />
-                    {hideScore ? "***" : victoryPtn}
-                  </PlayerText>
-                </PlayerTextContainer>
-                <UtilitiesInputContainer>
-                  <InputContainer>
-                    <SoftInput
-                      ref={(element) => manageRefs(element, i)}
-                      color={color}
-                      onKeyUp={(event) => handleKeyUp(event, id, i)}
-                      onChange={(event) => handleChangeScore(event, i)}
-                      value={softValue}
-                      pseudoName={pseudoName}
-                    />
-                    <PlayerUtilities
-                      id={id}
-                      remove={remove}
-                      reset={reset}
-                      isFocus={isFocus[i]}
-                      onKeyUp={(event) => {
-                        handleKeyUp(event, id, i);
-                      }}
-                    />
-                  </InputContainer>
-                </UtilitiesInputContainer>
-              </PlayerCard>
+              <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
+                <PlayerCard>
+                  <PlayerTextContainer>
+                    <PlayerText color={finalColor}>{name}</PlayerText>
+                    <PlayerText color={finalColor}>
+                      <IconHeading
+                        animationName="rotate"
+                        isHover={isFocus[i]}
+                        color={color}
+                        icon={Star}
+                        variant="heading"
+                      />
+                      {hideScore ? "***" : victoryPtn}
+                    </PlayerText>
+                  </PlayerTextContainer>
+                  <UtilitiesInputContainer>
+                    <InputContainer>
+                      <SoftInput
+                        ref={(element) => manageRefs(element, i)}
+                        color={color}
+                        onChange={(event) => handleChangeScore(event, i)}
+                        value={softValue}
+                        pseudoName={pseudoName}
+                      />
+                      <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
+                    </InputContainer>
+                  </UtilitiesInputContainer>
+                </PlayerCard>
+              </KeyboardManager>
             </FocusManager>
           );
         })}
@@ -219,11 +220,6 @@ export const PlayerStatsContainer = ({ children }: ContainerProps) => {
   return <section className={styles["board-ctn"]}>{children}</section>;
 };
 
-interface FocusManagerProps extends ContainerProps {
-  onFocus: () => void;
-  onBlur: () => void;
-  onClick: () => void;
-}
 const PlayerCard = ({ children }: ContainerProps) => {
   const id = useId().replace(/:/g, "_");
   const duration = Math.max(Math.random(), 0.5).toFixed(2);
@@ -242,14 +238,6 @@ const PlayerCard = ({ children }: ContainerProps) => {
         {children}
       </div>
     </>
-  );
-};
-
-const FocusManager = ({ children, onFocus, onBlur, onClick }: FocusManagerProps) => {
-  return (
-    <li onFocus={onFocus} onBlur={onBlur} onClick={onClick} style={{ listStyle: "none" }}>
-      {children}
-    </li>
   );
 };
 

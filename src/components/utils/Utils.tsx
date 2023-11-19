@@ -1,5 +1,48 @@
-import { ReactNode, CSSProperties, useState, useId } from "react";
+import { ReactNode, CSSProperties, useState, useId, ElementType, KeyboardEvent } from "react";
 import { IconAddPlayer, IconButton } from "@Components";
+import { ContainerProps } from "@Types";
+
+interface FocusManagerProps extends ContainerProps {
+  onFocus: () => void;
+  onBlur?: () => void;
+  onClick?: () => void;
+  as?: ElementType;
+}
+export const FocusManager = ({
+  children,
+  onFocus,
+  onBlur,
+  onClick,
+  as: Element = "div",
+}: FocusManagerProps) => {
+  return (
+    <Element onFocus={onFocus} onBlur={onBlur} onClick={onClick}>
+      {children}
+    </Element>
+  );
+};
+
+interface KeyboardManagerProps extends ContainerProps {
+  onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  as?: ElementType;
+}
+export const KeyboardManager = ({
+  as: Element = "div",
+  children,
+  onKeyUp,
+  onKeyDown,
+}: KeyboardManagerProps) => {
+  const newOnKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+    console.log(e);
+    onKeyUp(e);
+  };
+  return (
+    <Element onKeyUp={newOnKeyUp} onKeyDown={onKeyDown}>
+      {children}
+    </Element>
+  );
+};
 
 type FlexProps = {
   children: ReactNode;

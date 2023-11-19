@@ -17,7 +17,7 @@ export const buildAllLines = (players: Player[]) => {
         : players.map((p: Player) => {
             return {
               label: p.name,
-              data: p.history,
+              data: p.addedScores,
               backgroundColor: p.color,
               borderColor: p.color,
             };
