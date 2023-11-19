@@ -28,9 +28,11 @@
 - [x] reducer for theme => useTheme (context)
 - [x] Nav
 - [x] PlayerList
-- [x] AddPlayer
 - [x] UndoRedo button
+- [x] AddPlayer
 - [x] keyboard Navigation fetch element in the dom not virtual dom (slower)
+- [ ] Add total points to middle of donut chart
+- [ ] Add beautifuld body background animation https://reflect.app/
 
 ## BUGS & PROPOSITIONS
 
@@ -39,8 +41,6 @@
 - [x] Refacto theme logic with context API and localstorage ?
 - [x] Change add player to more designed menu on click
 - [x] refacto setterStates to (prev) => ... instead of new = [...old]
-- [ ] reducer for transition ? => useTransition
-- [ ] reducer for lclStrg => useLocalStorage ?
 - [x] see if backgroundColor , borderColor ect.. can be applied in ChartOption<'chart'>
 - [x] score input changing from controlled to unconrolled
 - [x] cannot score < 0 in score input
@@ -49,12 +49,12 @@
 - [x] Change player icon indicator to another icon & svg
 - [x] generator in utils to get color
 - [x] change layout when charts for players
-- [ ] if unFocus name input is empty, close the panel AddPlayer
+- [x] if unFocus name input is empty, close the panel AddPlayer
 - [x] if focus on x Player, highlight x elements in charts for this player
 - [ ] No two players can have the same name
 - [x] Undo Button
 - [x] Tooltip for each element of the nav
 - [ ] TEAMS
 - [ ] load multiple parties
-- [ ] Third col for ui (settings, theme, addplayer, save, load...)
+- [x] Third col for ui (settings, theme, addplayer, save, load...)
 - [ ] chart BUG infinite if too much spamming on undo redo button
