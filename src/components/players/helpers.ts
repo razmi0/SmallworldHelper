@@ -10,6 +10,7 @@ export const keys = {
   ARROW_DOWN: "ArrowDown",
   ARROW_LEFT: "ArrowLeft",
   TAB: "Tab",
+  ESCAPE: "Escape",
 };
 
 export const navigateTo = (
