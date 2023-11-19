@@ -1,12 +1,5 @@
 // import { Input, InputButton } from "./components/Input";
-import {
-  useUndoRedo,
-  usePlayer,
-  useToggle,
-  useLocalStorage,
-  useMidAction,
-  useMidState,
-} from "@Hooks";
+import { useUndoRedo, usePlayer, useToggle, useMidAction, useMidState } from "@Hooks";
 import {
   MainContainer,
   PlayerStatsContainer,
@@ -99,7 +92,7 @@ const manageStorage = (
   payload: Player[]
 ) => {
   if (load) {
-    setLoad(true);
+    setLoad(false);
     try {
       const storedData = getFromLocalStorage<Player[]>("players");
       return storedData;
