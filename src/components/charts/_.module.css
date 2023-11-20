@@ -1,0 +1,14 @@
+.donut-total-vc-ptn {
+  max-width: 150px;
+}
+.donut-total-vc-ptn::before {
+  content: attr(data-total-vc-ptn);
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: color 400ms ease-in-out 50ms;
+  white-space: nowrap;
+  /* offset-x | offset-y | blur-radius | color */
+  font-size: 1.5rem;
+  font-weight: bold;
+}

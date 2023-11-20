@@ -18,6 +18,8 @@ import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "
 import { ChartContainer } from "@Components";
 import { LineProps, BarProps, DonutProps } from "@Types";
 import { focusOnBar, focusOnLine, focusOndonut } from "@/hooks/charts/helper";
+import styles from "./_.module.css";
+import { findSum } from "@/utils";
 
 ChartJS.register(
   CategoryScale,
@@ -77,7 +79,7 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   );
 };
 
-const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
+const Line = ({ data, options }: LineProps) => {
   return (
     <div>
       <ChartLine data={data} options={options} />
@@ -85,22 +87,32 @@ const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
   );
 };
 
-const Doughnut = ({ data, options /* theme = "dark" */ }: DonutProps) => {
+const Doughnut = ({ data, options }: DonutProps) => {
+  const color = findFocusedColor(data) || "#FFF";
+  const vcPtn = findSum(data.datasets?.[0].data) || 0;
   return (
     <div
       style={{
-        maxWidth: "150px",
+        color: color,
+        textShadow: `0px 0px ${color === "#FFF" ? 5 : 2}px`,
       }}
+      className={`${styles["donut-total-vc-ptn"]}`}
+      data-total-vc-ptn={vcPtn}
     >
       <ChartDonut data={data} options={options} />
     </div>
   );
 };
 
-const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
+const Bar = ({ data, options }: BarProps) => {
   return (
     <div>
       <ChartBar data={data} options={options} />
     </div>
   );
+};
+
+const findFocusedColor = (data: ChartData<"doughnut">) => {
+  const bgColors = data.datasets?.[0].backgroundColor as string[];
+  return bgColors.find((color) => color.length === 7 /* no alpha */);
 };
