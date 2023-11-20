@@ -44,7 +44,6 @@ const App = () => {
 
   return (
     <MainContainer>
-      {/* {isDevEnv() && <Clock />} */}
       <Nav
         toggleHideScore={hideScore}
         storageActions={storageActions}
