@@ -224,14 +224,14 @@ export const updatedonuts = (donuts: DonutData, updatedPlayer: Player): DonutDat
 // HELPERS FUNCTIONS FOR RESET_PLAYER
 //--
 export const resetPlayersStats = (players: Player[], id: Player["id"]) => {
-  const newPlayers = players.map((player) => {
+  const rsPlayers = players.map((player) => {
     return player.id === id ? resetPlayerStats(player) : player;
   });
-  const index = newPlayers.findIndex((player) => player.id === id);
+  const index = rsPlayers.findIndex((player) => player.id === id);
   if (index === -1) throw new Error(errorMsg);
   return {
-    newPlayer: newPlayers[index],
-    newPlayers: newPlayers,
+    rsPlayer: rsPlayers[index],
+    rsPlayers: rsPlayers,
   };
 };
 
