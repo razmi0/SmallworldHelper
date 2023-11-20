@@ -51,10 +51,10 @@
 - [x] change layout when charts for players
 - [x] if unFocus name input is empty, close the panel AddPlayer
 - [x] if focus on x Player, highlight x elements in charts for this player
-- [ ] No two players can have the same name
+- [x] No two players can have the same name
 - [x] Undo Button
 - [x] Tooltip for each element of the nav
 - [ ] TEAMS
 - [ ] load multiple parties
 - [x] Third col for ui (settings, theme, addplayer, save, load...)
-- [ ] chart BUG infinite if too much spamming on undo redo button
+- [x] KINDA FIX ?? chart BUG infinite if too much spamming on undo redo button
