@@ -94,7 +94,6 @@ const Doughnut = ({ data, options }: DonutProps) => {
     <div
       style={{
         color: color,
-        textShadow: `0px 0px ${color === "#FFF" ? 5 : 2}px`,
       }}
       className={`${styles["donut-total-vc-ptn"]}`}
       data-total-vc-ptn={vcPtn}
