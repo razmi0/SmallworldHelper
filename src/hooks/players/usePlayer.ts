@@ -66,6 +66,8 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
   switch (type) {
     case "ADD_PLAYER": {
       const { name, startScore } = payload;
+      const hasName = players.find((player) => player.name === name);
+      if (hasName) return state;
       const newPlayer = buildBaseStats(name, startScore, players.length /* => id*/);
       return {
         ...state,
@@ -92,13 +94,13 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
 
     case "RESET_SCORE": {
       const { id } = payload;
-      const { newPlayer, newPlayers } = resetPlayersStats(players, id);
+      const { rsPlayer, rsPlayers } = resetPlayersStats(players, id);
       return {
         ...state,
-        players: newPlayers,
-        lines: resetLine(lines, newPlayer.name, newPlayers),
-        bars: resetBar(bars, newPlayer.name),
-        donuts: resetdonut(donuts, newPlayer.name),
+        players: rsPlayers,
+        lines: resetLine(lines, rsPlayer.name, rsPlayers),
+        bars: resetBar(bars, rsPlayer.name),
+        donuts: resetdonut(donuts, rsPlayer.name),
       };
     }
 
