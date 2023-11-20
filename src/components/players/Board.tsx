@@ -202,22 +202,11 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 };
 
 const BoardView = ({ children }: ContainerProps) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className={styles["board-view-ctn"]}>{children}</div>;
 };
 
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
-  return <section className={styles["board-ctn"]}>{children}</section>;
+  return <section className={styles["player-stats-ctn"]}>{children}</section>;
 };
 
 const PlayerCard = ({ children }: ContainerProps) => {
