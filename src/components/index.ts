@@ -10,7 +10,7 @@ import {
   KeyboardManager,
   RefManager,
 } from "./utils/Utils";
-import { Bar, Charts, Line, Doughnut } from "./charts/Charts";
+import { Charts } from "./charts/Charts";
 import {
   AddPlayer as IconAddPlayer,
   AddScore,
@@ -54,10 +54,7 @@ export {
   KeyboardManager,
   RefManager,
   /* CHARTS */
-  Bar,
   Charts,
-  Line,
-  Doughnut,
   /* ICONS */
   IconAddPlayer,
   AddScore,
