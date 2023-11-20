@@ -4,7 +4,7 @@ import { ContainerProps } from "@Types";
 
 export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
   const childrenArr = Array.isArray(children) ? children : [children];
-  const id = useId().replace(/:/g, (Math.random() * 1000).toFixed(1));
+  const id = useId().replace(/:/g, "_");
 
   return (
     <section className="charts-ctn">
@@ -15,19 +15,7 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
             <figure
               id={id}
               key={i}
-              style={{
-                maxHeight: "250px",
-                marginRight: "0px",
-                marginLeft: "0px",
-                marginTop: "0px",
-                marginBottom: "0px",
-                // paddingLeft: "1.2rem",
-                // paddingRight: "1.2rem",
-                padding: "1.2rem",
-                width: "100%",
-                height: "100%",
-              }}
-              className="grainy lin-dark global-grainy shadow-ctn"
+              className={`grainy lin-dark global-grainy shadow-ctn ${styles["figure-ctn"]}`}
             >
               {child}
             </figure>

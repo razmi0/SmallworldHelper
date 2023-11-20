@@ -1,9 +1,8 @@
 .nav-ctn {
   display: flex;
+  flex-direction: column;
   width: fit-content;
   gap: 5px;
-  justify-content: flex-start;
-  align-items: center;
 }
 .menu-icon-ctn {
   display: flex;

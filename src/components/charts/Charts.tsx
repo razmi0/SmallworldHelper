@@ -31,34 +31,6 @@ ChartJS.register(
   BarElement
 );
 
-export const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
-  return (
-    <div>
-      <ChartLine data={data} options={options} />
-    </div>
-  );
-};
-
-export const Doughnut = ({ data, options /* theme = "dark" */ }: DonutProps) => {
-  return (
-    <div
-      style={{
-        maxWidth: "150px",
-      }}
-    >
-      <ChartDonut data={data} options={options} />
-    </div>
-  );
-};
-
-export const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
-  return (
-    <div>
-      <ChartBar data={data} options={options} />
-    </div>
-  );
-};
-
 type ChartProps = {
   isOpen: boolean;
   lines: ChartData<"line">;
@@ -102,5 +74,33 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
       <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} />
       <Doughnut data={currentlyFocused ? focusedDonut : donuts} options={donutOptions} />
     </ChartContainer>
+  );
+};
+
+const Line = ({ data, options /* theme = "dark" */ }: LineProps) => {
+  return (
+    <div>
+      <ChartLine data={data} options={options} />
+    </div>
+  );
+};
+
+const Doughnut = ({ data, options /* theme = "dark" */ }: DonutProps) => {
+  return (
+    <div
+      style={{
+        maxWidth: "150px",
+      }}
+    >
+      <ChartDonut data={data} options={options} />
+    </div>
+  );
+};
+
+const Bar = ({ data, options /* theme = "dark" */ }: BarProps) => {
+  return (
+    <div>
+      <ChartBar data={data} options={options} />
+    </div>
   );
 };

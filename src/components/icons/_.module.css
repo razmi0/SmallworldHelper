@@ -1,7 +1,7 @@
 .icon-tooltip {
   position: absolute;
-  bottom: -20px;
-  left: -20px;
+  left: 40px;
+  bottom: 7px;
   height: fit-content;
   padding: 3px;
   white-space: nowrap;
