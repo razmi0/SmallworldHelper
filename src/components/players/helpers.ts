@@ -20,7 +20,7 @@ export const keys = {
 const ROW_SIZE = 5;
 
 // const matrice = new Array(3).fill(null).map(() => new Array(4).fill(null));
-export type Directions = "PREV" | "NEXT" | "RIGHT" | "LEFT";
+export type Directions = "PREV" | "NEXT" | "RIGHT" | "LEFT" | "SELF";
 export const navigateTo = (
   matrice: HTMLElement[],
   currentIndex: number,
@@ -55,6 +55,10 @@ export const navigateTo = (
       else goWanted(matrice, wantedIndex);
       break;
     }
+
+    case "SELF":
+      goWanted(matrice, currentIndex);
+      break;
 
     //
   }

@@ -145,7 +145,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
     if (element) inputs.current[i] = element;
-    if (isFocus[i] && element) navigateTo(inputs.current, i);
+    if (isFocus[i] && element) navigateTo(inputs.current, i, "SELF");
   };
 
   return (
@@ -188,6 +188,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
                         onChange={(event) => handleChangeScore(event, i)}
                         value={softValue}
                         pseudoName={pseudoName}
+                        // onFocus={() => handleFocus(i)}
                       />
                       <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
                     </InputContainer>
