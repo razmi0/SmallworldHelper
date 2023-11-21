@@ -1,0 +1,15 @@
+.main-grid {
+  display: grid;
+  grid-template-areas: "player player player", "player player player", "chart chart chart";
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.player-grid-item {
+  display: grid;
+  grid-area: player;
+}
+
+.chart-grid {
+  display: grid;
+  grid-area: chart;
+}
