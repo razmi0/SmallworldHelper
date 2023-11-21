@@ -21,11 +21,12 @@ export const FocusManager = ({
   onFocus,
   onBlur,
   onClick,
+  className = "",
   as: Element = "div",
 }: FocusManagerProps) => {
   const id = `${useId()}_focus_manager`;
   return (
-    <Element id={id} onFocus={onFocus} onBlur={onBlur} onClick={onClick}>
+    <Element id={id} onFocus={onFocus} onBlur={onBlur} onClick={onClick} className={className}>
       {children}
     </Element>
   );
