@@ -14,24 +14,76 @@ export const keys = {
   ESCAPE: "Escape",
 };
 
+/**
+ * [[0, 0, 0, 0] * 3]
+ */
+const ROW_SIZE = 5;
+
+// const matrice = new Array(3).fill(null).map(() => new Array(4).fill(null));
+export type Directions = "PREV" | "NEXT" | "RIGHT" | "LEFT";
 export const navigateTo = (
   matrice: HTMLElement[],
   currentIndex: number,
-  direction: "PREV" | "NEXT" | "" = ""
+  direction?: Directions
 ) => {
+  //
   switch (direction) {
     case "PREV":
-      currentIndex - 1 >= 0
-        ? matrice[currentIndex - 1].focus()
-        : matrice[matrice.length - 1].focus();
+      goPrev(matrice, currentIndex);
       break;
+
+    //
+
     case "NEXT":
-      currentIndex + 1 < matrice.length ? matrice[currentIndex + 1].focus() : matrice[0].focus();
+      goNext(matrice, currentIndex);
       break;
-    default:
-      matrice[currentIndex].focus();
+
+    //
+
+    case "RIGHT": {
+      const wantedIndex = currentIndex + ROW_SIZE;
+      if (wantedIndex > matrice.length) return;
+      else goWanted(matrice, wantedIndex);
       break;
+    }
+
+    //
+
+    case "LEFT": {
+      const wantedIndex = currentIndex - ROW_SIZE;
+      if (wantedIndex < 0) return;
+      else goWanted(matrice, wantedIndex);
+      break;
+    }
+
+    //
   }
+};
+
+const goLast = (matrice: HTMLElement[]) => {
+  matrice[matrice.length - 1].focus();
+};
+
+const goFirst = (matrice: HTMLElement[]) => {
+  matrice[0].focus();
+};
+
+const goWanted = (matrice: HTMLElement[], wantedIndex: number) => {
+  matrice[wantedIndex].focus();
+};
+
+const goPrev = (matrice: HTMLElement[], currentIndex: number) => {
+  const wantedIndex = currentIndex - 1;
+  wantedIndex >= 0 //
+    ? goWanted(matrice, wantedIndex) // not == 0 => focus
+    : goLast(matrice); // == 0 => go last
+};
+
+const goNext = (matrice: HTMLElement[], currentIndex: number) => {
+  const wantedIndex = currentIndex + 1;
+  wantedIndex < matrice.length
+    ? goWanted(matrice, wantedIndex) // not > to length => so focus
+    : goFirst(matrice); // > to length => go first
 };
 
 // VALIDATION
@@ -96,4 +148,6 @@ export const getCardViewTransition = (id: string, duration: string) => `
       opacity: 1;
     }
   }
+
+  
 `;

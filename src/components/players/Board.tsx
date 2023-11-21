@@ -93,38 +93,40 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     id: number,
     i: number
   ) => {
+    const matrice = inputs.current;
     switch (e.key) {
       case keys.ENTER: {
-        console.log("enter : ", e.currentTarget.nodeName);
         if (e.currentTarget.value === "-") return;
         update(id /* PLAYER ID */, newScores[i] as number);
         resetInput(i);
-        navigateTo(inputs.current, i, "NEXT");
+        navigateTo(matrice, i, "NEXT");
         break;
       }
 
       case keys.BACKSPACE: {
-        console.log("backspace : ", e.currentTarget.nodeName);
         if (isDeletable(e)) {
           resetInput(i);
         }
         break;
       }
 
-      case keys.ARROW_UP: {
-        console.log("arrow up : ", e.currentTarget.nodeName);
-        navigateTo(inputs.current, i, "PREV");
+      case keys.ARROW_RIGHT:
+        navigateTo(matrice, i, "RIGHT");
         break;
-      }
 
-      case keys.ARROW_DOWN: {
-        console.log("arrow down : ", e.currentTarget.nodeName);
-        navigateTo(inputs.current, i, "NEXT");
+      case keys.ARROW_LEFT:
+        navigateTo(matrice, i, "LEFT");
         break;
-      }
+
+      case keys.ARROW_UP:
+        navigateTo(matrice, i, "PREV");
+        break;
+
+      case keys.ARROW_DOWN:
+        navigateTo(matrice, i, "NEXT");
+        break;
 
       case keys.ESCAPE: {
-        console.log("escape : ", e.currentTarget.nodeName);
         resetInput(i);
         break;
       }

@@ -9,6 +9,7 @@ export const TIME_BEFORE_RESET_FOCUS = 40000;
 // }
 
 export const lineOptions: ChartOptions<"line"> = {
+  maintainAspectRatio: false,
   spanGaps: true,
   normalized: true,
   animation: {
@@ -66,6 +67,8 @@ export const lineOptions: ChartOptions<"line"> = {
 };
 
 export const barOptions: ChartOptions<"bar"> = {
+  maintainAspectRatio: false,
+
   normalized: true,
   animation: {
     delay: 300,
@@ -119,6 +122,8 @@ export const barOptions: ChartOptions<"bar"> = {
 };
 
 export const donutOptions: ChartOptions<"doughnut"> = {
+  maintainAspectRatio: false,
+
   normalized: true,
   spacing: 3,
   animation: {
