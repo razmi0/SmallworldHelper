@@ -14,7 +14,7 @@ import {
   ChartData,
 } from "chart.js";
 import { useMidState, useMidAction } from "@Hooks";
-import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "../charts/data";
+import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "./options";
 import { ChartContainer } from "@Components";
 import { LineProps, BarProps, DonutProps } from "@Types";
 import { focusOnBar, focusOnLine, focusOndonut } from "@/hooks/charts/helper";
@@ -70,6 +70,8 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
     focusedDonut = focusOndonut(focusedIndex, donuts);
   }
 
+  console.log(isFocus.length);
+
   return (
     <ChartContainer isOpen={isOpen}>
       <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} />
@@ -89,7 +91,8 @@ const Line = ({ data, options }: LineProps) => {
 
 const Doughnut = ({ data, options }: DonutProps) => {
   const color = findFocusedColor(data) || "#FFF";
-  const vcPtn = findSum(data.datasets?.[0].data) || 0;
+  const total = findSum(data.datasets?.[0].data);
+  const vcPtn = total === 0 ? "" : total;
   return (
     <div
       style={{
@@ -105,7 +108,12 @@ const Doughnut = ({ data, options }: DonutProps) => {
 
 const Bar = ({ data, options }: BarProps) => {
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <ChartBar data={data} options={options} />
     </div>
   );

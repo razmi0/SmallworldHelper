@@ -28,7 +28,7 @@
 }
 
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0;
   padding: 1rem;
   width: 100%;
@@ -82,8 +82,6 @@ p {
 .global-grainy {
   position: relative;
   border-radius: var(--std-card-radius);
-  width: 240px;
-  height: 125px;
   overflow: hidden;
   transition: filter 0.2s;
 }
@@ -114,11 +112,12 @@ p {
 }
 
 .charts-ctn {
+  grid-area: charts-ctn;
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: fit-content;
-  /* justify-content: space-around; */
+  justify-content: space-evenly;
   /* max-width: 450px; */
   /* padding: 10px 10px; */
 }
