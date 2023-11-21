@@ -57,15 +57,13 @@ const intermediateReducer = (
 
     case "CHANGE_FOCUS": {
       const { index, value } = action.payload;
-      let newBooleanMap = state.isFocus;
+      const { isFocus } = state;
 
-      if (index >= state.isFocus.length) {
-        newBooleanMap = resizeArray(state.isFocus, index + 1, false);
-      }
+      // MATRICE 4 by 3 on isFocus ?
 
       return {
         ...state,
-        isFocus: newBooleanMap.map((item, i) => (i === index ? value : item)),
+        isFocus: isFocus.map((item, i) => (i === index ? value : item)),
       };
     }
 
