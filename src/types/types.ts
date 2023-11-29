@@ -110,7 +110,7 @@ export type SvgDataType = {
   };
 };
 
-export type VariantType = "utility" | "nav" | "chart" | "player" | "heading" | "";
+export type VariantType = "utility" | "nav" | "chart" | "player" | "heading" | "toaster" | "";
 export interface IconProps {
   icon: ComponentType<SvgProps>;
   iconName: IconName;
@@ -145,7 +145,8 @@ export type IconName =
   | "reset"
   | "delete"
   | "undo"
-  | "redo";
+  | "redo"
+  | "close";
 
 export type KeyboardNavigationIdType = "soft-input" | "utility";
 
