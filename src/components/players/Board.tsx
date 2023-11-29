@@ -24,7 +24,7 @@ import {
 import {
   blurInput,
   getCardStyles,
-  getCardViewTransition,
+  // getCardViewTransition,
   initInputsRefs,
   isDeletable,
   keys,
@@ -216,13 +216,13 @@ export const PlayerStatsContainer = ({ children }: ContainerProps) => {
 
 const PlayerCard = ({ children }: ContainerProps) => {
   const id = useId().replace(/:/g, "_");
-  const duration = Math.max(Math.random(), 1).toFixed(2);
+  // const duration = Math.min(Math.random(), 1).toFixed(2);
   const classes = getCardStyles("player");
-  const viewTransition = getCardViewTransition(id, duration);
+  // const viewTransition = getCardViewTransition(id, duration);
 
   return (
     <>
-      <style>{viewTransition}</style>
+      {/* <style>{viewTransition}</style> */}
       <div
         id="WATCH ME"
         className={classes}
@@ -252,10 +252,6 @@ const PlayerText = ({ children, color, ...props }: PlayerTextProps) => {
   );
 };
 
-// const UtilitiesInputContainer = ({ children }: ContainerProps) => {
-//   return <div className={styles["utilities-input-ctn"]}>{children}</div>;
-// };
-
 const PlayerUtilities = ({
   id,
   reset,
@@ -264,7 +260,6 @@ const PlayerUtilities = ({
   datatype,
   onKeyUp,
 }: PlayerUtilitiesProps) => {
-  // const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
 
   const visibility = !isFocus ? "hidden" : "initial";
