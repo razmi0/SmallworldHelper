@@ -70,8 +70,6 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
     focusedDonut = focusOndonut(focusedIndex, donuts);
   }
 
-  console.log(isFocus.length);
-
   return (
     <ChartContainer isOpen={isOpen}>
       <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} />
