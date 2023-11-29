@@ -184,3 +184,10 @@ export type UndoRedoStates<T> = {
   isUndoPossible: boolean;
   isRedoPossible: boolean;
 };
+
+export type NotificationType = {
+  id: number;
+  title: string;
+  message: string;
+  type: "success" | "error" | "warning" | "info";
+};
