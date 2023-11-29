@@ -10,6 +10,7 @@ import {
   KeyboardManager,
   RefManager,
   Position,
+  Toast,
 } from "./utils/Utils";
 import { Charts } from "./charts/Charts";
 import {
@@ -51,6 +52,7 @@ export {
   FreshStartButton,
   Spacer,
   UndoRedo,
+  Toast,
   /* MANAGERS */
   FocusManager,
   KeyboardManager,

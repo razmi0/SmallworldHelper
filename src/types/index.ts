@@ -19,6 +19,7 @@ import {
   UndoRedoActions,
   UndoRedoStates,
   VariantType,
+  NotificationType,
 } from "./types";
 
 /*   */
@@ -44,4 +45,5 @@ export type {
   UndoRedoActions,
   UndoRedoStates,
   VariantType,
+  NotificationType,
 };
