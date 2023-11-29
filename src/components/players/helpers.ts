@@ -141,33 +141,31 @@ export const getCardStyles = (size: SizeType = "player") => {
       break;
   }
 
-  console.log(classes + cardStyles);
-
   return classes + cardStyles;
 };
 
-export const getCardViewTransition = (id: string, duration: string) => `
-  ::view-transition-new(player-card${id}) {
-    animation-duration: ${duration}s;
-    animation-fill-mode: forwards;
-    animation-name: player-card-animation;
-  }
-  ::view-transition-old(player-card${id}) {
-    display: none;
-  }
-  @keyframes player-card-animation {
-    0% {
-      scale: 1;
-    }
-    50% {
-      scale: 1.01;
-      opacity: 0.95;
-    }
-    100% {
-      scale: 1;
-      opacity: 1;
-    }
-  }
+// export const getCardViewTransition = (id: string, duration: string) => `
 
-  
-`;
+// `;
+// ::view-transition-new(player-card${id}) {
+//   animation-duration: ${duration}s;
+//   animation-fill-mode: forwards;
+//   animation-name: player-card-animation;
+// }
+// ::view-transition-old(player-card${id}) {
+//   display: none;
+// }
+// @keyframes player-card-animation {
+//   0% {
+//     opacity: 1;
+//     transform : translateY(O)
+//   }
+//   50% {
+//     opacity: 0.95;
+//     transform : translateY(-10%)
+//   }
+//   100% {
+//     opacity: 1;
+//     transform : translateY(O)
+//   }
+// }
