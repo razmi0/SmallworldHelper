@@ -75,7 +75,7 @@ export const buildAlldonuts = (players: Player[]) => {
 export const buildBaseStats = (name: string, startScore: number, id: number) => {
   return {
     id: id,
-    name: name.charAt(0).toUpperCase() + name.slice(1),
+    name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(),
     victoryPtn: startScore,
     history: [startScore],
     addedScores: [startScore],
