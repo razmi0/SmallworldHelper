@@ -33,6 +33,9 @@ export const getSvgData = (variant: VariantType) => {
     case "utility":
       return UTILITY_STYLES;
 
+    case "toaster":
+      return TOASTER_STYLES;
+
     default:
       return NAV_STYLES;
   }
@@ -178,6 +181,17 @@ const HEADING_STYLES: SvgDataType = {
       getAnimation: function () {
         return `${this.name} ${this.duration}s ${this.timing} ${this.delay}s ${this.iteration} ${this.direction}`;
       },
+    },
+  },
+};
+
+const TOASTER_STYLES: SvgDataType = {
+  size: ["35px", "35px"],
+  transition: "all 1s ease-in-out",
+  filter: ["0px", "0px"],
+  icons: {
+    close: {
+      color: ["#242424", "#242424"],
     },
   },
 };
