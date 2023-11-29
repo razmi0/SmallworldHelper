@@ -18,6 +18,9 @@
   margin: 0.8rem 0.4rem;
   height: 100%;
   width: fit-content;
+
+  /* position: absolute; */
+  /* top: 0; */
 }
 
 .figure-ctn {

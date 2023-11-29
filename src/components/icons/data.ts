@@ -48,7 +48,7 @@ export const getSvgData = (variant: VariantType) => {
  */
 const NAV_STYLES: SvgDataType = {
   size: ["40px", "40px"],
-  filter: ["13px", "5px"],
+  filter: ["0px", "0px"],
   transition: "all 0.2s ease-in-out",
   gap: "5px",
   bezierParams: [0.4, 0.2],

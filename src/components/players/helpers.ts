@@ -17,7 +17,7 @@ export const keys = {
 /**
  * [[0, 0, 0, 0] * 3]
  */
-const ROW_SIZE = 5;
+const ROW_SIZE = 4;
 
 // const matrice = new Array(3).fill(null).map(() => new Array(4).fill(null));
 export type Directions = "PREV" | "NEXT" | "RIGHT" | "LEFT" | "SELF";
