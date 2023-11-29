@@ -162,8 +162,9 @@ const HEADING_STYLES: SvgDataType = {
       direction: "alternate",
       keyframes: `0%  {transform: rotate(0deg) }
                   100% {transform: rotate(360deg)}`,
-      getAnimation: () => {
-        return `${HEADING_STYLES.animations?.rotate.name} ${HEADING_STYLES.animations?.rotate.duration}s ${HEADING_STYLES.animations?.rotate.timing} ${HEADING_STYLES.animations?.rotate.delay}s ${HEADING_STYLES.animations?.rotate.iteration} ${HEADING_STYLES.animations?.rotate.direction}`;
+      getAnimation: function () {
+        console.log(this);
+        return `${this.name} ${this.duration}s ${this.timing} ${this.delay}s ${this.iteration} ${this.direction}`;
       },
     },
     translate: {
@@ -175,9 +176,17 @@ const HEADING_STYLES: SvgDataType = {
       name: "translate",
       keyframes:
         "0% {transform: translate(0px, 0px) ; transform: rotate(0deg)} 50% {transform : translate(0px, 5px)} 100% {transform: translate(0px, -5px) ; transform: rotate(360deg)}",
-      getAnimation: () => {
-        return `${HEADING_STYLES.animations?.translate.name} ${HEADING_STYLES.animations?.translate.duration}s ${HEADING_STYLES.animations?.translate.timing} ${HEADING_STYLES.animations?.translate.delay}s ${HEADING_STYLES.animations?.translate.iteration} ${HEADING_STYLES.animations?.translate.direction}`;
+      getAnimation: function () {
+        return `${this.name} ${this.duration}s ${this.timing} ${this.delay}s ${this.iteration} ${this.direction}`;
       },
     },
   },
 };
+
+if (HEADING_STYLES.animations?.translate.getAnimation)
+  HEADING_STYLES.animations.translate.getAnimation =
+    HEADING_STYLES.animations.translate.getAnimation.bind(HEADING_STYLES.animations?.translate);
+
+if (HEADING_STYLES.animations?.rotate.getAnimation)
+  HEADING_STYLES.animations.rotate.getAnimation =
+    HEADING_STYLES.animations.rotate.getAnimation.bind(HEADING_STYLES.animations?.rotate);
