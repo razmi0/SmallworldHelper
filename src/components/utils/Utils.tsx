@@ -9,7 +9,56 @@ import {
 } from "react";
 import { IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
+import { useNotif } from "@Hooks";
 import styles from "./_.module.css";
+
+export const Toast = () => {
+  const id = useId();
+  const { notifs, removeNotif } = useNotif();
+
+  //
+  setTimeout(() => {
+    if (notifs.length > 0) {
+      removeNotif(notifs[0].id);
+    }
+  }, 5000);
+
+  return (
+    <ListContainer>
+      {notifs.map((notif) => {
+        const { title, message, type } = notif;
+        const color = getToastColorType(type);
+        return (
+          <li key={id}>
+            <div className={styles["toast-header"]}>
+              <Bullet color={color} />
+              <div>{title}</div>
+            </div>
+            <div>{message}</div>
+          </li>
+        );
+      })}
+    </ListContainer>
+  );
+};
+
+export const getToastColorType = (type: "success" | "error" | "warning" | "info") => {
+  return type === "success"
+    ? "green"
+    : type === "error"
+    ? "red"
+    : type === "warning"
+    ? "orange"
+    : "blue";
+};
+
+const Bullet = ({ color }: { color: string }) => {
+  return <div className={styles["bullet"]} style={{ backgroundColor: color }} />;
+};
+
+const ListContainer = ({ children }: { children: ReactNode }) => {
+  return <ul className={styles["toast-list-ctn"]}>{children}</ul>;
+};
 
 interface FocusManagerProps extends ContainerProps {
   onFocus: () => void;
