@@ -31,6 +31,7 @@ import {
   Star,
   Theme,
   Undo,
+  Close,
 } from "./icons/Icons";
 import { Nav } from "./nav/Nav";
 import { AddPlayerCard } from "./players/AddPlayer";
@@ -77,6 +78,7 @@ export {
   Star,
   Theme,
   Undo,
+  Close,
   /* NAV */
   Nav,
   /* PLAYERS */
