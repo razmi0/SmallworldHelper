@@ -77,14 +77,14 @@ export const Nav = ({
           variant="nav"
           icon={Undo}
           iconName="undo"
-          onClick={undo}
+          onClick={() => withViewTransition(undo)}
           disabled={!isUndoPossible}
         />
         <IconButton
           variant="nav"
           icon={Redo}
           iconName="redo"
-          onClick={redo}
+          onClick={() => withViewTransition(redo)}
           disabled={!isRedoPossible}
         />
       </nav>
