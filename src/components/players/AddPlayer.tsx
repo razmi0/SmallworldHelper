@@ -5,9 +5,8 @@ import { getCardStyles, keys, validateIntOnChange } from "./helpers";
 import { withViewTransition } from "@Utils";
 import { ContainerProps, NotificationType } from "@Types";
 
-const addPlayerNotifications = {
+const addPlayerSuccess = {
   title: "Player added",
-  message: "Player has been added",
   type: "success" as NotificationType["type"],
 };
 
@@ -33,7 +32,8 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
     withViewTransition(() => {
       addPlayer(newPlayerName, startScore as number);
       addNotif({
-        ...addPlayerNotifications,
+        ...addPlayerSuccess,
+        message: `${newPlayerName} has join the game`,
         id: Math.random() * 10,
       });
       setNewPlayerName("");

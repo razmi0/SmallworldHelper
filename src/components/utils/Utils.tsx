@@ -6,36 +6,48 @@ import {
   ElementType,
   KeyboardEvent,
   forwardRef,
+  useEffect,
 } from "react";
-import { IconAddPlayer, IconButton } from "@Components";
+import { Close, IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
 import { useNotif } from "@Hooks";
 import styles from "./_.module.css";
 
 export const Toast = () => {
-  const id = useId();
   const { notifs, removeNotif } = useNotif();
 
-  //
-  setTimeout(() => {
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     if (notifs.length > 0) {
-      removeNotif(notifs[0].id);
+      timeoutId = setTimeout(() => {
+        removeNotif(notifs[0].id);
+      }, 7000);
     }
-  }, 5000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [notifs, removeNotif]);
+
+  const handleClose = () => {
+    removeNotif(notifs[0].id);
+  };
 
   return (
     <ListContainer>
-      {notifs.map((notif) => {
+      {notifs.map((notif, i) => {
         const { title, message, type } = notif;
         const color = getToastColorType(type);
         return (
-          <li key={id}>
-            <div className={styles["toast-header"]}>
+          <ListElement key={i}>
+            <ToastHeader onClick={handleClose}>
               <Bullet color={color} />
-              <div>{title}</div>
-            </div>
-            <div>{message}</div>
-          </li>
+              <span>{title}</span>
+            </ToastHeader>
+            <Separator />
+            <ToastMessage color={color}>{message}</ToastMessage>
+          </ListElement>
         );
       })}
     </ListContainer>
@@ -58,6 +70,41 @@ const Bullet = ({ color }: { color: string }) => {
 
 const ListContainer = ({ children }: { children: ReactNode }) => {
   return <ul className={styles["toast-list-ctn"]}>{children}</ul>;
+};
+
+const ListElement = ({ children }: { children: ReactNode }) => {
+  return <li className={styles["toast-list-element"]}>{children}</li>;
+};
+
+type ToastHeaderProps = {
+  children: ReactNode;
+  onClick: () => void;
+};
+const ToastHeader = ({ children, onClick }: ToastHeaderProps) => {
+  return (
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <div className={styles["toast-header"]}>{children}</div>
+      <IconButton
+        onClick={onClick}
+        icon={Close}
+        iconName="close"
+        variant="toaster"
+        sx={{ position: "absolute", right: 0, top: 0 }}
+      />
+    </div>
+  );
+};
+
+const Separator = () => {
+  return <hr className={styles["separator"]} />;
+};
+
+const ToastMessage = ({ children, color }: { children: ReactNode; color: string }) => {
+  return (
+    <div className={styles["toast-message"]}>
+      <span style={{ color: color }}>{children}</span>
+    </div>
+  );
 };
 
 interface FocusManagerProps extends ContainerProps {
