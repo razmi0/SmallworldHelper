@@ -13,6 +13,8 @@ import { Player } from "@Types";
 import { manageStorage } from "@Utils";
 
 const App = () => {
+  console.time("App");
+
   const { playersStates, playersActions } = usePlayer();
   const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
@@ -41,6 +43,8 @@ const App = () => {
       setPlayers(loadedPlayers);
     }
   }, [loadPlayers, savePlayers]);
+
+  console.timeEnd("App");
 
   return (
     <MainContainer>
