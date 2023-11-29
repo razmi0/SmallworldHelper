@@ -16,12 +16,12 @@
 
   --light-color: #ffffff;
   --dark-color: #242424;
+  --dark-color-lighter: #727272;
   --dark-icon: #609dff;
   --primary-color: #646cff;
   --other-primary-color: #213547;
   --std-height: 40px;
   --std-card-radius: 7px;
-  --color: #7272724d;
 }
 
 /* FOR DOCUMENTATION */
@@ -57,7 +57,7 @@ li {
 
 body {
   height: 100vh;
-  background: radial-gradient(circle at center, var(--dark-color) 50%, var(--dark-color) 100%);
+  background: linear-gradient(var(--dark-color) 50%, var(--dark-color) 100%);
 }
 
 h1 {

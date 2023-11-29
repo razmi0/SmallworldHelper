@@ -3,3 +3,24 @@
   left: 70px;
   top: 2%;
 }
+
+.toast-list-ctn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: "fit-content";
+  height: "fit-content";
+  margin: 20px;
+}
+.toast-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+/*  useNotifications =>  */
