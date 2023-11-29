@@ -8,6 +8,7 @@ import {
   Charts,
   AddPlayerCard,
   FreshStartButton,
+  Toast,
 } from "@Components";
 import { Player } from "@Types";
 import { manageStorage } from "@Utils";
@@ -28,6 +29,8 @@ const App = () => {
   const { isScoreHidden, isChartsOpen } = toggleStates;
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
+
+  // const { notifs, setNotifs } = useNotif();
 
   const hasPlayer = players.length > 0;
 
@@ -82,6 +85,7 @@ const App = () => {
           toggleOpenAddPlayer={openAddPlayer}
         />
       </PlayerStatsContainer>
+      <Toast />
     </MainContainer>
   );
 };
