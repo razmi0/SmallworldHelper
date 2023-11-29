@@ -1,5 +1,6 @@
 import {
   ChangeEvent,
+  HTMLAttributes,
   KeyboardEvent,
   ReactNode,
   useCallback,
@@ -167,9 +168,13 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
             >
               <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
                 <PlayerCard>
+                  <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
+
                   <PlayerTextContainer>
-                    <PlayerText color={finalColor}>{name}</PlayerText>
-                    <PlayerText color={finalColor}>
+                    <PlayerText color={finalColor} id="up">
+                      {name}
+                    </PlayerText>
+                    <PlayerText color={finalColor} id="bottom">
                       <IconHeading
                         animationName="rotate"
                         isHover={isFocus[i]}
@@ -180,19 +185,16 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
                       {hideScore ? "***" : victoryPtn}
                     </PlayerText>
                   </PlayerTextContainer>
-                  <UtilitiesInputContainer>
-                    <InputContainer>
-                      <SoftInput
-                        ref={(element) => manageRefs(element, i)}
-                        color={color}
-                        onChange={(event) => handleChangeScore(event, i)}
-                        value={softValue}
-                        pseudoName={pseudoName}
-                        // onFocus={() => handleFocus(i)}
-                      />
-                      <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
-                    </InputContainer>
-                  </UtilitiesInputContainer>
+                  <InputContainer>
+                    <SoftInput
+                      ref={(element) => manageRefs(element, i)}
+                      color={color}
+                      onChange={(event) => handleChangeScore(event, i)}
+                      value={softValue}
+                      pseudoName={pseudoName}
+                      // onFocus={() => handleFocus(i)}
+                    />
+                  </InputContainer>
                 </PlayerCard>
               </KeyboardManager>
             </FocusManager>
@@ -215,13 +217,14 @@ export const PlayerStatsContainer = ({ children }: ContainerProps) => {
 const PlayerCard = ({ children }: ContainerProps) => {
   const id = useId().replace(/:/g, "_");
   const duration = Math.max(Math.random(), 1).toFixed(2);
-  const classes = getCardStyles();
+  const classes = getCardStyles("player");
   const viewTransition = getCardViewTransition(id, duration);
 
   return (
     <>
       <style>{viewTransition}</style>
       <div
+        id="WATCH ME"
         className={classes}
         style={{
           viewTransitionName: `player-card${id}`,
@@ -237,17 +240,21 @@ const PlayerTextContainer = ({ children }: ContainerProps) => {
   return <div className={styles["player-text-ctn"]}>{children}</div>;
 };
 
-const PlayerText = ({ children, color }: { children: ReactNode; color: string }) => {
+interface PlayerTextProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+  color: string;
+}
+const PlayerText = ({ children, color, ...props }: PlayerTextProps) => {
   return (
-    <div style={{ color }} className={styles["player-text"]}>
+    <div {...props} style={{ color }} className={styles["player-text"]}>
       {children}
     </div>
   );
 };
 
-const UtilitiesInputContainer = ({ children }: ContainerProps) => {
-  return <div className={styles["utilities-input-ctn"]}>{children}</div>;
-};
+// const UtilitiesInputContainer = ({ children }: ContainerProps) => {
+//   return <div className={styles["utilities-input-ctn"]}>{children}</div>;
+// };
 
 const PlayerUtilities = ({
   id,
@@ -257,7 +264,7 @@ const PlayerUtilities = ({
   datatype,
   onKeyUp,
 }: PlayerUtilitiesProps) => {
-  const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
+  // const resetWithViewTransition = useCallback(() => withViewTransition(() => reset(id)), [id]);
   const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
 
   const visibility = !isFocus ? "hidden" : "initial";
@@ -270,7 +277,7 @@ const PlayerUtilities = ({
           visibility: visibility,
         }}
         variant={"utility"}
-        onClick={resetWithViewTransition}
+        onClick={() => reset(id)}
         icon={Reset}
         iconName="reset"
         datatype={finalDatatype}

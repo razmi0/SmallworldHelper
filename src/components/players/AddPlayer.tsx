@@ -1,10 +1,9 @@
 import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
-import { KeyboardManager, RefManager, SoftInput } from "@Components";
+import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside } from "@Hooks";
-import { keys, validateIntOnChange } from "./helpers";
+import { getCardStyles, keys, validateIntOnChange } from "./helpers";
 import { withViewTransition } from "@Utils";
 import { ContainerProps } from "@Types";
-import styles from "./_.module.css";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
@@ -70,29 +69,32 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
 
   return (
     <RefManager ref={ref}>
-      {isOpen && (
-        <KeyboardManager onKeyUp={handleKeyUp}>
-          <AddPlayerInputsContainer>
-            <SoftInput
-              label="Name"
-              pseudoName="0_addPlayer"
-              onChange={(e) => setNewPlayerName(e.currentTarget.value)}
-              value={newPlayerName}
-            />
-            <SoftInput
-              label="Start score"
-              pseudoName="0_startScore"
-              onChange={(e) => handleStartScoreChange(e)}
-              value={finalStartScore}
-            />
-          </AddPlayerInputsContainer>
-        </KeyboardManager>
-      )}
+      <Position variant="nav-extension">
+        {isOpen && (
+          <KeyboardManager onKeyUp={handleKeyUp}>
+            <AddStyles>
+              <SoftInput
+                label="Name"
+                pseudoName="0_addPlayer"
+                onChange={(e) => setNewPlayerName(e.currentTarget.value)}
+                value={newPlayerName}
+              />
+              <SoftInput
+                label="Start score"
+                pseudoName="0_startScore"
+                onChange={(e) => handleStartScoreChange(e)}
+                value={finalStartScore}
+              />
+            </AddStyles>
+          </KeyboardManager>
+        )}
+      </Position>
     </RefManager>
   );
 };
 
-const AddPlayerInputsContainer = ({ children }: ContainerProps) => {
-  const classes = `${styles["board-card"]} ${styles["addplayer-ctn"]} ${styles["utility-card"]} grainy lin-dark global-grainy shadow-ctn `;
-  return <div className={classes}>{children}</div>;
+const AddStyles = ({ children }: ContainerProps) => {
+  const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
+  const classes = getCardStyles("utility");
+  return <div className={classes + cardStyles}>{children}</div>;
 };

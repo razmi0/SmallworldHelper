@@ -9,6 +9,7 @@ import {
   FocusManager,
   KeyboardManager,
   RefManager,
+  Position,
 } from "./utils/Utils";
 import { Charts } from "./charts/Charts";
 import {
@@ -45,6 +46,7 @@ export {
   SoftInput,
   /* UTILS */
   Clock,
+  Position,
   Flex,
   FreshStartButton,
   Spacer,

@@ -42,7 +42,7 @@ export const getSvgData = (variant: VariantType) => {
 //--
 
 /**
- * @description This is the data structure for the icons in the nav menu.
+ * @description icon data .
  *              positions increment from left to right to match the order of the buttons in the nav menu
  *              and subsequent translate factor animation.
  */

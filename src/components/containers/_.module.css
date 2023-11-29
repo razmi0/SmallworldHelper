@@ -25,6 +25,18 @@
   padding: 1.2rem;
   width: 400px;
   height: fit-content;
-  /* width: 100% !important; */
-  /* height: fit-content !important; */
+}
+
+@media screen and (max-width: 560px) {
+  .figure-ctn {
+    width: 300px;
+    padding: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 472px) {
+  .figure-ctn {
+    width: 250px;
+    padding: 0.5rem 0.5rem;
+  }
 }

@@ -9,6 +9,7 @@ import {
 } from "react";
 import { IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
+import styles from "./_.module.css";
 
 interface FocusManagerProps extends ContainerProps {
   onFocus: () => void;
@@ -38,7 +39,7 @@ interface KeyboardManagerProps extends ContainerProps {
   as?: ElementType;
 }
 
-export const RefManager = forwardRef<HTMLDivElement, ContainerProps>(({ children }, ref) => {
+export const RefManager = forwardRef<HTMLDivElement, ContainerProps>((props, ref) => {
   const id = `${useId()}_ref_manager`;
   return (
     <div
@@ -47,9 +48,10 @@ export const RefManager = forwardRef<HTMLDivElement, ContainerProps>(({ children
       style={{
         width: "fit-content",
         height: "fit-content",
+        ...props.style,
       }}
     >
-      {children}
+      {props.children}
     </div>
   );
 });
@@ -170,4 +172,15 @@ export const FreshStartButton = ({
       )}
     </>
   );
+};
+
+type PositionType = "nav-extension";
+interface PositionContainerProps extends ContainerProps {
+  variant: PositionType;
+}
+export const Position = ({ variant, children }: PositionContainerProps) => {
+  let classes: string;
+  if (variant === "nav-extension") classes = styles["nav-extension"];
+  else classes = "";
+  return <div className={classes}>{children}</div>;
 };

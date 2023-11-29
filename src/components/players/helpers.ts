@@ -126,8 +126,24 @@ export const initInputsRefs = (size: number) => {
 
 // UI
 //--
-export const getCardStyles = () => {
-  return `${styles["list-element-ctn"]} ${styles["board-card"]} grainy lin-dark global-grainy shadow-ctn`;
+
+export type SizeType = "player" | "utility";
+export const getCardStyles = (size: SizeType = "player") => {
+  let classes = styles["board-card"];
+  const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
+
+  switch (size) {
+    case "player":
+      classes += ` ${styles["card-size-player"]} ${styles["list-element-ctn"]}`;
+      break;
+    case "utility":
+      classes += ` ${styles["card-size-utility"]} ${styles["addplayer-ctn"]}`;
+      break;
+  }
+
+  console.log(classes + cardStyles);
+
+  return classes + cardStyles;
 };
 
 export const getCardViewTransition = (id: string, duration: string) => `

@@ -1,0 +1,54 @@
+.form__group {
+  position: relative;
+  width: 100%;
+}
+
+.form__field--commun {
+  font-family: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+  /* font-size: 0.9rem; */
+  font-weight: 700;
+  min-width: 100px;
+}
+.form__field--commun::placeholder {
+  color: transparent;
+}
+.form__field--commun:placeholder-shown ~ .form__label {
+  cursor: text;
+  top: 9px;
+  font-size: 0.95rem;
+}
+.form__field--commun:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  width: 100%;
+}
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  color: #9b9b9b;
+  pointer-events: none;
+  text-shadow: 0px 0px 2px;
+}
+.form__field--commun:focus ~ .form__label {
+  position: absolute;
+  top: -10px;
+  display: block;
+  transition: 0.3s ease-out;
+  font-size: 0.8rem;
+}
+/* reset input */
+.form__field--commun:required,
+.form__field--commun:invalid {
+  box-shadow: none;
+}
