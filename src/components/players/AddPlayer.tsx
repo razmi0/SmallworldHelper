@@ -1,9 +1,15 @@
 import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
 import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
-import { useMidState, useMidAction, useClickOutside } from "@Hooks";
+import { useMidState, useMidAction, useClickOutside, useNotif } from "@Hooks";
 import { getCardStyles, keys, validateIntOnChange } from "./helpers";
 import { withViewTransition } from "@Utils";
-import { ContainerProps } from "@Types";
+import { ContainerProps, NotificationType } from "@Types";
+
+const addPlayerNotifications = {
+  title: "Player added",
+  message: "Player has been added",
+  type: "success" as NotificationType["type"],
+};
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
@@ -11,6 +17,7 @@ type AddPlayerProps = {
   toggleOpenAddPlayer: () => void;
 };
 export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerProps) => {
+  const { addNotif } = useNotif();
   const { newPlayerName, startScore } = useMidState();
   const { addPlayerActions } = useMidAction();
   const { setNewPlayerName, setStartScore } = addPlayerActions;
@@ -25,6 +32,10 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
   const addPlayerAction = useCallback(() => {
     withViewTransition(() => {
       addPlayer(newPlayerName, startScore as number);
+      addNotif({
+        ...addPlayerNotifications,
+        id: Math.random() * 10,
+      });
       setNewPlayerName("");
       resetScoreInput();
     });
