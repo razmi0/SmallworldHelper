@@ -163,7 +163,6 @@ const HEADING_STYLES: SvgDataType = {
       keyframes: `0%  {transform: rotate(0deg) }
                   100% {transform: rotate(360deg)}`,
       getAnimation: function () {
-        console.log(this);
         return `${this.name} ${this.duration}s ${this.timing} ${this.delay}s ${this.iteration} ${this.direction}`;
       },
     },
