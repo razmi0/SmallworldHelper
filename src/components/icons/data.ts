@@ -186,7 +186,7 @@ const HEADING_STYLES: SvgDataType = {
 };
 
 const TOASTER_STYLES: SvgDataType = {
-  size: ["35px", "35px"],
+  size: ["27px", "27px"],
   transition: "all 1s ease-in-out",
   filter: ["0px", "0px"],
   icons: {

@@ -188,7 +188,6 @@ export type UndoRedoStates<T> = {
 
 export type NotificationType = {
   id: number;
-  title: string;
   message: string;
   type: "success" | "error" | "warning" | "info";
 };

@@ -202,7 +202,7 @@ IconButton.displayName = "IconButton";
 
 export const Close = ({ size }: SvgProps) => {
   return (
-    <svg width={size[0]} height={size[1]} viewBox="0 0 24.00 24.00" fill="none" stroke="#242424">
+    <svg width={size[0]} height={size[1]} viewBox="0 0 24.00 24.00" fill="none" stroke="#9b9b9b">
       <g strokeWidth="0"></g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
@@ -210,7 +210,7 @@ export const Close = ({ size }: SvgProps) => {
           <path
             id="Vector"
             d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16"
-            stroke="#242424"
+            stroke="#9b9b9b"
             strokeWidth="1"
             strokeLinecap="round"
             strokeLinejoin="round"

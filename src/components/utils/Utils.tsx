@@ -22,7 +22,7 @@ export const Toast = () => {
     if (notifs.length > 0) {
       timeoutId = setTimeout(() => {
         removeNotif(notifs[0].id);
-      }, 7000);
+      }, 1000000);
     }
 
     return () => {
@@ -37,16 +37,13 @@ export const Toast = () => {
   return (
     <ListContainer>
       {notifs.map((notif, i) => {
-        const { title, message, type } = notif;
+        const { message, type } = notif;
         const color = getToastColorType(type);
         return (
-          <ListElement key={i}>
-            <ToastHeader onClick={handleClose}>
-              <Bullet color={color} />
-              <span>{title}</span>
-            </ToastHeader>
-            <Separator />
-            <ToastMessage color={color}>{message}</ToastMessage>
+          <ListElement color={color} key={i}>
+            <ToastBody onClick={handleClose}>
+              <ToastMessage message={message} />
+            </ToastBody>
           </ListElement>
         );
       })}
@@ -64,45 +61,72 @@ export const getToastColorType = (type: "success" | "error" | "warning" | "info"
     : "blue";
 };
 
-const Bullet = ({ color }: { color: string }) => {
-  return <div className={styles["bullet"]} style={{ backgroundColor: color }} />;
-};
-
 const ListContainer = ({ children }: { children: ReactNode }) => {
-  return <ul className={styles["toast-list-ctn"]}>{children}</ul>;
+  return (
+    <>
+      <style>
+        {`@keyframes slide {
+        0% {
+          transform: translateY(100%);
+        }
+        100% {
+          transform: translateX(0%);
+        }
+    }`}
+      </style>
+      <ul className={styles["toast-list-ctn"]}>{children}</ul>
+    </>
+  );
 };
 
-const ListElement = ({ children }: { children: ReactNode }) => {
-  return <li className={styles["toast-list-element"]}>{children}</li>;
+const ListElement = ({ children, color }: { children: ReactNode; color: string }) => {
+  const id = useId().replace(/:/g, "_") + "_list_element";
+  return (
+    <>
+      <style>
+        {`
+        ::view-transition-new(slide${id}) {
+          animation: slide 0.2s ease-in;
+        }
+      `}
+      </style>
+      <li
+        style={{
+          viewTransitionName: `slide${id}`,
+          border: `1px solid ${color}`,
+          boxShadow: `inset 0 0 10px ${color}`,
+        }}
+        className={styles["toast-list-element"] + " grainy lin-dark"}
+      >
+        {children}
+      </li>
+    </>
+  );
 };
 
 type ToastHeaderProps = {
   children: ReactNode;
   onClick: () => void;
 };
-const ToastHeader = ({ children, onClick }: ToastHeaderProps) => {
+const ToastBody = ({ children, onClick }: ToastHeaderProps) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <div className={styles["toast-header"]}>{children}</div>
+      <div className={styles["toast-body"]}>{children}</div>
       <IconButton
         onClick={onClick}
         icon={Close}
         iconName="close"
         variant="toaster"
-        sx={{ position: "absolute", right: 0, top: 0 }}
+        sx={{ position: "absolute", right: 0 }}
       />
     </div>
   );
 };
 
-const Separator = () => {
-  return <hr className={styles["separator"]} />;
-};
-
-const ToastMessage = ({ children, color }: { children: ReactNode; color: string }) => {
+const ToastMessage = ({ message }: { message: string }) => {
   return (
     <div className={styles["toast-message"]}>
-      <span style={{ color: color }}>{children}</span>
+      <span>{message}</span>
     </div>
   );
 };
@@ -127,6 +151,10 @@ export const FocusManager = ({
       {children}
     </Element>
   );
+};
+
+export const Separator = () => {
+  return <hr className={styles["separator"]} />;
 };
 
 interface KeyboardManagerProps extends ContainerProps {

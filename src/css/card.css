@@ -24,6 +24,7 @@
   z-index: -10;
   border-radius: var(--std-card-radius);
 }
+
 .global-grainy:hover {
   filter: brightness(1.1);
   transition: filter 0.2s;

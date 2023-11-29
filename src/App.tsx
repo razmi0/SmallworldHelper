@@ -30,8 +30,6 @@ const App = () => {
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
 
-  // const { notifs, setNotifs } = useNotif();
-
   const hasPlayer = players.length > 0;
 
   useEffect(() => {
