@@ -16,5 +16,6 @@ module.exports = {
     "@typescript-eslint/ban-ts-comment": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "off",
+    "no-case-declarations": "off",
   },
 };
