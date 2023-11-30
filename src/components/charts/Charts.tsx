@@ -18,8 +18,8 @@ import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "
 import { ChartContainer } from "@Components";
 import { LineProps, BarProps, DonutProps } from "@Types";
 import { focusOnBar, focusOnLine, focusOndonut } from "@/hooks/charts/helper";
-import styles from "./_.module.css";
 import { findSum } from "@/utils";
+import styles from "./_.module.css";
 
 ChartJS.register(
   CategoryScale,
@@ -96,7 +96,7 @@ const Doughnut = ({ data, options }: DonutProps) => {
       style={{
         color: color,
       }}
-      className={`${styles["donut-total-vc-ptn"]}`}
+      className={`${styles["donut-total-vc-ptn"]} ${styles["donut-ctn-size"]} `}
       data-total-vc-ptn={vcPtn}
     >
       <ChartDonut data={data} options={options} />
@@ -116,6 +116,10 @@ const Bar = ({ data, options }: BarProps) => {
     </div>
   );
 };
+
+Doughnut.displayName = "Doughnut";
+Line.displayName = "Line";
+Bar.displayName = "Bar";
 
 const findFocusedColor = (data: ChartData<"doughnut">) => {
   const bgColors = data.datasets?.[0].backgroundColor as string[];
