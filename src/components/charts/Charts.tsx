@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { Line as ChartLine, Doughnut as ChartDonut, Bar as ChartBar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -12,6 +12,7 @@ import {
   ArcElement,
   BarElement,
   ChartData,
+  ChartOptions,
 } from "chart.js";
 import { useMidState, useMidAction } from "@Hooks";
 import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "./options";
@@ -79,10 +80,29 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   );
 };
 
+interface HasBothAxis extends ChartOptions {
+  scales: {
+    x: {
+      display: boolean;
+    };
+    y: {
+      display: boolean;
+    };
+  };
+}
 const Line = ({ data, options }: LineProps) => {
+  const [optionsState, setOptionsState] = useState(options);
+
+  const handleToggleAxis = () => {
+    const newOptions = { ...optionsState } as HasBothAxis;
+    newOptions.scales.x.display = !newOptions.scales.x?.display;
+    newOptions.scales.y.display = !newOptions.scales.y?.display;
+    setOptionsState(newOptions);
+  };
+
   return (
-    <div>
-      <ChartLine data={data} options={options} />
+    <div onClick={handleToggleAxis}>
+      <ChartLine data={data} options={optionsState} />
     </div>
   );
 };
@@ -105,23 +125,33 @@ const Doughnut = ({ data, options }: DonutProps) => {
 };
 
 const Bar = ({ data, options }: BarProps) => {
+  const [optionsState, setOptionsState] = useState(options);
+
+  const handleToggleAxis = () => {
+    const newOptions = { ...optionsState } as HasBothAxis;
+    newOptions.scales.x.display = !newOptions.scales.x?.display;
+    newOptions.scales.y.display = !newOptions.scales.y?.display;
+    setOptionsState(newOptions);
+  };
+
   return (
     <div
       style={{
         width: "100%",
         height: "100%",
       }}
+      onClick={handleToggleAxis}
     >
-      <ChartBar data={data} options={options} />
+      <ChartBar data={data} options={optionsState} />
     </div>
   );
 };
-
-Doughnut.displayName = "Doughnut";
-Line.displayName = "Line";
-Bar.displayName = "Bar";
 
 const findFocusedColor = (data: ChartData<"doughnut">) => {
   const bgColors = data.datasets?.[0].backgroundColor as string[];
   return bgColors.find((color) => color.length === 7 /* no alpha */);
 };
+
+Doughnut.displayName = "Doughnut";
+Line.displayName = "Line";
+Bar.displayName = "Bar";

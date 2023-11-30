@@ -17,4 +17,5 @@
 .donut {
   width: fit-content;
   padding: 1.2rem;
+  border-radius: 50% !important;
 }

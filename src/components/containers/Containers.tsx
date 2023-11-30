@@ -6,21 +6,24 @@ import { ContainerProps } from "@Types";
 export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
   const childrenArr = Array.isArray(children) ? children : [children];
   const id = useId().replace(/:/g, "_");
-  const classes = " grainy lin-dark global-grainy shadow-ctn";
+  const communClasses = `${styles["figure-ctn"]} grainy lin-dark global-grainy shadow-ctn `;
+  const donutClasses = `${chartStyles["donut"]} grainy-donut-radius lin-dark-donut-radius global-grainy-donut-radius`;
+  const otherClasses =
+    " grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
 
   return (
     <section className="charts-ctn">
       {isOpen &&
         children &&
         childrenArr.map((child, i) => {
-          const isDonut = child.type.name === "Doughnut";
+          const chartType = child.type.name.toLowerCase();
+          const finalId = `${id}${chartType}`;
+          const isDonut = chartType === "doughnut";
           return (
             <figure
-              id={id}
+              id={finalId}
               key={i}
-              className={`${classes} ${styles["figure-ctn"]} ${
-                isDonut ? chartStyles["donut"] : ""
-              }`}
+              className={`${communClasses} ${isDonut ? donutClasses : otherClasses}`}
             >
               {child}
             </figure>

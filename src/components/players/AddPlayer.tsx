@@ -105,6 +105,8 @@ export const AddPlayerCard = ({
 
 const AddStyles = ({ children }: ContainerProps) => {
   const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
+  const otherClasses =
+    " grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
   const classes = getCardStyles("utility");
-  return <div className={classes + cardStyles}>{children}</div>;
+  return <div className={classes + cardStyles + otherClasses}>{children}</div>;
 };

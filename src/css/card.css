@@ -1,16 +1,44 @@
+:root {
+  --std-card-radius-default: 7px;
+  --std-card-donut: 50%;
+}
+
+.grainy-donut-radius::before {
+  border-radius: var(--std-card-donut);
+}
+
+.grainy-default-radius::before {
+  border-radius: var(--std-card-radius-default);
+}
+
+.global-grainy-default-radius {
+  border-radius: var(--std-card-radius-default);
+}
+
+.global-grainy-donut-radius {
+  border-radius: var(--std-card-donut);
+}
+
+.lin-dark-donut-radius::after {
+  border-radius: var(--std-card-donut);
+}
+
+.lin-dark-default-radius::after {
+  border-radius: var(--std-card-radius-default);
+}
+
 .grainy::before {
   content: "";
   position: absolute;
   inset: 1px;
-  border-radius: var(--std-card-radius);
   background: url(/noise.svg);
   pointer-events: none;
   opacity: 0.3;
   z-index: -20;
 }
+
 .global-grainy {
   position: relative;
-  border-radius: var(--std-card-radius);
   /* overflow: hidden; */
   transition: filter 0.2s;
 }
@@ -22,7 +50,6 @@
   background: linear-gradient(41deg, rgb(16, 16, 18, 0.5) 0%, rgb(9, 9, 12, 1) 100%);
   pointer-events: none;
   z-index: -10;
-  border-radius: var(--std-card-radius);
 }
 
 .global-grainy:hover {

@@ -131,6 +131,8 @@ export type SizeType = "player" | "utility";
 export const getCardStyles = (size: SizeType = "player") => {
   let classes = styles["board-card"];
   const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
+  const otherClasses =
+    " grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
 
   switch (size) {
     case "player":
@@ -141,7 +143,7 @@ export const getCardStyles = (size: SizeType = "player") => {
       break;
   }
 
-  return classes + cardStyles;
+  return classes + cardStyles + otherClasses;
 };
 
 // export const getCardViewTransition = (id: string, duration: string) => `

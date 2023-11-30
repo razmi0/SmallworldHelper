@@ -22,7 +22,6 @@
   --primary-color: #646cff;
   --other-primary-color: #213547;
   --std-height: 40px;
-  --std-card-radius: 7px;
 }
 
 /* FOR DOCUMENTATION */
@@ -115,3 +114,9 @@ p {
     margin: 0px;
   }
 }
+
+/* .chart-ctn {
+  figure {
+    border-radius: 50%;
+  }
+} */
