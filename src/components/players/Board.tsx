@@ -64,13 +64,14 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
   const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef(initInputsRefs(players.length));
+  const playerSize = players.length;
 
   useClickOutside(inputs, () => blurInput(inputs.current));
 
   useEffect(() => {
-    inputs.current = initInputsRefs(players.length);
-    setIsOnFocus(players.length, false);
-  }, [players.length]);
+    inputs.current = initInputsRefs(playerSize);
+    setIsOnFocus(playerSize, false);
+  }, [playerSize]);
 
   const resetInput = (i: number) => {
     setNewScores(i, 0);
