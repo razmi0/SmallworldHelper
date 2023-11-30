@@ -16,9 +16,10 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
       {isOpen &&
         children &&
         childrenArr.map((child, i) => {
-          const chartType = child.type.name.toLowerCase();
+          const chartType = child.props.type;
           const finalId = `${id}${chartType}`;
-          const isDonut = chartType === "doughnut";
+          const isDonut = chartType === "donut"; // doesn't pass minifying
+
           return (
             <figure
               id={finalId}

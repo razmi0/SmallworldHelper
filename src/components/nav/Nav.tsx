@@ -14,10 +14,12 @@ import {
 import { withViewTransition } from "@Utils";
 import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 import styles from "./_.module.css";
+import { useEffect, useState } from "react";
 
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 
 type NavProps = {
+  playerSize: number;
   toggleOpenAddPlayer: (newState?: boolean) => void;
   toggleOpenCharts: () => void;
   toggleHideScore: () => void;
@@ -28,6 +30,7 @@ type NavProps = {
 };
 
 export const Nav = ({
+  playerSize,
   toggleHideScore,
   toggleOpenAddPlayer,
   toggleOpenCharts,
@@ -36,9 +39,14 @@ export const Nav = ({
   isScoreHidden,
   storageActions,
 }: NavProps) => {
+  const [allowViewTransition, setAllowViewTransition] = useState(false);
   const { setLoadPlayers, setSavePlayers } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
+
+  useEffect(() => {
+    setAllowViewTransition(true);
+  }, [playerSize]);
 
   return (
     <Header>
@@ -77,14 +85,28 @@ export const Nav = ({
           variant="nav"
           icon={Undo}
           iconName="undo"
-          onClick={() => withViewTransition(undo)}
+          onClick={() => {
+            if (!allowViewTransition) {
+              undo();
+              return;
+            }
+            withViewTransition(undo);
+            setAllowViewTransition(false);
+          }}
           disabled={!isUndoPossible}
         />
         <IconButton
           variant="nav"
           icon={Redo}
           iconName="redo"
-          onClick={() => withViewTransition(redo)}
+          onClick={() => {
+            if (!allowViewTransition) {
+              redo();
+              return;
+            }
+            withViewTransition(redo);
+            setAllowViewTransition(false);
+          }}
           disabled={!isRedoPossible}
         />
       </nav>

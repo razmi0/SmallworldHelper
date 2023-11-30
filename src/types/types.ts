@@ -51,18 +51,21 @@ export type LineProps = {
   data: ChartData<"line">;
   options: ChartOptions<"line">;
   theme?: "light" | "dark";
+  type: "line";
 };
 
 export type BarProps = {
   data: ChartData<"bar">;
   options: ChartOptions<"bar">;
   theme?: "light" | "dark";
+  type: "bar";
 };
 
 export type DonutProps = {
   data: ChartData<"doughnut">;
   options: ChartOptions<"doughnut">;
   theme?: "light" | "dark";
+  type: "donut";
 };
 
 // ICONS

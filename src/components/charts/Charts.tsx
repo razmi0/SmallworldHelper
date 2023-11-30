@@ -73,9 +73,13 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
 
   return (
     <ChartContainer isOpen={isOpen}>
-      <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} />
-      <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} />
-      <Doughnut data={currentlyFocused ? focusedDonut : donuts} options={donutOptions} />
+      <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} type="line" />
+      <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} type="bar" />
+      <Doughnut
+        data={currentlyFocused ? focusedDonut : donuts}
+        options={donutOptions}
+        type="donut"
+      />
     </ChartContainer>
   );
 };

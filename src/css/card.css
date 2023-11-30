@@ -1,10 +1,10 @@
 :root {
   --std-card-radius-default: 7px;
-  --std-card-donut: 50%;
+  --std-card-radius-donut: 50%;
 }
 
 .grainy-donut-radius::before {
-  border-radius: var(--std-card-donut);
+  border-radius: var(--std-card-radius-donut);
 }
 
 .grainy-default-radius::before {
@@ -16,11 +16,11 @@
 }
 
 .global-grainy-donut-radius {
-  border-radius: var(--std-card-donut);
+  border-radius: var(--std-card-radius-donut);
 }
 
 .lin-dark-donut-radius::after {
-  border-radius: var(--std-card-donut);
+  border-radius: var(--std-card-radius-donut);
 }
 
 .lin-dark-default-radius::after {

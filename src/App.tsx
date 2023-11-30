@@ -59,6 +59,7 @@ const App = () => {
 
   const hasPlayer = players.length > 0;
   const names = players.map((player) => player.name);
+  const playerSize = players.length;
 
   // console.timeEnd("App");
 
@@ -68,11 +69,12 @@ const App = () => {
   return (
     <MainContainer>
       <Nav
-        toggleHideScore={hideScore}
         storageActions={storageActions}
+        toggleHideScore={hideScore}
         toggleOpenAddPlayer={openAddPlayer}
         toggleOpenCharts={openCharts}
         isScoreHidden={isScoreHidden}
+        playerSize={playerSize}
         undoRedoStates={undoRedoStates}
         undoRedoActions={undoRedoActions}
       />
