@@ -51,9 +51,10 @@ export const useSwitchTheme = () => {
 
 const initTheme = () => {
   const systemMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "dark";
-  const localMode = getFromLocalStorage("__smallWorld_th", false) as ThemeState | false;
-  setStyles(localMode || systemMode);
-  return localMode || systemMode;
+  const localMode = getFromLocalStorage<ThemeState | false>("__smallWorld_th", false);
+
+  setStyles(localMode.stored || systemMode);
+  return localMode.stored || systemMode;
 };
 
 const body = document.querySelector("body")!;

@@ -13,15 +13,15 @@ export const manageStorage = (
     try {
       const storedData = getFromLocalStorage<Player[]>("players");
       return storedData;
-    } catch (error) {
-      throw new Error("No players found in local storage");
+    } catch (e) {
+      return new Error("No players found in local storage");
     }
   } else if (save) {
     setSave(false);
     try {
       saveToLocalStorage<Player[]>("players", payload);
-    } catch (error) {
-      throw new Error("Unable to save players to local storage");
+    } catch (e) {
+      return new Error("Unable to save players to local storage");
     }
   }
 };
