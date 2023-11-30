@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useUndoRedo, usePlayer, useToggle, useMidAction, useMidState } from "@Hooks";
+import { useUndoRedo, usePlayer, useToggle, useMidAction, useMidState, useNotif } from "@Hooks";
 import {
   MainContainer,
   PlayerStatsContainer,
@@ -11,18 +11,22 @@ import {
   Toast,
 } from "@Components";
 import { Player } from "@Types";
-import { manageStorage } from "@Utils";
+import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
 
+let a = 0;
 const App = () => {
-  console.time("App");
+  // console.time("App");
+
+  const { post } = useNotif();
 
   const { playersStates, playersActions } = usePlayer();
+
   const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
   const { storageActions } = useMidAction();
   const { setLoadPlayers, setSavePlayers } = storageActions;
-  const { loadPlayers, savePlayers } = useMidState();
+  const { storageEvent } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts } = toggleActions;
@@ -30,22 +34,36 @@ const App = () => {
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
 
-  const hasPlayer = players.length > 0;
-
   useEffect(() => {
-    const loadedPlayers = manageStorage(
-      loadPlayers,
-      savePlayers,
-      setLoadPlayers,
-      setSavePlayers,
-      players
-    );
-    if (loadedPlayers) {
-      setPlayers(loadedPlayers);
-    }
-  }, [loadPlayers, savePlayers]);
+    switch (storageEvent) {
+      case "LOAD":
+        setLoadPlayers(false);
+        const storedData = getFromLocalStorage<Player[]>("players", []);
+        storedData.error.length > 0
+          ? post({ type: "error", message: storedData.error })
+          : post({ type: "success", message: "👍" });
+        break;
 
-  console.timeEnd("App");
+      case "SAVE":
+        setSavePlayers(false);
+        const error = saveToLocalStorage("players", players);
+        error
+          ? post({ type: "error", message: error })
+          : post({ type: "success", message: "Saved" });
+        break;
+
+      default:
+        break;
+    }
+  }, [storageEvent]);
+
+  const hasPlayer = players.length > 0;
+  const names = players.map((player) => player.name);
+
+  // console.timeEnd("App");
+
+  a += 1;
+  console.log("counter", a);
 
   return (
     <MainContainer>
@@ -77,12 +95,13 @@ const App = () => {
           bars={bars}
           donuts={donuts}
         />
-        <AddPlayerCard
-          addPlayer={addPlayer}
-          isOpen={toggleStates.isAddPlayerOpen}
-          toggleOpenAddPlayer={openAddPlayer}
-        />
       </PlayerStatsContainer>
+      <AddPlayerCard
+        addPlayer={addPlayer}
+        isOpen={toggleStates.isAddPlayerOpen}
+        toggleOpenAddPlayer={openAddPlayer}
+        names={names}
+      />
       <Toast />
     </MainContainer>
   );
