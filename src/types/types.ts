@@ -186,8 +186,10 @@ export type UndoRedoStates<T> = {
   isRedoPossible: boolean;
 };
 
+export type NotificationTypeInComponent = Omit<NotificationType, "id" | "timeout">;
 export type NotificationType = {
   id: number;
   message: string;
   type: "success" | "error" | "warning" | "info";
+  timeout: number;
 };
