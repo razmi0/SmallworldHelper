@@ -16,11 +16,13 @@ import {
   removeOpacityFromHex,
   saveToLocalStorage,
   withViewTransition,
+  beautify,
 } from "./utils";
 
 /* */
 
 export {
+  beautify,
   /* COLORS */
   add4dToHex,
   addOpacityToHex,

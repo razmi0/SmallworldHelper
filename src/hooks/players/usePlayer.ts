@@ -42,19 +42,35 @@ type PlayerAction =
 // INITIAL STATES
 // --
 export const initialPlayerStates = {
-  players: getFromLocalStorage<Player[]>("players", []),
+  players: getFromLocalStorage<Player[]>("players", []).stored,
   startScore: 0,
 
   /* lineData not stored at the moment */
-  lineData: () =>
-    getFromLocalStorage<LineData>("lineData", buildAllLines(initialPlayerStates.players)),
+  lineData: () => {
+    const storedData = getFromLocalStorage<LineData>(
+      "lineData",
+      buildAllLines(initialPlayerStates.players)
+    );
+    return storedData.stored;
+  },
 
   /* barData not stored at the moment */
-  barData: () => getFromLocalStorage<BarData>("barData", buildAllBars(initialPlayerStates.players)),
+  barData: () => {
+    const storedData = getFromLocalStorage<BarData>(
+      "barData",
+      buildAllBars(initialPlayerStates.players)
+    );
+    return storedData.stored;
+  },
 
   /* DonutData not stored at the moment */
-  DonutData: () =>
-    getFromLocalStorage<DonutData>("DonutData", buildAlldonuts(initialPlayerStates.players)),
+  DonutData: () => {
+    const storedData = getFromLocalStorage<DonutData>(
+      "DonutData",
+      buildAlldonuts(initialPlayerStates.players)
+    );
+    return storedData.stored;
+  },
 };
 
 // REDUCER
