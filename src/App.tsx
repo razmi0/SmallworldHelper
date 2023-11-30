@@ -41,7 +41,7 @@ const App = () => {
         const storedData = getFromLocalStorage<Player[]>("players", []);
         storedData.error.length > 0
           ? post({ type: "error", message: storedData.error })
-          : post({ type: "success", message: "👍" });
+          : post({ type: "success", message: "Loaded 👍" });
         break;
 
       case "SAVE":

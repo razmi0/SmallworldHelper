@@ -2,6 +2,13 @@ import { createContext, useContext, useReducer } from "react";
 import { NotificationType } from "@Types";
 import { NotificationTypeInComponent } from "@/types/types";
 
+const SELF_DESTRUCT_TIMEOUT = 6000 as const;
+const RANDOM_ID_FACTOR = 100 as const;
+
+const getId = () => {
+  return Date.now() + parseInt((Math.random() * RANDOM_ID_FACTOR).toFixed());
+};
+
 type NotifContextType = {
   state: NotifStates;
   dispatch: React.Dispatch<NotifActions>;
@@ -24,14 +31,14 @@ const notificationReducer = (state: NotifStates, action: NotifActions): NotifSta
   switch (action.type) {
     case "ADD": {
       const { notif, removeNotif } = action.payload;
-      const id = Math.random() * 10;
+      const id = getId();
       const newNotif = {
         ...notif,
         id: id,
         timeout: Date.now(),
         fn: setTimeout(() => {
           removeNotif(id);
-        }, 4000),
+        }, SELF_DESTRUCT_TIMEOUT),
       } as NotificationType;
 
       return {

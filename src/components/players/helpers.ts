@@ -127,8 +127,8 @@ export const initInputsRefs = (size: number) => {
 // UI
 //--
 
-export type SizeType = "player" | "utility";
-export const getCardStyles = (size: SizeType = "player") => {
+export type SizeType = "player" | "utility" | "default";
+export const getCardStyles = (size: SizeType) => {
   let classes = styles["board-card"];
   const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
   const otherClasses =
@@ -141,6 +141,9 @@ export const getCardStyles = (size: SizeType = "player") => {
     case "utility":
       classes += ` ${styles["card-size-utility"]} ${styles["addplayer-ctn"]}`;
       break;
+
+    default:
+      return cardStyles + otherClasses;
   }
 
   return classes + cardStyles + otherClasses;

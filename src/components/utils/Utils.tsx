@@ -11,6 +11,7 @@ import { Close, IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
 import { useNotif } from "@Hooks";
 import styles from "./_.module.css";
+import { getCardStyles } from "../players/helpers";
 
 export const Toast = () => {
   const { notifs, removeNotif } = useNotif();
@@ -62,6 +63,7 @@ const ListContainer = ({ children }: { children: ReactNode }) => {
 
 const ListElement = ({ children, color }: { children: ReactNode; color: string }) => {
   const id = useId().replace(/:/g, "_") + "_list_element";
+  const classes = getCardStyles("default");
   return (
     <>
       <style>
@@ -77,7 +79,7 @@ const ListElement = ({ children, color }: { children: ReactNode; color: string }
           boxShadow: ` 0 1px 1px ${color}`,
           overflow: "hidden",
         }}
-        className={styles["toast-list-element"] + " global-grainy grainy lin-dark"}
+        className={styles["toast-list-element"] + " " + classes}
       >
         {children}
       </li>
