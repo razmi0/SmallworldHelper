@@ -6,9 +6,8 @@
 - Reset player's score
 - Add player's score
 - Sort by score
-- Save to local storage
-- Load from local storage
-- Dark/light mode
+- Save session
+- Load session
 - Line chart
 - Bar chart
 - Pie chart
