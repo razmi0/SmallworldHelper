@@ -1,5 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 import { NotificationType } from "@Types";
+import { NotificationTypeInComponent } from "@/types/types";
 
 type NotifContextType = {
   state: NotifStates;
@@ -12,17 +13,30 @@ type NotifStates = {
 type NotifActions =
   | { type: "REMOVE_AT"; payload: { id: number } }
   | { type: "REMOVE_ALL" }
-  | { type: "ADD"; payload: { notif: NotificationType } };
+  | {
+      type: "ADD";
+      payload: { notif: NotificationTypeInComponent; removeNotif: (id: number) => void };
+    };
 
 const NotifContext = createContext<NotifContextType | null>(null);
 
 const notificationReducer = (state: NotifStates, action: NotifActions): NotifStates => {
   switch (action.type) {
     case "ADD": {
-      const { notif } = action.payload;
+      const { notif, removeNotif } = action.payload;
+      const id = Math.random() * 10;
+      const newNotif = {
+        ...notif,
+        id: id,
+        timeout: Date.now(),
+        fn: setTimeout(() => {
+          removeNotif(id);
+        }, 4000),
+      } as NotificationType;
+
       return {
         ...state,
-        notifs: [...state.notifs, notif],
+        notifs: [...state.notifs, newNotif],
       };
     }
 
@@ -60,10 +74,6 @@ export const useNotif = () => {
   const { state, dispatch } = context;
   const { notifs } = state;
 
-  const addNotif = (notif: NotificationType) => {
-    dispatch({ type: "ADD", payload: { notif } });
-  };
-
   const removeNotif = (id: number) => {
     dispatch({ type: "REMOVE_AT", payload: { id } });
   };
@@ -72,5 +82,9 @@ export const useNotif = () => {
     dispatch({ type: "REMOVE_ALL" });
   };
 
-  return { notifs, addNotif, removeNotif, removeAllNotifs };
+  const post = (notif: NotificationTypeInComponent) => {
+    dispatch({ type: "ADD", payload: { notif, removeNotif } });
+  };
+
+  return { notifs, post, removeNotif, removeAllNotifs };
 };
