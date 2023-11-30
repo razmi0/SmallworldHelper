@@ -6,7 +6,6 @@ import {
   ElementType,
   KeyboardEvent,
   forwardRef,
-  useEffect,
 } from "react";
 import { Close, IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
@@ -16,24 +15,6 @@ import styles from "./_.module.css";
 export const Toast = () => {
   const { notifs, removeNotif } = useNotif();
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    if (notifs.length > 0) {
-      timeoutId = setTimeout(() => {
-        removeNotif(notifs[0].id);
-      }, 1000000);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [notifs, removeNotif]);
-
-  const handleClose = () => {
-    removeNotif(notifs[0].id);
-  };
-
   return (
     <ListContainer>
       {notifs.map((notif, i) => {
@@ -41,7 +22,7 @@ export const Toast = () => {
         const color = getToastColorType(type);
         return (
           <ListElement color={color} key={i}>
-            <ToastBody onClick={handleClose}>
+            <ToastBody onClick={() => removeNotif(notifs[0].id)}>
               <ToastMessage message={message} />
             </ToastBody>
           </ListElement>
@@ -93,10 +74,10 @@ const ListElement = ({ children, color }: { children: ReactNode; color: string }
       <li
         style={{
           viewTransitionName: `slide${id}`,
-          border: `1px solid ${color}`,
-          boxShadow: `inset 0 0 10px ${color}`,
+          boxShadow: ` 0 1px 1px ${color}`,
+          overflow: "hidden",
         }}
-        className={styles["toast-list-element"] + " grainy lin-dark"}
+        className={styles["toast-list-element"] + " global-grainy grainy lin-dark"}
       >
         {children}
       </li>
@@ -110,7 +91,7 @@ type ToastHeaderProps = {
 };
 const ToastBody = ({ children, onClick }: ToastHeaderProps) => {
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div style={{ display: "flex", flexDirection: "row" }} className="">
       <div className={styles["toast-body"]}>{children}</div>
       <IconButton
         onClick={onClick}
