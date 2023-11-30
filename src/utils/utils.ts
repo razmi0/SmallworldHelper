@@ -91,23 +91,28 @@ export const findMaxNbrTurns = (arr: HistoryItems | []) => {
   return max;
 };
 
-export const saveToLocalStorage = <T>(key: string, value: T): void => {
+export const saveToLocalStorage = <T>(key: string, value: T) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    throw new Error("Error saving to localStorage: " + error);
+  } catch (e) {
+    return "Error saving session";
   }
 };
 /**
  * @param defaultValue: default value if nothing is found in localStorage
  */
-export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T): T => {
+export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T) => {
+  let error = "";
+  let storedValue: T = defaultValue;
+
   try {
-    const storedValue = window.localStorage.getItem(key);
-    return storedValue !== null ? (JSON.parse(storedValue) as T) : defaultValue;
-  } catch (error) {
-    throw new Error("Error getting from localStorage: " + error);
+    const storedItem = window.localStorage.getItem(key);
+    storedValue = storedItem !== null ? JSON.parse(storedItem) : defaultValue;
+  } catch (e) {
+    error = "Error loading session";
   }
+
+  return { error, stored: storedValue };
 };
 
 export const findAverage = (arr: number[]) => {
@@ -169,4 +174,8 @@ export const isProdEnv = () => {
 
 export const isDevEnv = () => {
   return import.meta.env.DEV;
+};
+
+export const beautify = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
