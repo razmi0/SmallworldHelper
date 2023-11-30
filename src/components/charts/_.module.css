@@ -13,3 +13,8 @@
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+.donut {
+  width: fit-content;
+  padding: 1.2rem;
+}
