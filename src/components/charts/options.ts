@@ -30,13 +30,13 @@ export const lineOptions: ChartOptions<"line"> = {
   // maintainAspectRatio: false,
   scales: {
     x: {
-      display: true,
+      display: false,
       grid: {
         display: false,
       },
     },
     y: {
-      display: true,
+      display: false,
       grid: {
         display: false,
       },
@@ -83,13 +83,13 @@ export const barOptions: ChartOptions<"bar"> = {
 
   scales: {
     x: {
-      display: true,
+      display: false,
       grid: {
         display: false,
       },
     },
     y: {
-      display: true,
+      display: false,
       grid: {
         display: false,
       },
