@@ -2,21 +2,22 @@ import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
 import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside, useNotif } from "@Hooks";
 import { getCardStyles, keys, validateIntOnChange } from "./helpers";
-import { withViewTransition } from "@Utils";
-import { ContainerProps, NotificationType } from "@Types";
-
-const addPlayerSuccess = {
-  title: "Player added",
-  type: "success" as NotificationType["type"],
-};
+import { beautify, withViewTransition } from "@Utils";
+import { ContainerProps } from "@Types";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
   isOpen: boolean;
   toggleOpenAddPlayer: () => void;
+  names: string[];
 };
-export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPlayerProps) => {
-  const { addNotif } = useNotif();
+export const AddPlayerCard = ({
+  addPlayer,
+  isOpen,
+  toggleOpenAddPlayer,
+  names,
+}: AddPlayerProps) => {
+  const { post } = useNotif();
   const { newPlayerName, startScore } = useMidState();
   const { addPlayerActions } = useMidAction();
   const { setNewPlayerName, setStartScore } = addPlayerActions;
@@ -29,17 +30,19 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
   });
 
   const addPlayerAction = useCallback(() => {
+    const newName = beautify(newPlayerName);
     withViewTransition(() => {
-      addPlayer(newPlayerName, startScore as number);
-      addNotif({
-        ...addPlayerSuccess,
-        message: `${newPlayerName} has join the game`,
-        id: Math.random() * 10,
-      });
-      setNewPlayerName("");
-      resetScoreInput();
+      if (names.includes(newName)) {
+        post({
+          type: "warning",
+          message: `${newName} already taken`,
+        });
+      }
     });
-  }, [newPlayerName, startScore]);
+    addPlayer(newName, startScore as number);
+    setNewPlayerName("");
+    setStartScore(0);
+  }, [newPlayerName, startScore]); // newPlayerName, startScore
 
   const handleInputValidation = () => {
     if (!newPlayerName) return;
@@ -55,7 +58,7 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
 
   const toggleCard = () => {
     withViewTransition(toggleOpenAddPlayer);
-    resetScoreInput();
+    setStartScore(0);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -67,13 +70,9 @@ export const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer }: AddPla
     }
     if (e.key === keys.BACKSPACE) {
       if (startScore.toString().length === 1) {
-        resetScoreInput();
+        setStartScore(0);
       }
     }
-  };
-
-  const resetScoreInput = () => {
-    setStartScore(0);
   };
 
   const finalStartScore = startScore ? startScore : "";
