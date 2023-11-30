@@ -143,8 +143,16 @@ export const useMidState = () => {
   if (states === null) {
     throw new Error("useMidState must be used within a IntermediateProvider");
   }
+
   const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
-  return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers };
+
+  let storageEvent = "";
+  if (savePlayers) {
+    storageEvent = "SAVE";
+  } else if (loadPlayers) {
+    storageEvent = "LOAD";
+  }
+  return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers, storageEvent };
 };
 
 export const useMidAction = () => {
@@ -191,3 +199,5 @@ export const useMidAction = () => {
     setNewScores,
   };
 };
+
+// focus addplayer storage
