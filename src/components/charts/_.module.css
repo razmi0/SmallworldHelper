@@ -1,5 +1,6 @@
 .donut-total-vc-ptn {
   max-width: 150px;
+  transform: translateY(2px);
 }
 .donut-total-vc-ptn::before {
   content: attr(data-total-vc-ptn);
