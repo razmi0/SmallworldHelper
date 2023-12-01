@@ -3,6 +3,13 @@
   flex-direction: column;
   width: fit-content;
 }
+.view-transition-manager {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  view-transition-name: nav-vt;
+}
+
 .menu-icon-ctn {
   display: flex;
   place-content: center;
