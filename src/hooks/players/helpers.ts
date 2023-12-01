@@ -3,6 +3,10 @@ import { BarData, LineData, Player, DonutData } from "@Types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils";
 
 const errorMsg = "Player not found";
+const BORDER_WIDTH = 1 as const;
+const BORDER_WIDTH_DONUT = 0 as const;
+const BG_OPACITY = 0.8 as const; // bar & donut
+const BAR_THICKNESS = 10 as const;
 
 // HELPERS FUNCTIONS FOR BUILD CHARTS FROM SCRATCH
 //--
@@ -32,23 +36,32 @@ export const buildAllBars = (players: Player[]) => {
       {
         label: "Max score",
         data: players.map((p) => p.max) ?? [],
-        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, BG_OPACITY)) ?? [],
         borderColor: players.map((p) => p.color) ?? [],
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
+        barThickness: BAR_THICKNESS,
+        barPercentage: 1.0,
+        categoryPercentage: 1.0,
       },
       {
         label: "Average score",
         data: players.map((p) => p.avg) ?? [],
-        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, BG_OPACITY)) ?? [],
         borderColor: players.map((p) => p.color) ?? [],
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
+        barThickness: BAR_THICKNESS,
+        barPercentage: 1.0,
+        categoryPercentage: 1.0,
       },
       {
         label: "Min score",
         data: players.map((p) => p.min) ?? [],
-        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, BG_OPACITY)) ?? [],
         borderColor: players.map((p) => p.color) ?? [],
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
+        barThickness: BAR_THICKNESS,
+        barPercentage: 1.0,
+        categoryPercentage: 1.0,
       },
     ],
   };
@@ -61,9 +74,9 @@ export const buildAlldonuts = (players: Player[]) => {
       {
         label: "Victory points",
         data: players.map((p) => p.victoryPtn) ?? [],
-        backgroundColor: players.map((p) => addOpacityToHex(p.color, 0.8)) ?? [],
+        backgroundColor: players.map((p) => addOpacityToHex(p.color, BG_OPACITY)) ?? [],
         borderColor: players.map((p) => p.color) ?? [],
-        borderWidth: 0,
+        borderWidth: BORDER_WIDTH_DONUT,
       },
     ],
   };
@@ -110,7 +123,7 @@ export const buildNewBars = (bars: BarData, newPlayer: Player) => {
     ...dataset,
     data: [...dataset.data, newPlayer.victoryPtn],
     borderColor: [...dataset.borderColor, newPlayer.color],
-    backgroundColor: [...dataset.backgroundColor, addOpacityToHex(newPlayer.color, 0.8)],
+    backgroundColor: [...dataset.backgroundColor, addOpacityToHex(newPlayer.color, BG_OPACITY)],
   }));
   return {
     labels: [...labels, newPlayer.name],
@@ -126,7 +139,10 @@ export const buildNewdonuts = (donuts: DonutData, newPlayer: Player) => {
       {
         ...datasets[0],
         data: [...datasets[0].data, newPlayer.victoryPtn],
-        backgroundColor: [...datasets[0].backgroundColor, addOpacityToHex(newPlayer.color, 0.8)],
+        backgroundColor: [
+          ...datasets[0].backgroundColor,
+          addOpacityToHex(newPlayer.color, BG_OPACITY),
+        ],
         borderColor: [...datasets[0].borderColor, newPlayer.color],
       },
     ],
