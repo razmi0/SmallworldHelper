@@ -146,12 +146,8 @@ export const useMidState = () => {
 
   const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
 
-  let storageEvent = "";
-  if (savePlayers) {
-    storageEvent = "SAVE";
-  } else if (loadPlayers) {
-    storageEvent = "LOAD";
-  }
+  const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
+
   return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers, storageEvent };
 };
 
@@ -161,10 +157,16 @@ export const useMidAction = () => {
     throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
+  /**
+   * @description change focus at index
+   */
   const isOnFocus = useCallback((index: number, value: boolean) => {
     dispatch({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
   }, []);
 
+  /**
+   *  @description change the length of the isFocus array
+   */
   const setIsOnFocus = useCallback((newLength: number, fillValue: boolean) => {
     dispatch({
       type: "CHANGE_FOCUS_LENGTH",
