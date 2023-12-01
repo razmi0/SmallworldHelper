@@ -13,7 +13,7 @@ import {
 import { Player } from "@Types";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
 
-let a = 0;
+// let a = 0;
 const App = () => {
   // console.time("App");
 
@@ -64,7 +64,7 @@ const App = () => {
 
   // console.timeEnd("App");
 
-  a += 1;
+  // a += 1;
   // console.log("counter", a);
 
   return (
