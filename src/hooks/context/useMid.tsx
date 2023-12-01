@@ -147,8 +147,18 @@ export const useMidState = () => {
   const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
 
   const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
+  const onlyOneFocus = isFocus.filter((focus) => focus).length === 1;
 
-  return { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers, storageEvent };
+  return {
+    isFocus,
+    newScores,
+    startScore,
+    newPlayerName,
+    savePlayers,
+    loadPlayers,
+    storageEvent,
+    onlyOneFocus,
+  };
 };
 
 export const useMidAction = () => {
