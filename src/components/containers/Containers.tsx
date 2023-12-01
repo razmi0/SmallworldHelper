@@ -36,9 +36,11 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
 
 export const Header = ({ children, ...rest }: ContainerProps) => {
   return (
-    <header className={styles["header-ctn"]} {...rest}>
-      {children}
-    </header>
+    <>
+      <header className={styles["header-ctn"]} {...rest}>
+        {children}
+      </header>
+    </>
   );
 };
 
