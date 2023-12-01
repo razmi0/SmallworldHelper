@@ -27,7 +27,7 @@ const App = () => {
 
   const { storageActions } = useMidAction();
   const { setLoadPlayers, setSavePlayers } = storageActions;
-  const { storageEvent } = useMidState();
+  const { storageEvent, isFocus } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts, openNav } = toggleActions;
@@ -73,19 +73,11 @@ const App = () => {
     }
   }, [storageEvent]);
 
-  const hasPlayer = players.length > 0;
-  const names = players.map((player) => player.name);
-  const playerSize = players.length;
-  const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
-
-  // console.timeEnd("App");
-
-  // a += 1;
-  // console.log("counter", a);
+  const { hasPlayer, names, playerSize, hasHistory, color } = workingVars(players, isFocus);
 
   return (
     <>
-      <RisingStars />
+      <RisingStars color={color} />
       <MainContainer>
         <Nav
           storageActions={storageActions}
@@ -129,6 +121,17 @@ const App = () => {
       </MainContainer>
     </>
   );
+};
+
+const workingVars = (players: Player[], isFocus: boolean[]) => {
+  const hasPlayer = players.length > 0;
+  const names = players.map((player) => player.name);
+  const playerSize = players.length;
+  const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
+  const colorIndex = isFocus.findIndex((focus) => focus);
+  const color = players[colorIndex]?.color;
+
+  return { hasPlayer, names, playerSize, hasHistory, color };
 };
 
 export default App;

@@ -60,7 +60,7 @@ type PlayerUtilitiesProps = {
 //--
 
 export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
-  const { isFocus, newScores } = useMidState();
+  const { isFocus, newScores, onlyOneFocus } = useMidState();
   const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef(initInputsRefs(players.length));
@@ -147,9 +147,6 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     if (isFocus[i] && element) navigateTo(inputs.current, i, "SELF");
   };
 
-  const onlyOneFocus: boolean = isFocus.filter((focus) => focus).length === 1;
-  console.log(onlyOneFocus);
-
   return (
     <BoardView>
       <ul className={styles["players-list-ctn"]}>
@@ -159,7 +156,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
           const finalColor = isFocus[i]
             ? color
             : onlyOneFocus
-            ? "rgba(255,255,222, 0.1)"
+            ? "rgba(255,255,222, 0.3)"
             : "inherit";
           const softValue = newScores[i] ? newScores[i] : "";
 
