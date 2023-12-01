@@ -29,10 +29,23 @@ const App = () => {
   const { storageEvent } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
-  const { hideScore, openAddPlayer, openCharts } = toggleActions;
-  const { isScoreHidden, isChartsOpen } = toggleStates;
+  const { hideScore, openAddPlayer, openCharts, openNav } = toggleActions;
+  const { isScoreHidden, isChartsOpen, isNavOpen } = toggleStates;
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
+
+  useEffect(() => {
+    addEventListener("beforeunload", (e) => {
+      e.returnValue = "";
+      return;
+    });
+    return () => {
+      removeEventListener("beforeunload", (e) => {
+        e.returnValue = "";
+        return;
+      });
+    };
+  }, []);
 
   useEffect(() => {
     switch (storageEvent) {
@@ -49,7 +62,7 @@ const App = () => {
         const error = saveToLocalStorage("players", players);
         error
           ? post({ type: "error", message: error })
-          : post({ type: "success", message: "Saved" });
+          : post({ type: "success", message: "Saved 👍" });
         break;
 
       default:
@@ -74,6 +87,8 @@ const App = () => {
         toggleHideScore={hideScore}
         toggleOpenAddPlayer={openAddPlayer}
         toggleOpenCharts={openCharts}
+        toggleOpenNav={openNav}
+        isNavOpen={isNavOpen}
         isScoreHidden={isScoreHidden}
         playerSize={playerSize}
         undoRedoStates={undoRedoStates}
