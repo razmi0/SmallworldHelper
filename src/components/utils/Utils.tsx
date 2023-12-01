@@ -287,7 +287,6 @@ interface PositionContainerProps extends ContainerProps {
 }
 export const Position = ({ variant, children }: PositionContainerProps) => {
   let classes: string;
-  if (variant === "nav-extension") classes = styles["nav-extension"];
-  else classes = "";
+  variant === "nav-extension" ? (classes = styles["nav-extension"]) : (classes = "");
   return <div className={classes}>{children}</div>;
 };
