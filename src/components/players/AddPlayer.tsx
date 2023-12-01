@@ -19,7 +19,8 @@ export const AddPlayerCard = ({
 }: AddPlayerProps) => {
   const { post } = useNotif();
   const { newPlayerName, startScore } = useMidState();
-  const { addPlayerActions } = useMidAction();
+  const { addPlayerActions, focusActions } = useMidAction();
+  const { isOnFocus } = focusActions;
   const { setNewPlayerName, setStartScore } = addPlayerActions;
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
 
@@ -64,6 +65,7 @@ export const AddPlayerCard = ({
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === keys.ESCAPE) {
       toggleCard();
+      isOnFocus(0, true);
     }
     if (e.key === keys.ENTER) {
       handleInputValidation();
@@ -78,28 +80,30 @@ export const AddPlayerCard = ({
   const finalStartScore = startScore ? startScore : "";
 
   return (
-    <RefManager ref={ref}>
-      <Position variant="nav-extension">
-        {isOpen && (
-          <KeyboardManager onKeyUp={handleKeyUp}>
-            <AddStyles>
-              <SoftInput
-                label="Name"
-                pseudoName="0_addPlayer"
-                onChange={(e) => setNewPlayerName(e.currentTarget.value)}
-                value={newPlayerName}
-              />
-              <SoftInput
-                label="Start score"
-                pseudoName="0_startScore"
-                onChange={(e) => handleStartScoreChange(e)}
-                value={finalStartScore}
-              />
-            </AddStyles>
-          </KeyboardManager>
-        )}
-      </Position>
-    </RefManager>
+    <>
+      {isOpen && (
+        <RefManager ref={ref}>
+          <Position variant="nav-extension">
+            <KeyboardManager onKeyUp={handleKeyUp}>
+              <AddStyles>
+                <SoftInput
+                  label="Name"
+                  pseudoName="0_addPlayer"
+                  onChange={(e) => setNewPlayerName(e.currentTarget.value)}
+                  value={newPlayerName}
+                />
+                <SoftInput
+                  label="Start score"
+                  pseudoName="0_startScore"
+                  onChange={(e) => handleStartScoreChange(e)}
+                  value={finalStartScore}
+                />
+              </AddStyles>
+            </KeyboardManager>
+          </Position>
+        </RefManager>
+      )}
+    </>
   );
 };
 
