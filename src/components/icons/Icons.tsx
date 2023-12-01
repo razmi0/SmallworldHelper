@@ -283,7 +283,7 @@ export const Load = ({ color, size, bgColor }: SvgProps) => {
       </g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
-        <rect width={size[0]} height={size[1]} fill="white" fillOpacity="0.01"></rect>
+        <rect width={size[0]} height={size[1]} fill="white" fillOpacity="0"></rect>
         <path
           d="M11.6777 20.271C7.27476 21.3181 4 25.2766 4 30C4 35.5228 8.47715 40 14 40V40C14.9474 40 15.864 39.8683 16.7325 39.6221"
           stroke={color}
@@ -337,7 +337,7 @@ export const Save = ({ color, size, bgColor }: SvgProps) => {
       </g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
-        <rect width="48" height="48" fill="white" fillOpacity="0.01"></rect>
+        <rect width="48" height="48" fill="white" fillOpacity="0"></rect>
         <path
           d="M11.6777 20.271C7.27476 21.3181 4 25.2766 4 30C4 35.5228 8.47715 40 14 40C14.9474 40 15.864 39.8683 16.7325 39.6221"
           stroke={color}
