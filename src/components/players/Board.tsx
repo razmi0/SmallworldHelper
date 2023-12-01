@@ -147,13 +147,20 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     if (isFocus[i] && element) navigateTo(inputs.current, i, "SELF");
   };
 
+  const onlyOneFocus: boolean = isFocus.filter((focus) => focus).length === 1;
+  console.log(onlyOneFocus);
+
   return (
     <BoardView>
       <ul className={styles["players-list-ctn"]}>
         {players.map((player, i) => {
           const { name, victoryPtn, id, color } = player;
           const pseudoName = `${id}_${name.toLowerCase()}`;
-          const finalColor = isFocus[i] ? color : "inherit";
+          const finalColor = isFocus[i]
+            ? color
+            : onlyOneFocus
+            ? "rgba(255,255,222, 0.1)"
+            : "inherit";
           const softValue = newScores[i] ? newScores[i] : "";
 
           return (
