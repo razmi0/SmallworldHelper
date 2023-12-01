@@ -31,15 +31,15 @@ export const AddPlayerCard = ({
 
   const addPlayerAction = useCallback(() => {
     const newName = beautify(newPlayerName);
+    if (names.includes(newName)) {
+      post({
+        type: "warning",
+        message: `${newName} already taken`,
+      });
+    }
     withViewTransition(() => {
-      if (names.includes(newName)) {
-        post({
-          type: "warning",
-          message: `${newName} already taken`,
-        });
-      }
+      addPlayer(newName, startScore as number);
     });
-    addPlayer(newName, startScore as number);
     setNewPlayerName("");
     setStartScore(0);
   }, [newPlayerName, startScore]); // newPlayerName, startScore
