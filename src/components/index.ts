@@ -11,6 +11,7 @@ import {
   RefManager,
   Position,
   Toast,
+  RisingStars,
 } from "./utils/Utils";
 import { Charts } from "./charts/Charts";
 import {
@@ -54,6 +55,7 @@ export {
   Spacer,
   UndoRedo,
   Toast,
+  RisingStars,
   /* MANAGERS */
   FocusManager,
   KeyboardManager,

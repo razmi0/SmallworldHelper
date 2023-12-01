@@ -9,6 +9,7 @@ import {
   AddPlayerCard,
   FreshStartButton,
   Toast,
+  RisingStars,
 } from "@Components";
 import { Player } from "@Types";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
@@ -81,47 +82,50 @@ const App = () => {
   // console.log("counter", a);
 
   return (
-    <MainContainer>
-      <Nav
-        storageActions={storageActions}
-        toggleHideScore={hideScore}
-        toggleOpenAddPlayer={openAddPlayer}
-        toggleOpenCharts={openCharts}
-        toggleOpenNav={openNav}
-        isNavOpen={isNavOpen}
-        isScoreHidden={isScoreHidden}
-        playerSize={playerSize}
-        undoRedoStates={undoRedoStates}
-        undoRedoActions={undoRedoActions}
-      />
-      <FreshStartButton
-        toggleOpenAddPlayer={openAddPlayer}
-        hasPlayers={hasPlayer}
-        isAddPlayerOpen={toggleStates.isAddPlayerOpen}
-      />
-      <PlayerStatsContainer>
-        <Board
-          hideScore={isScoreHidden}
-          players={players}
-          reset={resetScore}
-          remove={removePlayer}
-          update={updateScore}
+    <>
+      <RisingStars />
+      <MainContainer>
+        <Nav
+          storageActions={storageActions}
+          toggleHideScore={hideScore}
+          toggleOpenAddPlayer={openAddPlayer}
+          toggleOpenCharts={openCharts}
+          toggleOpenNav={openNav}
+          isNavOpen={isNavOpen}
+          isScoreHidden={isScoreHidden}
+          playerSize={playerSize}
+          undoRedoStates={undoRedoStates}
+          undoRedoActions={undoRedoActions}
         />
-        <Charts
-          isOpen={isChartsOpen && playerSize > 0 && hasHistory}
-          lines={lines}
-          bars={bars}
-          donuts={donuts}
+        <FreshStartButton
+          toggleOpenAddPlayer={openAddPlayer}
+          hasPlayers={hasPlayer}
+          isAddPlayerOpen={toggleStates.isAddPlayerOpen}
         />
-      </PlayerStatsContainer>
-      <AddPlayerCard
-        addPlayer={addPlayer}
-        isOpen={toggleStates.isAddPlayerOpen}
-        toggleOpenAddPlayer={openAddPlayer}
-        names={names}
-      />
-      <Toast />
-    </MainContainer>
+        <PlayerStatsContainer>
+          <Board
+            hideScore={isScoreHidden}
+            players={players}
+            reset={resetScore}
+            remove={removePlayer}
+            update={updateScore}
+          />
+          <Charts
+            isOpen={isChartsOpen && playerSize > 0 && hasHistory}
+            lines={lines}
+            bars={bars}
+            donuts={donuts}
+          />
+        </PlayerStatsContainer>
+        <AddPlayerCard
+          addPlayer={addPlayer}
+          isOpen={toggleStates.isAddPlayerOpen}
+          toggleOpenAddPlayer={openAddPlayer}
+          names={names}
+        />
+        <Toast />
+      </MainContainer>
+    </>
   );
 };
 
