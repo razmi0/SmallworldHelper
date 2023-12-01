@@ -12,7 +12,7 @@ import {
   RisingStars,
 } from "@Components";
 import { Player } from "@Types";
-import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
+import { getFromLocalStorage, saveToLocalStorage, isProdEnv } from "@Utils";
 
 // let a = 0;
 const App = () => {
@@ -36,15 +36,17 @@ const App = () => {
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
 
   useEffect(() => {
-    addEventListener("beforeunload", (e) => {
-      e.returnValue = "";
-      return;
-    });
-    return () => {
-      removeEventListener("beforeunload", (e) => {
+    isProdEnv() &&
+      addEventListener("beforeunload", (e) => {
         e.returnValue = "";
         return;
       });
+    return () => {
+      isProdEnv() &&
+        removeEventListener("beforeunload", (e) => {
+          e.returnValue = "";
+          return;
+        });
     };
   }, []);
 

@@ -6,6 +6,7 @@ import {
   ElementType,
   KeyboardEvent,
   forwardRef,
+  useMemo,
 } from "react";
 import { Close, IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
@@ -14,7 +15,7 @@ import styles from "./_.module.css";
 import { getCardStyles } from "../players/helpers";
 
 export const RisingStars = () => {
-  const risingStarStyle = getRisingStarStyle();
+  const risingStarStyle = useMemo(() => getRisingStarStyle(), []);
   return (
     <>
       <style>{risingStarStyle}</style>
