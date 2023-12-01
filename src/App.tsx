@@ -60,11 +60,12 @@ const App = () => {
   const hasPlayer = players.length > 0;
   const names = players.map((player) => player.name);
   const playerSize = players.length;
+  const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
 
   // console.timeEnd("App");
 
   a += 1;
-  console.log("counter", a);
+  // console.log("counter", a);
 
   return (
     <MainContainer>
@@ -92,7 +93,7 @@ const App = () => {
           update={updateScore}
         />
         <Charts
-          isOpen={isChartsOpen && players.length > 0}
+          isOpen={isChartsOpen && playerSize > 0 && hasHistory}
           lines={lines}
           bars={bars}
           donuts={donuts}
