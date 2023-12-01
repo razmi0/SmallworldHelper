@@ -82,8 +82,8 @@ export const AddPlayerCard = ({
   return (
     <>
       {isOpen && (
-        <RefManager ref={ref}>
-          <Position variant="nav-extension">
+        <Position variant="nav-extension">
+          <RefManager ref={ref}>
             <KeyboardManager onKeyUp={handleKeyUp}>
               <AddStyles>
                 <SoftInput
@@ -100,8 +100,8 @@ export const AddPlayerCard = ({
                 />
               </AddStyles>
             </KeyboardManager>
-          </Position>
-        </RefManager>
+          </RefManager>
+        </Position>
       )}
     </>
   );

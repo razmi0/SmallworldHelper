@@ -73,13 +73,9 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     setIsOnFocus(playerSize, false);
   }, [playerSize]);
 
-  const resetInput = (i: number) => {
-    setNewScores(i, 0);
-  };
-
   const handleBlur = useCallback((i: number) => {
     isOnFocus(i, false);
-    resetInput(i);
+    setNewScores(i, 0);
   }, []);
 
   const handleFocus = useCallback((i: number) => {
@@ -100,14 +96,14 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
       case keys.ENTER: {
         if (e.currentTarget.value === "-") return;
         update(id /* PLAYER ID */, newScores[i] as number);
-        resetInput(i);
+        setNewScores(i, 0);
         navigateTo(matrice, i, "NEXT");
         break;
       }
 
       case keys.BACKSPACE: {
         if (isDeletable(e)) {
-          resetInput(i);
+          setNewScores(i, 0);
         }
         break;
       }
@@ -129,7 +125,8 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
         break;
 
       case keys.ESCAPE: {
-        resetInput(i);
+        setNewScores(i, 0);
+        isOnFocus(i, false);
         break;
       }
 
