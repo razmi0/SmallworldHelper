@@ -1,7 +1,10 @@
 .nav-extension {
   position: absolute;
-  left: 70px;
-  top: 2%;
+  /* left: 70px; */
+  /* top: 2%; */
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
 }
 
 .toast-list-ctn {

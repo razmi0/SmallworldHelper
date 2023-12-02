@@ -15,7 +15,7 @@ export type Player = {
   sum: number;
 };
 
-export type LineData = {
+export type LineDataType = {
   labels: string[]; // x-axis & ...turns
   datasets: {
     label: string; // player name
@@ -25,7 +25,7 @@ export type LineData = {
   }[];
 };
 
-export type BarData = {
+export type BarDataType = {
   labels: string[]; // x-axis & players name
   datasets: {
     label: string; // maxscore, minscore, average
@@ -36,7 +36,7 @@ export type BarData = {
   }[];
 };
 
-export type DonutData = {
+export type DonutDataType = {
   labels: string[];
   datasets: {
     label: string;
@@ -162,12 +162,12 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
 
 export type PlayerState = {
   players: Player[];
-  lines: LineData;
-  bars: BarData;
-  donuts: DonutData;
+  lines: LineDataType;
+  bars: BarDataType;
+  donuts: DonutDataType;
 };
 
-export type FullSetterType = [Player[], LineData, BarData, DonutData];
+export type FullSetterType = [Player[], LineDataType, BarDataType, DonutDataType];
 
 export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;

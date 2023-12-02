@@ -44,6 +44,7 @@ export type CardType =
   | "bar"
   | "donut"
   | "player-back"
+  | "utility-back"
   | "chart-back"
   | "donut-back";
 export const getCardStyles = (card: CardType) => {
@@ -52,6 +53,7 @@ export const getCardStyles = (card: CardType) => {
   const playerBack = cssModules.player["player-back"];
   const chartBack = cssModules.chart["chart-back"];
   const donutBack = cssModules.chart["donut-back"];
+  const utilityBack = cssModules.player["utility-back"];
 
   switch (card) {
     case "player":
@@ -61,9 +63,6 @@ export const getCardStyles = (card: CardType) => {
         defaultRadius +
         cssModules.player["list-element-ctn"]
       );
-
-    case "player-back":
-      return playerBack;
 
     case "utility":
       return (
@@ -87,6 +86,12 @@ export const getCardStyles = (card: CardType) => {
 
     case "donut-back":
       return donutBack;
+
+    case "player-back":
+      return playerBack;
+
+    case "utility-back":
+      return utilityBack;
 
     default:
       return "NOPNOPNOPNOPNOP"; // cardStyles +

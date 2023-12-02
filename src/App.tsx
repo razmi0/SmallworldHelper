@@ -74,51 +74,55 @@ const App = () => {
   }, [storageEvent]);
 
   const { hasPlayer, names, playerSize, hasHistory, color } = workingVars(players, isFocus);
+  const nop = false;
 
   return (
     <>
       <RisingStars color={color} />
-      <MainContainer>
-        <Nav
-          storageActions={storageActions}
-          toggleHideScore={hideScore}
-          toggleOpenAddPlayer={openAddPlayer}
-          toggleOpenCharts={openCharts}
-          toggleOpenNav={openNav}
-          isNavOpen={isNavOpen}
-          isScoreHidden={isScoreHidden}
-          playerSize={playerSize}
-          undoRedoStates={undoRedoStates}
-          undoRedoActions={undoRedoActions}
-        />
-        <FreshStartButton
-          toggleOpenAddPlayer={openAddPlayer}
-          hasPlayers={hasPlayer}
-          isAddPlayerOpen={toggleStates.isAddPlayerOpen}
-        />
-        <PlayerStatsContainer>
-          <Board
-            hideScore={isScoreHidden}
-            players={players}
-            reset={resetScore}
-            remove={removePlayer}
-            update={updateScore}
+      <Test />
+      {nop && (
+        <MainContainer>
+          <Nav
+            storageActions={storageActions}
+            toggleHideScore={hideScore}
+            toggleOpenAddPlayer={openAddPlayer}
+            toggleOpenCharts={openCharts}
+            toggleOpenNav={openNav}
+            isNavOpen={isNavOpen}
+            isScoreHidden={isScoreHidden}
+            playerSize={playerSize}
+            undoRedoStates={undoRedoStates}
+            undoRedoActions={undoRedoActions}
           />
-          <Charts
-            isOpen={isChartsOpen && playerSize > 0 && hasHistory}
-            lines={lines}
-            bars={bars}
-            donuts={donuts}
+          <FreshStartButton
+            toggleOpenAddPlayer={openAddPlayer}
+            hasPlayers={hasPlayer}
+            isAddPlayerOpen={toggleStates.isAddPlayerOpen}
           />
-        </PlayerStatsContainer>
-        <AddPlayerCard
-          addPlayer={addPlayer}
-          isOpen={toggleStates.isAddPlayerOpen}
-          toggleOpenAddPlayer={openAddPlayer}
-          names={names}
-        />
-        <Toast />
-      </MainContainer>
+          <PlayerStatsContainer>
+            <Board
+              hideScore={isScoreHidden}
+              players={players}
+              reset={resetScore}
+              remove={removePlayer}
+              update={updateScore}
+            />
+            <Charts
+              isOpen={isChartsOpen && playerSize > 0 && hasHistory}
+              lines={lines}
+              bars={bars}
+              donuts={donuts}
+            />
+          </PlayerStatsContainer>
+          <AddPlayerCard
+            addPlayer={addPlayer}
+            isOpen={toggleStates.isAddPlayerOpen}
+            toggleOpenAddPlayer={openAddPlayer}
+            names={names}
+          />
+          <Toast />
+        </MainContainer>
+      )}
     </>
   );
 };
@@ -132,6 +136,18 @@ const workingVars = (players: Player[], isFocus: boolean[]) => {
   const color = players[colorIndex]?.color;
 
   return { hasPlayer, names, playerSize, hasHistory, color };
+};
+
+const Test = () => {
+  const classes =
+    "circuit-glow impact-glow-1 impact-glow-2 impact-glow-3 static-impact-glow impact-glow circuit-comet serial-text sdk-text inner-circuit circuit-cover";
+  return (
+    <>
+      <div>
+        <h1>TEST</h1>
+      </div>
+    </>
+  );
 };
 
 export default App;

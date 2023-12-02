@@ -69,6 +69,7 @@ export const lineOptions: ChartOptions<"line"> = {
 export const barOptions: ChartOptions<"bar"> = {
   maintainAspectRatio: false,
   normalized: true,
+  skipNull: true,
   animation: {
     delay: 300,
   },

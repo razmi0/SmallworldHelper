@@ -1,7 +1,8 @@
 :root {
   --card-size-width: 140px;
   --card-size-height-player: 150px;
-  --card-size-height-utility: fit-content;
+  --card-size-height-utility: 100%;
+  --card-size-width-utility: 100%;
 }
 
 .player-stats-ctn {
@@ -71,8 +72,16 @@
 }
 
 .card-size-utility {
-  width: var(--card-size-width);
+  width: var(--card-size-width-utility);
   height: var(--card-size-height-utility);
+}
+
+.utility-back {
+  position: relative;
+  width: var(--card-size-width-utility);
+  height: var(--card-size-height-utility);
+  border-radius: var(--std-card-radius-default);
+  background-color: black;
 }
 
 .player-back {
@@ -118,8 +127,9 @@
 } */
 
 .addplayer-ctn {
-  gap: 12px;
+  gap: 20px;
   view-transition-name: add-player-vt;
+  padding: 30px 20px;
 }
 
 ::view-transition-new(add-player-vt) {

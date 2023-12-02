@@ -1,5 +1,5 @@
-import {
-  BarData,
+export type {
+  BarDataType,
   BarProps,
   ContainerProps,
   FullSetterType,
@@ -8,9 +8,9 @@ import {
   IconName,
   IconProps,
   KeyboardNavigationIdType,
-  LineData,
+  LineDataType,
   LineProps,
-  DonutData,
+  DonutDataType,
   DonutProps,
   Player,
   PlayerState,
@@ -23,27 +23,3 @@ import {
 } from "./types";
 
 /*   */
-
-export type {
-  BarData,
-  BarProps,
-  ContainerProps,
-  FullSetterType,
-  IconButtonProps,
-  IconHeadingProps,
-  IconName,
-  IconProps,
-  KeyboardNavigationIdType,
-  LineData,
-  LineProps,
-  DonutData,
-  DonutProps,
-  Player,
-  PlayerState,
-  SvgDataType,
-  SvgProps,
-  UndoRedoActions,
-  UndoRedoStates,
-  VariantType,
-  NotificationType,
-};

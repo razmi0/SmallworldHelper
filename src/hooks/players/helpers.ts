@@ -1,5 +1,5 @@
 import { PLAYER_COLORS } from "../../components/icons/data";
-import { BarData, LineData, Player, DonutData } from "@Types";
+import { BarDataType, LineDataType, Player, DonutDataType } from "@Types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils";
 
 const errorMsg = "Player not found";
@@ -7,6 +7,8 @@ const BORDER_WIDTH = 1 as const;
 const BORDER_WIDTH_DONUT = 0 as const;
 const BG_OPACITY = 0.8 as const; // bar & donut
 const BAR_THICKNESS = 10 as const;
+const BAR_PERCENTAGE = 1.0 as const;
+const CATEGORY_PERCENTAGE = 1.0 as const;
 
 // HELPERS FUNCTIONS FOR BUILD CHARTS FROM SCRATCH
 //--
@@ -30,6 +32,7 @@ export const buildAllLines = (players: Player[]) => {
 };
 
 export const buildAllBars = (players: Player[]) => {
+  // console.trace("buildAllBars");
   return {
     labels: players.map((p) => p.name) ?? [],
     datasets: [
@@ -40,8 +43,8 @@ export const buildAllBars = (players: Player[]) => {
         borderColor: players.map((p) => p.color) ?? [],
         borderWidth: BORDER_WIDTH,
         barThickness: BAR_THICKNESS,
-        barPercentage: 1.0,
-        categoryPercentage: 1.0,
+        barPercentage: BAR_PERCENTAGE,
+        categoryPercentage: CATEGORY_PERCENTAGE,
       },
       {
         label: "Average score",
@@ -50,8 +53,8 @@ export const buildAllBars = (players: Player[]) => {
         borderColor: players.map((p) => p.color) ?? [],
         borderWidth: BORDER_WIDTH,
         barThickness: BAR_THICKNESS,
-        barPercentage: 1.0,
-        categoryPercentage: 1.0,
+        barPercentage: BAR_PERCENTAGE,
+        categoryPercentage: CATEGORY_PERCENTAGE,
       },
       {
         label: "Min score",
@@ -60,8 +63,8 @@ export const buildAllBars = (players: Player[]) => {
         borderColor: players.map((p) => p.color) ?? [],
         borderWidth: BORDER_WIDTH,
         barThickness: BAR_THICKNESS,
-        barPercentage: 1.0,
-        categoryPercentage: 1.0,
+        barPercentage: BAR_PERCENTAGE,
+        categoryPercentage: CATEGORY_PERCENTAGE,
       },
     ],
   };
@@ -93,7 +96,7 @@ export const buildBaseStats = (name: string, startScore: number, id: number) => 
     history: [startScore],
     addedScores: [startScore],
     rankChange: 0,
-    color: PLAYER_COLORS[id] ?? getRandomColor(),
+    color: PLAYER_COLORS[(id % PLAYER_COLORS.length) - 1] ?? getRandomColor(),
     max: startScore,
     min: startScore,
     avg: startScore,
@@ -101,7 +104,7 @@ export const buildBaseStats = (name: string, startScore: number, id: number) => 
   };
 };
 
-export const buildNewLines = (lines: LineData, newPlayer: Player) => {
+export const buildNewLines = (lines: LineDataType, newPlayer: Player) => {
   const { datasets, labels } = lines;
   return {
     labels: labels,
@@ -117,7 +120,7 @@ export const buildNewLines = (lines: LineData, newPlayer: Player) => {
   };
 };
 
-export const buildNewBars = (bars: BarData, newPlayer: Player) => {
+export const buildNewBars = (bars: BarDataType, newPlayer: Player) => {
   const { datasets, labels } = bars;
   const clonedDatasets = datasets.map((dataset) => ({
     ...dataset,
@@ -131,7 +134,7 @@ export const buildNewBars = (bars: BarData, newPlayer: Player) => {
   };
 };
 
-export const buildNewdonuts = (donuts: DonutData, newPlayer: Player) => {
+export const buildNewdonuts = (donuts: DonutDataType, newPlayer: Player) => {
   const { datasets, labels } = donuts;
   return {
     labels: [...labels, newPlayer.name],
@@ -180,10 +183,10 @@ export const updatePlayersStats = (players: Player[], newScore: number, id: numb
 };
 
 export const updateLines = (
-  lines: LineData,
+  lines: LineDataType,
   updatedPlayer: Player,
   players: Player[]
-): LineData => {
+): LineDataType => {
   const newLabels =
     findMaxNbrTurns(players) > lines.labels.length
       ? [...lines.labels, (lines.labels.length + 1).toString()]
@@ -203,7 +206,7 @@ export const updateLines = (
   };
 };
 
-export const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
+export const updateBars = (bars: BarDataType, updatedPlayer: Player): BarDataType => {
   const index = bars.labels.findIndex((label) => label === updatedPlayer.name);
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = bars.datasets.map((dataset, i) => {
@@ -215,12 +218,12 @@ export const updateBars = (bars: BarData, updatedPlayer: Player): BarData => {
     };
   });
   return {
-    labels: [...bars.labels], // This spread is not necessary labels are not being mutated
+    labels: bars.labels, // This spread is not necessary labels are not being mutated
     datasets: newDatasets,
   };
 };
 
-export const updatedonuts = (donuts: DonutData, updatedPlayer: Player): DonutData => {
+export const updatedonuts = (donuts: DonutDataType, updatedPlayer: Player): DonutDataType => {
   const index = donuts.labels.findIndex((label) => label === updatedPlayer.name);
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = donuts.datasets.map((dataset) => {
@@ -260,7 +263,11 @@ const resetPlayerStats = (player: Player) => {
   };
 };
 
-export const resetLine = (lines: LineData, name: Player["name"], players: Player[]): LineData => {
+export const resetLine = (
+  lines: LineDataType,
+  name: Player["name"],
+  players: Player[]
+): LineDataType => {
   const newDatasets = lines.datasets.map((dataset) => {
     return dataset.label === name ? { ...dataset, data: [...dataset.data, 0] } : dataset;
   });
@@ -274,7 +281,7 @@ export const resetLine = (lines: LineData, name: Player["name"], players: Player
   };
 };
 
-export const resetBar = (bars: BarData, name: Player["name"]): BarData => {
+export const resetBar = (bars: BarDataType, name: Player["name"]): BarDataType => {
   const index = bars.labels.findIndex((label) => label === name);
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = bars.datasets.map((dataset) => {
@@ -291,7 +298,7 @@ export const resetBar = (bars: BarData, name: Player["name"]): BarData => {
   };
 };
 
-export const resetdonut = (donuts: DonutData, name: Player["name"]): DonutData => {
+export const resetdonut = (donuts: DonutDataType, name: Player["name"]): DonutDataType => {
   const index = donuts.labels.findIndex((label) => label === name);
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = donuts.datasets.map((dataset) => {
@@ -319,7 +326,7 @@ export const removePlayer = (players: Player[], id: Player["id"]) => {
   };
 };
 
-export const removeLine = (lines: LineData, name: Player["name"]): LineData => {
+export const removeLine = (lines: LineDataType, name: Player["name"]): LineDataType => {
   const newDatasets = lines.datasets.filter((dataset) => dataset.label !== name);
   if (newDatasets.length === 0) throw new Error(errorMsg);
   return {
@@ -328,7 +335,7 @@ export const removeLine = (lines: LineData, name: Player["name"]): LineData => {
   };
 };
 
-export const removeBar = (bars: BarData, name: Player["name"]): BarData => {
+export const removeBar = (bars: BarDataType, name: Player["name"]): BarDataType => {
   const index = bars.labels.findIndex((label) => label === name);
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = bars.datasets.map((dataset) => {
@@ -351,7 +358,7 @@ export const removeBar = (bars: BarData, name: Player["name"]): BarData => {
   };
 };
 
-export const removedonut = (donuts: DonutData, name: Player["name"]): DonutData => {
+export const removedonut = (donuts: DonutDataType, name: Player["name"]): DonutDataType => {
   const index = donuts.labels.findIndex((label) => label === name);
   if (index === -1) throw new Error(errorMsg);
   const newDatasets = donuts.datasets.map((dataset) => {
@@ -376,9 +383,9 @@ export const removedonut = (donuts: DonutData, name: Player["name"]): DonutData 
 
 type ResetStates = {
   players: Player[];
-  lines: LineData;
-  bars: BarData;
-  donuts: DonutData;
+  lines: LineDataType;
+  bars: BarDataType;
+  donuts: DonutDataType;
 };
 // RESET ALL STATES (PLAYERS, LINES, BARS, donutS)
 //--

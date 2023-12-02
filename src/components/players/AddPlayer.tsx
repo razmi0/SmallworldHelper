@@ -80,6 +80,8 @@ export const AddPlayerCard = ({
 
   const finalStartScore = startScore ? startScore : "";
 
+  console.log(isOpen);
+
   return (
     <>
       {isOpen && (
@@ -109,9 +111,12 @@ export const AddPlayerCard = ({
 };
 
 const AddStyles = ({ children }: ContainerProps) => {
-  const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
-  const otherClasses =
-    " grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
   const classes = getCardStyles("utility");
-  return <div className={classes + cardStyles + otherClasses}>{children}</div>;
+  const back = getCardStyles("utility-back");
+
+  return (
+    <div className={back} style={{ boxShadow: "0px 0px 1px 1px rgba(255, 255, 222, 0.3)" }}>
+      <div className={classes}>{children}</div>
+    </div>
+  );
 };

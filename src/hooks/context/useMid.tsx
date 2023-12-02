@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useCallback, useContext, useReducer } from "react";
+import { ReactNode, createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helper";
 
 type newScoreType = number | string; // string => transitional value of input === "-"
@@ -121,11 +121,16 @@ export const IntermediateProvider = ({
   children: ReactNode;
   size?: number;
 }) => {
-  const [state, dispatch] = useReducer(intermediateReducer, {
-    ...initialIntermediateState,
-    isFocus: initBooleanMap(size),
-    newScores: initNewScores(size),
-  });
+  const initial = useMemo(
+    () => ({
+      ...initialIntermediateState,
+      isFocus: initBooleanMap(size),
+      newScores: initNewScores(size),
+    }),
+    []
+  );
+
+  const [state, dispatch] = useReducer(intermediateReducer, initial);
 
   return (
     <IntermediateContext.Provider value={state}>

@@ -1,7 +1,7 @@
 // IMPORTS
 // --
-import { useCallback, useReducer } from "react";
-import { BarData, LineData, DonutData, Player, PlayerState } from "@Types";
+import { useCallback, useMemo, useReducer } from "react";
+import { BarDataType, LineDataType, DonutDataType, Player, PlayerState } from "@Types";
 import {
   buildAllLines,
   buildAllBars,
@@ -47,7 +47,7 @@ export const initialPlayerStates = {
 
   /* lineData not stored at the moment */
   lineData: () => {
-    const storedData = getFromLocalStorage<LineData>(
+    const storedData = getFromLocalStorage<LineDataType>(
       "lineData",
       buildAllLines(initialPlayerStates.players)
     );
@@ -56,7 +56,7 @@ export const initialPlayerStates = {
 
   /* barData not stored at the moment */
   barData: () => {
-    const storedData = getFromLocalStorage<BarData>(
+    const storedData = getFromLocalStorage<BarDataType>(
       "barData",
       buildAllBars(initialPlayerStates.players)
     );
@@ -64,13 +64,17 @@ export const initialPlayerStates = {
   },
 
   /* DonutData not stored at the moment */
-  DonutData: () => {
-    const storedData = getFromLocalStorage<DonutData>(
+  donutData: () => {
+    const storedData = getFromLocalStorage<DonutDataType>(
       "DonutData",
       buildAlldonuts(initialPlayerStates.players)
     );
     return storedData.stored;
   },
+};
+
+const extendId = () => {
+  return parseInt((Math.random() * 100).toFixed());
 };
 
 // REDUCER
@@ -82,9 +86,15 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
   switch (type) {
     case "ADD_PLAYER": {
       const { name, startScore } = payload;
-      const hasName = players.find((player) => player.name === name);
-      if (hasName) return state;
-      const newPlayer = buildBaseStats(name, startScore, players.length /* => id*/);
+
+      const uniqueIds: Set<number> = new Set(players.map((player) => player.id));
+      const uniqueNames: Set<string> = new Set(players.map((player) => player.name));
+      let newId = 0;
+
+      if (uniqueNames.has(name)) return state;
+      while (uniqueIds.has(newId)) newId = players.length + extendId();
+
+      const newPlayer = buildBaseStats(name, startScore, newId);
       return {
         ...state,
         players: [...players, newPlayer],
@@ -133,6 +143,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
     }
 
     case "SET_PLAYERS": {
+      console.log("SET_PLAYERS");
       const { players } = payload;
       return {
         ...state,
@@ -151,12 +162,16 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
 // PLAYER STATES HOOK
 //--
 export const usePlayer = () => {
-  const [playersStates, dispatch] = useReducer(playerReducer, {
-    players: initialPlayerStates.players,
-    lines: initialPlayerStates.lineData(),
-    bars: initialPlayerStates.barData(),
-    donuts: initialPlayerStates.DonutData(),
-  });
+  const initialState = useMemo(
+    () => ({
+      players: initialPlayerStates.players,
+      lines: initialPlayerStates.lineData(),
+      bars: initialPlayerStates.barData(),
+      donuts: initialPlayerStates.donutData(),
+    }),
+    []
+  );
+  const [playersStates, dispatch] = useReducer(playerReducer, initialState);
 
   /**
    * Build charts from there

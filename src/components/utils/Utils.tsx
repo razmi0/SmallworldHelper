@@ -145,7 +145,7 @@ const ListElement = ({ children, color }: { children: ReactNode; color: string }
       <li
         style={{
           viewTransitionName: `slide${id}`,
-          boxShadow: ` 0 1px 1px ${color}`,
+          boxShadow: ` 0px 0px 1px 1px ${color}`,
           overflow: "hidden",
         }}
         className={cssModules.utils["toast-list-element"] + " " + classes}

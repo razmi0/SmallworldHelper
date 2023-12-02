@@ -86,6 +86,7 @@ p {
   gap: 10px;
   width: fit-content;
   justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 820px) {

@@ -20,7 +20,7 @@ import { ChartContainer } from "@Components";
 import { LineProps, BarProps, DonutProps } from "@Types";
 import { focusOnBar, focusOnLine, focusOndonut } from "@/hooks/charts/helper";
 import { findSum } from "@Utils";
-import {cssModules} from "@Styles";
+import { cssModules } from "@Styles";
 
 ChartJS.register(
   CategoryScale,
@@ -63,7 +63,7 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   let focusedLine = lines,
     focusedBar = bars,
     focusedDonut = donuts,
-    focusedColor = "";
+    focusedColor = "rgba(255,255,255, 0.3)";
 
   if (currentlyFocused) {
     const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
