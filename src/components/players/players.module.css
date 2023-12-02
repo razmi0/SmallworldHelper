@@ -1,3 +1,9 @@
+:root {
+  --card-size-width: 140px;
+  --card-size-height-player: 150px;
+  --card-size-height-utility: fit-content;
+}
+
 .player-stats-ctn {
   display: flex;
   width: 100%;
@@ -60,14 +66,21 @@
 }
 
 .card-size-player {
-  width: 140px;
-  height: 150px;
+  width: var(--card-size-width);
+  height: var(--card-size-height-player);
 }
 
 .card-size-utility {
-  width: 140px;
-  height: fit-content;
-  /* filter: brightness(0.9) saturate(1.2); */
+  width: var(--card-size-width);
+  height: var(--card-size-height-utility);
+}
+
+.player-back {
+  position: relative;
+  width: var(--card-size-width);
+  height: var(--card-size-height-player);
+  border-radius: var(--std-card-radius-default);
+  background-color: black;
 }
 
 .player-text-ctn {

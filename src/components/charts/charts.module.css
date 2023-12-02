@@ -1,0 +1,44 @@
+:root {
+  --card-size-chart-width: fit-content;
+  --card-size-chart-height: fit-content;
+}
+
+.donut-total-vc-ptn {
+  max-width: 150px;
+}
+.donut-total-vc-ptn::before {
+  content: attr(data-total-vc-ptn);
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: color 400ms ease-in-out 50ms;
+  white-space: nowrap;
+  /* offset-x | offset-y | blur-radius | color */
+  text-shadow: 0px 0px 1px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.donut {
+  width: fit-content !important;
+  padding: 0.1rem !important;
+  border-radius: 50% !important;
+}
+
+.chart-back {
+  position: relative;
+  width: var(--card-size-chart-width);
+  height: var(--card-size-chart-height);
+  border-radius: var(--std-card-radius-default);
+  background-color: black;
+  z-index: 0;
+}
+
+.donut-back {
+  position: relative;
+  width: var(--card-size-chart-width);
+  height: var(--card-size-chart-height);
+  border-radius: var(--std-card-radius-donut);
+  background-color: black;
+  z-index: 0;
+}
