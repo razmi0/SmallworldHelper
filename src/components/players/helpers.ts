@@ -1,5 +1,4 @@
 import { KeyboardEvent, createRef } from "react";
-import styles from "./_.module.css";
 
 // KEYBOARD NAVIGATION
 //--
@@ -122,31 +121,6 @@ export const initInputsRefs = (size: number) => {
   return new Array(size)
     .fill(null)
     .map(() => createRef<HTMLInputElement>()) as unknown as HTMLInputElement[];
-};
-
-// UI
-//--
-
-export type SizeType = "player" | "utility" | "default";
-export const getCardStyles = (size: SizeType) => {
-  let classes = styles["board-card"];
-  const cardStyles = " grainy lin-dark global-grainy shadow-ctn";
-  const otherClasses =
-    " grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
-
-  switch (size) {
-    case "player":
-      classes += ` ${styles["card-size-player"]} ${styles["list-element-ctn"]}`;
-      break;
-    case "utility":
-      classes += ` ${styles["card-size-utility"]} ${styles["addplayer-ctn"]}`;
-      break;
-
-    default:
-      return cardStyles + otherClasses;
-  }
-
-  return classes + cardStyles + otherClasses;
 };
 
 // export const getCardViewTransition = (id: string, duration: string) => `

@@ -23,8 +23,6 @@ import {
 } from "@Components";
 import {
   blurInput,
-  getCardStyles,
-  // getCardViewTransition,
   initInputsRefs,
   isDeletable,
   keys,
@@ -32,7 +30,7 @@ import {
   validateIntOnChange,
 } from "./helpers";
 import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
-import styles from "./_.module.css";
+import { cssModules, getCardStyles } from "@Styles";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -60,7 +58,7 @@ type PlayerUtilitiesProps = {
 //--
 
 export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
-  const { isFocus, newScores } = useMidState();
+  const { isFocus, newScores, onlyOneFocus } = useMidState();
   const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef(initInputsRefs(players.length));
@@ -147,19 +145,16 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     if (isFocus[i] && element) navigateTo(inputs.current, i, "SELF");
   };
 
-  const onlyOneFocus: boolean = isFocus.filter((focus) => focus).length === 1;
-  console.log(onlyOneFocus);
-
   return (
     <BoardView>
-      <ul className={styles["players-list-ctn"]}>
+      <ul className={cssModules.player["players-list-ctn"]}>
         {players.map((player, i) => {
           const { name, victoryPtn, id, color } = player;
           const pseudoName = `${id}_${name.toLowerCase()}`;
           const finalColor = isFocus[i]
             ? color
             : onlyOneFocus
-            ? "rgba(255,255,222, 0.1)"
+            ? "rgba(255,255,222, 0.3)" // no focus card font color
             : "inherit";
           const softValue = newScores[i] ? newScores[i] : "";
 
@@ -172,7 +167,7 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
               as="li"
             >
               <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
-                <PlayerCard>
+                <PlayerCard color={finalColor}>
                   <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
 
                   <PlayerTextContainer>
@@ -212,24 +207,30 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
 };
 
 const BoardView = ({ children }: ContainerProps) => {
-  return <div className={styles["board-view-ctn"]}>{children}</div>;
+  return <div className={cssModules.player["board-view-ctn"]}>{children}</div>;
 };
 
 export const PlayerStatsContainer = ({ children }: ContainerProps) => {
-  return <section className={styles["player-stats-ctn"]}>{children}</section>;
+  return <section className={cssModules.player["player-stats-ctn"]}>{children}</section>;
 };
 
-const PlayerCard = ({ children }: ContainerProps) => {
+interface PlayerCardProps extends ContainerProps {
+  color: string;
+}
+const PlayerCard = ({ children, color }: PlayerCardProps) => {
   const id = useId().replace(/:/g, "_");
-  // const duration = Math.min(Math.random(), 1).toFixed(2);
   const classes = getCardStyles("player");
-  // const viewTransition = getCardViewTransition(id, duration);
+  const back = getCardStyles("player-back");
+  const backShadowColor = color === "inherit" ? "rgba(255,255,222, 0.3)" : color;
 
   return (
-    <>
-      {/* <style>{viewTransition}</style> */}
+    <div
+      className={back}
+      style={{ boxShadow: `0px 0px 1px 1px ${backShadowColor}` }}
+      color={backShadowColor}
+    >
       <div
-        id="WATCH ME"
+        id="card"
         className={classes}
         style={{
           viewTransitionName: `player-card${id}`,
@@ -237,12 +238,12 @@ const PlayerCard = ({ children }: ContainerProps) => {
       >
         {children}
       </div>
-    </>
+    </div>
   );
 };
 
 const PlayerTextContainer = ({ children }: ContainerProps) => {
-  return <div className={styles["player-text-ctn"]}>{children}</div>;
+  return <div className={cssModules.player["player-text-ctn"]}>{children}</div>;
 };
 
 interface PlayerTextProps extends HTMLAttributes<HTMLDivElement> {
@@ -251,7 +252,7 @@ interface PlayerTextProps extends HTMLAttributes<HTMLDivElement> {
 }
 const PlayerText = ({ children, color, ...props }: PlayerTextProps) => {
   return (
-    <div {...props} style={{ color }} className={styles["player-text"]}>
+    <div {...props} style={{ color }} className={cssModules.player["player-text"]}>
       {children}
     </div>
   );
@@ -271,7 +272,7 @@ const PlayerUtilities = ({
   const finalDatatype = datatype ? datatype : "";
 
   return (
-    <div className={styles["player-utilities-ctn"]}>
+    <div className={cssModules.player["player-utilities-ctn"]}>
       <IconButton
         sx={{
           visibility: visibility,

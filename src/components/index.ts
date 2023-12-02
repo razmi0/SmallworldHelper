@@ -1,6 +1,6 @@
-import { ChartContainer, Header, InputContainer, MainContainer } from "./containers/Containers";
-import { Input, SoftInput } from "./utils/Inputs";
-import {
+export { ChartContainer, Header, InputContainer, MainContainer } from "./containers/Containers";
+export { Input, SoftInput } from "./utils/Inputs";
+export {
   Clock,
   Flex,
   FreshStartButton,
@@ -11,9 +11,10 @@ import {
   RefManager,
   Position,
   Toast,
+  RisingStars,
 } from "./utils/Utils";
-import { Charts } from "./charts/Charts";
-import {
+export { Charts } from "./charts/Charts";
+export {
   AddPlayer as IconAddPlayer,
   AddScore,
   Chart,
@@ -33,56 +34,6 @@ import {
   Undo,
   Close,
 } from "./icons/Icons";
-import { Nav } from "./nav/Nav";
-import { AddPlayerCard } from "./players/AddPlayer";
-import { Board, PlayerStatsContainer } from "./players/Board";
-
-export {
-  /* CONTAINERS */
-  ChartContainer,
-  Header,
-  InputContainer,
-  MainContainer,
-  /* INPUTS */
-  Input,
-  SoftInput,
-  /* UTILS */
-  Clock,
-  Position,
-  Flex,
-  FreshStartButton,
-  Spacer,
-  UndoRedo,
-  Toast,
-  /* MANAGERS */
-  FocusManager,
-  KeyboardManager,
-  RefManager,
-  /* CHARTS */
-  Charts,
-  /* ICONS */
-  IconAddPlayer,
-  AddScore,
-  Chart,
-  Delete,
-  EyeClose,
-  EyeOpen,
-  Icon,
-  IconButton,
-  IconHeading,
-  Load,
-  Menu,
-  Redo,
-  Reset,
-  Save,
-  Star,
-  Theme,
-  Undo,
-  Close,
-  /* NAV */
-  Nav,
-  /* PLAYERS */
-  Board,
-  PlayerStatsContainer,
-  AddPlayerCard,
-};
+export { Nav } from "./nav/Nav";
+export { AddPlayerCard } from "./players/AddPlayer";
+export { Board, PlayerStatsContainer } from "./players/Board";

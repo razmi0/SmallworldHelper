@@ -17,6 +17,7 @@ import {
   saveToLocalStorage,
   withViewTransition,
   beautify,
+  isProdEnv,
 } from "./utils";
 
 /* */
@@ -31,6 +32,7 @@ export {
   removeOpacityFromHex,
   /* DEV */
   isDevEnv,
+  isProdEnv,
   /* LOCALSTORAGE */
   saveToLocalStorage,
   getFromLocalStorage,

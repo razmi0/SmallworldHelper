@@ -73,7 +73,7 @@ export const barOptions: ChartOptions<"bar"> = {
     delay: 300,
   },
   responsive: true,
-  // maintainAspectRatio: false,
+
   elements: {
     bar: {
       borderRadius: 4,
@@ -85,6 +85,7 @@ export const barOptions: ChartOptions<"bar"> = {
       display: false,
       grid: {
         display: false,
+        offset: false,
       },
     },
     y: {

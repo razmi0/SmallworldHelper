@@ -9,9 +9,10 @@ import {
   AddPlayerCard,
   FreshStartButton,
   Toast,
+  RisingStars,
 } from "@Components";
 import { Player } from "@Types";
-import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
+import { getFromLocalStorage, saveToLocalStorage, isProdEnv } from "@Utils";
 
 // let a = 0;
 const App = () => {
@@ -26,7 +27,7 @@ const App = () => {
 
   const { storageActions } = useMidAction();
   const { setLoadPlayers, setSavePlayers } = storageActions;
-  const { storageEvent } = useMidState();
+  const { storageEvent, isFocus } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts, openNav } = toggleActions;
@@ -35,15 +36,17 @@ const App = () => {
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
 
   useEffect(() => {
-    addEventListener("beforeunload", (e) => {
-      e.returnValue = "";
-      return;
-    });
-    return () => {
-      removeEventListener("beforeunload", (e) => {
+    isProdEnv() &&
+      addEventListener("beforeunload", (e) => {
         e.returnValue = "";
         return;
       });
+    return () => {
+      isProdEnv() &&
+        removeEventListener("beforeunload", (e) => {
+          e.returnValue = "";
+          return;
+        });
     };
   }, []);
 
@@ -70,59 +73,65 @@ const App = () => {
     }
   }, [storageEvent]);
 
+  const { hasPlayer, names, playerSize, hasHistory, color } = workingVars(players, isFocus);
+
+  return (
+    <>
+      <RisingStars color={color} />
+      <MainContainer>
+        <Nav
+          storageActions={storageActions}
+          toggleHideScore={hideScore}
+          toggleOpenAddPlayer={openAddPlayer}
+          toggleOpenCharts={openCharts}
+          toggleOpenNav={openNav}
+          isNavOpen={isNavOpen}
+          isScoreHidden={isScoreHidden}
+          playerSize={playerSize}
+          undoRedoStates={undoRedoStates}
+          undoRedoActions={undoRedoActions}
+        />
+        <FreshStartButton
+          toggleOpenAddPlayer={openAddPlayer}
+          hasPlayers={hasPlayer}
+          isAddPlayerOpen={toggleStates.isAddPlayerOpen}
+        />
+        <PlayerStatsContainer>
+          <Board
+            hideScore={isScoreHidden}
+            players={players}
+            reset={resetScore}
+            remove={removePlayer}
+            update={updateScore}
+          />
+          <Charts
+            isOpen={isChartsOpen && playerSize > 0 && hasHistory}
+            lines={lines}
+            bars={bars}
+            donuts={donuts}
+          />
+        </PlayerStatsContainer>
+        <AddPlayerCard
+          addPlayer={addPlayer}
+          isOpen={toggleStates.isAddPlayerOpen}
+          toggleOpenAddPlayer={openAddPlayer}
+          names={names}
+        />
+        <Toast />
+      </MainContainer>
+    </>
+  );
+};
+
+const workingVars = (players: Player[], isFocus: boolean[]) => {
   const hasPlayer = players.length > 0;
   const names = players.map((player) => player.name);
   const playerSize = players.length;
   const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
+  const colorIndex = isFocus.findIndex((focus) => focus);
+  const color = players[colorIndex]?.color;
 
-  // console.timeEnd("App");
-
-  // a += 1;
-  // console.log("counter", a);
-
-  return (
-    <MainContainer>
-      <Nav
-        storageActions={storageActions}
-        toggleHideScore={hideScore}
-        toggleOpenAddPlayer={openAddPlayer}
-        toggleOpenCharts={openCharts}
-        toggleOpenNav={openNav}
-        isNavOpen={isNavOpen}
-        isScoreHidden={isScoreHidden}
-        playerSize={playerSize}
-        undoRedoStates={undoRedoStates}
-        undoRedoActions={undoRedoActions}
-      />
-      <FreshStartButton
-        toggleOpenAddPlayer={openAddPlayer}
-        hasPlayers={hasPlayer}
-        isAddPlayerOpen={toggleStates.isAddPlayerOpen}
-      />
-      <PlayerStatsContainer>
-        <Board
-          hideScore={isScoreHidden}
-          players={players}
-          reset={resetScore}
-          remove={removePlayer}
-          update={updateScore}
-        />
-        <Charts
-          isOpen={isChartsOpen && playerSize > 0 && hasHistory}
-          lines={lines}
-          bars={bars}
-          donuts={donuts}
-        />
-      </PlayerStatsContainer>
-      <AddPlayerCard
-        addPlayer={addPlayer}
-        isOpen={toggleStates.isAddPlayerOpen}
-        toggleOpenAddPlayer={openAddPlayer}
-        names={names}
-      />
-      <Toast />
-    </MainContainer>
-  );
+  return { hasPlayer, names, playerSize, hasHistory, color };
 };
 
 export default App;

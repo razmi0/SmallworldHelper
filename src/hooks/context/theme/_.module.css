@@ -1,15 +1,13 @@
 :root {
-  --dark: #121212;
-  --light: #ffffde;
-  --color: #7272724d;
+  --dark-theme: #000000;
+  --light-theme: #ffffde;
+  --color-theme: #7272724d;
 }
 .dark-body {
-  background-color: var(--dark);
-  color: var(--light);
+  background-color: var(--dark-theme);
+  color: var(--light-theme);
 }
 .light-body {
-  background-color: var(--light);
-  color: var(--dark);
-}
-.body-no-settings {
+  background-color: var(--light-theme);
+  color: var(--dark-theme);
 }

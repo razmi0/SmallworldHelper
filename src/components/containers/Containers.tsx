@@ -1,15 +1,28 @@
 import { ReactNode, useId } from "react";
-import styles from "./_.module.css";
-import chartStyles from "../charts/_.module.css";
 import { ContainerProps } from "@Types";
+import { cssModules, getCardStyles } from "@Styles";
 
-export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOpen: boolean }) => {
+type LocalChartType = "donut" | "line" | "bar";
+export const ChartContainer = ({
+  children,
+  isOpen,
+  color,
+}: {
+  children: ReactNode;
+  isOpen: boolean;
+  color: string;
+}) => {
   const childrenArr = Array.isArray(children) ? children : [children];
   const id = useId().replace(/:/g, "_");
-  const communClasses = `${styles["figure-ctn"]} grainy lin-dark global-grainy shadow-ctn `;
-  const donutClasses = `${chartStyles["donut"]} grainy-donut-radius lin-dark-donut-radius global-grainy-donut-radius`;
-  const otherClasses =
-    " grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
+
+  const back = getCardStyles("chart-back");
+  const donutBack = getCardStyles("donut-back");
+
+  const getClasses = (chartType: LocalChartType) => {
+    if (chartType === "donut") return getCardStyles("donut");
+    if (chartType === "line") return getCardStyles("bar");
+    if (chartType === "bar") return getCardStyles("line");
+  };
 
   return (
     <section className="charts-ctn">
@@ -18,16 +31,19 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
         childrenArr.map((child, i) => {
           const chartType = child.props.type;
           const finalId = `${id}${chartType}`;
-          const isDonut = chartType === "donut"; // doesn't pass minifying
+
+          const classes = getClasses(chartType);
 
           return (
-            <figure
-              id={finalId}
+            <div
+              style={{ boxShadow: `0px 0px 1px 1px ${color}` }}
               key={i}
-              className={`${communClasses} ${isDonut ? donutClasses : otherClasses}`}
+              className={chartType === "donut" ? donutBack : back}
             >
-              {child}
-            </figure>
+              <figure id={finalId} className={classes}>
+                {child}
+              </figure>
+            </div>
           );
         })}
     </section>
@@ -37,7 +53,7 @@ export const ChartContainer = ({ children, isOpen }: { children: ReactNode; isOp
 export const Header = ({ children, ...rest }: ContainerProps) => {
   return (
     <>
-      <header className={styles["header-ctn"]} {...rest}>
+      <header className={cssModules.container["header-ctn"]} {...rest}>
         {children}
       </header>
     </>
@@ -46,7 +62,7 @@ export const Header = ({ children, ...rest }: ContainerProps) => {
 
 export const MainContainer = ({ children, ...rest }: ContainerProps) => {
   return (
-    <div className={styles["main-ctn"]} {...rest}>
+    <div className={cssModules.container["main-ctn"]} {...rest}>
       {children}
     </div>
   );
@@ -54,7 +70,7 @@ export const MainContainer = ({ children, ...rest }: ContainerProps) => {
 
 export const InputContainer = ({ children, ...rest }: ContainerProps) => {
   return (
-    <div className={styles["input-ctn"]} {...rest}>
+    <div className={cssModules.container["input-ctn"]} {...rest}>
       {children}
     </div>
   );

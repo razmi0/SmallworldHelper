@@ -1,6 +1,7 @@
 :root {
-  --std-card-radius-default: 7px;
+  --std-card-radius-default: 10px;
   --std-card-radius-donut: 50%;
+  --linear-dark-card-bg: linear-gradient(41deg, rgb(16, 16, 18, 0.5) 0%, rgb(9, 9, 12, 1) 100%);
 }
 
 .grainy-donut-radius::before {
@@ -39,7 +40,6 @@
 
 .global-grainy {
   position: relative;
-  /* overflow: hidden; */
   transition: filter 0.2s;
 }
 
@@ -47,7 +47,7 @@
   content: "";
   position: absolute;
   inset: 1px;
-  background: linear-gradient(41deg, rgb(16, 16, 18, 0.5) 0%, rgb(9, 9, 12, 1) 100%);
+  background: var(--linear-dark-card-bg);
   pointer-events: none;
   z-index: -10;
 }
@@ -57,5 +57,5 @@
   transition: filter 0.2s;
 }
 .shadow-ctn {
-  box-shadow: 0px 1px 1px rgb(0, 0, 0, 0.5);
+  box-shadow: 0px 1px 1px rgb(9, 9, 12);
 }
