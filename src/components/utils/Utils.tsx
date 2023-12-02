@@ -11,8 +11,7 @@ import {
 import { Close, IconAddPlayer, IconButton } from "@Components";
 import { ContainerProps } from "@Types";
 import { useNotif } from "@Hooks";
-import styles from "./_.module.css";
-import { getCardStyles } from "../players/helpers";
+import { cssModules, getCardStyles } from "@Styles";
 
 export const RisingStars = ({ color }: { color: string }) => {
   const risingStarStyle = useMemo(() => getRisingStarStyle(color), [color]);
@@ -126,7 +125,7 @@ const ListContainer = ({ children }: { children: ReactNode }) => {
         }
     }`}
       </style>
-      <ul className={styles["toast-list-ctn"]}>{children}</ul>
+      <ul className={cssModules.utils["toast-list-ctn"]}>{children}</ul>
     </>
   );
 };
@@ -149,7 +148,7 @@ const ListElement = ({ children, color }: { children: ReactNode; color: string }
           boxShadow: ` 0 1px 1px ${color}`,
           overflow: "hidden",
         }}
-        className={styles["toast-list-element"] + " " + classes}
+        className={cssModules.utils["toast-list-element"] + " " + classes}
       >
         {children}
       </li>
@@ -164,7 +163,7 @@ type ToastHeaderProps = {
 const ToastBody = ({ children, onClick }: ToastHeaderProps) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }} className="">
-      <div className={styles["toast-body"]}>{children}</div>
+      <div className={cssModules.utils["toast-body"]}>{children}</div>
       <IconButton
         onClick={onClick}
         icon={Close}
@@ -178,7 +177,7 @@ const ToastBody = ({ children, onClick }: ToastHeaderProps) => {
 
 const ToastMessage = ({ message }: { message: string }) => {
   return (
-    <div className={styles["toast-message"]}>
+    <div className={cssModules.utils["toast-message"]}>
       <span>{message}</span>
     </div>
   );
@@ -207,7 +206,7 @@ export const FocusManager = ({
 };
 
 export const Separator = () => {
-  return <hr className={styles["separator"]} />;
+  return <hr className={cssModules.utils["separator"]} />;
 };
 
 interface KeyboardManagerProps extends ContainerProps {
@@ -357,6 +356,6 @@ interface PositionContainerProps extends ContainerProps {
 }
 export const Position = ({ variant, children }: PositionContainerProps) => {
   let classes: string;
-  variant === "nav-extension" ? (classes = styles["nav-extension"]) : (classes = "");
+  variant === "nav-extension" ? (classes = cssModules.utils["nav-extension"]) : (classes = "");
   return <div className={classes}>{children}</div>;
 };

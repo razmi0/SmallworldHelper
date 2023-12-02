@@ -1,4 +1,5 @@
 import { useClickOutside, useMidAction /* useSwitchTheme */ } from "@Hooks";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import {
   Header,
   IconAddPlayer,
@@ -13,9 +14,8 @@ import {
   Menu,
 } from "@Components";
 import { withViewTransition } from "@Utils";
+import { cssModules } from "@Styles";
 import { ContainerProps, Player, UndoRedoActions, UndoRedoStates } from "@Types";
-import styles from "./_.module.css";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 
@@ -60,7 +60,7 @@ export const Nav = ({
 
   return (
     <Header>
-      <nav className={styles["nav-ctn"]} ref={navRef}>
+      <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
         <IconButton
           variant="nav"
           iconName="menu"
@@ -153,7 +153,7 @@ const ViewTransitionManager = ({ children }: ContainerProps) => {
             }
         `}
       </style>
-      <div className={styles["view-transition-manager"]}>{children}</div>
+      <div className={cssModules.nav["view-transition-manager"]}>{children}</div>
     </>
   );
 };

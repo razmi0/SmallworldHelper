@@ -1,8 +1,9 @@
 import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
 import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside, useNotif } from "@Hooks";
-import { getCardStyles, keys, validateIntOnChange } from "./helpers";
+import { keys, validateIntOnChange } from "./helpers";
 import { beautify, withViewTransition } from "@Utils";
+import { getCardStyles } from "@Styles";
 import { ContainerProps } from "@Types";
 
 type AddPlayerProps = {

@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useReducer, useCallback } from "react";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
-import styles from "./_.module.css";
+import { cssModules } from "@Styles";
 
 type ThemeState = "light" | "dark";
 type ThemeContextType = "light" | "dark";
@@ -61,7 +61,5 @@ const body = document.querySelector("body")!;
 const setStyles = (theme: ThemeState) => {
   const isDark = theme === "dark";
 
-  body.className = `${styles["body-no-settings"]} ${
-    isDark ? styles["dark-body"] : styles["light-body"]
-  }`;
+  body.className = `${isDark ? cssModules.theme["dark-body"] : cssModules.theme["light-body"]}`;
 };

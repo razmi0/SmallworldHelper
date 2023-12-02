@@ -19,8 +19,8 @@ import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "
 import { ChartContainer } from "@Components";
 import { LineProps, BarProps, DonutProps } from "@Types";
 import { focusOnBar, focusOnLine, focusOndonut } from "@/hooks/charts/helper";
-import { findSum } from "@/utils";
-import styles from "./_.module.css";
+import { findSum } from "@Utils";
+import {cssModules} from "@Styles";
 
 ChartJS.register(
   CategoryScale,
@@ -62,17 +62,19 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
 
   let focusedLine = lines,
     focusedBar = bars,
-    focusedDonut = donuts;
+    focusedDonut = donuts,
+    focusedColor = "";
 
   if (currentlyFocused) {
     const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
-    focusedBar = focusOnBar(focusedIndex, bars) as ChartData<"bar">;
+    focusedBar = focusOnBar(focusedIndex, bars);
     focusedLine = focusOnLine(focusedIndex, lines);
     focusedDonut = focusOndonut(focusedIndex, donuts);
+    focusedColor = findFocusedColor(focusedDonut) || "rgba(255,255,255, 0.3)";
   }
 
   return (
-    <ChartContainer isOpen={isOpen}>
+    <ChartContainer isOpen={isOpen} color={focusedColor}>
       <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} type="line" />
       <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} type="bar" />
       <Doughnut
@@ -120,7 +122,7 @@ const Doughnut = ({ data, options }: DonutProps) => {
       style={{
         color: color,
       }}
-      className={`${styles["donut-total-vc-ptn"]} ${styles["donut-ctn-size"]} `}
+      className={`${cssModules.chart["donut-total-vc-ptn"]}`}
       data-total-vc-ptn={vcPtn}
     >
       <ChartDonut data={data} options={options} />
@@ -139,13 +141,7 @@ const Bar = ({ data, options }: BarProps) => {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-      onClick={handleToggleAxis}
-    >
+    <div onClick={handleToggleAxis}>
       <ChartBar data={data} options={optionsState} />
     </div>
   );
@@ -153,7 +149,7 @@ const Bar = ({ data, options }: BarProps) => {
 
 const findFocusedColor = (data: ChartData<"doughnut">) => {
   const bgColors = data.datasets?.[0].backgroundColor as string[];
-  return bgColors.find((color) => color.length === 7 /* no alpha */);
+  return bgColors.find((color) => color.length === 7 /* no alpha => isFocused */);
 };
 
 Doughnut.displayName = "Doughnut";

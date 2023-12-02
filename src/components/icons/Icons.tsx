@@ -3,7 +3,7 @@ import { useTheme } from "@Hooks";
 import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "@Types";
 import { getSvgData } from "./data";
 import { debounce } from "@Utils";
-import styles from "./_.module.css";
+import { cssModules } from "@Styles";
 
 const DISABLED_COLOR = "#b5179e";
 
@@ -102,7 +102,7 @@ const IconTooltip = ({
   // theme = "light",
   size = ["auto", "auto"],
 }: IconTooltipProps) => {
-  const classes = `${styles["icon-tooltip"]}`;
+  const classes = `${cssModules.icons["icon-tooltip"]}`;
   return (
     <>
       {isOpen && (
