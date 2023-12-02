@@ -25,7 +25,8 @@
       "@Hooks": ["src/hooks/index.ts"],
       "@Utils": ["src/utils/index.ts"],
       "@Types": ["src/types/index.ts"],
-      "@Styles": ["src/css/index.css"]
+      "@Css": ["src/css/index.css"],
+      "@Styles": ["src/css"]
     }
   },
   "type": ["vitest/globals", "./src/types.ts"],
