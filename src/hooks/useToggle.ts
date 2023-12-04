@@ -37,6 +37,7 @@ const toggleReducer = (state: ToggleState, action: ToggleActions): ToggleState =
     }
 
     case "TOGGLE_OPEN_NAV": {
+      console.log(action.payload);
       return action.payload
         ? { ...state, isNavOpen: action.payload }
         : { ...state, isNavOpen: !state.isNavOpen };

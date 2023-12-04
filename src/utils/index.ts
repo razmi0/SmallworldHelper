@@ -15,7 +15,6 @@ import {
   isDevEnv,
   removeOpacityFromHex,
   saveToLocalStorage,
-  withViewTransition,
   beautify,
   isProdEnv,
 } from "./utils";
@@ -43,7 +42,6 @@ export {
   findSum,
   findMaxNbrTurns,
   /* HIGH ORDER FUNCTION */
-  withViewTransition,
   debounce,
   throttle,
   /* STORAGE */

@@ -2,7 +2,7 @@ import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
 import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside, useNotif } from "@Hooks";
 import { keys, validateIntOnChange } from "./helpers";
-import { beautify, withViewTransition } from "@Utils";
+import { beautify } from "@Utils";
 import { getCardStyles } from "@Styles";
 import { ContainerProps } from "@Types";
 
@@ -39,9 +39,9 @@ export const AddPlayerCard = ({
         message: `${newName} already taken`,
       });
     }
-    withViewTransition(() => {
+    () => {
       addPlayer(newName, startScore as number);
-    });
+    };
     setNewPlayerName("");
     setStartScore(0);
   }, [newPlayerName, startScore]); // newPlayerName, startScore
@@ -59,7 +59,7 @@ export const AddPlayerCard = ({
   };
 
   const toggleCard = () => {
-    withViewTransition(toggleOpenAddPlayer);
+    toggleOpenAddPlayer;
     setStartScore(0);
   };
 

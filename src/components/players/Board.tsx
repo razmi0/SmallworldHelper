@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import { useClickOutside, useMidState, useMidAction } from "@Hooks";
-import { withViewTransition } from "@Utils";
+import {} from "@Utils";
 import {
   SoftInput,
   InputContainer,
@@ -266,7 +266,7 @@ const PlayerUtilities = ({
   datatype,
   onKeyUp,
 }: PlayerUtilitiesProps) => {
-  const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
+  const removeAtId = useCallback(() => () => remove(id), [id]);
 
   const visibility = !isFocus ? "hidden" : "initial";
   const finalDatatype = datatype ? datatype : "";
@@ -290,7 +290,7 @@ const PlayerUtilities = ({
           visibility: visibility,
         }}
         variant={"utility"}
-        onClick={removeWithViewTransition}
+        onClick={removeAtId}
         icon={Delete}
         iconName="delete"
         datatype={finalDatatype}
