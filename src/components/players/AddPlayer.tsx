@@ -80,8 +80,6 @@ export const AddPlayerCard = ({
 
   const finalStartScore = startScore ? startScore : "";
 
-  console.log(isOpen);
-
   return (
     <>
       {isOpen && (
