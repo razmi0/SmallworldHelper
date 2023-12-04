@@ -12,7 +12,7 @@ import {
   RisingStars,
 } from "@Components";
 import { Player } from "@Types";
-import { getFromLocalStorage, saveToLocalStorage, isProdEnv } from "@Utils";
+import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
 
 // let a = 0;
 const App = () => {
@@ -34,21 +34,6 @@ const App = () => {
   const { isScoreHidden, isChartsOpen, isNavOpen } = toggleStates;
 
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
-
-  useEffect(() => {
-    isProdEnv() &&
-      addEventListener("beforeunload", (e) => {
-        e.returnValue = "";
-        return;
-      });
-    return () => {
-      isProdEnv() &&
-        removeEventListener("beforeunload", (e) => {
-          e.returnValue = "";
-          return;
-        });
-    };
-  }, []);
 
   useEffect(() => {
     switch (storageEvent) {
@@ -74,55 +59,51 @@ const App = () => {
   }, [storageEvent]);
 
   const { hasPlayer, names, playerSize, hasHistory, color } = workingVars(players, isFocus);
-  const nop = false;
 
   return (
     <>
       <RisingStars color={color} />
-      <Test />
-      {nop && (
-        <MainContainer>
-          <Nav
-            storageActions={storageActions}
-            toggleHideScore={hideScore}
-            toggleOpenAddPlayer={openAddPlayer}
-            toggleOpenCharts={openCharts}
-            toggleOpenNav={openNav}
-            isNavOpen={isNavOpen}
-            isScoreHidden={isScoreHidden}
-            playerSize={playerSize}
-            undoRedoStates={undoRedoStates}
-            undoRedoActions={undoRedoActions}
+      <MainContainer>
+        <Nav
+          storageActions={storageActions}
+          toggleHideScore={hideScore}
+          toggleOpenAddPlayer={openAddPlayer}
+          toggleOpenCharts={openCharts}
+          toggleOpenNav={openNav}
+          isNavOpen={isNavOpen}
+          isScoreHidden={isScoreHidden}
+          playerSize={playerSize}
+          undoRedoStates={undoRedoStates}
+          undoRedoActions={undoRedoActions}
+        />
+        <FreshStartButton
+          toggleOpenAddPlayer={openAddPlayer}
+          hasPlayers={hasPlayer}
+          isAddPlayerOpen={toggleStates.isAddPlayerOpen}
+        />
+        <PlayerStatsContainer>
+          <Board
+            hideScore={isScoreHidden}
+            players={players}
+            reset={resetScore}
+            remove={removePlayer}
+            update={updateScore}
           />
-          <FreshStartButton
-            toggleOpenAddPlayer={openAddPlayer}
-            hasPlayers={hasPlayer}
-            isAddPlayerOpen={toggleStates.isAddPlayerOpen}
+          <Charts
+            isOpen={isChartsOpen && playerSize > 0 && hasHistory}
+            lines={lines}
+            bars={bars}
+            donuts={donuts}
           />
-          <PlayerStatsContainer>
-            <Board
-              hideScore={isScoreHidden}
-              players={players}
-              reset={resetScore}
-              remove={removePlayer}
-              update={updateScore}
-            />
-            <Charts
-              isOpen={isChartsOpen && playerSize > 0 && hasHistory}
-              lines={lines}
-              bars={bars}
-              donuts={donuts}
-            />
-          </PlayerStatsContainer>
-          <AddPlayerCard
-            addPlayer={addPlayer}
-            isOpen={toggleStates.isAddPlayerOpen}
-            toggleOpenAddPlayer={openAddPlayer}
-            names={names}
-          />
-          <Toast />
-        </MainContainer>
-      )}
+        </PlayerStatsContainer>
+        <AddPlayerCard
+          addPlayer={addPlayer}
+          isOpen={toggleStates.isAddPlayerOpen}
+          toggleOpenAddPlayer={openAddPlayer}
+          names={names}
+        />
+        <Toast />
+      </MainContainer>
     </>
   );
 };
@@ -136,18 +117,6 @@ const workingVars = (players: Player[], isFocus: boolean[]) => {
   const color = players[colorIndex]?.color;
 
   return { hasPlayer, names, playerSize, hasHistory, color };
-};
-
-const Test = () => {
-  const classes =
-    "circuit-glow impact-glow-1 impact-glow-2 impact-glow-3 static-impact-glow impact-glow circuit-comet serial-text sdk-text inner-circuit circuit-cover";
-  return (
-    <>
-      <div>
-        <h1>TEST</h1>
-      </div>
-    </>
-  );
 };
 
 export default App;

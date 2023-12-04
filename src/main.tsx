@@ -3,13 +3,17 @@ import ReactDOM from "react-dom/client";
 import { NotificationProvider, IntermediateProvider, ThemeProvider } from "@Hooks";
 import App from "./App.tsx";
 import "@Css";
+import { WindowEvents } from "./components/utils/WindowEvents.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <NotificationProvider>
-      <IntermediateProvider>
-        <App />
-      </IntermediateProvider>
-    </NotificationProvider>
-  </ThemeProvider>
+  <>
+    <WindowEvents />
+    <ThemeProvider>
+      <NotificationProvider>
+        <IntermediateProvider>
+          <App />
+        </IntermediateProvider>
+      </NotificationProvider>
+    </ThemeProvider>
+  </>
 );
