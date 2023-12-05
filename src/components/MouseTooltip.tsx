@@ -54,7 +54,7 @@ const UnmountedMouseTooltip: FC<Props> = ({ initialPosition, children }) => {
 
 const MouseTooltip: FC<Props> = ({ children, ...props }) => (
   <MouseToolTipContext.Consumer>
-    {(context: { portalTarget: HTMLElement }) =>
+    {(context: { portalTarget: HTMLDivElement }) =>
       createPortal(
         <UnmountedMouseTooltip {...props}>{children}</UnmountedMouseTooltip>,
         context.portalTarget
