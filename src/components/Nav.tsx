@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { MutableRefObject, useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { useMidAction } from "@Context/useMid";
 import { Header } from "@Components/Containers";
@@ -13,9 +13,8 @@ import IconButton, {
   Save,
   Menu,
 } from "@Components/Icons";
-import { withViewTransition } from "@Utils/utils";
 import { cssModules } from "@Components/styles";
-import { ContainerProps, Player, UndoRedoActions, UndoRedoStates } from "@Types";
+import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 
@@ -49,7 +48,7 @@ const Nav = ({
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
 
   useClickOutside(navRef, () => {
-    if (isNavOpen && navRef) withViewTransition(toggleOpenNav);
+    if (isNavOpen && navRef) toggleOpenNav();
   });
 
   return (
@@ -57,7 +56,7 @@ const Nav = ({
       <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
         <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => toggleOpenNav()} />
         {isNavOpen && (
-          <ViewTransitionManager>
+          <>
             <IconButton
               variant="nav"
               icon={Load}
@@ -102,33 +101,10 @@ const Nav = ({
               onClick={() => redo()}
               disabled={!isRedoPossible}
             />
-          </ViewTransitionManager>
+          </>
         )}
       </nav>
     </Header>
   );
 };
 export default Nav;
-const ViewTransitionManager = ({ children }: ContainerProps) => {
-  return (
-    <>
-      <style>
-        {`
-            ::view-transition-new(nav-vt) {
-              animation : slide-in-from-left 0.2s ease-out;
-            }
-
-            @keyframes slide-in-from-left {
-              0% {
-                transform: translateX(-200%);
-              }
-              100% {
-                transform: translateX(0);
-              }
-            }
-        `}
-      </style>
-      <div className={cssModules.nav["view-transition-manager"]}>{children}</div>
-    </>
-  );
-};

@@ -10,7 +10,7 @@ function isTimeoutValid(timeout: number): boolean {
  * returns callback to use for cancelling
  */
 export const useTimeout = (callback: () => void, timeout: number = 0): TimeOutCb => {
-  const timeoutIdRef = useRef<number | null>(null);
+  const timeoutIdRef = useRef<null | number>(null);
 
   const cancel = useCallback(() => {
     const timeoutId = timeoutIdRef.current;

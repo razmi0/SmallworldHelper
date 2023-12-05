@@ -5,12 +5,10 @@ import {
   ReactNode,
   useCallback,
   useEffect,
-  useId,
   useRef,
 } from "react";
 import { useMidState, useMidAction } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { withViewTransition } from "@Utils/utils";
 import IconButton, { Delete, Reset, Star, IconHeading } from "@Components/Icons";
 import { SoftInput } from "@Components/Inputs";
 import { FocusManager, KeyboardManager } from "@Components/Utils";
@@ -57,6 +55,8 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef(initInputsRefs(players.length));
   const playerSize = players.length;
+
+  // filter: brightness(1.5);
 
   useClickOutside(inputs, () => blurInput(inputs.current));
 
@@ -163,7 +163,6 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
               <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
                 <PlayerCard color={finalColor}>
                   <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
-
                   <PlayerTextContainer>
                     <PlayerText color={finalColor} id="up">
                       {name}
@@ -186,7 +185,6 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
                       onChange={(event) => handleChangeScore(event, i)}
                       value={softValue}
                       pseudoName={pseudoName}
-                      // onFocus={() => handleFocus(i)}
                     />
                   </InputContainer>
                 </PlayerCard>
@@ -214,7 +212,6 @@ interface PlayerCardProps extends ContainerProps {
   color: string;
 }
 const PlayerCard = ({ children, color }: PlayerCardProps) => {
-  const id = useId().replace(/:/g, "_");
   const classes = getCardStyles("player");
   const back = getCardStyles("player-back");
   const backShadowColor = color === "inherit" ? "rgba(255,255,222, 0.3)" : color;
@@ -225,13 +222,7 @@ const PlayerCard = ({ children, color }: PlayerCardProps) => {
       style={{ boxShadow: `0px 0px 1px 1px ${backShadowColor}` }}
       color={backShadowColor}
     >
-      <div
-        id="card"
-        className={classes}
-        style={{
-          viewTransitionName: `player-card${id}`,
-        }}
-      >
+      <div id="card" className={classes}>
         {children}
       </div>
     </div>
@@ -262,7 +253,8 @@ const PlayerUtilities = ({
   datatype,
   onKeyUp,
 }: PlayerUtilitiesProps) => {
-  const removeWithViewTransition = useCallback(() => withViewTransition(() => remove(id)), [id]);
+  const removeAtId = useCallback(() => remove(id), [id]);
+  const resetAtId = useCallback(() => reset(id), [id]);
 
   const visibility = !isFocus ? "hidden" : "initial";
   const finalDatatype = datatype ? datatype : "";
@@ -274,7 +266,7 @@ const PlayerUtilities = ({
           visibility: visibility,
         }}
         variant={"utility"}
-        onClick={() => reset(id)}
+        onClick={resetAtId}
         icon={Reset}
         iconName="reset"
         datatype={finalDatatype}
@@ -286,7 +278,7 @@ const PlayerUtilities = ({
           visibility: visibility,
         }}
         variant={"utility"}
-        onClick={removeWithViewTransition}
+        onClick={removeAtId}
         icon={Delete}
         iconName="delete"
         datatype={finalDatatype}

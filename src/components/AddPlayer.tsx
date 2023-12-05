@@ -5,7 +5,7 @@ import { useMidAction, useMidState } from "@Context/useMid";
 import { useNotif } from "@Context/useNotif";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { keys, validateIntOnChange } from "../utils/players/helpers";
-import { beautify, withViewTransition } from "@Utils/utils";
+import { beautify } from "@Utils/utils";
 import { getCardStyles } from "@Components/styles";
 import { ContainerProps } from "@Types";
 
@@ -37,9 +37,7 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPla
         message: `${newName} already taken`,
       });
     }
-    withViewTransition(() => {
-      addPlayer(newName, startScore as number);
-    });
+    addPlayer(newName, startScore as number);
     setNewPlayerName("");
     setStartScore(0);
   }, [newPlayerName, startScore]); // newPlayerName, startScore
@@ -57,7 +55,7 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPla
   };
 
   const toggleCard = () => {
-    withViewTransition(toggleOpenAddPlayer);
+    toggleOpenAddPlayer();
     setStartScore(0);
   };
 
