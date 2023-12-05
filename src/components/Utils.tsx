@@ -8,10 +8,10 @@ import {
   forwardRef,
   useMemo,
 } from "react";
-import { Close, IconAddPlayer, IconButton } from "@Components";
+import IconButton, { Close, AddPlayer as IconAddPlayer } from "@Components/Icons";
 import { ContainerProps } from "@Types";
-import { useNotif } from "@Hooks";
-import { cssModules, getCardStyles } from "@Styles";
+import { useNotif } from "@Context/useNotif";
+import { cssModules, getCardStyles } from "@Components/styles";
 
 export const RisingStars = ({ color }: { color: string }) => {
   const risingStarStyle = useMemo(() => getRisingStarStyle(color), [color]);

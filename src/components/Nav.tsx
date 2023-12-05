@@ -1,20 +1,20 @@
-import { useClickOutside, useMidAction /* useSwitchTheme */ } from "@Hooks";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import {
-  Header,
-  IconAddPlayer,
+import { useClickOutside } from "@Hooks/useClickOutside";
+import { useMidAction } from "@Context/useMid";
+import { Header } from "@Components/Containers";
+import IconButton, {
   Chart,
+  AddPlayer as IconAddPlayer,
   EyeClose,
   EyeOpen,
-  IconButton,
   Load,
   Undo,
   Redo,
   Save,
   Menu,
-} from "@Components";
-import { withViewTransition } from "@Utils";
-import { cssModules } from "@Styles";
+} from "@Components/Icons";
+import { withViewTransition } from "@Utils/utils";
+import { cssModules } from "@Components/styles";
 import { ContainerProps, Player, UndoRedoActions, UndoRedoStates } from "@Types";
 
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
@@ -32,7 +32,7 @@ type NavProps = {
   storageActions: ReturnType<typeof useMidAction>["storageActions"];
 };
 
-export const Nav = ({
+const Nav = ({
   playerSize,
   toggleHideScore,
   toggleOpenAddPlayer,
@@ -133,7 +133,7 @@ export const Nav = ({
     </Header>
   );
 };
-
+export default Nav;
 const ViewTransitionManager = ({ children }: ContainerProps) => {
   return (
     <>

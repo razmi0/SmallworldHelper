@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { isProdEnv } from "@Utils";
+import { isProdEnv } from "@Utils/utils";
 
 export const WindowEvents = () => {
   useEffect(() => {

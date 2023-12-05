@@ -21,12 +21,15 @@
     "allowUmdGlobalAccess": true,
     "paths": {
       "@/*": ["src/*"],
-      "@Components": ["src/components/index.ts"],
-      "@Hooks": ["src/hooks/index.ts"],
-      "@Utils": ["src/utils/index.ts"],
-      "@Types": ["src/types/index.ts"],
-      "@Css": ["src/css/index.css"],
-      "@Styles": ["src/css"]
+      "@Components/*": ["src/components/*"],
+      "@Containers": ["src/components/Containers.tsx"],
+      "@Icons/*": ["src/utils/icons/*"],
+      "@Hooks/*": ["src/hooks/*"],
+      "@Context/*": ["src/hooks/context/*"],
+      "@Utils/*": ["src/utils/*"],
+      "@Types": ["src/types/types.ts"],
+      "@Css/*": ["src/css/index.css"],
+      "@CssModules": ["src/css"]
     }
   },
   "type": ["vitest/globals", "./src/types.ts"],

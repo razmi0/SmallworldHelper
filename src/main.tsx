@@ -1,9 +1,11 @@
 import ReactDOM from "react-dom/client";
 // import { StrictMode } from "react";
-import { NotificationProvider, IntermediateProvider, ThemeProvider } from "@Hooks";
+import { IntermediateProvider } from "@Context/useMid";
+import { NotificationProvider } from "@Context/useNotif.tsx";
+import { ThemeProvider } from "@Context/theme/useTheme.tsx";
 import App from "./App.tsx";
 import "@Css";
-import { WindowEvents } from "./components/utils/WindowEvents.tsx";
+import { WindowEvents } from "@Components/WindowEvents.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <>

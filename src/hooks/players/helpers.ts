@@ -1,6 +1,6 @@
-import { PLAYER_COLORS } from "../../components/icons/data";
+import { PLAYER_COLORS } from "../../utils/icons/data";
 import { BarDataType, LineDataType, Player, DonutDataType } from "@Types";
-import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils";
+import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils/utils";
 
 const errorMsg = "Player not found";
 const BORDER_WIDTH = 1 as const;

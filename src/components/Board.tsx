@@ -8,19 +8,13 @@ import {
   useId,
   useRef,
 } from "react";
-import { useClickOutside, useMidState, useMidAction } from "@Hooks";
-import { withViewTransition } from "@Utils";
-import {
-  SoftInput,
-  InputContainer,
-  Delete,
-  IconButton,
-  IconHeading,
-  Reset,
-  Star,
-  FocusManager,
-  KeyboardManager,
-} from "@Components";
+import { useMidState, useMidAction } from "@Context/useMid";
+import { useClickOutside } from "@Hooks/useClickOutside";
+import { withViewTransition } from "@Utils/utils";
+import IconButton, { Delete, Reset, Star, IconHeading } from "@Components/Icons";
+import { SoftInput } from "@Components/Inputs";
+import { FocusManager, KeyboardManager } from "@Components/Utils";
+import { InputContainer } from "@Components/Containers";
 import {
   blurInput,
   initInputsRefs,
@@ -28,9 +22,9 @@ import {
   keys,
   navigateTo,
   validateIntOnChange,
-} from "./helpers";
+} from "../utils/players/helpers";
 import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
-import { cssModules, getCardStyles } from "@Styles";
+import { cssModules, getCardStyles } from "@Components/styles";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -57,7 +51,7 @@ type PlayerUtilitiesProps = {
 // COMPONENTS
 //--
 
-export const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
+const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
   const { isFocus, newScores, onlyOneFocus } = useMidState();
   const { setNewScores, focusActions } = useMidAction();
   const { isOnFocus, setIsOnFocus } = focusActions;
@@ -205,6 +199,8 @@ export const Board = ({ players, update, reset, remove, hideScore, children }: B
     </BoardView>
   );
 };
+
+export default Board;
 
 const BoardView = ({ children }: ContainerProps) => {
   return <div className={cssModules.player["board-view-ctn"]}>{children}</div>;

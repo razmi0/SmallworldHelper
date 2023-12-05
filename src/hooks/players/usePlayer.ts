@@ -24,7 +24,7 @@ import {
   updatedonuts,
   updatePlayersStats,
 } from "./helpers";
-import { getFromLocalStorage } from "@Utils";
+import { getFromLocalStorage } from "@Utils/utils";
 
 // TYPES
 // --

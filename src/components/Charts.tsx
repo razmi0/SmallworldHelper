@@ -14,13 +14,18 @@ import {
   ChartData,
   ChartOptions,
 } from "chart.js";
-import { useMidState, useMidAction } from "@Hooks";
-import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "./options";
-import { ChartContainer } from "@Components";
+import { useMidState, useMidAction } from "@Context/useMid";
+import {
+  TIME_BEFORE_RESET_FOCUS,
+  barOptions,
+  lineOptions,
+  donutOptions,
+} from "../utils/charts/options";
+import { ChartContainer } from "@Components/Containers";
+import { focusOnBar, focusOnLine, focusOndonut } from "../utils/charts/helpers";
+import { findSum } from "@Utils/utils";
+import { cssModules } from "@Components/styles";
 import { LineProps, BarProps, DonutProps } from "@Types";
-import { focusOnBar, focusOnLine, focusOndonut } from "@/hooks/charts/helper";
-import { findSum } from "@Utils";
-import { cssModules } from "@Styles";
 
 ChartJS.register(
   CategoryScale,
@@ -40,7 +45,7 @@ type ChartProps = {
   bars: ChartData<"bar">;
   donuts: ChartData<"doughnut">;
 };
-export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
+const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   const { isFocus } = useMidState();
   const { focusActions } = useMidAction();
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
@@ -86,6 +91,7 @@ export const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   );
 };
 
+export default Charts;
 interface HasBothAxis extends ChartOptions {
   scales: {
     x: {

@@ -1,9 +1,9 @@
 import { forwardRef, useCallback, useState, CSSProperties } from "react";
-import { useTheme } from "@Hooks";
-import { IconProps, IconButtonProps, IconHeadingProps, SvgProps, SvgDataType } from "@Types";
-import { getSvgData } from "./data";
-import { debounce } from "@Utils";
-import { cssModules } from "@Styles";
+import { useTheme } from "@Context/theme/useTheme";
+import { getSvgData } from "../utils/icons/data";
+import { debounce } from "@Utils/utils";
+import { IconProps, IconButtonProps, SvgProps, SvgDataType, IconHeadingProps } from "@Types";
+import { cssModules } from "@Components/styles";
 
 const DISABLED_COLOR = "#b5179e";
 
@@ -47,7 +47,7 @@ const getColor = (iconName: string, svgData: SvgDataType, idxThemedColr: number)
   return color;
 };
 
-export const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconProps) => {
+const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconProps) => {
   const [isHover, setIsHover] = useState(false);
   const { theme } = useTheme();
 
@@ -593,3 +593,5 @@ export const EyeClose = ({ color, size, bgColor }: SvgProps) => {
     </svg>
   );
 };
+
+export default IconButton;

@@ -1,11 +1,11 @@
 // CSS MODULES
-import chartStyles from "../components/charts/charts.module.css";
-import containerStyles from "../components/containers/containers.module.css";
-import playerStyles from "../components/players/players.module.css";
-import utilsStyles from "../components/utils/utils.module.css";
-import navStyles from "../components/nav/nav.module.css";
-import iconsStyles from "../components/icons/icons.module.css";
-import themeStyles from "../hooks/context/theme/_.module.css";
+import chartStyles from "./charts.module.css";
+import containerStyles from "./containers.module.css";
+import playerStyles from "./players.module.css";
+import utilsStyles from "./utils.module.css";
+import navStyles from "./nav.module.css";
+import iconsStyles from "./icons.module.css";
+import themeStyles from "@Context/theme/_.module.css";
 // import globalStyles from ".../components/css/index.css/?inline";
 
 type ModuleNames =
@@ -18,6 +18,7 @@ type ModuleNames =
   | "theme"
   | ("global" & undefined);
 type CssStyles = Record<ModuleNames, CSSModuleClasses>;
+/* eslint-disable no-re-export/no-re-export */
 export const cssModules: CssStyles = {
   chart: chartStyles,
   container: containerStyles,

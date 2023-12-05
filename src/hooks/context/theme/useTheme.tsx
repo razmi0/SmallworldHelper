@@ -1,6 +1,6 @@
 import { createContext, useContext, ReactNode, useReducer, useCallback } from "react";
-import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
-import { cssModules } from "@Styles";
+import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
+import { cssModules } from "@Components/styles";
 
 type ThemeState = "light" | "dark";
 type ThemeContextType = "light" | "dark";

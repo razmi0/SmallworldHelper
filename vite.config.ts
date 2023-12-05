@@ -12,11 +12,14 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@Components": path.resolve(__dirname, "./src/components"),
+      "@Containers": path.resolve(__dirname, "./src/components/containers/Containers.tsx"),
+      "@Icons": path.resolve(__dirname, "./src/components/icons"),
       "@Hooks": path.resolve(__dirname, "./src/hooks"),
-      "@Types": path.resolve(__dirname, "./src/types"),
+      "@Context": path.resolve(__dirname, "./src/hooks/context"),
+      "@Types": path.resolve(__dirname, "./src/types/types.ts"),
       "@Utils": path.resolve(__dirname, "./src/utils"),
-      "@Styles": path.resolve(__dirname, "./src/css"),
       "@Css": path.resolve(__dirname, "./src/css/index.css"),
+      "@CssModules": path.resolve(__dirname, "./src/css"),
     },
   },
   test: {
@@ -25,10 +28,3 @@ export default defineConfig({
     environment: "jsdom",
   },
 });
-
-// "paths": {
-//  "@Styles": ["src/styles/index.css"]
-
-//   "@/*": ["src/*"],
-//   "@Components/*": ["src/components/index.ts"]
-// },

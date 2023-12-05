@@ -1,6 +1,6 @@
 import { ReactNode, useId } from "react";
 import { ContainerProps } from "@Types";
-import { cssModules, getCardStyles } from "@Styles";
+import { cssModules, getCardStyles } from "@Components/styles";
 
 type LocalChartType = "donut" | "line" | "bar";
 export const ChartContainer = ({

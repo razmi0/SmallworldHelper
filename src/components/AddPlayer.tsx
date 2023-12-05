@@ -1,9 +1,12 @@
 import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
-import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
-import { useMidState, useMidAction, useClickOutside, useNotif } from "@Hooks";
-import { keys, validateIntOnChange } from "./helpers";
-import { beautify, withViewTransition } from "@Utils";
-import { getCardStyles } from "@Styles";
+import { KeyboardManager, Position, RefManager } from "@Components/Utils";
+import { SoftInput } from "@Components/Inputs";
+import { useMidAction, useMidState } from "@Context/useMid";
+import { useNotif } from "@Context/useNotif";
+import { useClickOutside } from "@Hooks/useClickOutside";
+import { keys, validateIntOnChange } from "../utils/players/helpers";
+import { beautify, withViewTransition } from "@Utils/utils";
+import { getCardStyles } from "@Components/styles";
 import { ContainerProps } from "@Types";
 
 type AddPlayerProps = {
@@ -12,12 +15,7 @@ type AddPlayerProps = {
   toggleOpenAddPlayer: () => void;
   names: string[];
 };
-export const AddPlayerCard = ({
-  addPlayer,
-  isOpen,
-  toggleOpenAddPlayer,
-  names,
-}: AddPlayerProps) => {
+const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPlayerProps) => {
   const { post } = useNotif();
   const { newPlayerName, startScore } = useMidState();
   const { addPlayerActions, focusActions } = useMidAction();
@@ -107,6 +105,8 @@ export const AddPlayerCard = ({
     </>
   );
 };
+
+export default AddPlayerCard;
 
 const AddStyles = ({ children }: ContainerProps) => {
   const classes = getCardStyles("utility");

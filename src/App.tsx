@@ -1,23 +1,20 @@
 import { useEffect } from "react";
-import { useUndoRedo, usePlayer, useToggle, useMidAction, useMidState, useNotif } from "@Hooks";
-import {
-  MainContainer,
-  PlayerStatsContainer,
-  Board,
-  Nav,
-  Charts,
-  AddPlayerCard,
-  FreshStartButton,
-  Toast,
-  RisingStars,
-} from "@Components";
+import { usePlayer } from "@Hooks/players/usePlayer";
+import { useUndoRedo } from "@Hooks/useUndoRedo";
+import { useToggle } from "@Hooks/useToggle";
+import { useMidAction, useMidState } from "@Context/useMid";
+import { useNotif } from "@Context/useNotif";
+import { MainContainer } from "@Components/Containers";
+import Board, { PlayerStatsContainer } from "@Components/Board";
+import Nav from "@Components/Nav";
+import Charts from "@Components/Charts";
+import AddPlayerCard from "@Components/AddPlayer";
+import { FreshStartButton, Toast, RisingStars } from "@Components/Utils";
+import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import { Player } from "@Types";
-import { getFromLocalStorage, saveToLocalStorage } from "@Utils";
 
 // let a = 0;
 const App = () => {
-  // console.time("App");
-
   const { post } = useNotif();
 
   const { playersStates, playersActions } = usePlayer();

@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useCallback, useContext, useMemo, useReducer } from "react";
-import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helper";
+import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helpers";
 
 type newScoreType = number | string; // string => transitional value of input === "-"
 
