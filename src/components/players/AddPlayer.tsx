@@ -1,4 +1,4 @@
-import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
+import { ChangeEvent, MutableRefObject, useRef } from "react";
 import { KeyboardManager, Position, RefManager, SoftInput } from "@Components";
 import { useMidState, useMidAction, useClickOutside, useNotif } from "@Hooks";
 import { keys, validateIntOnChange } from "./helpers";
@@ -31,20 +31,18 @@ export const AddPlayerCard = ({
     }
   });
 
-  const addPlayerAction = useCallback(() => {
+  const addPlayerAction = () => {
     const newName = beautify(newPlayerName);
     if (names.includes(newName)) {
       post({
-        type: "warning",
         message: `${newName} already taken`,
+        type: "warning",
       });
     }
-    () => {
-      addPlayer(newName, startScore as number);
-    };
+    addPlayer(newName, startScore as number);
     setNewPlayerName("");
     setStartScore(0);
-  }, [newPlayerName, startScore]); // newPlayerName, startScore
+  };
 
   const handleInputValidation = () => {
     if (!newPlayerName) return;
@@ -59,7 +57,7 @@ export const AddPlayerCard = ({
   };
 
   const toggleCard = () => {
-    toggleOpenAddPlayer;
+    toggleOpenAddPlayer();
     setStartScore(0);
   };
 

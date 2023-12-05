@@ -131,28 +131,17 @@ const ListContainer = ({ children }: { children: ReactNode }) => {
 };
 
 const ListElement = ({ children, color }: { children: ReactNode; color: string }) => {
-  const id = useId().replace(/:/g, "_") + "_list_element";
   const classes = getCardStyles("default");
   return (
-    <>
-      <style>
-        {`
-        ::view-transition-new(slide${id}) {
-          animation: slide 0.2s ease-in;
-        }
-      `}
-      </style>
-      <li
-        style={{
-          viewTransitionName: `slide${id}`,
-          boxShadow: ` 0px 0px 1px 1px ${color}`,
-          overflow: "hidden",
-        }}
-        className={cssModules.utils["toast-list-element"] + " " + classes}
-      >
-        {children}
-      </li>
-    </>
+    <li
+      style={{
+        boxShadow: ` 0px 0px 1px 1px ${color}`,
+        overflow: "hidden",
+      }}
+      className={cssModules.utils["toast-list-element"] + " " + classes}
+    >
+      {children}
+    </li>
   );
 };
 

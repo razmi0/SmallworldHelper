@@ -1,3 +1,5 @@
+import { flushSync } from "react-dom";
+
 export const getRandomColor = (opacity: number = 1) => {
   const randomRgba = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
     Math.random() * 255
@@ -130,18 +132,18 @@ export const findSum = (arr: number[]) => {
   return arr.reduce((a, b) => a + b, 0);
 };
 
-// export const  = <T>(fn: (args?: T) => void, args?: T) => {
-//   const isTransitionable = document.startViewTransition;
-//   if (!isTransitionable) {
-//     fn(args);
-//   } else {
-//     document.startViewTransition(() => {
-//       flushSync(() => {
-//         fn(args);
-//       });
-//     });
-//   }
-// };
+export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
+  const isTransitionable = document.startViewTransition;
+  if (!isTransitionable) {
+    fn(args);
+  } else {
+    document.startViewTransition(() => {
+      flushSync(() => {
+        fn(args);
+      });
+    });
+  }
+};
 
 type F<T extends unknown[] = unknown[]> = (...args: T) => unknown | void;
 export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
@@ -177,3 +179,9 @@ export const isDevEnv = () => {
 export const beautify = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
+
+export const arrayify = <T>(x: T | T[]): T[] => {
+  return Array.isArray(x) ? x : ([x] as T[]);
+};
+
+//Array.isArray(children) ? children : [children];

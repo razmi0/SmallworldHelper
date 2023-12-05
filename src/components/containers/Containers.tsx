@@ -3,6 +3,7 @@ import { ContainerProps } from "@Types";
 import { cssModules, getCardStyles } from "@Styles";
 
 type LocalChartType = "donut" | "line" | "bar";
+type ChildrenChartWithPropsType = { props: { type: LocalChartType } } & ReactNode;
 export const ChartContainer = ({
   children,
   isOpen,
@@ -12,7 +13,7 @@ export const ChartContainer = ({
   isOpen: boolean;
   color: string;
 }) => {
-  const childrenArr = Array.isArray(children) ? children : [children];
+  const childrenArr: ChildrenChartWithPropsType[] = Array.isArray(children) ? children : [children];
   const id = useId().replace(/:/g, "_");
 
   const back = getCardStyles("chart-back");
@@ -30,6 +31,7 @@ export const ChartContainer = ({
         children &&
         childrenArr.map((child, i) => {
           const chartType = child.props.type;
+
           const finalId = `${id}${chartType}`;
 
           const classes = getClasses(chartType);

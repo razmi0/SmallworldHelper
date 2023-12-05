@@ -122,29 +122,3 @@ export const initInputsRefs = (size: number) => {
     .fill(null)
     .map(() => createRef<HTMLInputElement>()) as unknown as HTMLInputElement[];
 };
-
-// export const getCardViewTransition = (id: string, duration: string) => `
-
-// `;
-// ::view-transition-new(player-card${id}) {
-//   animation-duration: ${duration}s;
-//   animation-fill-mode: forwards;
-//   animation-name: player-card-animation;
-// }
-// ::view-transition-old(player-card${id}) {
-//   display: none;
-// }
-// @keyframes player-card-animation {
-//   0% {
-//     opacity: 1;
-//     transform : translateY(O)
-//   }
-//   50% {
-//     opacity: 0.95;
-//     transform : translateY(-10%)
-//   }
-//   100% {
-//     opacity: 1;
-//     transform : translateY(O)
-//   }
-// }

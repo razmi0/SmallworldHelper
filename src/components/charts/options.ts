@@ -124,6 +124,7 @@ export const barOptions: ChartOptions<"bar"> = {
 
 export const donutOptions: ChartOptions<"doughnut"> = {
   maintainAspectRatio: false,
+  events: ["click"],
 
   normalized: true,
   spacing: 3,

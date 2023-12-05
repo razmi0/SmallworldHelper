@@ -4,6 +4,7 @@ import { NotificationProvider, IntermediateProvider, ThemeProvider } from "@Hook
 import App from "./App.tsx";
 import "@Css";
 import { WindowEvents } from "./components/utils/WindowEvents.tsx";
+import { AppContext } from "./components/AppContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <>
@@ -11,7 +12,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ThemeProvider>
       <NotificationProvider>
         <IntermediateProvider>
-          <App />
+          <AppContext.Provider
+            value={{ portalTarget: document.getElementById("portal-target") as HTMLDivElement }}
+          >
+            <App />
+          </AppContext.Provider>
         </IntermediateProvider>
       </NotificationProvider>
     </ThemeProvider>

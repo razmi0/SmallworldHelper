@@ -14,7 +14,8 @@ import {
   Menu,
 } from "@Components";
 import { cssModules } from "@Styles";
-import { ContainerProps, Player, UndoRedoActions, UndoRedoStates } from "@Types";
+import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
+import { MouseTooltipWrapper } from "../OnMouseTooltip";
 
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 
@@ -48,15 +49,18 @@ export const Nav = ({
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
 
   useClickOutside(navRef, () => {
-    if (isNavOpen && navRef) toggleOpenNav;
+    if (isNavOpen && navRef) toggleOpenNav();
   });
 
   return (
     <Header>
       <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
-        <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => toggleOpenNav} />
+        <MouseTooltipWrapper>
+          <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => toggleOpenNav()} />
+          <p>Menu</p>
+        </MouseTooltipWrapper>
         {isNavOpen && (
-          <ViewTransitionManager>
+          <>
             <IconButton
               variant="nav"
               icon={Load}
@@ -73,61 +77,37 @@ export const Nav = ({
               variant="nav"
               icon={IconAddPlayer}
               iconName="addplayer"
-              onClick={() => toggleOpenAddPlayer}
+              onClick={() => toggleOpenAddPlayer()}
             />
             <IconButton
               variant="nav"
               icon={Chart}
               iconName="chart"
-              onClick={() => toggleOpenCharts}
+              onClick={() => toggleOpenCharts()}
             />
             <IconButton
               variant="nav"
               icon={isScoreHidden ? EyeClose : EyeOpen}
               iconName="eyes"
-              onClick={toggleHideScore}
+              onClick={() => toggleHideScore()}
             />
             <IconButton
               variant="nav"
               icon={Undo}
               iconName="undo"
-              onClick={() => undo}
+              onClick={() => undo()}
               disabled={!isUndoPossible}
             />
             <IconButton
               variant="nav"
               icon={Redo}
               iconName="redo"
-              onClick={() => redo}
+              onClick={() => redo()}
               disabled={!isRedoPossible}
             />
-          </ViewTransitionManager>
+          </>
         )}
       </nav>
     </Header>
-  );
-};
-
-const ViewTransitionManager = ({ children }: ContainerProps) => {
-  return (
-    <>
-      <style>
-        {`
-            ::view-transition-new(nav-vt) {
-              animation : slide-in-from-left 0.2s ease-out;
-            }
-
-            @keyframes slide-in-from-left {
-              0% {
-                transform: translateX(-200%);
-              }
-              100% {
-                transform: translateX(0);
-              }
-            }
-        `}
-      </style>
-      <div className={cssModules.nav["view-transition-manager"]}>{children}</div>
-    </>
   );
 };

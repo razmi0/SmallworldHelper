@@ -226,16 +226,13 @@ const PlayerCard = ({ children, color }: PlayerCardProps) => {
   return (
     <div
       className={back}
-      style={{ boxShadow: `0px 0px 1px 1px ${backShadowColor}` }}
+      style={{
+        boxShadow: `0px 0px 1px 1px ${backShadowColor}`,
+        viewTransitionName: `player-card${id}`,
+      }}
       color={backShadowColor}
     >
-      <div
-        id="card"
-        className={classes}
-        style={{
-          viewTransitionName: `player-card${id}`,
-        }}
-      >
+      <div id="card" className={classes} style={{}}>
         {children}
       </div>
     </div>
@@ -266,8 +263,6 @@ const PlayerUtilities = ({
   datatype,
   onKeyUp,
 }: PlayerUtilitiesProps) => {
-  const removeAtId = useCallback(() => () => remove(id), [id]);
-
   const visibility = !isFocus ? "hidden" : "initial";
   const finalDatatype = datatype ? datatype : "";
 
@@ -290,7 +285,7 @@ const PlayerUtilities = ({
           visibility: visibility,
         }}
         variant={"utility"}
-        onClick={removeAtId}
+        onClick={() => remove(id)}
         icon={Delete}
         iconName="delete"
         datatype={finalDatatype}
