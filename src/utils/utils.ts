@@ -156,18 +156,6 @@ export const debounce = <T extends unknown[]>(fn: F<T>, delay: number) => {
   };
 };
 
-export const throttle = <T extends unknown[]>(fn: F<T>, delay: number) => {
-  let isThrottled = false;
-  return function (...args: T) {
-    if (isThrottled) return;
-    isThrottled = true;
-    fn(...args);
-    setTimeout(() => {
-      isThrottled = false;
-    }, delay);
-  };
-};
-
 export const isProdEnv = () => {
   return import.meta.env.PROD;
 };
