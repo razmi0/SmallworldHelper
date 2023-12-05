@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from "react";
 
+type TimeOutCb = { cancel: () => void; reschedule: () => void };
 function isTimeoutValid(timeout: number): boolean {
   return !isNaN(timeout) && timeout >= 0 && timeout !== Infinity;
 }
@@ -8,10 +9,7 @@ function isTimeoutValid(timeout: number): boolean {
  * React hook for delaying calls with time.
  * returns callback to use for cancelling
  */
-export const useTimeout = (
-  callback: () => void,
-  timeout: number = 0
-): { cancel: () => void; reschedule: () => void } => {
+export const useTimeout = (callback: () => void, timeout: number = 0): TimeOutCb => {
   const timeoutIdRef = useRef<number | null>(null);
 
   const cancel = useCallback(() => {
