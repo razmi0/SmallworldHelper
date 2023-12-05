@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-
-import { MouseToolTipContext } from "@Context/MouseToolTip";
+import { MouseToolTipContext } from "@Context/MouseToolTipContext";
 
 export type TooltipPosition = { top: number; left: number };
 
@@ -30,12 +29,11 @@ const UnmountedMouseTooltip: FC<Props> = ({ initialPosition, children }) => {
   return (
     <>
       <style>{`
-    
     .box{
         transition: opacity 300ms;
         position: absolute;
         z-index: 90;
-      opacity: 1;
+        opacity: 1;
         max-width: 400px;
         margin-left: 20px;
         background-color: #fff;
@@ -43,12 +41,9 @@ const UnmountedMouseTooltip: FC<Props> = ({ initialPosition, children }) => {
         width: 200px;
         height: 100px;
     }
-
     .opacity-0{
         opacity: 0;
-    }    
-      
-    
+    }
     `}</style>
       <div className={"mouse-tooltip box " + !isMounted && "opacity-0"} style={position}>
         {children}
