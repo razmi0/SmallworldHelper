@@ -33,7 +33,6 @@ type NavProps = {
 };
 
 const Nav = ({
-  playerSize,
   toggleHideScore,
   toggleOpenAddPlayer,
   toggleOpenCharts,
@@ -44,15 +43,10 @@ const Nav = ({
   isScoreHidden,
   storageActions,
 }: NavProps) => {
-  const [allowViewTransition, setAllowViewTransition] = useState(false);
   const { setLoadPlayers, setSavePlayers } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
-
-  useEffect(() => {
-    setAllowViewTransition(true);
-  }, [playerSize]);
 
   useClickOutside(navRef, () => {
     if (isNavOpen && navRef) withViewTransition(toggleOpenNav);
@@ -61,12 +55,7 @@ const Nav = ({
   return (
     <Header>
       <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
-        <IconButton
-          variant="nav"
-          iconName="menu"
-          icon={Menu}
-          onClick={() => withViewTransition(toggleOpenNav)}
-        />
+        <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => toggleOpenNav()} />
         {isNavOpen && (
           <ViewTransitionManager>
             <IconButton
@@ -85,46 +74,32 @@ const Nav = ({
               variant="nav"
               icon={IconAddPlayer}
               iconName="addplayer"
-              onClick={() => withViewTransition(toggleOpenAddPlayer)}
+              onClick={() => toggleOpenAddPlayer()}
             />
             <IconButton
               variant="nav"
               icon={Chart}
               iconName="chart"
-              onClick={() => withViewTransition(toggleOpenCharts)}
+              onClick={() => toggleOpenCharts()}
             />
             <IconButton
               variant="nav"
               icon={isScoreHidden ? EyeClose : EyeOpen}
               iconName="eyes"
-              onClick={toggleHideScore}
+              onClick={() => toggleHideScore()}
             />
             <IconButton
               variant="nav"
               icon={Undo}
               iconName="undo"
-              onClick={() => {
-                if (!allowViewTransition) {
-                  undo();
-                  return;
-                }
-                withViewTransition(undo);
-                setAllowViewTransition(false);
-              }}
+              onClick={() => undo()}
               disabled={!isUndoPossible}
             />
             <IconButton
               variant="nav"
               icon={Redo}
               iconName="redo"
-              onClick={() => {
-                if (!allowViewTransition) {
-                  redo();
-                  return;
-                }
-                withViewTransition(redo);
-                setAllowViewTransition(false);
-              }}
+              onClick={() => redo()}
               disabled={!isRedoPossible}
             />
           </ViewTransitionManager>
