@@ -1,3 +1,4 @@
+import { arrayify } from "@/utils/utils";
 import { MutableRefObject, useEffect } from "react";
 
 type ClickOutsideRef = MutableRefObject<HTMLElement[]> | MutableRefObject<HTMLElement>;
@@ -6,10 +7,7 @@ export const useClickOutside = (
   ref: ClickOutsideRef,
   handler: (event: TouchOrMouseEvent) => void
 ) => {
-  let elements = ref.current as HTMLElement[];
-  if (!Array.isArray(ref.current)) {
-    elements = [ref.current];
-  }
+  const elements = arrayify(ref.current);
   useEffect(() => {
     const listener = (event: TouchOrMouseEvent) => {
       elements.map((element) => {
