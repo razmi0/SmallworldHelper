@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { AppContext } from "./AppContext";
+import { MouseToolTipContext } from "./AppContext";
 
 export type TooltipPosition = { top: number; left: number };
 
@@ -58,14 +58,14 @@ const UnmountedMouseTooltip: FC<Props> = ({ initialPosition, children }) => {
 };
 
 const MouseTooltip: FC<Props> = ({ children, ...props }) => (
-  <AppContext.Consumer>
+  <MouseToolTipContext.Consumer>
     {(context: { portalTarget: HTMLElement }) =>
       createPortal(
         <UnmountedMouseTooltip {...props}>{children}</UnmountedMouseTooltip>,
         context.portalTarget
       )
     }
-  </AppContext.Consumer>
+  </MouseToolTipContext.Consumer>
 );
 
 export const MouseTooltipWrapper: FC<

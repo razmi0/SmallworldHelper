@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-export const AppContext = createContext<{ portalTarget: HTMLDivElement }>({
+export const MouseToolTipContext = createContext<{ portalTarget: HTMLDivElement }>({
   portalTarget: document.createElement("div"),
 });
