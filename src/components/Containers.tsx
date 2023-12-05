@@ -1,18 +1,17 @@
-import { ReactNode, useId } from "react";
+import { FC, ReactNode, useId } from "react";
 import { ContainerProps } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
+import { arrayify } from "@Utils/utils";
 
 type LocalChartType = "donut" | "line" | "bar";
-export const ChartContainer = ({
-  children,
-  isOpen,
-  color,
-}: {
-  children: ReactNode;
+type ChildWithProps = ReactNode & { props: { type: LocalChartType } };
+type Props = {
+  children: ChildWithProps[] | ChildWithProps;
   isOpen: boolean;
   color: string;
-}) => {
-  const childrenArr = Array.isArray(children) ? children : [children];
+};
+export const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
+  const childrenArr = arrayify(children);
   const id = useId().replace(/:/g, "_");
 
   const back = getCardStyles("chart-back");

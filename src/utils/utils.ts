@@ -179,3 +179,7 @@ export const isDevEnv = () => {
 export const beautify = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
+
+export const arrayify = <T>(item: T | T[]) => {
+  return Array.isArray(item) ? item : ([item] as T[]);
+};
