@@ -1,4 +1,11 @@
-import { KeyboardEvent, ReactNode, CSSProperties, forwardRef, InputHTMLAttributes } from "react";
+import {
+  KeyboardEvent,
+  ReactNode,
+  CSSProperties,
+  forwardRef,
+  InputHTMLAttributes,
+  useState,
+} from "react";
 import { add4dToHex } from "@Utils/utils";
 import { KeyboardNavigationIdType } from "@Types";
 
@@ -49,13 +56,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 );
 
 export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
-  ({ pseudoName, sx, color, datatype, value, onEnter, label = "Add score", ...rest }, ref) => {
-    const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (onEnter && e.key === "Enter") {
-        onEnter(e);
-      }
-    };
-
+  ({ pseudoName, sx, color, datatype, value, label = "Add score", ...rest }, ref) => {
     return (
       <div className="form__group">
         <style>
@@ -73,7 +74,6 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           datatype={datatype}
-          onKeyUp={(e) => handleEnter(e)}
           className={`form__field--${pseudoName} form__field--commun`}
           id={pseudoName}
           style={sx}
@@ -81,9 +81,48 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
           placeholder={label}
           value={value}
           autoComplete="off"
+          required
           {...rest}
         />
         <label htmlFor={pseudoName} className="form__label">
+          {label}
+        </label>
+      </div>
+    );
+  }
+);
+export const BlockyInput = forwardRef<HTMLInputElement, InputProps>(
+  ({ pseudoName, color, datatype, value, label = "Add score", ...rest }, ref) => {
+    pseudoName = pseudoName.replace(/_/g, "_") + "_input";
+    const [isFocus, setIsFocus] = useState(false);
+    const noFocusColor = "rgba(255,255,222, 0.3)";
+    const styles = isFocus
+      ? { color, borderColor: color }
+      : {
+          color: noFocusColor,
+          borderColor: noFocusColor,
+        };
+
+    return (
+      <div className="input-box">
+        <input
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          ref={ref}
+          datatype={datatype}
+          className={pseudoName}
+          id={pseudoName}
+          type="text"
+          value={value}
+          autoComplete="off"
+          required
+          style={{
+            ...styles,
+            boxShadow: `0px 5px 3px 5px #0000009c ${isFocus ? "inset" : ""}`,
+          }}
+          {...rest}
+        />
+        <label htmlFor={pseudoName} style={styles}>
           {label}
         </label>
       </div>

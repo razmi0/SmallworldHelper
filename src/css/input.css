@@ -52,3 +52,38 @@
 .form__field--commun:invalid {
   box-shadow: none;
 }
+
+.input-box {
+  position: relative;
+}
+
+.input-box input {
+  padding: 15px 20px;
+  outline: none;
+  background: transparent;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 700;
+  width: 120px; /* var(--card-size-width) -10 * 2 */
+}
+.input-box label {
+  position: absolute;
+  left: 0;
+  padding: 15px 20px;
+  pointer-events: none;
+  font-size: 0.8em;
+  transition: 0.4s cubic-bezier(0.05, 0.81, 0, 0.93);
+  letter-spacing: 0.1em;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  font-size: 0.7em;
+  transform: translateX(14px) translateY(-7.5px);
+  padding: 0 5px;
+  border-radius: 2px;
+  /* background: ; --linear-dark-card-bg #212121 */
+  background: rgb(20, 20, 26);
+  letter-spacing: 0em;
+  border: #212121 solid 1px;
+}
