@@ -1,7 +1,13 @@
 :root {
   --std-card-radius-default: 10px;
   --std-card-radius-donut: 50%;
-  --linear-dark-card-bg: linear-gradient(180deg, rgb(16, 16, 18, 0.5) 0%, rgb(9, 9, 12, 1) 100%);
+  --linear-dark-start: rgba(16, 16, 18, 0.5);
+  --linear-dark-end: rgba(9, 9, 12, 1);
+  --linear-dark-card-bg: linear-gradient(
+    180deg,
+    var(--linear-dark-start) 0%,
+    var(--linear-dark-end) 100%
+  );
 }
 
 .grainy-donut-radius::before {
