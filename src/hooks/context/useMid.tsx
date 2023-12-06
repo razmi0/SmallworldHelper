@@ -1,4 +1,12 @@
-import { ReactNode, createContext, useCallback, useContext, useMemo, useReducer } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+} from "react";
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helpers";
 
 type newScoreType = number | string; // string => transitional value of input === "-"
@@ -25,12 +33,12 @@ type IntermediateActions =
   | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useMidState
   | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useMidState
 
-type IntermediateDispatchContextType = (actions: IntermediateActions) => void;
-
 // CONTEXT
 //--
-const IntermediateContext = createContext<IntermediateStates | null>(null);
-const IntermediateDispatchContext = createContext<IntermediateDispatchContextType | null>(null);
+const IntermediateContext = createContext<{
+  states: IntermediateStates;
+  dispatch: Dispatch<IntermediateActions>;
+} | null>(null);
 
 // REDUCER
 //--
@@ -130,47 +138,28 @@ export const IntermediateProvider = ({
     []
   );
 
-  const [state, dispatch] = useReducer(intermediateReducer, initial);
+  const [states, dispatch] = useReducer(intermediateReducer, initial);
 
   return (
-    <IntermediateContext.Provider value={state}>
-      <IntermediateDispatchContext.Provider value={dispatch}>
-        {children}
-      </IntermediateDispatchContext.Provider>
+    <IntermediateContext.Provider value={{ states, dispatch }}>
+      {children}
     </IntermediateContext.Provider>
   );
 };
 
 // HOOKS
 //--
-export const useMidState = () => {
-  const states = useContext(IntermediateContext);
-  if (states === null) {
-    throw new Error("useMidState must be used within a IntermediateProvider");
+
+export const useMid = () => {
+  const { states, dispatch } = useContext(IntermediateContext) || {};
+  if (!dispatch || !states) {
+    throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
   const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
 
   const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
-  const onlyOneFocus = isFocus.filter((focus) => focus).length === 1;
-
-  return {
-    isFocus,
-    newScores,
-    startScore,
-    newPlayerName,
-    savePlayers,
-    loadPlayers,
-    storageEvent,
-    onlyOneFocus,
-  };
-};
-
-export const useMidAction = () => {
-  const dispatch = useContext(IntermediateDispatchContext);
-  if (dispatch === null) {
-    throw new Error("useMidAction must be used within a IntermediateProvider");
-  }
+  const onlyOneFocus = isFocus.filter((focus: boolean) => focus).length === 1;
 
   /**
    * @description change focus at index
@@ -214,6 +203,14 @@ export const useMidAction = () => {
     addPlayerActions: { setNewPlayerName, setStartScore },
     storageActions: { setSavePlayers, setLoadPlayers },
     setNewScores,
+    isFocus,
+    newScores,
+    startScore,
+    newPlayerName,
+    savePlayers,
+    loadPlayers,
+    storageEvent,
+    onlyOneFocus,
   };
 };
 

@@ -1,7 +1,7 @@
 import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
 import { KeyboardManager, Position, RefManager } from "@Components/Utils";
 import { SoftInput } from "@Components/Inputs";
-import { useMidAction, useMidState } from "@Context/useMid";
+import { useMid } from "@Context/useMid";
 import { useNotif } from "@Context/useNotif";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { keys, validateIntOnChange } from "../utils/players/helpers";
@@ -17,8 +17,7 @@ type AddPlayerProps = {
 };
 const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPlayerProps) => {
   const { post } = useNotif();
-  const { newPlayerName, startScore } = useMidState();
-  const { addPlayerActions, focusActions } = useMidAction();
+  const { addPlayerActions, focusActions, newPlayerName, startScore } = useMid();
   const { isOnFocus } = focusActions;
   const { setNewPlayerName, setStartScore } = addPlayerActions;
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;

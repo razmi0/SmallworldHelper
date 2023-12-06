@@ -14,7 +14,7 @@ import {
   ChartData,
   ChartOptions,
 } from "chart.js";
-import { useMidState, useMidAction } from "@Context/useMid";
+import { useMid } from "@Context/useMid";
 import {
   TIME_BEFORE_RESET_FOCUS,
   barOptions,
@@ -46,8 +46,8 @@ type ChartProps = {
   donuts: ChartData<"doughnut">;
 };
 const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
-  const { isFocus } = useMidState();
-  const { focusActions } = useMidAction();
+  console.time("Charts");
+  const { isFocus, focusActions } = useMid();
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
   const { resetFocus } = focusActions;
 
@@ -79,15 +79,18 @@ const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
   }
 
   return (
-    <ChartContainer isOpen={isOpen} color={focusedColor}>
-      <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} type="line" />
-      <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} type="bar" />
-      <Doughnut
-        data={currentlyFocused ? focusedDonut : donuts}
-        options={donutOptions}
-        type="donut"
-      />
-    </ChartContainer>
+    <>
+      <ChartContainer isOpen={isOpen} color={focusedColor}>
+        <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} type="line" />
+        <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} type="bar" />
+        <Doughnut
+          data={currentlyFocused ? focusedDonut : donuts}
+          options={donutOptions}
+          type="donut"
+        />
+      </ChartContainer>
+      {console.timeEnd("Charts")}
+    </>
   );
 };
 
@@ -100,7 +103,7 @@ type Props = {
   isOpen: boolean;
   color: string;
 };
-export const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
+const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
   const childrenArr = arrayify(children);
   const id = useId().replace(/:/g, "_");
 
@@ -125,7 +128,7 @@ export const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
 
           return (
             <div
-              style={{ boxShadow: `0px 0px 1px 1px ${color}` }}
+              style={{ boxShadow: `0px 0px 1px 1px ${color}` }} // , borderRadius: "50%"
               key={i}
               className={chartType === "donut" ? donutBack : back}
             >

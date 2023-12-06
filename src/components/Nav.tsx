@@ -1,6 +1,5 @@
 import { MutableRefObject, useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { useMidAction } from "@Context/useMid";
 import { Header } from "@Components/Containers";
 import IconButton, {
   Chart,
@@ -28,7 +27,10 @@ type NavProps = {
   isScoreHidden: boolean;
   undoRedoStates: NavUndoRedoStates;
   undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
-  storageActions: ReturnType<typeof useMidAction>["storageActions"];
+  storageActions: {
+    setSavePlayers: (payload: boolean) => void;
+    setLoadPlayers: (payload: boolean) => void;
+  };
 };
 
 const Nav = ({

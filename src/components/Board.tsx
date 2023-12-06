@@ -7,7 +7,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { useMidState, useMidAction } from "@Context/useMid";
+import { useMid } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import IconButton, { Delete, Reset, Star, IconHeading } from "@Components/Icons";
 import { BlockyInput } from "@Components/Inputs";
@@ -49,8 +49,8 @@ type PlayerUtilitiesProps = {
 //--
 
 const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
-  const { isFocus, newScores, onlyOneFocus } = useMidState();
-  const { setNewScores, focusActions } = useMidAction();
+  console.time("Board");
+  const { setNewScores, focusActions, isFocus, newScores, onlyOneFocus } = useMid();
   const { isOnFocus, setIsOnFocus } = focusActions;
   const inputs = useRef(initInputsRefs(players.length));
   const playerSize = players.length;
@@ -139,59 +139,62 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
   };
 
   return (
-    <BoardView>
-      <ul className={cssModules.player["players-list-ctn"]}>
-        {players.map((player, i) => {
-          const { name, victoryPtn, id, color } = player;
-          const pseudoName = `${id}_${name.toLowerCase()}`;
-          const finalColor = isFocus[i]
-            ? color
-            : onlyOneFocus
-            ? "rgba(255,255,222, 0.3)" // no focus card font color
-            : "inherit";
-          const softValue = newScores[i] ? newScores[i] : "";
+    <>
+      <BoardView>
+        <ul className={cssModules.player["players-list-ctn"]}>
+          {players.map((player, i) => {
+            const { name, victoryPtn, id, color } = player;
+            const pseudoName = `${id}_${name.toLowerCase()}`;
+            const finalColor = isFocus[i]
+              ? color
+              : onlyOneFocus
+              ? "rgba(255,255,222, 0.3)" // no focus card font color
+              : "inherit";
+            const softValue = newScores[i] ? newScores[i] : "";
 
-          return (
-            <FocusManager
-              key={pseudoName}
-              onBlur={() => handleBlur(i)}
-              onFocus={() => handleFocus(i)}
-              onClick={() => handleClicked(i)}
-              as="li"
-            >
-              <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
-                <PlayerCard color={finalColor}>
-                  <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
-                  <PlayerTextContainer>
-                    <PlayerText color={finalColor} id="up">
-                      {name}
-                    </PlayerText>
-                    <PlayerText color={finalColor} id="bottom">
-                      <IconHeading
-                        animationName="rotate"
-                        isHover={isFocus[i]}
-                        color={color}
-                        icon={Star}
-                        variant="heading"
-                      />
-                      {hideScore ? "***" : victoryPtn}
-                    </PlayerText>
-                  </PlayerTextContainer>
-                  <BlockyInput
-                    ref={(element) => manageRefs(element, i)}
-                    color={color}
-                    onChange={(event) => handleChangeScore(event, i)}
-                    value={softValue}
-                    pseudoName={pseudoName}
-                  />
-                </PlayerCard>
-              </KeyboardManager>
-            </FocusManager>
-          );
-        })}
-      </ul>
-      {children}
-    </BoardView>
+            return (
+              <FocusManager
+                key={pseudoName}
+                onBlur={() => handleBlur(i)}
+                onFocus={() => handleFocus(i)}
+                onClick={() => handleClicked(i)}
+                as="li"
+              >
+                <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
+                  <PlayerCard color={finalColor}>
+                    <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
+                    <PlayerTextContainer>
+                      <PlayerText color={finalColor} id="up">
+                        {name}
+                      </PlayerText>
+                      <PlayerText color={finalColor} id="bottom">
+                        <IconHeading
+                          animationName="rotate"
+                          isHover={isFocus[i]}
+                          color={color}
+                          icon={Star}
+                          variant="heading"
+                        />
+                        {hideScore ? "***" : victoryPtn}
+                      </PlayerText>
+                    </PlayerTextContainer>
+                    <BlockyInput
+                      ref={(element) => manageRefs(element, i)}
+                      color={color}
+                      onChange={(event) => handleChangeScore(event, i)}
+                      value={softValue}
+                      pseudoName={pseudoName}
+                    />
+                  </PlayerCard>
+                </KeyboardManager>
+              </FocusManager>
+            );
+          })}
+        </ul>
+        {children}
+      </BoardView>
+      {console.timeEnd("Board")}
+    </>
   );
 };
 

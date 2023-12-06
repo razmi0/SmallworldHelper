@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { usePlayer } from "@Hooks/players/usePlayer";
 import { useUndoRedo } from "@Hooks/useUndoRedo";
 import { useToggle } from "@Hooks/useToggle";
-import { useMidAction, useMidState } from "@Context/useMid";
+import { useMid } from "@Context/useMid";
 import { useNotif } from "@Context/useNotif";
 import { MainContainer } from "@Components/Containers";
 import Board, { PlayerStatsContainer } from "@Components/Board";
@@ -22,9 +22,9 @@ const App = () => {
   const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  const { storageActions } = useMidAction();
+  const { storageEvent, isFocus, storageActions } = useMid();
+  console.log(useMid());
   const { setLoadPlayers, setSavePlayers } = storageActions;
-  const { storageEvent, isFocus } = useMidState();
 
   const { toggleStates, toggleActions } = useToggle();
   const { hideScore, openAddPlayer, openCharts, openNav } = toggleActions;
