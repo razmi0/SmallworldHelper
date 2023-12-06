@@ -1,3 +1,12 @@
+:root {
+  --blocky-input-lbl-padding: 15px 20px;
+  --blocky-input-lbl-transition: 0.4s cubic-bezier(0.05, 0.81, 0, 0.93);
+
+  --blocky-input-lbl-bg-focus: rgb(20, 20, 26);
+  --blocky-input-lbl-border-focus: #212121 solid 1px;
+  --blocky-input-lbl-transform-focus: translateX(14px) translateY(-7.5px);
+}
+
 .form__group {
   position: relative;
   width: 100%;
@@ -58,7 +67,7 @@
 }
 
 .input-box input {
-  padding: 15px 20px;
+  padding: var(--blocky-input-lbl-padding);
   outline: none;
   background: transparent;
   border-radius: 5px;
@@ -69,21 +78,20 @@
 .input-box label {
   position: absolute;
   left: 0;
-  padding: 15px 20px;
+  padding: var(--blocky-input-lbl-padding);
   pointer-events: none;
   font-size: 0.8em;
-  transition: 0.4s cubic-bezier(0.05, 0.81, 0, 0.93);
+  transition: var(--blocky-input-lbl-transition);
   letter-spacing: 0.1em;
 }
 
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
   font-size: 0.7em;
-  transform: translateX(14px) translateY(-7.5px);
+  transform: var(--blocky-input-lbl-transform-focus);
   padding: 0 5px;
   border-radius: 2px;
-  /* background: ; --linear-dark-card-bg #212121 */
-  background: rgb(20, 20, 26);
+  background: var(--blocky-input-lbl-bg-focus);
   letter-spacing: 0em;
-  border: #212121 solid 1px;
+  border: var(--blocky-input-lbl-border-focus);
 }
