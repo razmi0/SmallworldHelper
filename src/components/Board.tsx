@@ -10,9 +10,8 @@ import {
 import { useMidState, useMidAction } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import IconButton, { Delete, Reset, Star, IconHeading } from "@Components/Icons";
-import { BlockyInput, SoftInput } from "@Components/Inputs";
+import { BlockyInput } from "@Components/Inputs";
 import { FocusManager, KeyboardManager } from "@Components/Utils";
-import { InputContainer } from "@Components/Containers";
 import {
   blurInput,
   initInputsRefs,
@@ -178,7 +177,6 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
                       {hideScore ? "***" : victoryPtn}
                     </PlayerText>
                   </PlayerTextContainer>
-                  {/* <InputContainer> */}
                   <BlockyInput
                     ref={(element) => manageRefs(element, i)}
                     color={color}
@@ -186,7 +184,6 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
                     value={softValue}
                     pseudoName={pseudoName}
                   />
-                  {/* </InputContainer> */}
                 </PlayerCard>
               </KeyboardManager>
             </FocusManager>
