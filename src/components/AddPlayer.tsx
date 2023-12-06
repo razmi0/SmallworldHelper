@@ -8,20 +8,26 @@ import { keys, validateIntOnChange } from "../utils/players/helpers";
 import { beautify } from "@Utils/utils";
 import { getCardStyles } from "@Components/styles";
 import { ContainerProps } from "@Types";
+import { FocusActionsType } from "../types/types";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
   isOpen: boolean;
   toggleOpenAddPlayer: () => void;
   names: string[];
+  changeFocus: FocusActionsType["changeFocus"];
 };
-const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPlayerProps) => {
+const AddPlayerCard = ({
+  addPlayer,
+  isOpen,
+  toggleOpenAddPlayer,
+  names,
+  changeFocus,
+}: AddPlayerProps) => {
   const { post } = useNotif();
-  const { addPlayerActions, focusActions, newPlayerName, startScore } = useMid();
-  const { isOnFocus } = focusActions;
+  const { addPlayerActions, newPlayerName, startScore } = useMid();
   const { setNewPlayerName, setStartScore } = addPlayerActions;
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
-
   useClickOutside(ref, () => {
     if (isOpen) {
       toggleCard();
@@ -61,7 +67,7 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPla
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === keys.ESCAPE) {
       toggleCard();
-      isOnFocus(0, true);
+      changeFocus(0, true);
     }
     if (e.key === keys.ENTER) {
       handleInputValidation();

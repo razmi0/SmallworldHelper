@@ -14,18 +14,16 @@ import {
   ChartData,
   ChartOptions,
 } from "chart.js";
-import { useMid } from "@Context/useMid";
 import {
   TIME_BEFORE_RESET_FOCUS,
   barOptions,
   lineOptions,
   donutOptions,
 } from "../utils/charts/options";
-// import { ChartContainer } from "@Components/Containers";
 import { focusOnBar, focusOnLine, focusOndonut } from "../utils/charts/helpers";
 import { arrayify, findSum } from "@Utils/utils";
 import { cssModules, getCardStyles } from "@Components/styles";
-import { LineProps, BarProps, DonutProps } from "@Types";
+import { LineProps, BarProps, DonutProps, FocusActionsType, FocusStatesType } from "@Types";
 
 ChartJS.register(
   CategoryScale,
@@ -44,52 +42,47 @@ type ChartProps = {
   lines: ChartData<"line">;
   bars: ChartData<"bar">;
   donuts: ChartData<"doughnut">;
+  focusActions: FocusActionsType;
+  focusStates: Omit<FocusStatesType, "noFocus"> & { color: string };
 };
-const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
-  console.time("Charts");
-  const { isFocus, focusActions } = useMid();
-  const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
-  const { resetFocus } = focusActions;
 
-  const currentlyFocused = isFocus.some((isFocused) => isFocused);
+const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: ChartProps) => {
+  // console.time("Charts");
+  const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
+
+  const { focusMap, onlyOneFocus, color } = focusStates;
+  const { resetFocus } = focusActions;
 
   useEffect(() => {
     intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
     return () => {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
     };
-  }, [isFocus]);
+  }, [focusMap]);
 
   const handleResetFocus = () => {
-    if (currentlyFocused) resetFocus(); // only one focused
+    if (onlyOneFocus) resetFocus(); // only one focused
     if (intervalIdRef.current) clearInterval(intervalIdRef.current); // if interval all ready set in useEffect, clear it, already have one
   };
 
   let focusedLine = lines,
     focusedBar = bars,
-    focusedDonut = donuts,
-    focusedColor = "rgba(255,255,255, 0.3)";
+    focusedDonut = donuts;
 
-  if (currentlyFocused) {
-    const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
-    focusedBar = focusOnBar(focusedIndex, bars);
-    focusedLine = focusOnLine(focusedIndex, lines);
-    focusedDonut = focusOndonut(focusedIndex, donuts);
-    focusedColor = findFocusedColor(focusedDonut) || "rgba(255,255,255, 0.3)";
+  if (onlyOneFocus.focused) {
+    focusedBar = focusOnBar(onlyOneFocus.index, bars);
+    focusedLine = focusOnLine(onlyOneFocus.index, lines);
+    focusedDonut = focusOndonut(onlyOneFocus.index, donuts);
   }
 
   return (
     <>
-      <ChartContainer isOpen={isOpen} color={focusedColor}>
-        <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} type="line" />
-        <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} type="bar" />
-        <Doughnut
-          data={currentlyFocused ? focusedDonut : donuts}
-          options={donutOptions}
-          type="donut"
-        />
+      <ChartContainer isOpen={isOpen} color={color || "rgba(255,255,255, 0.3)"}>
+        <Line data={onlyOneFocus ? focusedLine : lines} options={lineOptions} type="line" />
+        <Bar data={onlyOneFocus ? focusedBar : bars} options={barOptions} type="bar" />
+        <Doughnut data={onlyOneFocus ? focusedDonut : donuts} options={donutOptions} type="donut" />
       </ChartContainer>
-      {console.timeEnd("Charts")}
+      {/* {console.timeEnd("Charts")} */}
     </>
   );
 };

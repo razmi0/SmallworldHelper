@@ -15,7 +15,7 @@ type IntermediateStates = {
   /**
    * @description inputs tracker
    */
-  isFocus: boolean[]; // useMap
+  // isFocus: boolean[]; // useMap
   newScores: newScoreType[]; // useMap
   startScore: newScoreType; // useMidState
   newPlayerName: string; // useMidState
@@ -24,9 +24,9 @@ type IntermediateStates = {
 };
 
 type IntermediateActions =
-  | { type: "CHANGE_FOCUS"; payload: { index: number; value: boolean } } // useMap
-  | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
-  | { type: "RESET_FOCUS" } // useMap
+  // | { type: "CHANGE_FOCUS"; payload: { index: number; value: boolean } } // useMap
+  // | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
+  // | { type: "RESET_FOCUS" } // useMap
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: newScoreType } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useMidState
   | { type: "SET_START_SCORE"; payload: { score: newScoreType } } // useMidState
@@ -63,33 +63,33 @@ const intermediateReducer = (
       };
     }
 
-    case "CHANGE_FOCUS": {
-      const { index, value } = action.payload;
-      const { isFocus } = state;
+    // case "CHANGE_FOCUS": {
+    //   const { index, value } = action.payload;
+    //   const { isFocus } = state;
 
-      // MATRICE 4 by 3 on isFocus ?
+    //   // MATRICE 4 by 3 on isFocus ?
 
-      return {
-        ...state,
-        isFocus: isFocus.map((item, i) => (i === index ? value : item)),
-      };
-    }
+    //   return {
+    //     ...state,
+    //     isFocus: isFocus.map((item, i) => (i === index ? value : item)),
+    //   };
+    // }
 
-    case "CHANGE_FOCUS_LENGTH": {
-      const { newLength, fillValue } = action.payload;
-      return {
-        ...state,
-        isFocus: resizeArray(state.isFocus, newLength, fillValue),
-        newScores: resizeArray(state.newScores, newLength, 0),
-      };
-    }
+    // case "CHANGE_FOCUS_LENGTH": {
+    //   const { newLength, fillValue } = action.payload;
+    //   return {
+    //     ...state,
+    //     isFocus: resizeArray(state.isFocus, newLength, fillValue),
+    //     newScores: resizeArray(state.newScores, newLength, 0),
+    //   };
+    // }
 
-    case "RESET_FOCUS": {
-      return {
-        ...state,
-        isFocus: state.isFocus.map(() => false),
-      };
-    }
+    // case "RESET_FOCUS": {
+    //   return {
+    //     ...state,
+    //     isFocus: state.isFocus.map(() => false),
+    //   };
+    // }
 
     case "SET_NEW_SCORES": {
       const { index, newScore } = action.payload;
@@ -156,61 +156,76 @@ export const useMid = () => {
     throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
-  const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
+  const { newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states; // isFocus,
 
   const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
-  const onlyOneFocus = isFocus.filter((focus: boolean) => focus).length === 1;
+  // const onlyOneFocus = isFocus.filter((focus: boolean) => focus).length === 1;
 
-  /**
-   * @description change focus at index
-   */
-  const isOnFocus = useCallback((index: number, value: boolean) => {
-    dispatch({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
-  }, []);
+  // /**
+  //  * @description change focus at index
+  //  */
+  // const isOnFocus = useCallback((index: number, value: boolean) => {
+  //   dispatch({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
+  // }, []);
 
-  /**
-   *  @description change the length of the isFocus array
-   */
-  const setIsOnFocus = useCallback((newLength: number, fillValue: boolean) => {
-    dispatch({
-      type: "CHANGE_FOCUS_LENGTH",
-      payload: { newLength: newLength, fillValue: fillValue },
-    });
-  }, []);
+  // /**
+  //  *  @description change the length of the isFocus array
+  //  */
+  // const setIsOnFocus = useCallback((newLength: number, fillValue: boolean) => {
+  //   dispatch({
+  //     type: "CHANGE_FOCUS_LENGTH",
+  //     payload: { newLength: newLength, fillValue: fillValue },
+  //   });
+  // }, []);
 
-  const resetFocus = useCallback(() => {
-    dispatch({ type: "RESET_FOCUS" });
-  }, []);
+  // const resetFocus = useCallback(() => {
+  //   dispatch({ type: "RESET_FOCUS" });
+  // }, []);
 
   const setNewScores = useCallback((index: number, newScore: number | string) => {
     dispatch({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
   }, []);
+
   const setNewPlayerName = useCallback((name: string) => {
     dispatch({ type: "SET_NEW_PLAYER_NAME", payload: { name: name } });
   }, []);
+
   const setStartScore = useCallback((score: newScoreType) => {
     dispatch({ type: "SET_START_SCORE", payload: { score: score } });
   }, []);
+
   const setSavePlayers = useCallback((payload: boolean) => {
     dispatch({ type: "SET_SAVE_PLAYERS", payload });
   }, []);
+
   const setLoadPlayers = useCallback((payload: boolean) => {
     dispatch({ type: "SET_LOAD_PLAYERS", payload });
   }, []);
 
   return {
-    focusActions: { resetFocus, isOnFocus, setIsOnFocus }, // as [typeof isOnFocus, typeof setIsOnFocus]
-    addPlayerActions: { setNewPlayerName, setStartScore },
-    storageActions: { setSavePlayers, setLoadPlayers },
-    setNewScores,
-    isFocus,
-    newScores,
-    startScore,
-    newPlayerName,
-    savePlayers,
-    loadPlayers,
-    storageEvent,
-    onlyOneFocus,
+    /**
+     * @description reducer + hook
+     */
+    // focusActions: { resetFocus, isOnFocus, setIsOnFocus }, // focus
+    // isFocus, // focus
+    // onlyOneFocus, // focus
+
+    /**
+     * @description local add player hook
+     */
+    addPlayerActions: { setNewPlayerName, setStartScore }, // addPlayer
+    setNewScores, // addPlayer
+    newScores, // addPlayer
+    startScore, // addPlayer
+    newPlayerName, // addPlayer
+
+    /**
+     * @description context
+     */
+    storageActions: { setSavePlayers, setLoadPlayers }, // storage
+    savePlayers, // storage
+    loadPlayers, // storage
+    storageEvent, // storage
   };
 };
 

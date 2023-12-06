@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { usePlayer } from "@Hooks/players/usePlayer";
 import { useUndoRedo } from "@Hooks/useUndoRedo";
 import { useToggle } from "@Hooks/useToggle";
+import { useFocus } from "@Hooks/useFocus";
 import { useMid } from "@Context/useMid";
 import { useNotif } from "@Context/useNotif";
 import { MainContainer } from "@Components/Containers";
@@ -15,21 +16,39 @@ import { Player } from "@Types";
 
 // let a = 0;
 const App = () => {
+  /**
+   * useNotif
+   */
   const { post } = useNotif();
 
-  const { playersStates, playersActions } = usePlayer();
-
+  /**
+   * usePlayer
+   */
+  const { playersStates, playersActions, playerSize, playersNames } = usePlayer();
   const { players, lines, bars, donuts } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
-  const { storageEvent, isFocus, storageActions } = useMid();
-  console.log(useMid());
+  /**
+   * useMid
+   */
+  const { storageEvent, storageActions } = useMid(); // , isFocus
   const { setLoadPlayers, setSavePlayers } = storageActions;
 
+  /**
+   * useFocus
+   */
+  const { focusStates, focusActions } = useFocus(players.length);
+  const { focusMap, onlyOneFocus } = focusStates;
+
+  /**
+   * useToggle
+   */
   const { toggleStates, toggleActions } = useToggle();
-  const { hideScore, openAddPlayer, openCharts, openNav } = toggleActions;
   const { isScoreHidden, isChartsOpen, isNavOpen } = toggleStates;
 
+  /**
+   * useUndoRedo
+   */
   const { undoRedoStates, undoRedoActions } = useUndoRedo<Player[]>(players, setPlayers);
 
   useEffect(() => {
@@ -55,7 +74,11 @@ const App = () => {
     }
   }, [storageEvent]);
 
-  const { hasPlayer, names, playerSize, hasHistory, color } = workingVars(players, isFocus);
+  useEffect(() => {
+    focusActions.changeFocusLength(players.length);
+  }, [playerSize]);
+
+  const { hasPlayer, hasHistory, color } = workingVars(players, onlyOneFocus.index);
 
   return (
     <>
@@ -63,10 +86,7 @@ const App = () => {
       <MainContainer>
         <Nav
           storageActions={storageActions}
-          toggleHideScore={hideScore}
-          toggleOpenAddPlayer={openAddPlayer}
-          toggleOpenCharts={openCharts}
-          toggleOpenNav={openNav}
+          togglers={toggleActions}
           isNavOpen={isNavOpen}
           isScoreHidden={isScoreHidden}
           playerSize={playerSize}
@@ -74,7 +94,7 @@ const App = () => {
           undoRedoActions={undoRedoActions}
         />
         <FreshStartButton
-          toggleOpenAddPlayer={openAddPlayer}
+          toggleOpenAddPlayer={toggleActions.openAddPlayer}
           hasPlayers={hasPlayer}
           isAddPlayerOpen={toggleStates.isAddPlayerOpen}
         />
@@ -85,8 +105,19 @@ const App = () => {
             reset={resetScore}
             remove={removePlayer}
             update={updateScore}
+            focusActions={focusActions}
+            focusStates={{
+              focusMap,
+              onlyOneFocus,
+            }}
           />
           <Charts
+            focusActions={focusActions}
+            focusStates={{
+              focusMap,
+              onlyOneFocus,
+              color,
+            }}
             isOpen={isChartsOpen && playerSize > 0 && hasHistory}
             lines={lines}
             bars={bars}
@@ -96,8 +127,9 @@ const App = () => {
         <AddPlayerCard
           addPlayer={addPlayer}
           isOpen={toggleStates.isAddPlayerOpen}
-          toggleOpenAddPlayer={openAddPlayer}
-          names={names}
+          toggleOpenAddPlayer={toggleActions.openAddPlayer}
+          names={playersNames}
+          changeFocus={focusActions.changeFocus}
         />
         <Toast />
       </MainContainer>
@@ -105,15 +137,12 @@ const App = () => {
   );
 };
 
-const workingVars = (players: Player[], isFocus: boolean[]) => {
+const workingVars = (players: Player[], onlyOneFocusIndex: number) => {
   const hasPlayer = players.length > 0;
-  const names = players.map((player) => player.name);
-  const playerSize = players.length;
   const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
-  const colorIndex = isFocus.findIndex((focus) => focus);
-  const color = players[colorIndex]?.color;
+  const color = players[onlyOneFocusIndex]?.color;
 
-  return { hasPlayer, names, playerSize, hasHistory, color };
+  return { hasPlayer, hasHistory, color };
 };
 
 export default App;

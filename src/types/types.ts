@@ -169,6 +169,20 @@ export type PlayerState = {
 
 export type FullSetterType = [Player[], LineDataType, BarDataType, DonutDataType];
 
+export type FocusActionsType = {
+  changeFocus: (index: number, value?: boolean) => void;
+  changeFocusLength: (newLength: number, fillValue?: boolean) => void;
+  resetFocus: () => void;
+};
+export type FocusStatesType = {
+  onlyOneFocus: {
+    index: number;
+    focused: boolean;
+  };
+  focusMap: boolean[];
+  noFocus: boolean;
+};
+
 export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }

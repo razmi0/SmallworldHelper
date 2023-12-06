@@ -19,10 +19,12 @@ type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUn
 
 type NavProps = {
   playerSize: number;
-  toggleOpenAddPlayer: (newState?: boolean) => void;
-  toggleOpenCharts: () => void;
-  toggleHideScore: () => void;
-  toggleOpenNav: () => void;
+  togglers: {
+    hideScore: () => void;
+    openAddPlayer: (newState?: boolean | undefined) => void;
+    openNav: (newState?: boolean | undefined) => void;
+    openCharts: () => void;
+  };
   isNavOpen: boolean;
   isScoreHidden: boolean;
   undoRedoStates: NavUndoRedoStates;
@@ -34,10 +36,7 @@ type NavProps = {
 };
 
 const Nav = ({
-  toggleHideScore,
-  toggleOpenAddPlayer,
-  toggleOpenCharts,
-  toggleOpenNav,
+  togglers,
   isNavOpen,
   undoRedoStates,
   undoRedoActions,
@@ -47,16 +46,17 @@ const Nav = ({
   const { setLoadPlayers, setSavePlayers } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
+  const { hideScore, openAddPlayer, openCharts, openNav } = togglers;
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
 
   useClickOutside(navRef, () => {
-    if (isNavOpen && navRef) toggleOpenNav();
+    if (isNavOpen && navRef) openNav();
   });
 
   return (
     <Header>
       <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
-        <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => toggleOpenNav()} />
+        <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => openNav()} />
         {isNavOpen && (
           <>
             <IconButton
@@ -75,19 +75,14 @@ const Nav = ({
               variant="nav"
               icon={IconAddPlayer}
               iconName="addplayer"
-              onClick={() => toggleOpenAddPlayer()}
+              onClick={() => openAddPlayer()}
             />
-            <IconButton
-              variant="nav"
-              icon={Chart}
-              iconName="chart"
-              onClick={() => toggleOpenCharts()}
-            />
+            <IconButton variant="nav" icon={Chart} iconName="chart" onClick={() => openCharts()} />
             <IconButton
               variant="nav"
               icon={isScoreHidden ? EyeClose : EyeOpen}
               iconName="eyes"
-              onClick={() => toggleHideScore()}
+              onClick={() => hideScore()}
             />
             <IconButton
               variant="nav"

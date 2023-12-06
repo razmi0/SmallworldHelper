@@ -173,9 +173,9 @@ const ToastMessage = ({ message }: { message: string }) => {
 };
 
 interface FocusManagerProps extends ContainerProps {
-  onFocus: () => void;
+  onFocus?: () => void;
   onBlur?: () => void;
-  onClick?: () => void;
+  onClick: () => void;
   as?: ElementType;
 }
 export const FocusManager = ({
