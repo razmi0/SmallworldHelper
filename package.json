@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 42069",
-    "build": "tsc && vite build",
+    "build": "./svg/build-icons.sh && tsc && vite build",
+    "icons": "./svg/build-icons.sh",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --open --port 6968",
     "bp": "tsc && vite build && vite preview --open --port 6969",
     "test": "vitest"
   },
   "dependencies": {
-    "@types/dom-view-transitions": "^1.0.3",
     "chart.js": "^4.4.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -20,6 +20,8 @@
   },
   "devDependencies": {
     "@testing-library/react": "^14.1.0",
+    "@types/dom-view-transitions": "^1.0.3",
+    "@types/glob": "^8.1.0",
     "@types/node": "^20.8.9",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
@@ -32,6 +34,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "jsdom": "^22.1.0",
+    "node-html-parser": "^6.1.11",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vitest": "^0.34.6"
