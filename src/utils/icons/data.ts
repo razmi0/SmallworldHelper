@@ -148,15 +148,21 @@ const NAV_STYLES: SvgDataType = {
 //--
 const UTILITY_STYLES: SvgDataType = {
   size: ["27px", "27px"],
-  transition: "all 1s ease-in-out",
+  transition: "all 0.2s linear",
   filter: ["0px", "0px"],
   icons: {
     close: {
       color: ["#242424", "#242424"],
-      size: ["15px", "15px"],
+
+      // message: "Remove player",
     },
     reset: {
       color: ["#9b9b9b", "#9b9b9b"],
+      size: ["22px", "22px"],
+      transform() {
+        return `translate(0px, 2px)`;
+      },
+      // message: "Reset score",
     },
   },
 };

@@ -73,6 +73,9 @@ const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconPro
   const { dropShadow, transform } = getFilter(isHover, svgData, color, disabled);
   const message = getMessage(iconName, svgData);
 
+  let size: [string, string] = ["0px", "0px"];
+  size = svgData.icons[iconName].size ? svgData.icons[iconName].size ?? size : svgData.size;
+
   return (
     <div
       className={`icon-stat-ctn ${className || ""}`}
@@ -84,9 +87,9 @@ const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconPro
         transition: svgData.transition ?? "none",
       }}
     >
-      <SvgIcon color={disabled ? DISABLED_COLOR : color} size={svgData.size} bgColor={bgColor} />
+      <SvgIcon color={disabled ? DISABLED_COLOR : color} size={size} bgColor={bgColor} />
       {message && (
-        <IconTooltip isOpen={isHover} size={svgData.size}>
+        <IconTooltip isOpen={isHover} size={size}>
           {message}
         </IconTooltip>
       )}
@@ -169,6 +172,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     ref
   ) => {
     const svgData = getSvgData(variant ?? "");
+
     const transform = animStartAt
       ? animStartState
       : svgData?.icons[iconName].transform?.() ?? "none";

@@ -60,6 +60,8 @@ const intermediateReducer = (
     }
 
     case "SET_NEW_SCORES": {
+      console.log("SET_NEW_SCORES");
+
       const { index, newScore } = action.payload;
       let newScores = state.newScores;
 
@@ -73,16 +75,6 @@ const intermediateReducer = (
       };
     }
 
-    case "SET_NEW_PLAYER_NAME": {
-      const { name } = action.payload;
-      if (!name && name.length !== 0) return state;
-      return { ...state, newPlayerName: name };
-    }
-    case "SET_START_SCORE": {
-      const { score } = action.payload;
-      if (!score && score !== 0) return state;
-      return { ...state, startScore: score };
-    }
     default:
       return state;
   }
@@ -124,20 +116,12 @@ export const useMid = () => {
     throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
-  const { newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states; // isFocus,
+  const { newScores, savePlayers, loadPlayers } = states; // isFocus,
 
   const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
 
   const setNewScores = useCallback((index: number, newScore: number | string) => {
     dispatch({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
-  }, []);
-
-  const setNewPlayerName = useCallback((name: string) => {
-    dispatch({ type: "SET_NEW_PLAYER_NAME", payload: { name: name } });
-  }, []);
-
-  const setStartScore = useCallback((score: newScoreType) => {
-    dispatch({ type: "SET_START_SCORE", payload: { score: score } });
   }, []);
 
   const setSavePlayers = useCallback((payload: boolean) => {
@@ -152,11 +136,8 @@ export const useMid = () => {
     /**
      * @description local add player hook
      */
-    addPlayerActions: { setNewPlayerName, setStartScore }, // addPlayer
     setNewScores, // addPlayer
     newScores, // addPlayer
-    startScore, // addPlayer
-    newPlayerName, // addPlayer
 
     /**
      * @description context
