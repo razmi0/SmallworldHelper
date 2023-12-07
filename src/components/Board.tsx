@@ -2,87 +2,83 @@ import {
   ChangeEvent,
   HTMLAttributes,
   KeyboardEvent,
+  MutableRefObject,
   ReactNode,
-  useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
-import { useMidState, useMidAction } from "@Context/useMid";
+import { useMid } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import IconButton, { Delete, Reset, Star, IconHeading } from "@Components/Icons";
+import { IconHeading } from "@Components/Icons";
 import { BlockyInput } from "@Components/Inputs";
-import { FocusManager, KeyboardManager } from "@Components/Utils";
+import { EventsManager, KeyboardManager } from "@Components/Utils";
 import {
   blurInput,
-  initInputsRefs,
+  createRefsArr,
   isDeletable,
   keys,
   navigateTo,
   validateIntOnChange,
 } from "../utils/players/helpers";
-import { ContainerProps, KeyboardNavigationIdType, Player } from "@Types";
+import { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
+import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
 
 /* players, reset, remove, update, */
 // TYPES
 //--
 
-type BoardType = {
+type BoardProps = {
   children?: ReactNode;
   players: Player[];
   hideScore: boolean;
   reset: (id: number) => void;
   remove: (id: number) => void;
   update: (id: number, score: number) => void;
-};
-
-type PlayerUtilitiesProps = {
-  id: number;
-  reset: (id: number) => void;
-  remove: (id: number) => void;
-  isFocus: boolean;
-  datatype?: KeyboardNavigationIdType;
-  onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  focusActions: Omit<FocusActionsType, "changeFocusLength">;
+  focusStates: Omit<FocusStatesType, "noFocus">;
 };
 
 // COMPONENTS
 //--
 
-const Board = ({ players, update, reset, remove, hideScore, children }: BoardType) => {
-  const { isFocus, newScores, onlyOneFocus } = useMidState();
-  const { setNewScores, focusActions } = useMidAction();
-  const { isOnFocus, setIsOnFocus } = focusActions;
-  const inputs = useRef(initInputsRefs(players.length));
+const Board = ({
+  focusActions,
+  focusStates,
+  players,
+  update,
+  reset,
+  remove,
+  hideScore,
+  children,
+}: BoardProps) => {
+  // console.time("Board");
+  const [hoverMap, setHover] = useState<boolean[]>(new Array(players.length).fill(false));
+  const { setNewScores, newScores } = useMid();
+  const { changeFocus, resetFocus } = focusActions;
+  const { focusMap, onlyOneFocus } = focusStates;
+
+  const inputsRef = useRef(createRefsArr(players.length));
+  const listRef = useRef<HTMLUListElement>(null) as MutableRefObject<HTMLUListElement>;
   const playerSize = players.length;
 
-  // filter: brightness(1.5);
-
-  useClickOutside(inputs, () => blurInput(inputs.current));
+  useClickOutside(listRef, () => {
+    blurInput(inputsRef.current);
+    resetFocus();
+  });
 
   useEffect(() => {
-    inputs.current = initInputsRefs(playerSize);
-    setIsOnFocus(playerSize, false);
+    inputsRef.current = createRefsArr(playerSize);
+    setHover(new Array(playerSize).fill(false));
   }, [playerSize]);
-
-  const handleBlur = useCallback((i: number) => {
-    isOnFocus(i, false);
-    setNewScores(i, 0);
-  }, []);
-
-  const handleFocus = useCallback((i: number) => {
-    isOnFocus(i, true);
-  }, []);
-
-  const handleClicked = useCallback((i: number) => {
-    isOnFocus(i, !isFocus[i]);
-  }, []);
 
   const handleKeyUp = (
     e: KeyboardEvent<HTMLInputElement | HTMLButtonElement>,
     id: number,
     i: number
   ) => {
-    const matrice = inputs.current;
+    const matrice = inputsRef.current;
     switch (e.key) {
       case keys.ENTER: {
         if (e.currentTarget.value === "-") return;
@@ -116,8 +112,8 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
         break;
 
       case keys.ESCAPE: {
+        changeFocus(i, false);
         setNewScores(i, 0);
-        isOnFocus(i, false);
         break;
       }
 
@@ -134,64 +130,96 @@ const Board = ({ players, update, reset, remove, hideScore, children }: BoardTyp
   };
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
-    if (element) inputs.current[i] = element;
-    if (isFocus[i] && element) navigateTo(inputs.current, i, "SELF");
+    if (element) inputsRef.current[i] = element;
+    if (focusMap[i] && element) {
+      navigateTo(inputsRef.current, i, "SELF");
+    }
+  };
+
+  const events = {
+    blur: (index: number) => {
+      changeFocus(index, false);
+      setNewScores(index, 0);
+    },
+    focus: (index: number) => {
+      changeFocus(index, true);
+    },
+    click: (index: number) => {
+      if (!onlyOneFocus.focused) {
+        changeFocus(index, true);
+      }
+    },
+    hover: (isHover: boolean, index: number) => {
+      setHover((p) => {
+        const newHoverMap = [...p];
+        newHoverMap[index] = isHover;
+        return newHoverMap;
+      });
+    },
   };
 
   return (
-    <BoardView>
-      <ul className={cssModules.player["players-list-ctn"]}>
-        {players.map((player, i) => {
-          const { name, victoryPtn, id, color } = player;
-          const pseudoName = `${id}_${name.toLowerCase()}`;
-          const finalColor = isFocus[i]
-            ? color
-            : onlyOneFocus
-            ? "rgba(255,255,222, 0.3)" // no focus card font color
-            : "inherit";
-          const softValue = newScores[i] ? newScores[i] : "";
+    <>
+      <BoardView>
+        <ul className={cssModules.player["players-list-ctn"]} ref={listRef}>
+          {players.map((player, i) => {
+            const { name, victoryPtn, id, color } = player;
+            const pseudoName = `${id}_${name.toLowerCase()}`;
+            const finalColor = focusMap[i]
+              ? color
+              : onlyOneFocus.focused
+              ? "rgba(255,255,222, 0.3)" // no focus card font color
+              : "inherit";
+            const softValue = newScores[i] ? newScores[i] : "";
 
-          return (
-            <FocusManager
-              key={pseudoName}
-              onBlur={() => handleBlur(i)}
-              onFocus={() => handleFocus(i)}
-              onClick={() => handleClicked(i)}
-              as="li"
-            >
-              <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
-                <PlayerCard color={finalColor}>
-                  <PlayerUtilities id={id} remove={remove} reset={reset} isFocus={isFocus[i]} />
-                  <PlayerTextContainer>
-                    <PlayerText color={finalColor} id="up">
-                      {name}
-                    </PlayerText>
-                    <PlayerText color={finalColor} id="bottom">
-                      <IconHeading
-                        animationName="rotate"
-                        isHover={isFocus[i]}
-                        color={color}
-                        icon={Star}
-                        variant="heading"
-                      />
-                      {hideScore ? "***" : victoryPtn}
-                    </PlayerText>
-                  </PlayerTextContainer>
-                  <BlockyInput
-                    ref={(element) => manageRefs(element, i)}
-                    color={color}
-                    onChange={(event) => handleChangeScore(event, i)}
-                    value={softValue}
-                    pseudoName={pseudoName}
-                  />
-                </PlayerCard>
-              </KeyboardManager>
-            </FocusManager>
-          );
-        })}
-      </ul>
-      {children}
-    </BoardView>
+            return (
+              <EventsManager
+                key={pseudoName}
+                onBlur={() => events.blur(i)}
+                onFocus={() => events.focus(i)}
+                onClick={() => events.click(i)}
+                onMouseEnter={() => events.hover(true, i)}
+                onMouseLeave={() => events.hover(false, i)}
+                as="li"
+              >
+                <KeyboardManager onKeyDown={(e) => handleKeyUp(e, id, i)}>
+                  <PlayerCard color={finalColor}>
+                    <UtilityButtonGroup isOpen={hoverMap[i]}>
+                      <CloseButton onClick={() => remove(id)} />
+                      <ResetButton onClick={() => reset(id)} />
+                    </UtilityButtonGroup>
+                    <PlayerTextContainer>
+                      <PlayerText color={finalColor} id="up">
+                        {name}
+                      </PlayerText>
+                      <PlayerText color={finalColor} id="bottom">
+                        <IconHeading
+                          animationName="rotate"
+                          isHover={focusMap[i]}
+                          color={color}
+                          iconName="star"
+                          variant="heading"
+                        />
+                        {hideScore ? "***" : victoryPtn}
+                      </PlayerText>
+                    </PlayerTextContainer>
+                    <BlockyInput
+                      ref={(el) => manageRefs(el, i)}
+                      color={color}
+                      onChange={(event) => handleChangeScore(event, i)}
+                      value={softValue}
+                      pseudoName={pseudoName}
+                    />
+                  </PlayerCard>
+                </KeyboardManager>
+              </EventsManager>
+            );
+          })}
+        </ul>
+        {children}
+      </BoardView>
+      {/* {console.timeEnd("Board")} */}
+    </>
   );
 };
 
@@ -238,50 +266,6 @@ const PlayerText = ({ children, color, ...props }: PlayerTextProps) => {
   return (
     <div {...props} style={{ color }} className={cssModules.player["player-text"]}>
       {children}
-    </div>
-  );
-};
-
-const PlayerUtilities = ({
-  id,
-  reset,
-  remove,
-  isFocus,
-  datatype,
-  onKeyUp,
-}: PlayerUtilitiesProps) => {
-  const removeAtId = useCallback(() => remove(id), [id]);
-  const resetAtId = useCallback(() => reset(id), [id]);
-
-  const visibility = !isFocus ? "hidden" : "initial";
-  const finalDatatype = datatype ? datatype : "";
-
-  return (
-    <div className={cssModules.player["player-utilities-ctn"]}>
-      <IconButton
-        sx={{
-          visibility: visibility,
-        }}
-        variant={"utility"}
-        onClick={resetAtId}
-        icon={Reset}
-        iconName="reset"
-        datatype={finalDatatype}
-        onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-        id={id + "." + 1}
-      />
-      <IconButton
-        sx={{
-          visibility: visibility,
-        }}
-        variant={"utility"}
-        onClick={removeAtId}
-        icon={Delete}
-        iconName="delete"
-        datatype={finalDatatype}
-        onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-        id={id + "." + 2}
-      />
     </div>
   );
 };

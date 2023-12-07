@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useId, useRef, useState, ReactNode, FC } from "react";
 import { Line as ChartLine, Doughnut as ChartDonut, Bar as ChartBar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -14,18 +14,16 @@ import {
   ChartData,
   ChartOptions,
 } from "chart.js";
-import { useMidState, useMidAction } from "@Context/useMid";
 import {
   TIME_BEFORE_RESET_FOCUS,
   barOptions,
   lineOptions,
   donutOptions,
 } from "../utils/charts/options";
-import { ChartContainer } from "@Components/Containers";
 import { focusOnBar, focusOnLine, focusOndonut } from "../utils/charts/helpers";
-import { findSum } from "@Utils/utils";
-import { cssModules } from "@Components/styles";
-import { LineProps, BarProps, DonutProps } from "@Types";
+import { arrayify, findSum } from "@Utils/utils";
+import { cssModules, getCardStyles } from "@Components/styles";
+import { LineProps, BarProps, DonutProps, FocusActionsType, FocusStatesType } from "@Types";
 
 ChartJS.register(
   CategoryScale,
@@ -44,54 +42,99 @@ type ChartProps = {
   lines: ChartData<"line">;
   bars: ChartData<"bar">;
   donuts: ChartData<"doughnut">;
+  focusActions: FocusActionsType;
+  focusStates: Omit<FocusStatesType, "noFocus"> & { color: string };
 };
-const Charts = ({ isOpen, lines, bars, donuts }: ChartProps) => {
-  const { isFocus } = useMidState();
-  const { focusActions } = useMidAction();
-  const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
-  const { resetFocus } = focusActions;
 
-  const currentlyFocused = isFocus.some((isFocused) => isFocused);
+const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: ChartProps) => {
+  // console.time("Charts");
+  const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
+
+  const { focusMap, onlyOneFocus, color } = focusStates;
+  const { resetFocus } = focusActions;
 
   useEffect(() => {
     intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
     return () => {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
     };
-  }, [isFocus]);
+  }, [focusMap]);
 
   const handleResetFocus = () => {
-    if (currentlyFocused) resetFocus(); // only one focused
+    if (onlyOneFocus) resetFocus(); // only one focused
     if (intervalIdRef.current) clearInterval(intervalIdRef.current); // if interval all ready set in useEffect, clear it, already have one
   };
 
   let focusedLine = lines,
     focusedBar = bars,
-    focusedDonut = donuts,
-    focusedColor = "rgba(255,255,255, 0.3)";
+    focusedDonut = donuts;
 
-  if (currentlyFocused) {
-    const focusedIndex = isFocus.findIndex((isFocused) => isFocused);
-    focusedBar = focusOnBar(focusedIndex, bars);
-    focusedLine = focusOnLine(focusedIndex, lines);
-    focusedDonut = focusOndonut(focusedIndex, donuts);
-    focusedColor = findFocusedColor(focusedDonut) || "rgba(255,255,255, 0.3)";
+  if (onlyOneFocus.focused) {
+    focusedBar = focusOnBar(onlyOneFocus.index, bars);
+    focusedLine = focusOnLine(onlyOneFocus.index, lines);
+    focusedDonut = focusOndonut(onlyOneFocus.index, donuts);
   }
 
   return (
-    <ChartContainer isOpen={isOpen} color={focusedColor}>
-      <Line data={currentlyFocused ? focusedLine : lines} options={lineOptions} type="line" />
-      <Bar data={currentlyFocused ? focusedBar : bars} options={barOptions} type="bar" />
-      <Doughnut
-        data={currentlyFocused ? focusedDonut : donuts}
-        options={donutOptions}
-        type="donut"
-      />
-    </ChartContainer>
+    <>
+      <ChartContainer isOpen={isOpen} color={color || "rgba(255,255,255, 0.3)"}>
+        <Line data={onlyOneFocus ? focusedLine : lines} options={lineOptions} type="line" />
+        <Bar data={onlyOneFocus ? focusedBar : bars} options={barOptions} type="bar" />
+        <Doughnut data={onlyOneFocus ? focusedDonut : donuts} options={donutOptions} type="donut" />
+      </ChartContainer>
+      {/* {console.timeEnd("Charts")} */}
+    </>
   );
 };
 
 export default Charts;
+
+type LocalChartType = "donut" | "line" | "bar";
+type ChildWithProps = ReactNode & { props: { type: LocalChartType } };
+type Props = {
+  children: ChildWithProps[] | ChildWithProps;
+  isOpen: boolean;
+  color: string;
+};
+const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
+  const childrenArr = arrayify(children);
+  const id = useId().replace(/:/g, "_");
+
+  const back = getCardStyles("chart-back");
+  const donutBack = getCardStyles("donut-back");
+
+  const getClasses = (chartType: LocalChartType) => {
+    if (chartType === "donut") return getCardStyles("donut");
+    if (chartType === "line") return getCardStyles("bar");
+    if (chartType === "bar") return getCardStyles("line");
+  };
+
+  return (
+    <section className="charts-ctn">
+      {isOpen &&
+        children &&
+        childrenArr.map((child, i) => {
+          const chartType = child.props.type;
+          const finalId = `${id}${chartType}`;
+
+          const classes = getClasses(chartType);
+
+          return (
+            <div
+              style={{ boxShadow: `0px 0px 1px 1px ${color}` }} // , borderRadius: "50%"
+              key={i}
+              className={chartType === "donut" ? donutBack : back}
+            >
+              <figure id={finalId} className={classes}>
+                {child}
+              </figure>
+            </div>
+          );
+        })}
+    </section>
+  );
+};
+
 interface HasBothAxis extends ChartOptions {
   scales: {
     x: {

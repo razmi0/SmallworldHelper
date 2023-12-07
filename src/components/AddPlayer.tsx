@@ -1,76 +1,77 @@
-import { ChangeEvent, MutableRefObject, useCallback, useRef } from "react";
+import { ChangeEvent, MutableRefObject, useCallback, useRef, useState } from "react";
 import { KeyboardManager, Position, RefManager } from "@Components/Utils";
 import { SoftInput } from "@Components/Inputs";
-import { useMidAction, useMidState } from "@Context/useMid";
 import { useNotif } from "@Context/useNotif";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { keys, validateIntOnChange } from "../utils/players/helpers";
 import { beautify } from "@Utils/utils";
 import { getCardStyles } from "@Components/styles";
 import { ContainerProps } from "@Types";
+import { FocusActionsType } from "../types/types";
+import { CloseButton } from "./Buttons";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
   isOpen: boolean;
-  toggleOpenAddPlayer: () => void;
+  toggleCard: () => void;
   names: string[];
+  changeFocus: FocusActionsType["changeFocus"];
 };
-const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPlayerProps) => {
+const AddPlayerCard = ({ addPlayer, isOpen, toggleCard, names, changeFocus }: AddPlayerProps) => {
+  const [newName, setNewName] = useState("");
+  const [startScore, setStartScore] = useState<number | string>(0);
   const { post } = useNotif();
-  const { newPlayerName, startScore } = useMidState();
-  const { addPlayerActions, focusActions } = useMidAction();
-  const { isOnFocus } = focusActions;
-  const { setNewPlayerName, setStartScore } = addPlayerActions;
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
 
-  useClickOutside(ref, () => {
-    if (isOpen) {
-      toggleCard();
-    }
-  });
-
-  const addPlayerAction = useCallback(() => {
-    const newName = beautify(newPlayerName);
-    if (names.includes(newName)) {
-      post({
-        type: "warning",
-        message: `${newName} already taken`,
-      });
-    }
-    addPlayer(newName, startScore as number);
-    setNewPlayerName("");
+  const toggleCardAndReset = () => {
+    toggleCard();
     setStartScore(0);
-  }, [newPlayerName, startScore]); // newPlayerName, startScore
-
-  const handleInputValidation = () => {
-    if (!newPlayerName) return;
-    addPlayerAction();
   };
 
+  useClickOutside(ref, () => isOpen && toggleCardAndReset());
+
+  const addNewPlayer = useCallback(() => {
+    const newBeautifulName = beautify(newName);
+    if (names.includes(newBeautifulName)) {
+      post({
+        type: "warning",
+        message: `${newBeautifulName} is already taken`,
+      });
+    }
+    addPlayer(newBeautifulName, startScore as number);
+    setNewName("");
+    setStartScore(0);
+  }, [newName, startScore]); // newPlayerName, startScore
+
   const handleStartScoreChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const raw = e.currentTarget.value;
-    const newScore: string | number | undefined = validateIntOnChange(raw);
-    if (!newScore) return;
+    const rawScore = e.currentTarget.value;
+    const newScore: string | number | undefined = validateIntOnChange(rawScore);
+    if (!newScore && newScore !== 0) return;
     setStartScore(newScore);
   };
 
-  const toggleCard = () => {
-    toggleOpenAddPlayer();
-    setStartScore(0);
+  const handleNewNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newName = e.currentTarget.value;
+    if (!newName && newName.length !== 0) return;
+    setNewName(newName);
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === keys.ESCAPE) {
-      toggleCard();
-      isOnFocus(0, true);
-    }
-    if (e.key === keys.ENTER) {
-      handleInputValidation();
-    }
-    if (e.key === keys.BACKSPACE) {
-      if (startScore.toString().length === 1) {
-        setStartScore(0);
-      }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case keys.ESCAPE:
+        toggleCardAndReset();
+        changeFocus(0, true);
+        break;
+      case keys.ENTER:
+        addNewPlayer();
+        break;
+      case keys.BACKSPACE:
+        if (startScore.toString().length === 1) {
+          setStartScore(0);
+        }
+        break;
+      default:
+        break;
     }
   };
 
@@ -79,15 +80,15 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPla
   return (
     <>
       {isOpen && (
-        <Position variant="nav-extension">
+        <Position variant="absolute-center">
           <RefManager ref={ref}>
-            <KeyboardManager onKeyUp={handleKeyUp}>
+            <KeyboardManager onKeyDown={handleKeyDown}>
               <AddStyles>
                 <SoftInput
                   label="Name"
                   pseudoName="0_addPlayer"
-                  onChange={(e) => setNewPlayerName(e.currentTarget.value)}
-                  value={newPlayerName}
+                  onChange={(e) => handleNewNameChange(e)}
+                  value={newName}
                 />
                 <SoftInput
                   label="Start score"
@@ -98,6 +99,7 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleOpenAddPlayer, names }: AddPla
               </AddStyles>
             </KeyboardManager>
           </RefManager>
+          <CloseButton onClick={toggleCardAndReset} />
         </Position>
       )}
     </>

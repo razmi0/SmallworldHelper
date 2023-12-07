@@ -117,7 +117,7 @@ export const blurInput = (inputsRefs: HTMLInputElement[]) => {
   });
 };
 
-export const initInputsRefs = (size: number) => {
+export const createRefsArr = (size: number) => {
   return new Array(size)
     .fill(null)
     .map(() => createRef<HTMLInputElement>()) as unknown as HTMLInputElement[];

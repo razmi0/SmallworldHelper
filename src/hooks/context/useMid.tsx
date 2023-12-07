@@ -1,4 +1,12 @@
-import { ReactNode, createContext, useCallback, useContext, useMemo, useReducer } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+} from "react";
 import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helpers";
 
 type newScoreType = number | string; // string => transitional value of input === "-"
@@ -7,7 +15,6 @@ type IntermediateStates = {
   /**
    * @description inputs tracker
    */
-  isFocus: boolean[]; // useMap
   newScores: newScoreType[]; // useMap
   startScore: newScoreType; // useMidState
   newPlayerName: string; // useMidState
@@ -16,21 +23,18 @@ type IntermediateStates = {
 };
 
 type IntermediateActions =
-  | { type: "CHANGE_FOCUS"; payload: { index: number; value: boolean } } // useMap
-  | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
-  | { type: "RESET_FOCUS" } // useMap
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: newScoreType } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useMidState
   | { type: "SET_START_SCORE"; payload: { score: newScoreType } } // useMidState
   | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useMidState
   | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useMidState
 
-type IntermediateDispatchContextType = (actions: IntermediateActions) => void;
-
 // CONTEXT
 //--
-const IntermediateContext = createContext<IntermediateStates | null>(null);
-const IntermediateDispatchContext = createContext<IntermediateDispatchContextType | null>(null);
+const IntermediateContext = createContext<{
+  states: IntermediateStates;
+  dispatch: Dispatch<IntermediateActions>;
+} | null>(null);
 
 // REDUCER
 //--
@@ -55,35 +59,9 @@ const intermediateReducer = (
       };
     }
 
-    case "CHANGE_FOCUS": {
-      const { index, value } = action.payload;
-      const { isFocus } = state;
-
-      // MATRICE 4 by 3 on isFocus ?
-
-      return {
-        ...state,
-        isFocus: isFocus.map((item, i) => (i === index ? value : item)),
-      };
-    }
-
-    case "CHANGE_FOCUS_LENGTH": {
-      const { newLength, fillValue } = action.payload;
-      return {
-        ...state,
-        isFocus: resizeArray(state.isFocus, newLength, fillValue),
-        newScores: resizeArray(state.newScores, newLength, 0),
-      };
-    }
-
-    case "RESET_FOCUS": {
-      return {
-        ...state,
-        isFocus: state.isFocus.map(() => false),
-      };
-    }
-
     case "SET_NEW_SCORES": {
+      console.log("SET_NEW_SCORES");
+
       const { index, newScore } = action.payload;
       let newScores = state.newScores;
 
@@ -97,16 +75,6 @@ const intermediateReducer = (
       };
     }
 
-    case "SET_NEW_PLAYER_NAME": {
-      const { name } = action.payload;
-      if (!name && name.length !== 0) return state;
-      return { ...state, newPlayerName: name };
-    }
-    case "SET_START_SCORE": {
-      const { score } = action.payload;
-      if (!score && score !== 0) return state;
-      return { ...state, startScore: score };
-    }
     default:
       return state;
   }
@@ -130,90 +98,54 @@ export const IntermediateProvider = ({
     []
   );
 
-  const [state, dispatch] = useReducer(intermediateReducer, initial);
+  const [states, dispatch] = useReducer(intermediateReducer, initial);
 
   return (
-    <IntermediateContext.Provider value={state}>
-      <IntermediateDispatchContext.Provider value={dispatch}>
-        {children}
-      </IntermediateDispatchContext.Provider>
+    <IntermediateContext.Provider value={{ states, dispatch }}>
+      {children}
     </IntermediateContext.Provider>
   );
 };
 
 // HOOKS
 //--
-export const useMidState = () => {
-  const states = useContext(IntermediateContext);
-  if (states === null) {
-    throw new Error("useMidState must be used within a IntermediateProvider");
-  }
 
-  const { isFocus, newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states;
-
-  const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
-  const onlyOneFocus = isFocus.filter((focus) => focus).length === 1;
-
-  return {
-    isFocus,
-    newScores,
-    startScore,
-    newPlayerName,
-    savePlayers,
-    loadPlayers,
-    storageEvent,
-    onlyOneFocus,
-  };
-};
-
-export const useMidAction = () => {
-  const dispatch = useContext(IntermediateDispatchContext);
-  if (dispatch === null) {
+export const useMid = () => {
+  const { states, dispatch } = useContext(IntermediateContext) || {};
+  if (!dispatch || !states) {
     throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
-  /**
-   * @description change focus at index
-   */
-  const isOnFocus = useCallback((index: number, value: boolean) => {
-    dispatch({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
-  }, []);
+  const { newScores, savePlayers, loadPlayers } = states; // isFocus,
 
-  /**
-   *  @description change the length of the isFocus array
-   */
-  const setIsOnFocus = useCallback((newLength: number, fillValue: boolean) => {
-    dispatch({
-      type: "CHANGE_FOCUS_LENGTH",
-      payload: { newLength: newLength, fillValue: fillValue },
-    });
-  }, []);
-
-  const resetFocus = useCallback(() => {
-    dispatch({ type: "RESET_FOCUS" });
-  }, []);
+  const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
 
   const setNewScores = useCallback((index: number, newScore: number | string) => {
     dispatch({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
   }, []);
-  const setNewPlayerName = useCallback((name: string) => {
-    dispatch({ type: "SET_NEW_PLAYER_NAME", payload: { name: name } });
-  }, []);
-  const setStartScore = useCallback((score: newScoreType) => {
-    dispatch({ type: "SET_START_SCORE", payload: { score: score } });
-  }, []);
+
   const setSavePlayers = useCallback((payload: boolean) => {
     dispatch({ type: "SET_SAVE_PLAYERS", payload });
   }, []);
+
   const setLoadPlayers = useCallback((payload: boolean) => {
     dispatch({ type: "SET_LOAD_PLAYERS", payload });
   }, []);
 
   return {
-    focusActions: { resetFocus, isOnFocus, setIsOnFocus }, // as [typeof isOnFocus, typeof setIsOnFocus]
-    addPlayerActions: { setNewPlayerName, setStartScore },
-    storageActions: { setSavePlayers, setLoadPlayers },
-    setNewScores,
+    /**
+     * @description local add player hook
+     */
+    setNewScores, // addPlayer
+    newScores, // addPlayer
+
+    /**
+     * @description context
+     */
+    storageActions: { setSavePlayers, setLoadPlayers }, // storage
+    savePlayers, // storage
+    loadPlayers, // storage
+    storageEvent, // storage
   };
 };
 

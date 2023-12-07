@@ -13,7 +13,6 @@
 - [x] Save / Load
 - [x] Keyboard navigation
 - [ ] Clock
-- [ ]
 
 ## REFACTORING
 
@@ -34,7 +33,8 @@
 - [x] AddPlayer
 - [x] keyboard Navigation fetch element in the dom not virtual dom (slower)
 - [x] Add total points to middle of donut chart
-- [ ] Add beautifuld body background animation https://reflect.app/
+- [x] Add beautifuld body background animation https://reflect.app/
+- [ ] Move focusReset timer in his hook
 
 ## BUGS & PROPOSITIONS
 

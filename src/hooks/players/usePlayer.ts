@@ -198,6 +198,8 @@ export const usePlayer = () => {
 
   return {
     playersStates,
+    playerSize: playersStates.players.length,
+    playersNames: playersStates.players.map((player) => player.name),
     playersActions: { setPlayers, addPlayer, removePlayer, resetScore, updateScore },
   };
 };

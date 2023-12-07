@@ -1,18 +1,7 @@
 import { MutableRefObject, useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { useMidAction } from "@Context/useMid";
 import { Header } from "@Components/Containers";
-import IconButton, {
-  Chart,
-  AddPlayer as IconAddPlayer,
-  EyeClose,
-  EyeOpen,
-  Load,
-  Undo,
-  Redo,
-  Save,
-  Menu,
-} from "@Components/Icons";
+import IconButton from "@Components/Icons";
 import { cssModules } from "@Components/styles";
 import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 
@@ -20,22 +9,24 @@ type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUn
 
 type NavProps = {
   playerSize: number;
-  toggleOpenAddPlayer: (newState?: boolean) => void;
-  toggleOpenCharts: () => void;
-  toggleHideScore: () => void;
-  toggleOpenNav: () => void;
+  togglers: {
+    hideScore: () => void;
+    openAddPlayer: (newState?: boolean | undefined) => void;
+    openNav: (newState?: boolean | undefined) => void;
+    openCharts: () => void;
+  };
   isNavOpen: boolean;
   isScoreHidden: boolean;
   undoRedoStates: NavUndoRedoStates;
   undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
-  storageActions: ReturnType<typeof useMidAction>["storageActions"];
+  storageActions: {
+    setSavePlayers: (payload: boolean) => void;
+    setLoadPlayers: (payload: boolean) => void;
+  };
 };
 
 const Nav = ({
-  toggleHideScore,
-  toggleOpenAddPlayer,
-  toggleOpenCharts,
-  toggleOpenNav,
+  togglers,
   isNavOpen,
   undoRedoStates,
   undoRedoActions,
@@ -45,58 +36,34 @@ const Nav = ({
   const { setLoadPlayers, setSavePlayers } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
+  const { hideScore, openAddPlayer, openCharts, openNav } = togglers;
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
 
-  useClickOutside(navRef, () => {
-    if (isNavOpen && navRef) toggleOpenNav();
-  });
+  useClickOutside(navRef, () => isNavOpen && navRef && openNav());
 
   return (
     <Header>
       <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
-        <IconButton variant="nav" iconName="menu" icon={Menu} onClick={() => toggleOpenNav()} />
+        <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
         {isNavOpen && (
           <>
+            <IconButton variant="nav" iconName="load" onClick={() => setLoadPlayers(true)} />
+            <IconButton variant="nav" iconName="save" onClick={() => setSavePlayers(true)} />
+            <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
+            <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
             <IconButton
               variant="nav"
-              icon={Load}
-              iconName="load"
-              onClick={() => setLoadPlayers(true)}
+              iconName={isScoreHidden ? "eyeclose" : "eyeopen"}
+              onClick={() => hideScore()}
             />
             <IconButton
               variant="nav"
-              icon={Save}
-              onClick={() => setSavePlayers(true)}
-              iconName="save"
-            />
-            <IconButton
-              variant="nav"
-              icon={IconAddPlayer}
-              iconName="addplayer"
-              onClick={() => toggleOpenAddPlayer()}
-            />
-            <IconButton
-              variant="nav"
-              icon={Chart}
-              iconName="chart"
-              onClick={() => toggleOpenCharts()}
-            />
-            <IconButton
-              variant="nav"
-              icon={isScoreHidden ? EyeClose : EyeOpen}
-              iconName="eyes"
-              onClick={() => toggleHideScore()}
-            />
-            <IconButton
-              variant="nav"
-              icon={Undo}
               iconName="undo"
               onClick={() => undo()}
               disabled={!isUndoPossible}
             />
             <IconButton
               variant="nav"
-              icon={Redo}
               iconName="redo"
               onClick={() => redo()}
               disabled={!isRedoPossible}

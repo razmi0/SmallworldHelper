@@ -111,6 +111,18 @@ const NAV_STYLES: SvgDataType = {
       message: "Hide scores",
     },
 
+    eyeopen: {
+      index: 6,
+      color: ["#646cff", "#609dff"],
+      message: "Show scores",
+    },
+
+    eyeclose: {
+      index: 6,
+      color: ["#646cff", "#609dff"],
+      message: "Hide scores",
+    },
+
     /* position 7 */
 
     undo: {
@@ -135,15 +147,22 @@ const NAV_STYLES: SvgDataType = {
 // ICON DATA FOR UTILITY BUTTONS IN PLAYERLIST COMPONENT
 //--
 const UTILITY_STYLES: SvgDataType = {
-  size: ["25px", "25px"],
-  filter: ["4px", "1px"],
-  transition: "all 0.2s ease-in-out",
+  size: ["27px", "27px"],
+  transition: "all 0.2s linear",
+  filter: ["0px", "0px"],
   icons: {
-    delete: {
-      color: ["#e14512", "#e14512"],
+    close: {
+      color: ["#242424", "#242424"],
+
+      // message: "Remove player",
     },
     reset: {
-      color: ["#e19f12", "#e19f12"],
+      color: ["#9b9b9b", "#9b9b9b"],
+      size: ["22px", "22px"],
+      transform() {
+        return `translate(0px, 2px)`;
+      },
+      // message: "Reset score",
     },
   },
 };
@@ -184,13 +203,15 @@ const HEADING_STYLES: SvgDataType = {
     },
   },
 };
-
 const TOASTER_STYLES: SvgDataType = {
   size: ["27px", "27px"],
   transition: "all 1s ease-in-out",
   filter: ["0px", "0px"],
   icons: {
     close: {
+      color: ["#242424", "#242424"],
+    },
+    reset: {
       color: ["#242424", "#242424"],
     },
   },
