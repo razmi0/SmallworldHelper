@@ -128,22 +128,7 @@
 
 .addplayer-ctn {
   gap: 20px;
-  view-transition-name: add-player-vt;
   padding: 30px 20px;
-}
-
-::view-transition-new(add-player-vt) {
-  animation-name: add-player-animation;
-  animation-duration: 0.4s;
-  animation-fill-mode: both;
-  animation-direction: alternate;
-}
-
-::view-transition-old(add-player-vt) {
-  animation-name: add-player-animation;
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-  animation-direction: reverse;
 }
 
 @keyframes add-player-animation {
