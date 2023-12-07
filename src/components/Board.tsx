@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useMid } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { Star, IconHeading } from "@Components/Icons";
+import { IconHeading } from "@Components/Icons";
 import { BlockyInput } from "@Components/Inputs";
 import { EventsManager, KeyboardManager } from "@Components/Utils";
 import {
@@ -39,15 +39,6 @@ type BoardProps = {
   focusActions: Omit<FocusActionsType, "changeFocusLength">;
   focusStates: Omit<FocusStatesType, "noFocus">;
 };
-
-// type PlayerUtilitiesProps = {
-//   id: number;
-//   reset: (id: number) => void;
-//   remove: (id: number) => void;
-//   focused: boolean;
-//   datatype?: KeyboardNavigationIdType;
-//   onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
-// };
 
 // COMPONENTS
 //--
@@ -206,7 +197,7 @@ const Board = ({
                           animationName="rotate"
                           isHover={focusMap[i]}
                           color={color}
-                          icon={Star}
+                          iconName="star"
                           variant="heading"
                         />
                         {hideScore ? "***" : victoryPtn}
@@ -278,51 +269,3 @@ const PlayerText = ({ children, color, ...props }: PlayerTextProps) => {
     </div>
   );
 };
-
-// const PlayerUtilities = ({
-//   id,
-//   reset,
-//   remove,
-//   focused,
-//   datatype,
-//   onKeyUp,
-// }: PlayerUtilitiesProps) => {
-//   const removeAtId = useCallback(() => remove(id), [id]);
-//   const resetAtId = useCallback(() => reset(id), [id]);
-
-//   const visibility = !focused ? "hidden" : "initial";
-//   const finalDatatype = datatype ? datatype : "";
-
-//   return (
-//     <>
-//       {focused && (
-//         <div className={cssModules.player["player-utilities-ctn"]}>
-//           <IconButton
-//             sx={{
-//               visibility: visibility,
-//             }}
-//             variant={"utility"}
-//             onClick={resetAtId}
-//             icon={Reset}
-//             iconName="reset"
-//             datatype={finalDatatype}
-//             onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-//             id={id + "." + 1}
-//           />
-//           <IconButton
-//             sx={{
-//               visibility: visibility,
-//             }}
-//             variant={"utility"}
-//             onClick={removeAtId}
-//             icon={Delete}
-//             iconName="delete"
-//             datatype={finalDatatype}
-//             onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-//             id={id + "." + 2}
-//           />
-//         </div>
-//       )}
-//     </>
-//   );
-// };

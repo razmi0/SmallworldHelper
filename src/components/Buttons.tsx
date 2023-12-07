@@ -1,12 +1,13 @@
 import { CSSProperties, ReactNode } from "react";
-import IconButton, { Close, Reset } from "./Icons";
+import IconButton from "./Icons";
 import { arrayify } from "@/utils/utils";
+
 export const CloseButton = ({ onClick }: { onClick: () => void }) => {
-  return <IconButton onClick={onClick} icon={Close} iconName="close" variant="toaster" />;
+  return <IconButton onClick={onClick} iconName="close" variant="utility" />;
 };
 
 export const ResetButton = ({ onClick }: { onClick: () => void }) => {
-  return <IconButton onClick={onClick} icon={Reset} iconName="reset" variant="toaster" />;
+  return <IconButton onClick={onClick} iconName="reset" variant="utility" />;
 };
 
 type ChildWithProps = ReactNode & { props: { style: CSSProperties } };
@@ -17,8 +18,6 @@ type Props = {
 
 export const UtilityButtonGroup = ({ children, isOpen }: Props) => {
   const childrenArr = arrayify(children);
-
-  console.log(childrenArr[0].props.style);
 
   if (!isOpen) return null;
 

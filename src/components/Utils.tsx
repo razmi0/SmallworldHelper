@@ -8,7 +8,7 @@ import {
   forwardRef,
   useMemo,
 } from "react";
-import IconButton, { Close, AddPlayer as IconAddPlayer } from "@Components/Icons";
+import IconButton from "@Components/Icons";
 import { ContainerProps } from "@Types";
 import { useNotif } from "@Context/useNotif";
 import { cssModules, getCardStyles } from "@Components/styles";
@@ -155,7 +155,6 @@ const ToastBody = ({ children, onClick }: ToastHeaderProps) => {
       <div className={cssModules.utils["toast-body"]}>{children}</div>
       <IconButton
         onClick={onClick}
-        icon={Close}
         iconName="close"
         variant="toaster"
         sx={{ position: "absolute", right: 0 }}
@@ -341,7 +340,6 @@ export const FreshStartButton = ({
           <IconButton
             style={{ cursor: "pointer", transform: "scale(1.2)" }}
             variant="nav"
-            icon={IconAddPlayer}
             iconName="addplayer"
             onClick={toggleOpenAddPlayer}
           />

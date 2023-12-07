@@ -97,6 +97,7 @@ export type SvgDataType = {
       zIndex?: () => number;
       getAnimation?: () => string;
       message?: string;
+      size?: [string, string];
     };
   };
   animations?: {
@@ -115,7 +116,7 @@ export type SvgDataType = {
 
 export type VariantType = "utility" | "nav" | "chart" | "player" | "heading" | "toaster" | "";
 export interface IconProps {
-  icon: ComponentType<SvgProps>;
+  icon?: ComponentType<SvgProps>;
   iconName: IconName;
   sx?: React.CSSProperties;
   className?: string;
@@ -126,7 +127,8 @@ export interface IconProps {
 }
 
 export interface IconHeadingProps {
-  icon: ComponentType<SvgProps>;
+  icon?: ComponentType<SvgProps>;
+  iconName: IconName;
   color: string;
   svgData?: SvgDataType;
   className?: string;
@@ -144,13 +146,14 @@ export type IconName =
   | "save"
   | "addplayer"
   | "chart"
-  | "eyes"
+  | "eyeopen"
+  | "eyeclose"
   | "reset"
   | "delete"
   | "undo"
   | "redo"
-  | "close";
-
+  | "close"
+  | "star";
 export type KeyboardNavigationIdType = "soft-input" | "utility";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, IconProps {
