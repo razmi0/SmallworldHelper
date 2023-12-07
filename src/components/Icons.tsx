@@ -51,6 +51,7 @@ const getColor = (iconName: string, svgData: SvgDataType, idxThemedColr: number)
 /** */
 
 const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconProps) => {
+  console.time("Icon");
   const [isHover, setIsHover] = useState(false);
   const { theme } = useTheme();
 
@@ -75,6 +76,8 @@ const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconPro
 
   let size: [string, string] = ["0px", "0px"];
   size = svgData.icons[iconName].size ? svgData.icons[iconName].size ?? size : svgData.size;
+
+  console.timeEnd("Icon");
 
   return (
     <div
