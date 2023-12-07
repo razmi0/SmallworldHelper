@@ -127,7 +127,7 @@ const App = () => {
         <AddPlayerCard
           addPlayer={addPlayer}
           isOpen={toggleStates.isAddPlayerOpen}
-          toggleOpenAddPlayer={toggleActions.openAddPlayer}
+          toggleCard={toggleActions.openAddPlayer}
           names={playersNames}
           changeFocus={focusActions.changeFocus}
         />

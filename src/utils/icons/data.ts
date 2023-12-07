@@ -193,6 +193,9 @@ const TOASTER_STYLES: SvgDataType = {
     close: {
       color: ["#242424", "#242424"],
     },
+    reset: {
+      color: ["#242424", "#242424"],
+    },
   },
 };
 

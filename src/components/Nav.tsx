@@ -49,9 +49,7 @@ const Nav = ({
   const { hideScore, openAddPlayer, openCharts, openNav } = togglers;
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
 
-  useClickOutside(navRef, () => {
-    if (isNavOpen && navRef) openNav();
-  });
+  useClickOutside(navRef, () => isNavOpen && navRef && openNav());
 
   return (
     <Header>

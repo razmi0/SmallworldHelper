@@ -15,7 +15,6 @@ type IntermediateStates = {
   /**
    * @description inputs tracker
    */
-  // isFocus: boolean[]; // useMap
   newScores: newScoreType[]; // useMap
   startScore: newScoreType; // useMidState
   newPlayerName: string; // useMidState
@@ -24,9 +23,6 @@ type IntermediateStates = {
 };
 
 type IntermediateActions =
-  // | { type: "CHANGE_FOCUS"; payload: { index: number; value: boolean } } // useMap
-  // | { type: "CHANGE_FOCUS_LENGTH"; payload: { newLength: number; fillValue: boolean } } // useMap
-  // | { type: "RESET_FOCUS" } // useMap
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: newScoreType } } // useMap
   | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useMidState
   | { type: "SET_START_SCORE"; payload: { score: newScoreType } } // useMidState
@@ -62,34 +58,6 @@ const intermediateReducer = (
         loadPlayers: payload,
       };
     }
-
-    // case "CHANGE_FOCUS": {
-    //   const { index, value } = action.payload;
-    //   const { isFocus } = state;
-
-    //   // MATRICE 4 by 3 on isFocus ?
-
-    //   return {
-    //     ...state,
-    //     isFocus: isFocus.map((item, i) => (i === index ? value : item)),
-    //   };
-    // }
-
-    // case "CHANGE_FOCUS_LENGTH": {
-    //   const { newLength, fillValue } = action.payload;
-    //   return {
-    //     ...state,
-    //     isFocus: resizeArray(state.isFocus, newLength, fillValue),
-    //     newScores: resizeArray(state.newScores, newLength, 0),
-    //   };
-    // }
-
-    // case "RESET_FOCUS": {
-    //   return {
-    //     ...state,
-    //     isFocus: state.isFocus.map(() => false),
-    //   };
-    // }
 
     case "SET_NEW_SCORES": {
       const { index, newScore } = action.payload;
@@ -159,28 +127,6 @@ export const useMid = () => {
   const { newScores, startScore, newPlayerName, savePlayers, loadPlayers } = states; // isFocus,
 
   const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
-  // const onlyOneFocus = isFocus.filter((focus: boolean) => focus).length === 1;
-
-  // /**
-  //  * @description change focus at index
-  //  */
-  // const isOnFocus = useCallback((index: number, value: boolean) => {
-  //   dispatch({ type: "CHANGE_FOCUS", payload: { index: index, value: value } });
-  // }, []);
-
-  // /**
-  //  *  @description change the length of the isFocus array
-  //  */
-  // const setIsOnFocus = useCallback((newLength: number, fillValue: boolean) => {
-  //   dispatch({
-  //     type: "CHANGE_FOCUS_LENGTH",
-  //     payload: { newLength: newLength, fillValue: fillValue },
-  //   });
-  // }, []);
-
-  // const resetFocus = useCallback(() => {
-  //   dispatch({ type: "RESET_FOCUS" });
-  // }, []);
 
   const setNewScores = useCallback((index: number, newScore: number | string) => {
     dispatch({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
@@ -203,13 +149,6 @@ export const useMid = () => {
   }, []);
 
   return {
-    /**
-     * @description reducer + hook
-     */
-    // focusActions: { resetFocus, isOnFocus, setIsOnFocus }, // focus
-    // isFocus, // focus
-    // onlyOneFocus, // focus
-
     /**
      * @description local add player hook
      */

@@ -172,23 +172,35 @@ const ToastMessage = ({ message }: { message: string }) => {
   );
 };
 
-interface FocusManagerProps extends ContainerProps {
+interface EventsManagerProps extends ContainerProps {
   onFocus?: () => void;
   onBlur?: () => void;
   onClick: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   as?: ElementType;
 }
-export const FocusManager = ({
+export const EventsManager = ({
   children,
   onFocus,
   onBlur,
   onClick,
+  onMouseLeave,
+  onMouseEnter,
   className = "",
   as: Element = "div",
-}: FocusManagerProps) => {
+}: EventsManagerProps) => {
   const id = `${useId()}_focus_manager`;
   return (
-    <Element id={id} onFocus={onFocus} onBlur={onBlur} onClick={onClick} className={className}>
+    <Element
+      id={id}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={className}
+    >
       {children}
     </Element>
   );
@@ -199,7 +211,7 @@ export const Separator = () => {
 };
 
 interface KeyboardManagerProps extends ContainerProps {
-  onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   as?: ElementType;
 }
@@ -339,12 +351,12 @@ export const FreshStartButton = ({
   );
 };
 
-type PositionType = "nav-extension";
+type PositionType = "absolute-center";
 interface PositionContainerProps extends ContainerProps {
   variant: PositionType;
 }
 export const Position = ({ variant, children }: PositionContainerProps) => {
   let classes: string;
-  variant === "nav-extension" ? (classes = cssModules.utils["nav-extension"]) : (classes = "");
+  variant === "absolute-center" ? (classes = cssModules.utils["absolute-center"]) : (classes = "");
   return <div className={classes}>{children}</div>;
 };

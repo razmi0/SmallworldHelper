@@ -6,6 +6,7 @@ import { IconProps, IconButtonProps, SvgProps, SvgDataType, IconHeadingProps } f
 import { cssModules } from "@Components/styles";
 
 const DISABLED_COLOR = "#b5179e";
+const NEUTRAL_COLOR = "#9b9b9b";
 
 const getBgColor = (theme: "light" | "dark") => {
   return theme === "light" ? "transparent" : "transparent";
@@ -169,7 +170,9 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     ref
   ) => {
     const svgData = getSvgData(variant ?? "");
-    const transform = animStartAt ? animStartState : svgData?.icons[iconName].transform?.();
+    const transform = animStartAt
+      ? animStartState
+      : svgData?.icons[iconName].transform?.() ?? "none";
     const zIndex = svgData?.icons[iconName].zIndex?.() ?? "auto";
     const transition = svgData?.icons[iconName].transition?.() ?? "none";
 
@@ -202,7 +205,13 @@ IconButton.displayName = "IconButton";
 
 export const Close = ({ size }: SvgProps) => {
   return (
-    <svg width={size[0]} height={size[1]} viewBox="0 0 24.00 24.00" fill="none" stroke="#9b9b9b">
+    <svg
+      width={size[0]}
+      height={size[1]}
+      viewBox="0 0 24.00 24.00"
+      fill="none"
+      stroke={NEUTRAL_COLOR}
+    >
       <g strokeWidth="0"></g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
@@ -210,7 +219,7 @@ export const Close = ({ size }: SvgProps) => {
           <path
             id="Vector"
             d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16"
-            stroke="#9b9b9b"
+            stroke={NEUTRAL_COLOR}
             strokeWidth="1"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -492,7 +501,7 @@ export const Delete = ({ color, size }: SvgProps) => {
   );
 };
 
-export const Reset = ({ color, size }: SvgProps) => {
+export const Reset = ({ color = NEUTRAL_COLOR, size }: SvgProps) => {
   return (
     <svg fill={color} width={size[0]} height={size[1]} viewBox="-102.4 -102.4 716.80 716.80">
       <g strokeWidth="0"></g>

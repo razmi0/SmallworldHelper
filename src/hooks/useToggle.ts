@@ -54,9 +54,7 @@ const toggleReducer = (state: ToggleState, action: ToggleActions): ToggleState =
 // HOOK
 //--
 export const useToggle = () => {
-  const [toggleStates, dispatch] = useReducer(toggleReducer, {
-    ...initialToggleStates,
-  });
+  const [toggleStates, dispatch] = useReducer(toggleReducer, initialToggleStates);
 
   const toggleActions = {
     hideScore: useCallback(() => dispatch({ type: "TOGGLE_HIDE_SCORE" }), []),

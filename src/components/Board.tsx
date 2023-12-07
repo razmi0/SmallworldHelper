@@ -4,15 +4,15 @@ import {
   KeyboardEvent,
   MutableRefObject,
   ReactNode,
-  useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { useMid } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import IconButton, { Delete, Reset, Star, IconHeading } from "@Components/Icons";
+import { Star, IconHeading } from "@Components/Icons";
 import { BlockyInput } from "@Components/Inputs";
-import { FocusManager, KeyboardManager } from "@Components/Utils";
+import { EventsManager, KeyboardManager } from "@Components/Utils";
 import {
   blurInput,
   createRefsArr,
@@ -21,14 +21,9 @@ import {
   navigateTo,
   validateIntOnChange,
 } from "../utils/players/helpers";
-import {
-  ContainerProps,
-  FocusActionsType,
-  FocusStatesType,
-  KeyboardNavigationIdType,
-  Player,
-} from "@Types";
+import { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
+import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -41,18 +36,18 @@ type BoardProps = {
   reset: (id: number) => void;
   remove: (id: number) => void;
   update: (id: number, score: number) => void;
-  focusActions: Omit<FocusActionsType, "resetFocus" | "changeFocusLength">;
+  focusActions: Omit<FocusActionsType, "changeFocusLength">;
   focusStates: Omit<FocusStatesType, "noFocus">;
 };
 
-type PlayerUtilitiesProps = {
-  id: number;
-  reset: (id: number) => void;
-  remove: (id: number) => void;
-  focused: boolean;
-  datatype?: KeyboardNavigationIdType;
-  onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
-};
+// type PlayerUtilitiesProps = {
+//   id: number;
+//   reset: (id: number) => void;
+//   remove: (id: number) => void;
+//   focused: boolean;
+//   datatype?: KeyboardNavigationIdType;
+//   onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
+// };
 
 // COMPONENTS
 //--
@@ -68,20 +63,23 @@ const Board = ({
   children,
 }: BoardProps) => {
   // console.time("Board");
+  const [hoverMap, setHover] = useState<boolean[]>(new Array(players.length).fill(false));
   const { setNewScores, newScores } = useMid();
-  const { changeFocus } = focusActions;
+  const { changeFocus, resetFocus } = focusActions;
   const { focusMap, onlyOneFocus } = focusStates;
 
   const inputsRef = useRef(createRefsArr(players.length));
   const listRef = useRef<HTMLUListElement>(null) as MutableRefObject<HTMLUListElement>;
   const playerSize = players.length;
 
-  // filter: brightness(1.5);
-
-  useClickOutside(listRef, () => blurInput(inputsRef.current));
+  useClickOutside(listRef, () => {
+    blurInput(inputsRef.current);
+    resetFocus();
+  });
 
   useEffect(() => {
     inputsRef.current = createRefsArr(playerSize);
+    setHover(new Array(playerSize).fill(false));
   }, [playerSize]);
 
   const handleKeyUp = (
@@ -147,6 +145,28 @@ const Board = ({
     }
   };
 
+  const events = {
+    blur: (index: number) => {
+      changeFocus(index, false);
+      setNewScores(index, 0);
+    },
+    focus: (index: number) => {
+      changeFocus(index, true);
+    },
+    click: (index: number) => {
+      if (!onlyOneFocus.focused) {
+        changeFocus(index, true);
+      }
+    },
+    hover: (isHover: boolean, index: number) => {
+      setHover((p) => {
+        const newHoverMap = [...p];
+        newHoverMap[index] = isHover;
+        return newHoverMap;
+      });
+    },
+  };
+
   return (
     <>
       <BoardView>
@@ -162,25 +182,21 @@ const Board = ({
             const softValue = newScores[i] ? newScores[i] : "";
 
             return (
-              <FocusManager
+              <EventsManager
                 key={pseudoName}
-                onBlur={() => {
-                  changeFocus(i, false);
-                  setNewScores(i, 0);
-                }}
-                onFocus={() => {
-                  changeFocus(i, true);
-                }}
-                onClick={() => {
-                  if (!onlyOneFocus.focused) {
-                    changeFocus(i, true);
-                  }
-                }}
+                onBlur={() => events.blur(i)}
+                onFocus={() => events.focus(i)}
+                onClick={() => events.click(i)}
+                onMouseEnter={() => events.hover(true, i)}
+                onMouseLeave={() => events.hover(false, i)}
                 as="li"
               >
-                <KeyboardManager onKeyUp={(event) => handleKeyUp(event, id, i)}>
+                <KeyboardManager onKeyDown={(e) => handleKeyUp(e, id, i)}>
                   <PlayerCard color={finalColor}>
-                    <PlayerUtilities id={id} remove={remove} reset={reset} focused={focusMap[i]} />
+                    <UtilityButtonGroup isOpen={hoverMap[i]}>
+                      <CloseButton onClick={() => remove(id)} />
+                      <ResetButton onClick={() => reset(id)} />
+                    </UtilityButtonGroup>
                     <PlayerTextContainer>
                       <PlayerText color={finalColor} id="up">
                         {name}
@@ -205,7 +221,7 @@ const Board = ({
                     />
                   </PlayerCard>
                 </KeyboardManager>
-              </FocusManager>
+              </EventsManager>
             );
           })}
         </ul>
@@ -263,46 +279,50 @@ const PlayerText = ({ children, color, ...props }: PlayerTextProps) => {
   );
 };
 
-const PlayerUtilities = ({
-  id,
-  reset,
-  remove,
-  focused,
-  datatype,
-  onKeyUp,
-}: PlayerUtilitiesProps) => {
-  const removeAtId = useCallback(() => remove(id), [id]);
-  const resetAtId = useCallback(() => reset(id), [id]);
+// const PlayerUtilities = ({
+//   id,
+//   reset,
+//   remove,
+//   focused,
+//   datatype,
+//   onKeyUp,
+// }: PlayerUtilitiesProps) => {
+//   const removeAtId = useCallback(() => remove(id), [id]);
+//   const resetAtId = useCallback(() => reset(id), [id]);
 
-  const visibility = !focused ? "hidden" : "initial";
-  const finalDatatype = datatype ? datatype : "";
+//   const visibility = !focused ? "hidden" : "initial";
+//   const finalDatatype = datatype ? datatype : "";
 
-  return (
-    <div className={cssModules.player["player-utilities-ctn"]}>
-      <IconButton
-        sx={{
-          visibility: visibility,
-        }}
-        variant={"utility"}
-        onClick={resetAtId}
-        icon={Reset}
-        iconName="reset"
-        datatype={finalDatatype}
-        onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-        id={id + "." + 1}
-      />
-      <IconButton
-        sx={{
-          visibility: visibility,
-        }}
-        variant={"utility"}
-        onClick={removeAtId}
-        icon={Delete}
-        iconName="delete"
-        datatype={finalDatatype}
-        onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
-        id={id + "." + 2}
-      />
-    </div>
-  );
-};
+//   return (
+//     <>
+//       {focused && (
+//         <div className={cssModules.player["player-utilities-ctn"]}>
+//           <IconButton
+//             sx={{
+//               visibility: visibility,
+//             }}
+//             variant={"utility"}
+//             onClick={resetAtId}
+//             icon={Reset}
+//             iconName="reset"
+//             datatype={finalDatatype}
+//             onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
+//             id={id + "." + 1}
+//           />
+//           <IconButton
+//             sx={{
+//               visibility: visibility,
+//             }}
+//             variant={"utility"}
+//             onClick={removeAtId}
+//             icon={Delete}
+//             iconName="delete"
+//             datatype={finalDatatype}
+//             onKeyUp={onKeyUp as (e: KeyboardEvent<HTMLButtonElement>) => void}
+//             id={id + "." + 2}
+//           />
+//         </div>
+//       )}
+//     </>
+//   );
+// };
