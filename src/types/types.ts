@@ -70,7 +70,6 @@ export type DonutProps = {
 
 // ICONS
 //--
-
 export type SvgProps = {
   color: string;
   size: [string, string];
@@ -79,7 +78,7 @@ export type SvgProps = {
 
 export type SvgDataType = {
   nbrOfIcons?: number;
-  size: [string, string]; // width, height in px
+  size?: [string, string]; // width, height in px
   filter?: [string, string]; // dropshadow
   scale?: string; // scale factor for the dropshadow
   transition?: string; // transition for the dropshadow
@@ -87,6 +86,7 @@ export type SvgDataType = {
   gap?: string; // gap between icons in px
   subscribeColors?: () => Generator<string, never, string>;
   maxZIndex?: number;
+  backgroundColor?: string;
   icons: {
     [key: string]: {
       index?: number;
