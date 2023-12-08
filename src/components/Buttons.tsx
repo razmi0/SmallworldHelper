@@ -1,6 +1,8 @@
-import { CSSProperties, ReactNode } from "react";
-import IconButton from "./Icons";
+import { CSSProperties, ReactNode, forwardRef } from "react";
+import Icon from "./Icons";
 import { arrayify } from "@/utils/utils";
+import { IconButtonProps } from "@/types/types";
+import { getSvgData } from "@Icons/data";
 
 export const CloseButton = ({ onClick }: { onClick: () => void }) => {
   return <IconButton onClick={onClick} iconName="close" variant="utility" />;
@@ -38,3 +40,53 @@ export const UtilityButtonGroup = ({ children, isOpen }: Props) => {
     </>
   );
 };
+
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  (
+    {
+      disabled,
+      variant,
+      datatype,
+      onClick,
+      iconName,
+      sx,
+      animStartAt = false,
+      animStartState = "none",
+      ...rest
+    },
+    ref
+  ) => {
+    const svgData = getSvgData(variant ?? "");
+
+    const transform = animStartAt
+      ? animStartState
+      : svgData?.icons[iconName].transform?.() ?? "none";
+    const zIndex = svgData?.icons[iconName].zIndex?.() ?? "auto";
+    const transition = svgData?.icons[iconName].transition?.() ?? "none";
+
+    // merging with sx
+    const styles: CSSProperties = {
+      cursor: "pointer",
+      transform: transform ?? "none",
+      transition: transition ?? "none",
+      zIndex: zIndex ?? "auto",
+      ...sx,
+    };
+
+    return (
+      <button
+        ref={ref}
+        disabled={disabled}
+        onClick={onClick}
+        style={styles}
+        type="button"
+        datatype={datatype}
+        {...rest}
+      >
+        <Icon variant={variant} iconName={iconName} disabled={disabled} />
+      </button>
+    );
+  }
+);
+
+IconButton.displayName = "IconButton";
