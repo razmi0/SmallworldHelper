@@ -8,7 +8,7 @@ import {
   forwardRef,
   useMemo,
 } from "react";
-import IconButton from "@Components/Icons";
+import { IconButton } from "@Components/Buttons";
 import { ContainerProps } from "@Types";
 import { useNotif } from "@Context/useNotif";
 import { cssModules, getCardStyles } from "@Components/styles";
