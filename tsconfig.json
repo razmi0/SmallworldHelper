@@ -23,16 +23,16 @@
       "@/*": ["src/*"],
       "@Components/*": ["src/components/*"],
       "@Containers": ["src/components/Containers.tsx"],
-      "@Icons/*": ["src/utils/icons/*"],
       "@Hooks/*": ["src/hooks/*"],
       "@Context/*": ["src/hooks/context/*"],
       "@Utils/*": ["src/utils/*"],
       "@Types": ["src/types/types.ts"],
       "@Css/*": ["src/css/index.css"],
-      "@CssModules": ["src/css"]
+      "@CssModules": ["src/css"],
+      "@Icons/*": ["svg/*"]
     }
   },
   "type": ["vitest/globals", "./src/types.ts"],
-  "include": ["src"],
+  "include": ["src", "svg/data.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
