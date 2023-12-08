@@ -1,0 +1,15 @@
+<svg width="0" height="0" viewBox="-4.8 -4.8 33.60 33.60" fill="backgroundColor">
+      <path
+        transform="translate(-4.8, -4.8), scale(2.1)"
+        fill="backgroundColor"
+        d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
+        stroke-width="0"
+      ></path>
+      <path
+        d="M4 7H15C17.7614 7 20 9.23857 20 12C20 14.7614 17.7614 17 15 17H8.00001M4 7L7 4M4 7L7 10"
+        stroke="mainColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
+    </svg>

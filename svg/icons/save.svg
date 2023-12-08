@@ -1,0 +1,44 @@
+<svg width="0" height="0" viewBox="-9.6 -9.6 67.20 67.20" fill="none">
+      <path
+        transform="translate(-9.6, -9.6), scale(4.2)"
+        fill="backgroundColor"
+        d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
+        stroke-width="0"
+      ></path>
+      <rect width="48" height="48" fill="white" fill-opacity="0"></rect>
+      <path
+        d="M11.6777 20.271C7.27476 21.3181 4 25.2766 4 30C4 35.5228 8.47715 40 14 40C14.9474 40 15.864 39.8683 16.7325 39.6221"
+        stroke="mainColor"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
+      <path
+        d="M36.0547 20.271C40.4577 21.3181 43.7324 25.2766 43.7324 30C43.7324 35.5228 39.2553 40 33.7324 40V40C32.785 40 31.8684 39.8683 30.9999 39.6221"
+        stroke="mainColor"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
+      <path
+        d="M36 20C36 13.3726 30.6274 8 24 8C17.3726 8 12 13.3726 12 20"
+        stroke="mainColor"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
+      <path
+        d="M17.0654 27.881L23.9999 20.9236L31.1318 28"
+        stroke="mainColor"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
+      <path
+        d="M24 38V24.4618"
+        stroke="mainColor"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
+    </svg>
