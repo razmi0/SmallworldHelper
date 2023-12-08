@@ -1,7 +1,7 @@
 import { MutableRefObject, useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { Header } from "@Components/Containers";
-import IconButton from "@Components/Icons";
+import { IconButton } from "@Components/Buttons";
 import { cssModules } from "@Components/styles";
 import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 
