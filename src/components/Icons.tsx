@@ -1,18 +1,14 @@
-import { forwardRef, useCallback, useState, CSSProperties } from "react";
+import { useCallback, useState } from "react";
 import { type SVGProps } from "react";
 import spriteHref from "/sprite.svg?url";
-import { SvgsComponents } from "../utils/icons/SvgIcons";
-import { useTheme } from "@Context/theme/useTheme";
-import { getSvgData } from "../utils/icons/data";
+import { Star } from "./SvgComponents";
+import { getSvgData } from "../../svg/data";
 import { debounce } from "@Utils/utils";
-import { IconProps, IconButtonProps, SvgDataType, IconHeadingProps } from "@Types";
+import { IconProps, SvgDataType, IconHeadingProps } from "@Types";
 import { cssModules } from "@Components/styles";
+import { IconName } from "../types/types";
 
 const DISABLED_COLOR = "#b5179e";
-
-const getBgColor = (theme: "light" | "dark") => {
-  return theme === "light" ? "transparent" : "transparent";
-};
 
 const getMessage = (iconName: string, svgData: SvgDataType) => {
   const message = svgData.icons[iconName]?.message;
@@ -56,7 +52,8 @@ const SvgIcon = ({
   name,
   ...props
 }: SVGProps<SVGSVGElement> & {
-  name: string;
+  name: IconName;
+  style?: string;
 }) => {
   return (
     <svg {...props}>
@@ -65,12 +62,9 @@ const SvgIcon = ({
   );
 };
 
-const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconProps) => {
+export const Icon = ({ iconName, className, variant, disabled }: IconProps) => {
   console.time("Icon");
   const [isHover, setIsHover] = useState(false);
-  const { theme } = useTheme();
-
-  if (!SvgIcon) SvgIcon = SvgsComponents[iconName];
 
   const svgData = getSvgData(variant ?? "");
   const events = {
@@ -83,14 +77,12 @@ const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconPro
       []
     ),
   };
-  const idxThemeColor = theme === "light" ? 0 : 1;
-  const bgColor = getBgColor(theme);
-  const color = getColor(iconName, svgData, idxThemeColor);
+  const color = getColor(iconName, svgData, 0);
   const { dropShadow, transform } = getFilter(isHover, svgData, color, disabled);
   const message = getMessage(iconName, svgData);
 
   let size: [string, string] = ["0px", "0px"];
-  size = svgData.icons[iconName].size ? svgData.icons[iconName].size ?? size : svgData.size;
+  size = svgData.icons[iconName].size ? svgData.icons[iconName].size ?? size : svgData.size ?? size;
 
   console.timeEnd("Icon");
 
@@ -105,7 +97,8 @@ const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconPro
         transition: svgData.transition ?? "none",
       }}
     >
-      <SvgIcon color={disabled ? DISABLED_COLOR : color} size={size} bgColor={bgColor} />
+      {/* <SvgIcon color={finalColor} size={size} bgColor={bgColor} /> */}
+      <SvgIcon name={iconName} width={size[0]} height={size[1]} />
       {message && (
         <IconTooltip isOpen={isHover} size={size}>
           {message}
@@ -114,7 +107,6 @@ const Icon = ({ icon: SvgIcon, iconName, className, variant, disabled }: IconPro
     </div>
   );
 };
-
 type IconTooltipProps = {
   isOpen: boolean;
   theme?: "light" | "dark";
@@ -136,8 +128,6 @@ const IconTooltip = ({ isOpen, children, size = ["auto", "auto"] }: IconTooltipP
 };
 
 export const IconHeading = ({
-  icon: SvgIcon,
-  iconName,
   color,
   variant,
   className,
@@ -145,7 +135,6 @@ export const IconHeading = ({
   animationName = "none",
   isHover = false,
 }: IconHeadingProps) => {
-  if (!SvgIcon) SvgIcon = SvgsComponents[iconName];
   const svgData = getSvgData(variant ?? "");
   const { dropShadow, transform } = getFilter(isHover, svgData, color);
   const keyframes = svgData.animations?.[animationName].keyframes;
@@ -162,7 +151,7 @@ export const IconHeading = ({
         animation: isHover ? `${getAnimation()}` : "none",
       }}
     >
-      <SvgIcon color={color} size={svgData.size} bgColor={bgColor} />
+      <Star color={color} size={svgData.size || ["20px", "20px"]} bgColor={bgColor} />
       <style>
         {` 
           @keyframes ${animationName} {
@@ -174,54 +163,4 @@ export const IconHeading = ({
   );
 };
 
-const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  (
-    {
-      disabled,
-      variant,
-      datatype,
-      onClick,
-      iconName,
-      sx,
-      animStartAt = false,
-      animStartState = "none",
-      ...rest
-    },
-    ref
-  ) => {
-    const svgData = getSvgData(variant ?? "");
-
-    const transform = animStartAt
-      ? animStartState
-      : svgData?.icons[iconName].transform?.() ?? "none";
-    const zIndex = svgData?.icons[iconName].zIndex?.() ?? "auto";
-    const transition = svgData?.icons[iconName].transition?.() ?? "none";
-
-    // merging with sx
-    const styles: CSSProperties = {
-      cursor: "pointer",
-      transform: transform ?? "none",
-      transition: transition ?? "none",
-      zIndex: zIndex ?? "auto",
-      ...sx,
-    };
-
-    return (
-      <button
-        ref={ref}
-        disabled={disabled}
-        onClick={onClick}
-        style={styles}
-        type="button"
-        datatype={datatype}
-        {...rest}
-      >
-        <Icon variant={variant} iconName={iconName} disabled={disabled} />
-      </button>
-    );
-  }
-);
-
-IconButton.displayName = "IconButton";
-
-export default IconButton;
+export default Icon;
