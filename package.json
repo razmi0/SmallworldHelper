@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 42069",
-    "build": "./svg/build-icons.sh && tsc && vite build",
-    "icons": "./svg/build-icons.sh",
+    "build": "./svg/run.sh && tsc && vite build",
+    "icons:build": "./svg/run.sh",
+    "icons:refresh": "node svg/dist/svg/build-icons.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --open --port 6968",
     "bp": "tsc && vite build && vite preview --open --port 6969",
