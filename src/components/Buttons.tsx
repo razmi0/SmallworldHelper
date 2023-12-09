@@ -2,7 +2,7 @@ import { CSSProperties, ReactNode, forwardRef } from "react";
 import Icon from "./Icons";
 import { arrayify } from "@/utils/utils";
 import { IconButtonProps } from "@/types/types";
-import { getSvgData } from "@Icons/data";
+import { getSvgData } from "icons/data";
 
 export const CloseButton = ({ onClick }: { onClick: () => void }) => {
   return <IconButton onClick={onClick} iconName="close" variant="utility" />;

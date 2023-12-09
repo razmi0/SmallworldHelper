@@ -29,10 +29,10 @@
       "@Types": ["src/types/types.ts"],
       "@Css/*": ["src/css/index.css"],
       "@CssModules": ["src/css"],
-      "@Icons/*": ["svg/*"]
+      "@Icons/*": ["icons/*"]
     }
   },
   "type": ["vitest/globals", "./src/types.ts"],
-  "include": ["src", "svg/data.ts"],
+  "include": ["src", "icons/data.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

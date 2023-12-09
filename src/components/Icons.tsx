@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { type SVGProps } from "react";
 import spriteHref from "/sprite.svg?url";
 import { Star } from "./SvgComponents";
-import { getSvgData } from "../../svg/data";
+import { getSvgData } from "../../icons/data";
 import { debounce } from "@Utils/utils";
 import { IconProps, SvgDataType, IconHeadingProps } from "@Types";
 import { cssModules } from "@Components/styles";

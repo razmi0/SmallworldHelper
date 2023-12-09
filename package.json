@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open --port 42069",
-    "build": "./svg/run.sh && tsc && vite build",
-    "icons:build": "./svg/run.sh",
-    "icons:refresh": "node svg/dist/svg/build-icons.js",
+    "build": "./icons/run.sh && tsc && vite build",
+    "icons:build": "./icons/run.sh",
+    "icons:refresh": "node icons/dist/build-icons.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --open --port 6968",
-    "bp": "./svg/run.sh && tsc && vite build && vite preview --open --port 6969",
+    "bp": "./icons/run.sh && tsc && vite build && vite preview --open --port 6969",
     "test": "vitest"
   },
   "dependencies": {
