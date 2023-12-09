@@ -143,10 +143,8 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
     }
 
     case "SET_PLAYERS": {
-      console.log("SET_PLAYERS");
       const { players } = payload;
       if (isEqual(players, state.players)) return state;
-      console.log("diffrent players");
       return {
         ...state,
         players,
