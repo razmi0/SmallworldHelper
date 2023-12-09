@@ -1,5 +1,7 @@
 # Smallworld Helper
 
+### Features
+
 - Add player
 - Add starting score
 - Delete player
@@ -14,4 +16,18 @@
 
 ### Ressources
 
-- https://www.svgrepo.com/collection/arrow-icons/
+- https://www.svgrepo.com/
+
+### Installation
+
+🔴 Run icons/run.sh before dev or build the project one time for sprite generation:
+
+```sh
+npm run build:icons
+```
+
+& then
+
+```sh
+npm run dev
+```
