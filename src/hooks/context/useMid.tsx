@@ -7,7 +7,7 @@ import {
   useMemo,
   useReducer,
 } from "react";
-import { resizeArray, initialIntermediateState, initBooleanMap, initNewScores } from "./helpers";
+import { resizeArray, initialMidState, initNewScores } from "./helpers";
 
 type newScoreType = number | string; // string => transitional value of input === "-"
 
@@ -16,16 +16,12 @@ type IntermediateStates = {
    * @description inputs tracker
    */
   newScores: newScoreType[]; // useMap
-  startScore: newScoreType; // useMidState
-  newPlayerName: string; // useMidState
-  savePlayers: boolean;
-  loadPlayers: boolean;
+  save: boolean;
+  load: boolean;
 };
 
 type IntermediateActions =
   | { type: "SET_NEW_SCORES"; payload: { index: number; newScore: newScoreType } } // useMap
-  | { type: "SET_NEW_PLAYER_NAME"; payload: { name: string } } // useMidState
-  | { type: "SET_START_SCORE"; payload: { score: newScoreType } } // useMidState
   | { type: "SET_SAVE_PLAYERS"; payload: boolean } // useMidState
   | { type: "SET_LOAD_PLAYERS"; payload: boolean }; // useMidState
 
@@ -47,7 +43,7 @@ const intermediateReducer = (
       const { payload } = action;
       return {
         ...state,
-        savePlayers: payload,
+        save: payload,
       };
     }
 
@@ -55,7 +51,7 @@ const intermediateReducer = (
       const { payload } = action;
       return {
         ...state,
-        loadPlayers: payload,
+        load: payload,
       };
     }
 
@@ -91,8 +87,7 @@ export const IntermediateProvider = ({
 }) => {
   const initial = useMemo(
     () => ({
-      ...initialIntermediateState,
-      isFocus: initBooleanMap(size),
+      ...initialMidState,
       newScores: initNewScores(size),
     }),
     []
@@ -116,9 +111,9 @@ export const useMid = () => {
     throw new Error("useMidAction must be used within a IntermediateProvider");
   }
 
-  const { newScores, savePlayers, loadPlayers } = states; // isFocus,
+  const { newScores, save, load } = states;
 
-  const storageEvent = savePlayers ? "SAVE" : loadPlayers ? "LOAD" : "";
+  const storageEvent = save ? "SAVE" : load ? "LOAD" : "";
 
   const setNewScores = useCallback((index: number, newScore: number | string) => {
     dispatch({ type: "SET_NEW_SCORES", payload: { index: index, newScore: newScore } });
@@ -143,8 +138,6 @@ export const useMid = () => {
      * @description context
      */
     storageActions: { setSavePlayers, setLoadPlayers }, // storage
-    savePlayers, // storage
-    loadPlayers, // storage
     storageEvent, // storage
   };
 };

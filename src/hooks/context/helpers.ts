@@ -1,19 +1,14 @@
 // INITIAL STATES
 //--
-export const initialIntermediateState = {
-  isOnFocus: (size: number): boolean[] => initBooleanMap(size),
+export const initialMidState = {
   newScores: (size: number): number[] => initNewScores(size),
-  startScore: 0,
-  newPlayerName: "",
-  savePlayers: false,
-  loadPlayers: false,
+  save: false,
+  load: false,
 };
 
 // HELPERS
 //--
-export const initBooleanMap = (size: number) => {
-  return Array.from({ length: size }, () => false);
-};
+
 export const initNewScores = (size: number) => {
   return Array.from({ length: size }, () => 0);
 };
