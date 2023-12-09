@@ -19,7 +19,7 @@ export default defineConfig({
       "@Utils": path.resolve(__dirname, "./src/utils"),
       "@Css": path.resolve(__dirname, "./src/css/index.css"),
       "@CssModules": path.resolve(__dirname, "./src/css"),
-      "@Icons": path.resolve(__dirname, "./svg"),
+      "@Icons": path.resolve(__dirname, "./icons"),
     },
   },
   test: {
