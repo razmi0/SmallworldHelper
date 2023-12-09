@@ -16,7 +16,7 @@ let nbrOfIcons = 0;
 
 const cwd = process.cwd();
 
-const inputDir = path.join(cwd, "svg", "icons");
+const inputDir = path.join(cwd, "icons", "svg");
 const inputDirRelative = path.relative(cwd, inputDir);
 const outputDir = path.join(cwd.replace(/\/svg/g, ""), "public");
 const outputDirRelative = path.relative(cwd, outputDir);
