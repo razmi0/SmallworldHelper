@@ -1,4 +1,4 @@
-import { PLAYER_COLORS } from "icons/data";
+import { PLAYER_COLORS } from "@Icons/data";
 import { BarDataType, LineDataType, Player, DonutDataType } from "@Types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils/utils";
 
