@@ -47,7 +47,6 @@ type ChartProps = {
 };
 
 const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: ChartProps) => {
-  // console.time("Charts");
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
 
   const { focusMap, onlyOneFocus, color } = focusStates;
@@ -82,7 +81,6 @@ const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: Char
         <Bar data={onlyOneFocus ? focusedBar : bars} options={barOptions} type="bar" />
         <Doughnut data={onlyOneFocus ? focusedDonut : donuts} options={donutOptions} type="donut" />
       </ChartContainer>
-      {/* {console.timeEnd("Charts")} */}
     </>
   );
 };

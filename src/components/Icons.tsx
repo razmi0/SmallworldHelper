@@ -63,7 +63,6 @@ const SvgIcon = ({
 };
 
 export const Icon = ({ iconName, className, variant, disabled }: IconProps) => {
-  console.time("Icon");
   const [isHover, setIsHover] = useState(false);
 
   const svgData = getSvgData(variant ?? "");
@@ -84,8 +83,6 @@ export const Icon = ({ iconName, className, variant, disabled }: IconProps) => {
   let size: [string, string] = ["0px", "0px"];
   size = svgData.icons[iconName].size ? svgData.icons[iconName].size ?? size : svgData.size ?? size;
 
-  console.timeEnd("Icon");
-
   return (
     <div
       className={`icon-stat-ctn ${className || ""}`}
@@ -97,7 +94,6 @@ export const Icon = ({ iconName, className, variant, disabled }: IconProps) => {
         transition: svgData.transition ?? "none",
       }}
     >
-      {/* <SvgIcon color={finalColor} size={size} bgColor={bgColor} /> */}
       <SvgIcon name={iconName} width={size[0]} height={size[1]} />
       {message && (
         <IconTooltip isOpen={isHover} size={size}>

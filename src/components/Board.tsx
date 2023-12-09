@@ -53,7 +53,6 @@ const Board = ({
   hideScore,
   children,
 }: BoardProps) => {
-  // console.time("Board");
   const [hoverMap, setHover] = useState<boolean[]>(new Array(players.length).fill(false));
   const { setNewScores, newScores } = useMid();
   const { changeFocus, resetFocus } = focusActions;
@@ -218,7 +217,6 @@ const Board = ({
         </ul>
         {children}
       </BoardView>
-      {/* {console.timeEnd("Board")} */}
     </>
   );
 };
