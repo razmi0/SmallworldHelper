@@ -14,7 +14,6 @@ import { FreshStartButton, Toast, RisingStars } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import { Player } from "@Types";
 
-// let a = 0;
 const App = () => {
   /**
    * useNotif

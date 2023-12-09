@@ -95,6 +95,6 @@ export const getCardStyles = (card: CardType) => {
       return utilityBack;
 
     default:
-      return "NOPNOPNOPNOPNOP"; // cardStyles +
+      return "DEFAULT"; // cardStyles +
   }
 };
