@@ -55,17 +55,19 @@ const App = () => {
     switch (storageEvent) {
       case "LOAD":
         setLoadPlayers(false);
-        const storedData = getFromLocalStorage<Player[]>("players", []);
-        storedData.error.length > 0
-          ? post({ type: "error", message: storedData.error })
-          : post({ type: "success", message: "Loaded 👍" });
+        const { stored, error } = getFromLocalStorage<Player[]>("players", []);
+        if (error.status) {
+          post({ type: "error", message: error.text });
+        }
+        post({ type: "success", message: "Loaded 👍" });
+        setPlayers(stored);
         break;
 
       case "SAVE":
         setSavePlayers(false);
-        const error = saveToLocalStorage("players", players);
-        error
-          ? post({ type: "error", message: error })
+        const err = saveToLocalStorage("players", players);
+        err
+          ? post({ type: "error", message: err })
           : post({ type: "success", message: "Saved 👍" });
         break;
 

@@ -102,14 +102,17 @@ export const saveToLocalStorage = <T>(key: string, value: T) => {
  * @param defaultValue: default value if nothing is found in localStorage
  */
 export const getFromLocalStorage = <T>(key: string, defaultValue: T = [] as T) => {
-  let error = "";
+  const error = { text: "", status: false };
   let storedValue: T = defaultValue;
 
   try {
     const storedItem = window.localStorage.getItem(key);
     storedValue = storedItem !== null ? JSON.parse(storedItem) : defaultValue;
+    error.status = false;
   } catch (e) {
-    error = "Error loading session";
+    if (storedValue === defaultValue) error.text = "No session found";
+    error.text = "Error loading session";
+    error.status = true;
   }
 
   return { error, stored: storedValue };
