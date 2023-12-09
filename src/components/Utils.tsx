@@ -281,34 +281,6 @@ export const Clock = () => {
   );
 };
 
-type UndoRedo = {
-  undo: () => void;
-  redo: () => void;
-  isUndoPossible: boolean;
-  isRedoPossible: boolean;
-};
-export const UndoRedo = ({ undo, redo, isRedoPossible, isUndoPossible }: UndoRedo) => {
-  return (
-    <div>
-      <button
-        onClick={undo}
-        disabled={!isUndoPossible}
-        style={{ color: `${isUndoPossible ? "green" : "red"}` }}
-      >
-        Undo
-      </button>
-      <button
-        onClick={redo}
-        disabled={!isRedoPossible}
-        style={{ color: `${isRedoPossible ? "green" : "red"}` }}
-      >
-        Redo
-      </button>
-      <button>Add</button>
-    </div>
-  );
-};
-
 type FreshStartButtonProps = {
   isNavOpen?: boolean;
   toggleOpenAddPlayer: () => void;
