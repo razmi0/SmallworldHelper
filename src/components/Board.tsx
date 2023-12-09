@@ -1,5 +1,4 @@
 import {
-  ChangeEvent,
   HTMLAttributes,
   KeyboardEvent,
   MutableRefObject,
@@ -12,18 +11,11 @@ import { useClickOutside } from "@Hooks/useClickOutside";
 import { IconHeading } from "@Components/Icons";
 import { HardInput } from "@Components/Inputs";
 import { EventsManager, KeyboardManager } from "@Components/Utils";
-import {
-  blurInput,
-  createRefsArr,
-  isDeletable,
-  keys,
-  navigateTo,
-  validateIntOnChange,
-} from "../utils/players/helpers";
+import { blurInput, createRefsArr, keys, navigateTo } from "../utils/players/helpers";
 import { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
 import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
-import { useInputScore } from "@/hooks/useInputScore";
+import { useNotif } from "@/hooks/context/useNotif";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -54,7 +46,7 @@ const Board = ({
   children,
 }: BoardProps) => {
   const [hoverMap, setHover] = useState<boolean[]>(new Array(players.length).fill(false));
-  const { changeScore, scoreMap } = useInputScore(players.length);
+  const { post } = useNotif();
   const { changeFocus, resetFocus } = focusActions;
   const { focusMap, onlyOneFocus } = focusStates;
 
@@ -78,41 +70,44 @@ const Board = ({
     i: number
   ) => {
     const matrice = inputsRef.current;
+    const target = e.target as HTMLInputElement;
+    if (!target) return;
     switch (e.key) {
-      case keys.ENTER: {
-        if (e.currentTarget.value === "-") return;
-        update(id /* PLAYER ID */, scoreMap[i] as number);
-        changeScore(i, 0);
+      case keys.ENTER:
+        let value = parseFloat(target.value);
+        if (target.value === "0") value = 0;
+        if (!value && value !== 0) {
+          post({ type: "error", message: "Only numbers are allowed 👎" });
+          return;
+        }
+        update(id, value);
+        resetTarget(target);
         navigateTo(matrice, i, "NEXT");
         break;
-      }
-
-      case keys.BACKSPACE: {
-        if (isDeletable(e)) {
-          changeScore(i, 0);
-        }
-        break;
-      }
 
       case keys.ARROW_RIGHT:
+        resetTarget(target);
         navigateTo(matrice, i, "RIGHT");
         break;
 
       case keys.ARROW_LEFT:
+        resetTarget(target);
         navigateTo(matrice, i, "LEFT");
         break;
 
       case keys.ARROW_UP:
+        resetTarget(target);
         navigateTo(matrice, i, "PREV");
         break;
 
       case keys.ARROW_DOWN:
+        resetTarget(target);
         navigateTo(matrice, i, "NEXT");
         break;
 
       case keys.ESCAPE: {
+        resetTarget(target);
         changeFocus(i, false);
-        changeScore(i, 0);
         break;
       }
 
@@ -121,11 +116,8 @@ const Board = ({
     }
   };
 
-  const handleChangeScore = (e: ChangeEvent<HTMLInputElement>, i: number) => {
-    const raw = e.currentTarget.value;
-    const newScore: string | number | undefined = validateIntOnChange(raw);
-    if (!newScore) return;
-    changeScore(i, newScore);
+  const resetTarget = (target: HTMLInputElement) => {
+    target.value = "";
   };
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
@@ -138,7 +130,6 @@ const Board = ({
   const events = {
     blur: (index: number) => {
       changeFocus(index, false);
-      changeScore(index, 0);
     },
     focus: (index: number) => {
       changeFocus(index, true);
@@ -169,7 +160,6 @@ const Board = ({
               : onlyOneFocus.focused
               ? "rgba(255,255,222, 0.3)" // no focus card font color
               : "inherit";
-            const softValue = scoreMap[i] ? scoreMap[i] : "";
 
             return (
               <EventsManager
@@ -205,8 +195,6 @@ const Board = ({
                     <HardInput
                       ref={(el) => manageRefs(el, i)}
                       color={color}
-                      onChange={(event) => handleChangeScore(event, i)}
-                      value={softValue}
                       pseudoName={pseudoName}
                     />
                   </PlayerCard>
