@@ -1,15 +1,14 @@
 import { useEffect } from "react";
-import { isProdEnv } from "@Utils/utils";
 
-export const useWindowEvents = () => {
+export const useWindowEvents = (prodEnv: boolean) => {
   useEffect(() => {
-    isProdEnv() &&
+    prodEnv &&
       addEventListener("beforeunload", (e) => {
         e.returnValue = "";
         return;
       });
     return () => {
-      isProdEnv() &&
+      prodEnv &&
         removeEventListener("beforeunload", (e) => {
           e.returnValue = "";
           return;

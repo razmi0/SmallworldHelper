@@ -20,8 +20,8 @@ type NavProps = {
   undoRedoStates: NavUndoRedoStates;
   undoRedoActions: Omit<UndoRedoActions<Player[]>, "setState">;
   storageActions: {
-    setSavePlayers: (payload: boolean) => void;
-    setLoadPlayers: (payload: boolean) => void;
+    setSave: (payload: boolean) => void;
+    setLoad: (payload: boolean) => void;
   };
 };
 
@@ -33,7 +33,7 @@ const Nav = ({
   isScoreHidden,
   storageActions,
 }: NavProps) => {
-  const { setLoadPlayers, setSavePlayers } = storageActions;
+  const { setLoad, setSave } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
   const { hideScore, openAddPlayer, openCharts, openNav } = togglers;
@@ -47,8 +47,8 @@ const Nav = ({
         <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
         {isNavOpen && (
           <>
-            <IconButton variant="nav" iconName="load" onClick={() => setLoadPlayers(true)} />
-            <IconButton variant="nav" iconName="save" onClick={() => setSavePlayers(true)} />
+            <IconButton variant="nav" iconName="load" onClick={() => setLoad(true)} />
+            <IconButton variant="nav" iconName="save" onClick={() => setSave(true)} />
             <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
             <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
             <IconButton

@@ -8,10 +8,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { useMid } from "@Context/useMid";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { IconHeading } from "@Components/Icons";
-import { BlockyInput } from "@Components/Inputs";
+import { HardInput } from "@Components/Inputs";
 import { EventsManager, KeyboardManager } from "@Components/Utils";
 import {
   blurInput,
@@ -24,6 +23,7 @@ import {
 import { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
 import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
+import { useInputScore } from "@/hooks/useInputScore";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -54,7 +54,7 @@ const Board = ({
   children,
 }: BoardProps) => {
   const [hoverMap, setHover] = useState<boolean[]>(new Array(players.length).fill(false));
-  const { setNewScores, newScores } = useMid();
+  const { changeScore, scoreMap } = useInputScore(players.length);
   const { changeFocus, resetFocus } = focusActions;
   const { focusMap, onlyOneFocus } = focusStates;
 
@@ -81,15 +81,15 @@ const Board = ({
     switch (e.key) {
       case keys.ENTER: {
         if (e.currentTarget.value === "-") return;
-        update(id /* PLAYER ID */, newScores[i] as number);
-        setNewScores(i, 0);
+        update(id /* PLAYER ID */, scoreMap[i] as number);
+        changeScore(i, 0);
         navigateTo(matrice, i, "NEXT");
         break;
       }
 
       case keys.BACKSPACE: {
         if (isDeletable(e)) {
-          setNewScores(i, 0);
+          changeScore(i, 0);
         }
         break;
       }
@@ -112,7 +112,7 @@ const Board = ({
 
       case keys.ESCAPE: {
         changeFocus(i, false);
-        setNewScores(i, 0);
+        changeScore(i, 0);
         break;
       }
 
@@ -125,7 +125,7 @@ const Board = ({
     const raw = e.currentTarget.value;
     const newScore: string | number | undefined = validateIntOnChange(raw);
     if (!newScore) return;
-    setNewScores(i, newScore);
+    changeScore(i, newScore);
   };
 
   const manageRefs = (element: HTMLInputElement | null, i: number) => {
@@ -138,7 +138,7 @@ const Board = ({
   const events = {
     blur: (index: number) => {
       changeFocus(index, false);
-      setNewScores(index, 0);
+      changeScore(index, 0);
     },
     focus: (index: number) => {
       changeFocus(index, true);
@@ -169,7 +169,7 @@ const Board = ({
               : onlyOneFocus.focused
               ? "rgba(255,255,222, 0.3)" // no focus card font color
               : "inherit";
-            const softValue = newScores[i] ? newScores[i] : "";
+            const softValue = scoreMap[i] ? scoreMap[i] : "";
 
             return (
               <EventsManager
@@ -202,7 +202,7 @@ const Board = ({
                         {hideScore ? "***" : victoryPtn}
                       </PlayerText>
                     </PlayerTextContainer>
-                    <BlockyInput
+                    <HardInput
                       ref={(el) => manageRefs(el, i)}
                       color={color}
                       onChange={(event) => handleChangeScore(event, i)}

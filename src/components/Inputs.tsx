@@ -91,7 +91,7 @@ export const SoftInput = forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
-export const BlockyInput = forwardRef<HTMLInputElement, InputProps>(
+export const HardInput = forwardRef<HTMLInputElement, InputProps>(
   ({ pseudoName, color, datatype, value, label = "Add score", ...rest }, ref) => {
     pseudoName = pseudoName.replace(/_/g, "_") + "_input";
     const [isFocus, setIsFocus] = useState(false);

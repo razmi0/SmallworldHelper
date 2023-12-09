@@ -3,7 +3,7 @@ import { usePlayer } from "@Hooks/players/usePlayer";
 import { useUndoRedo } from "@Hooks/useUndoRedo";
 import { useToggle } from "@Hooks/useToggle";
 import { useFocus } from "@Hooks/useFocus";
-import { useMid } from "@Context/useMid";
+import { useStorage } from "@Context/useStorage";
 import { useNotif } from "@Context/useNotif";
 import { MainContainer } from "@Components/Containers";
 import Board, { PlayerStatsContainer } from "@Components/Board";
@@ -15,6 +15,8 @@ import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import { Player } from "@Types";
 
 const App = () => {
+  console.log("App");
+
   /**
    * useNotif
    */
@@ -28,10 +30,10 @@ const App = () => {
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
   /**
-   * useMid
+   * useStorage
    */
-  const { storageEvent, storageActions } = useMid(); // , isFocus
-  const { setLoadPlayers, setSavePlayers } = storageActions;
+  const { storageEvent, storageActions } = useStorage();
+  const { setLoad, setSave } = storageActions;
 
   /**
    * useFocus
@@ -53,7 +55,7 @@ const App = () => {
   useEffect(() => {
     switch (storageEvent) {
       case "LOAD":
-        setLoadPlayers(false);
+        setLoad(false);
         const { stored, error } = getFromLocalStorage<Player[]>("players", []);
         if (error.status) {
           post({ type: "error", message: error.text });
@@ -63,7 +65,7 @@ const App = () => {
         break;
 
       case "SAVE":
-        setSavePlayers(false);
+        setSave(false);
         const err = saveToLocalStorage("players", players);
         err
           ? post({ type: "error", message: err })
