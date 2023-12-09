@@ -75,6 +75,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 
     return (
       <button
+        aria-label={`button ${iconName}`}
         ref={ref}
         disabled={disabled}
         onClick={onClick}
