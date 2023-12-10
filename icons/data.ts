@@ -92,7 +92,7 @@ export const getSvgData = (variant: VariantType) => {
  *              and subsequent translate factor animation.
  */
 export const NAV_STYLES: SvgDataType = {
-  size: ["40px", "40px"],
+  size: ["30px", "30px"],
   filter: ["0px", "0px"],
   transition: "all 0.2s ease-in-out",
   gap: "5px",
@@ -196,14 +196,14 @@ const UTILITY_STYLES: SvgDataType = {
 
   icons: {
     close: {
-      color: ["#9b9b9b", "#9b9b9b"],
+      color: ["#727272", "#727272"],
       size: ["27px", "27px"],
 
       // message: "Remove player",
     },
     reset: {
-      color: ["#9b9b9b", "#9b9b9b"],
-      size: ["22px", "22px"],
+      color: ["#727272", "#727272"],
+      size: ["25px", "25px"],
       // message: "Reset score",
     },
   },
@@ -255,10 +255,10 @@ const TOASTER_STYLES: SvgDataType = {
 
   icons: {
     close: {
-      color: ["#242424", "#242424"],
+      color: ["#727272", "#727272"],
     },
     reset: {
-      color: ["#242424", "#242424"],
+      color: ["#727272", "#727272"],
     },
   },
 };
