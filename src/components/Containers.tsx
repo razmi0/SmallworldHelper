@@ -1,10 +1,11 @@
 import { ContainerProps } from "@Types";
-import { cssModules } from "@Components/styles";
+import { cssModules, getCardStyles } from "@Components/styles";
 
 export const Header = ({ children, ...rest }: ContainerProps) => {
+  const classes = getCardStyles("header");
   return (
     <>
-      <header className={cssModules.container["header-ctn"]} {...rest}>
+      <header className={cssModules.container["header-ctn"] + " " + classes} {...rest}>
         {children}
       </header>
     </>
