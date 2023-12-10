@@ -1,4 +1,4 @@
-import { ChartOptions } from "chart.js";
+import type { ChartOptions } from "chart.js";
 
 export const TIME_BEFORE_RESET_FOCUS = 5000 as const;
 

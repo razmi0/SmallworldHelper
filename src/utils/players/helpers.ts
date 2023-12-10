@@ -1,4 +1,5 @@
-import { KeyboardEvent, createRef } from "react";
+import { createRef } from "react";
+import type { KeyboardEvent } from "react";
 
 // KEYBOARD NAVIGATION
 //--
