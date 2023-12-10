@@ -42,6 +42,7 @@ export type CardType =
   | "utility"
   | "default"
   | "line"
+  | "header"
   | "bar"
   | "donut"
   | "player-back"
@@ -93,6 +94,9 @@ export const getCardStyles = (card: CardType) => {
 
     case "utility-back":
       return utilityBack;
+
+    case "header":
+      return texture;
 
     default:
       return "DEFAULT"; // cardStyles +
