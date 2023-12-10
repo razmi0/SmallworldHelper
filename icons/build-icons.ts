@@ -100,10 +100,10 @@ const findColors = (iconName: string) => {
  * so only write if the content has changed
  */
 const writeIfChanged = async (filepath: string, newContent: string) => {
-  const currentContent = await fs.readFile(filepath, "utf8");
-  if (currentContent !== newContent) {
-    return fs.writeFile(filepath, newContent, "utf8");
-  }
+  // const currentContent = await fs.readFile(filepath, "utf8");
+  // if (currentContent !== newContent) {
+  return fs.writeFile(filepath, newContent, "utf8");
+  // }
 };
 
 // The relative paths are just for cleaner logs
