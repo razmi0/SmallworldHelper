@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, forwardRef } from "react";
+import { CSSProperties, ReactNode, forwardRef, useMemo } from "react";
 import Icon from "./Icons";
 import { arrayify } from "@/utils/utils";
 import { IconButtonProps } from "@/types/types";
@@ -56,7 +56,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     },
     ref
   ) => {
-    const svgData = getSvgData(variant ?? "");
+    const svgData = useMemo(() => getSvgData(variant ?? ""), [variant]);
 
     const transform = animStartAt
       ? animStartState
