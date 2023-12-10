@@ -188,6 +188,7 @@ export const EventsManager = ({
   onMouseEnter,
   className = "",
   as: Element = "div",
+  ...rest
 }: EventsManagerProps) => {
   const id = `${useId()}_focus_manager`;
   return (
@@ -199,6 +200,7 @@ export const EventsManager = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={className}
+      {...rest}
     >
       {children}
     </Element>
