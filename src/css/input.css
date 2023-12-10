@@ -1,12 +1,3 @@
-:root {
-  --blocky-input-lbl-padding: 15px 20px;
-  --blocky-input-lbl-transition: 0.4s cubic-bezier(0.05, 0.81, 0, 0.93);
-
-  --blocky-input-lbl-bg-focus: rgb(20, 20, 26);
-  --blocky-input-lbl-border-focus: #212121 solid 1px;
-  --blocky-input-lbl-transform-focus: translateX(14px) translateY(-7.5px);
-}
-
 .form__group {
   position: relative;
   width: 100%;

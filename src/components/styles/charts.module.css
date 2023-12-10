@@ -1,8 +1,3 @@
-:root {
-  --card-size-chart-width: fit-content;
-  --card-size-chart-height: fit-content;
-}
-
 .donut-total-vc-ptn {
   max-width: 150px;
 }

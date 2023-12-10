@@ -1,10 +1,3 @@
-:root {
-  --card-size-width: 140px;
-  --card-size-height-player: 150px;
-  --card-size-height-utility: 100%;
-  --card-size-width-utility: 100%;
-}
-
 .player-stats-ctn {
   display: flex;
   width: 100%;
