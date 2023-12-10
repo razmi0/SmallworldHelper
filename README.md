@@ -13,6 +13,9 @@
 - Line chart
 - Bar chart
 - Pie chart
+- Undo / Redo actions
+- Draggable players & cards
+- Notifications
 
 ### Ressources
 

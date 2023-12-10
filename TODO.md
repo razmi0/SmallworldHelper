@@ -60,3 +60,6 @@
 - [ ] load multiple parties
 - [x] Third col for ui (settings, theme, addplayer, save, load...)
 - [x] KINDA FIX ?? chart BUG infinite if too much spamming on undo redo button
+- [ ] close icon addPlayer panel position
+- [ ] undo/redo wrong line chart building => charts in localS
+- [ ] Track position of cards and localS
