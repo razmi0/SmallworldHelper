@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c813c88e-0852-4064-b280-edcfd32313e6/deploy-status)](https://app.netlify.com/sites/smallworldhelper/deploys)
+
 # Smallworld Helper
 
 ### Features
