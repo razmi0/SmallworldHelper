@@ -1,4 +1,4 @@
-import { SvgProps } from "@/types/types";
+import type { SvgProps } from "@Types";
 
 export const Star = ({ color, size }: SvgProps) => {
   return (

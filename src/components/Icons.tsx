@@ -1,12 +1,11 @@
 import { useCallback, useState } from "react";
-import { type SVGProps } from "react";
 import spriteHref from "/sprite.svg?url";
 import { Star } from "./Star";
 import { getSvgData } from "@Icons/data";
 import { debounce } from "@Utils/utils";
-import { IconProps, SvgDataType, IconHeadingProps } from "@Types";
 import { cssModules } from "@Components/styles";
-import { IconName } from "../types/types";
+import type { SVGProps } from "react";
+import type { IconName, IconProps, SvgDataType, IconHeadingProps } from "@Types";
 
 const DISABLED_COLOR = "#b5179e";
 

@@ -1,5 +1,5 @@
-import { ChartData, ChartOptions } from "chart.js";
-import { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
+import type { ChartData, ChartOptions } from "chart.js";
+import type { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
 
 export type Player = {
   id: number;

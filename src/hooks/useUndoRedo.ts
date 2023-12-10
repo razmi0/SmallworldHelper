@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { UndoRedoStates, UndoRedoActions } from "@Types";
+import type { UndoRedoStates, UndoRedoActions } from "@Types";
 type HistoryState<T> = {
   past: T[];
   present: T;

@@ -12,7 +12,7 @@ import Charts from "@Components/Charts";
 import AddPlayerCard from "@Components/AddPlayer";
 import { FreshStartButton, Toast, RisingStars } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
-import { Player } from "@Types";
+import type { Player } from "@Types";
 
 const App = () => {
   console.log("App");

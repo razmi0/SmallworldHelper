@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from "react";
 import { resizeArray } from "@Context/helpers";
-import { FocusActionsType, FocusStatesType } from "@Types";
+import type { FocusActionsType, FocusStatesType } from "@Types";
 
 type FocusStates = boolean[];
 type FocusAction =

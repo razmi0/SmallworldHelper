@@ -1,4 +1,5 @@
-import { Dispatch, ReactNode, createContext, useCallback, useContext, useReducer } from "react";
+import { createContext, useCallback, useContext, useReducer } from "react";
+import type { Dispatch, ReactNode } from "react";
 import { initialStorageEvent } from "./helpers";
 
 type StorageStates = {

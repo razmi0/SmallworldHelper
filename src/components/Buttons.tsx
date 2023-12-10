@@ -1,8 +1,9 @@
-import { CSSProperties, ReactNode, forwardRef, useMemo } from "react";
+import { forwardRef, useMemo } from "react";
 import Icon from "./Icons";
-import { arrayify } from "@/utils/utils";
-import { IconButtonProps } from "@/types/types";
+import { arrayify } from "@Utils/utils";
 import { getSvgData } from "@Icons/data";
+import type { CSSProperties, ReactNode } from "react";
+import type { IconButtonProps } from "@Types";
 
 export const CloseButton = ({ onClick }: { onClick: () => void }) => {
   return <IconButton onClick={onClick} iconName="close" variant="utility" />;

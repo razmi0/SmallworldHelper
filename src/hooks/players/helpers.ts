@@ -1,6 +1,5 @@
-import { PLAYER_COLORS } from "@Icons/data";
-import { BarDataType, LineDataType, Player, DonutDataType } from "@Types";
 import { addOpacityToHex, findMaxNbrTurns, getRandomColor } from "@Utils/utils";
+import type { BarDataType, LineDataType, Player, DonutDataType } from "@Types";
 
 const errorMsg = "Player not found";
 const BORDER_WIDTH = 1 as const;
@@ -96,7 +95,7 @@ export const buildBaseStats = (name: string, startScore: number, id: number) => 
     history: [startScore],
     addedScores: [startScore],
     rankChange: 0,
-    color: PLAYER_COLORS[(id % PLAYER_COLORS.length) - 1] ?? getRandomColor(),
+    color: getRandomColor(),
     max: startScore,
     min: startScore,
     avg: startScore,

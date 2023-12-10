@@ -1,6 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { NotificationType } from "@Types";
-import { NotificationTypeInComponent } from "@/types/types";
+import type { NotificationType, NotificationTypeInComponent } from "@Types";
 
 const SELF_DESTRUCT_TIMEOUT = 6000 as const;
 const RANDOM_ID_FACTOR = 100 as const;

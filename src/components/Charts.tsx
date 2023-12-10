@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useId, useRef, useState, ReactNode, FC } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Line as ChartLine, Doughnut as ChartDonut, Bar as ChartBar } from "react-chartjs-2";
 import Draggable from "react-draggable";
 import {
@@ -12,8 +12,6 @@ import {
   Legend,
   ArcElement,
   BarElement,
-  ChartData,
-  ChartOptions,
 } from "chart.js";
 import {
   TIME_BEFORE_RESET_FOCUS,
@@ -24,7 +22,9 @@ import {
 import { focusOnBar, focusOnLine, focusOndonut } from "../utils/charts/helpers";
 import { arrayify, findSum } from "@Utils/utils";
 import { cssModules, getCardStyles } from "@Components/styles";
-import { LineProps, BarProps, DonutProps, FocusActionsType, FocusStatesType } from "@Types";
+import type { ChartData, ChartOptions } from "chart.js";
+import type { MutableRefObject, ReactNode, FC } from "react";
+import type { LineProps, BarProps, DonutProps, FocusActionsType, FocusStatesType } from "@Types";
 
 ChartJS.register(
   CategoryScale,

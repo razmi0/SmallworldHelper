@@ -1,22 +1,15 @@
-import {
-  HTMLAttributes,
-  KeyboardEvent,
-  MutableRefObject,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
 import { useClickOutside } from "@Hooks/useClickOutside";
+import { useNotif } from "@/hooks/context/useNotif";
 import { IconHeading } from "@Components/Icons";
 import { HardInput } from "@Components/Inputs";
+import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
 import { EventsManager, KeyboardManager } from "@Components/Utils";
 import { blurInput, createRefsArr, keys, navigateTo } from "../utils/players/helpers";
-import { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
-import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
-import { useNotif } from "@/hooks/context/useNotif";
-import Draggable from "react-draggable";
+import type { HTMLAttributes, KeyboardEvent, MutableRefObject, ReactNode } from "react";
+import type { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
 
 /* players, reset, remove, update, */
 // TYPES

@@ -1,14 +1,14 @@
-import { ChangeEvent, MutableRefObject, useCallback, useRef, useState } from "react";
-import { KeyboardManager, Position, RefManager } from "@Components/Utils";
-import { SoftInput } from "@Components/Inputs";
+import { useCallback, useRef, useState } from "react";
 import { useNotif } from "@Context/useNotif";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { keys, validateIntOnChange } from "../utils/players/helpers";
+import { SoftInput } from "@Components/Inputs";
+import { CloseButton } from "@Components/Buttons";
+import { KeyboardManager, Position, RefManager } from "@Components/Utils";
+import { keys, validateIntOnChange } from "@Utils/players/helpers";
 import { beautify } from "@Utils/utils";
 import { getCardStyles } from "@Components/styles";
-import { ContainerProps } from "@Types";
-import { FocusActionsType } from "../types/types";
-import { CloseButton } from "./Buttons";
+import type { ChangeEvent, MutableRefObject } from "react";
+import type { FocusActionsType, ContainerProps } from "@Types";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;

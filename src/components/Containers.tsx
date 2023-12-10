@@ -1,4 +1,4 @@
-import { ContainerProps } from "@Types";
+import type { ContainerProps } from "@Types";
 import { cssModules, getCardStyles } from "@Components/styles";
 
 export const Header = ({ children, ...rest }: ContainerProps) => {

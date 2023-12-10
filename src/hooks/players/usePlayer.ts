@@ -1,7 +1,6 @@
 // IMPORTS
 // --
 import { useCallback, useMemo, useReducer } from "react";
-import { BarDataType, LineDataType, DonutDataType, Player, PlayerState } from "@Types";
 import {
   buildAllLines,
   buildAllBars,
@@ -25,6 +24,7 @@ import {
   updatePlayersStats,
 } from "./helpers";
 import { getFromLocalStorage, isEqual } from "@Utils/utils";
+import type { BarDataType, LineDataType, DonutDataType, Player, PlayerState } from "@Types";
 
 // TYPES
 // --

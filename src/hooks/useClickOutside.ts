@@ -1,5 +1,6 @@
 import { arrayify } from "@/utils/utils";
-import { MutableRefObject, useEffect } from "react";
+import { useEffect } from "react";
+import type { MutableRefObject } from "react";
 
 type ClickOutsideRef = MutableRefObject<HTMLElement[]> | MutableRefObject<HTMLElement>;
 type TouchOrMouseEvent = MouseEvent | TouchEvent;

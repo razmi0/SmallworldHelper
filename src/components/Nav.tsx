@@ -1,9 +1,10 @@
-import { MutableRefObject, useRef } from "react";
+import { useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { Header } from "@Components/Containers";
 import { IconButton } from "@Components/Buttons";
 import { cssModules } from "@Components/styles";
-import { Player, UndoRedoActions, UndoRedoStates } from "@Types";
+import type { MutableRefObject } from "react";
+import type { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 
 type NavUndoRedoStates = Pick<UndoRedoStates<Player[]>, "isRedoPossible" | "isUndoPossible">;
 

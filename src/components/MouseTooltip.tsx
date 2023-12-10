@@ -1,6 +1,7 @@
-import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { MouseToolTipContext } from "@Context/MouseToolTipContext";
+import type { FC, PropsWithChildren, ReactNode } from "react";
 
 export type TooltipPosition = { top: number; left: number };
 

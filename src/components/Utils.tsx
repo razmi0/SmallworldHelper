@@ -1,17 +1,29 @@
-import {
-  ReactNode,
-  CSSProperties,
-  useState,
-  useId,
-  ElementType,
-  KeyboardEvent,
-  forwardRef,
-  useMemo,
-} from "react";
+import { useState, useId, forwardRef, useMemo } from "react";
 import { IconButton } from "@Components/Buttons";
-import { ContainerProps } from "@Types";
 import { useNotif } from "@Context/useNotif";
 import { cssModules, getCardStyles } from "@Components/styles";
+import type { ReactNode, CSSProperties, ElementType, KeyboardEvent } from "react";
+import type { ContainerProps } from "@Types";
+
+/*
+ * DRAGGABLE
+ * If running in React Strict mode, ReactDOM.findDOMNode() is deprecated.
+ * Unfortunately, in order for <Draggable> to work properly, we need raw access
+ * to the underlying DOM node. If you want to avoid the warning, pass a `nodeRef`
+ * as in this example:
+ *
+ * function MyComponent() {
+ *   const nodeRef = React.useRef(null);
+ *   return (
+ *     <Draggable nodeRef={nodeRef}>
+ *       <div ref={nodeRef}>Example Target</div>
+ *     </Draggable>
+ *   );
+ * }
+ *
+ * This can be used for arbitrarily nested components, so long as the ref ends up
+ * pointing to the actual child DOM node and not a custom component.
+ */
 
 export const RisingStars = ({ color }: { color: string }) => {
   const risingStarStyle = useMemo(() => getRisingStarStyle(color), [color]);
