@@ -21,9 +21,6 @@ type Props = {
 
 export const UtilityButtonGroup = ({ children, isOpen }: Props) => {
   const childrenArr = arrayify(children);
-
-  if (!isOpen) return null;
-
   return (
     <>
       {childrenArr.map((child, i) => (
@@ -33,6 +30,7 @@ export const UtilityButtonGroup = ({ children, isOpen }: Props) => {
             position: "absolute",
             top: 0,
             right: `${i * 1.2}em`,
+            visibility: isOpen ? "visible" : "hidden",
           }}
         >
           {child}
