@@ -39,7 +39,7 @@ const App = () => {
    * useFocus
    */
   const { focusStates, focusActions } = useFocus(players.length);
-  const { focusMap, onlyOneFocus } = focusStates;
+  const { focusMap, onlyOneFocus, noFocus } = focusStates;
 
   /**
    * useToggle
@@ -120,6 +120,7 @@ const App = () => {
               focusMap,
               onlyOneFocus,
               color,
+              noFocus,
             }}
             isOpen={isChartsOpen && playerSize > 0 && hasHistory}
             lines={lines}
