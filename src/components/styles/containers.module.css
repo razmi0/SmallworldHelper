@@ -1,3 +1,9 @@
+:root {
+  --n-icons: 5;
+  --nav-width: calc(50% - (26px * var(--n-icons)));
+  --nav-height: 30px;
+}
+
 .main-ctn {
   display: flex;
   flex-direction: row;
@@ -15,9 +21,13 @@
 }
 
 .header-ctn {
-  margin: 0.8rem 0.4rem;
+  position: absolute !important;
+  top: 0;
+  left: var(--nav-width);
+  margin: 0.4rem;
   height: 100%;
   width: fit-content;
+  height: fit-content;
 }
 
 .figure-ctn {
