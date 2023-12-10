@@ -1,6 +1,6 @@
 .nav-ctn {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: fit-content;
 }
 .view-transition-manager {
