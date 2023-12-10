@@ -1,5 +1,6 @@
 import { MutableRefObject, useEffect, useId, useRef, useState, ReactNode, FC } from "react";
 import { Line as ChartLine, Doughnut as ChartDonut, Bar as ChartBar } from "react-chartjs-2";
+import Draggable from "react-draggable";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -43,16 +44,18 @@ type ChartProps = {
   bars: ChartData<"bar">;
   donuts: ChartData<"doughnut">;
   focusActions: FocusActionsType;
-  focusStates: Omit<FocusStatesType, "noFocus"> & { color: string };
+  focusStates: FocusStatesType & { color: string };
 };
 
 const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: ChartProps) => {
+  console.log("Charts");
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
 
-  const { focusMap, onlyOneFocus, color } = focusStates;
+  const { focusMap, onlyOneFocus, color, noFocus } = focusStates;
   const { resetFocus } = focusActions;
 
   useEffect(() => {
+    if (noFocus) return;
     intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
     return () => {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
@@ -118,15 +121,17 @@ const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
           const classes = getClasses(chartType);
 
           return (
-            <div
-              style={{ boxShadow: `0px 0px 1px 1px ${color}` }} // , borderRadius: "50%"
-              key={i}
-              className={chartType === "donut" ? donutBack : back}
-            >
-              <figure id={finalId} className={classes}>
-                {child}
-              </figure>
-            </div>
+            <Draggable>
+              <div
+                style={{ boxShadow: `0px 0px 1px 1px ${color}` }} // , borderRadius: "50%"
+                key={i}
+                className={chartType === "donut" ? donutBack : back}
+              >
+                <figure id={finalId} className={classes}>
+                  {child}
+                </figure>
+              </div>
+            </Draggable>
           );
         })}
     </section>

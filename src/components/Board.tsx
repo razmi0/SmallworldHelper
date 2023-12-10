@@ -16,6 +16,7 @@ import { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Type
 import { cssModules, getCardStyles } from "@Components/styles";
 import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
 import { useNotif } from "@/hooks/context/useNotif";
+import Draggable from "react-draggable";
 
 /* players, reset, remove, update, */
 // TYPES
@@ -158,48 +159,49 @@ const Board = ({
             const finalColor = focusMap[i]
               ? color
               : onlyOneFocus.focused
-              ? "rgba(255,255,222, 0.3)" // no focus card font color
+              ? "rgba(255,255,222, 0.3)"
               : "inherit";
 
             return (
-              <EventsManager
-                key={pseudoName}
-                onBlur={() => events.blur(i)}
-                onFocus={() => events.focus(i)}
-                onClick={() => events.click(i)}
-                onMouseEnter={() => events.hover(true, i)}
-                onMouseLeave={() => events.hover(false, i)}
-                as="li"
-              >
-                <KeyboardManager onKeyDown={(e) => handleKeyUp(e, id, i)}>
-                  <PlayerCard color={finalColor}>
-                    <UtilityButtonGroup isOpen={hoverMap[i]}>
-                      <CloseButton onClick={() => remove(id)} />
-                      <ResetButton onClick={() => reset(id)} />
-                    </UtilityButtonGroup>
-                    <PlayerTextContainer>
-                      <PlayerText color={finalColor} id="up">
-                        {name}
-                      </PlayerText>
-                      <PlayerText color={finalColor} id="bottom">
-                        <IconHeading
-                          animationName="rotate"
-                          isHover={focusMap[i]}
-                          color={color}
-                          iconName="star"
-                          variant="heading"
-                        />
-                        {hideScore ? "***" : victoryPtn}
-                      </PlayerText>
-                    </PlayerTextContainer>
-                    <HardInput
-                      ref={(el) => manageRefs(el, i)}
-                      color={color}
-                      pseudoName={pseudoName}
-                    />
-                  </PlayerCard>
-                </KeyboardManager>
-              </EventsManager>
+              <Draggable key={pseudoName}>
+                <EventsManager
+                  onBlur={() => events.blur(i)}
+                  onFocus={() => events.focus(i)}
+                  onClick={() => events.click(i)}
+                  onMouseEnter={() => events.hover(true, i)}
+                  onMouseLeave={() => events.hover(false, i)}
+                  as="li"
+                >
+                  <KeyboardManager onKeyDown={(e) => handleKeyUp(e, id, i)}>
+                    <PlayerCard color={finalColor}>
+                      <UtilityButtonGroup isOpen={hoverMap[i]}>
+                        <CloseButton onClick={() => remove(id)} />
+                        <ResetButton onClick={() => reset(id)} />
+                      </UtilityButtonGroup>
+                      <PlayerTextContainer>
+                        <PlayerText color={finalColor} id="up">
+                          {name}
+                        </PlayerText>
+                        <PlayerText color={finalColor} id="bottom">
+                          <IconHeading
+                            animationName="rotate"
+                            isHover={focusMap[i]}
+                            color={color}
+                            iconName="star"
+                            variant="heading"
+                          />
+                          {hideScore ? "***" : victoryPtn}
+                        </PlayerText>
+                      </PlayerTextContainer>
+                      <HardInput
+                        ref={(el) => manageRefs(el, i)}
+                        color={color}
+                        pseudoName={pseudoName}
+                      />
+                    </PlayerCard>
+                  </KeyboardManager>
+                </EventsManager>
+              </Draggable>
             );
           })}
         </ul>
