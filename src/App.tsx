@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { usePlayer } from "@Hooks/players/usePlayer";
 import { useUndoRedo } from "@Hooks/useUndoRedo";
 import { useToggle } from "@Hooks/useToggle";
@@ -13,6 +13,7 @@ import AddPlayerCard from "@Components/AddPlayer";
 import { StartButton, Toast, RisingStars } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import type { Player } from "@Types";
+import { buildAllBars, buildAllLines, buildAlldonuts } from "./hooks/players/helpers";
 
 const workingVars = (players: Player[], onlyOneFocusIndex: number) => {
   const hasPlayer = players.length > 0;
@@ -34,9 +35,15 @@ const App = () => {
    * usePlayer
    */
   const { playersStates, playersActions, playerSize, playersNames } = usePlayer();
-  const { players, lines, bars, donuts } = playersStates;
+  const { players /**, lines, bars, donuts */ } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
 
+  /**
+   * useChart
+   */
+  const lines = useMemo(() => buildAllLines(players), [players]);
+  const bars = useMemo(() => buildAllBars(players), [players]);
+  const donuts = useMemo(() => buildAlldonuts(players), [players]);
   /**
    * useStorage
    */
