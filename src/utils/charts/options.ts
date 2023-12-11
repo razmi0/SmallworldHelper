@@ -1,6 +1,6 @@
 import type { ChartOptions } from "chart.js";
 
-export const TIME_BEFORE_RESET_FOCUS = 5000 as const;
+export const TIME_BEFORE_RESET_FOCUS = 13000 as const;
 
 // declare module "chart.js" {
 //   interface TooltipPositionerMap {

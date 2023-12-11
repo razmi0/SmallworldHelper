@@ -123,6 +123,7 @@ const IconTooltip = ({ isOpen, children, size = ["auto", "auto"] }: IconTooltipP
 };
 
 export const IconHeading = ({
+  children,
   color,
   variant,
   className,
@@ -154,6 +155,7 @@ export const IconHeading = ({
           }
         `}
       </style>
+      {children}
     </div>
   );
 };

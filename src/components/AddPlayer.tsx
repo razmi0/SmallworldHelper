@@ -8,7 +8,7 @@ import { keys, validateIntOnChange } from "@Utils/players/helpers";
 import { beautify } from "@Utils/utils";
 import { getCardStyles } from "@Components/styles";
 import type { ChangeEvent, MutableRefObject } from "react";
-import type { FocusActionsType, ContainerProps } from "@Types";
+import type { FocusActionsType, ContainerProps, KeyboardHandlerTypeWithArgs } from "@Types";
 
 type AddPlayerProps = {
   addPlayer: (name: string, score: number) => void;
@@ -56,23 +56,28 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleCard, names, changeFocus }: Ad
     setNewName(newName);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (e.key) {
-      case keys.ESCAPE:
-        toggleCardAndReset();
-        changeFocus(0, true);
-        break;
-      case keys.ENTER:
-        addNewPlayer();
-        break;
-      case keys.BACKSPACE:
-        if (startScore.toString().length === 1) {
-          setStartScore(0);
-        }
-        break;
-      default:
-        break;
+  const handleEscapeKey = () => {
+    toggleCardAndReset();
+    changeFocus(0, true);
+  };
+
+  const handleEnterKey = () => {
+    addNewPlayer();
+  };
+
+  const handleBackspaceKey = () => {
+    if (startScore.toString().length === 1) {
+      setStartScore(0);
     }
+  };
+  type Args = [];
+  const keyboard: KeyboardHandlerTypeWithArgs<Args> = {
+    keyboardHandlers: {
+      [keys.ENTER]: handleEnterKey,
+      [keys.ESCAPE]: handleEscapeKey,
+      [keys.BACKSPACE]: handleBackspaceKey,
+    },
+    args: [],
   };
 
   const finalStartScore = startScore ? startScore : "";
@@ -82,7 +87,7 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleCard, names, changeFocus }: Ad
       {isOpen && (
         <Position variant="absolute-center">
           <RefManager ref={ref}>
-            <KeyboardManager onKeyDown={handleKeyDown}>
+            <KeyboardManager keyboard={keyboard}>
               <AddStyles>
                 <SoftInput
                   label="Name"

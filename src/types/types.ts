@@ -1,5 +1,38 @@
 import type { ChartData, ChartOptions } from "chart.js";
-import type { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode } from "react";
+import type { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode, ElementType } from "react";
+import type { KeysType, PointerType } from "@/utils/players/helpers";
+
+export type EventsManagerType<Arguments extends unknown[]> = {
+  [key in PointerType]: (...arg: Arguments) => void;
+};
+
+export interface PointerHandlerTypeWithArgs<Arguments extends unknown[]> {
+  pointerHandlers: Partial<EventsManagerType<Arguments>>;
+  args: Arguments;
+}
+
+export interface EventsManagerProps<Arguments extends unknown[]> extends ContainerProps {
+  pointer: PointerHandlerTypeWithArgs<Arguments>;
+  as?: ElementType;
+}
+
+export interface KeyboardHandlerTypeWithArgs<Arguments extends unknown[]> {
+  // 2
+  keyboardHandlers: Partial<KeyboardHandlerType<Arguments>>;
+  args: Arguments;
+}
+export type KeyboardHandlerType<Arguments extends unknown[]> = {
+  // 3
+  [key in KeysType]: (target?: EventTarget, ...args: Arguments) => void;
+};
+
+export type EventTarget = HTMLInputElement | HTMLButtonElement;
+
+export interface KeyboardManagerProps<Arguments extends unknown[]> extends ContainerProps {
+  // 1
+  keyboard: KeyboardHandlerTypeWithArgs<Arguments>;
+  as?: ElementType;
+}
 
 export type Player = {
   id: number;
@@ -137,6 +170,7 @@ export interface IconHeadingProps {
   isHover?: boolean;
   i?: number;
   variant?: VariantType;
+  children?: ReactNode;
 }
 
 export type IconName =

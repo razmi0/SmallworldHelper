@@ -26,14 +26,7 @@ type NavProps = {
   };
 };
 
-const Nav = ({
-  togglers,
-  isNavOpen,
-  undoRedoStates,
-  undoRedoActions,
-  isScoreHidden,
-  storageActions,
-}: NavProps) => {
+const Nav = ({ togglers, isNavOpen, undoRedoStates, undoRedoActions, isScoreHidden, storageActions }: NavProps) => {
   const { setLoad, setSave } = storageActions;
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
@@ -41,6 +34,8 @@ const Nav = ({
   const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
 
   useClickOutside(navRef, () => isNavOpen && navRef && openNav());
+
+  const eye = isScoreHidden ? "eyeclose" : "eyeopen";
 
   return (
     <Header>
@@ -52,23 +47,9 @@ const Nav = ({
             <IconButton variant="nav" iconName="save" onClick={() => setSave(true)} />
             <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
             <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
-            <IconButton
-              variant="nav"
-              iconName={isScoreHidden ? "eyeclose" : "eyeopen"}
-              onClick={() => hideScore()}
-            />
-            <IconButton
-              variant="nav"
-              iconName="undo"
-              onClick={() => undo()}
-              disabled={!isUndoPossible}
-            />
-            <IconButton
-              variant="nav"
-              iconName="redo"
-              onClick={() => redo()}
-              disabled={!isRedoPossible}
-            />
+            <IconButton variant="nav" iconName={eye} onClick={() => hideScore()} />
+            <IconButton variant="nav" iconName="undo" onClick={() => undo()} disabled={!isUndoPossible} />
+            <IconButton variant="nav" iconName="redo" onClick={() => redo()} disabled={!isRedoPossible} />
           </>
         )}
       </nav>

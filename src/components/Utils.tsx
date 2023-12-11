@@ -2,8 +2,9 @@ import { useState, useId, forwardRef, useMemo } from "react";
 import { IconButton } from "@Components/Buttons";
 import { useNotif } from "@Context/useNotif";
 import { cssModules, getCardStyles } from "@Components/styles";
-import type { ReactNode, CSSProperties, ElementType, KeyboardEvent } from "react";
-import type { ContainerProps } from "@Types";
+import type { ReactNode, CSSProperties, KeyboardEvent } from "react";
+import type { ContainerProps, EventTarget, EventsManagerProps, KeyboardManagerProps } from "@Types";
+import { keyHandlers } from "@/utils/players/helpers";
 
 /*
  * DRAGGABLE
@@ -115,13 +116,7 @@ export const Toast = () => {
 };
 
 const getToastColorType = (type: "success" | "error" | "warning" | "info") => {
-  return type === "success"
-    ? "green"
-    : type === "error"
-    ? "red"
-    : type === "warning"
-    ? "orange"
-    : "blue";
+  return type === "success" ? "green" : type === "error" ? "red" : type === "warning" ? "orange" : "blue";
 };
 
 const ListContainer = ({ children }: { children: ReactNode }) => {
@@ -165,12 +160,7 @@ const ToastBody = ({ children, onClick }: ToastHeaderProps) => {
   return (
     <div style={{ display: "flex", flexDirection: "row" }} className="">
       <div className={cssModules.utils["toast-body"]}>{children}</div>
-      <IconButton
-        onClick={onClick}
-        iconName="close"
-        variant="toaster"
-        sx={{ position: "absolute", right: 0 }}
-      />
+      <IconButton onClick={onClick} iconName="close" variant="toaster" sx={{ position: "absolute", right: 0 }} />
     </div>
   );
 };
@@ -183,34 +173,25 @@ const ToastMessage = ({ message }: { message: string }) => {
   );
 };
 
-interface EventsManagerProps extends ContainerProps {
-  onFocus?: () => void;
-  onBlur?: () => void;
-  onClick: () => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
-  as?: ElementType;
-}
-export const EventsManager = ({
+export const EventsManager = <T extends unknown[]>({
   children,
-  onFocus,
-  onBlur,
-  onClick,
-  onMouseLeave,
-  onMouseEnter,
+  pointer,
   className = "",
   as: Element = "div",
   ...rest
-}: EventsManagerProps) => {
+}: EventsManagerProps<T>) => {
   const id = `${useId()}_focus_manager`;
+
+  const { args, pointerHandlers } = pointer;
+  const { focus, blur, click, enter, leave } = pointerHandlers;
   return (
     <Element
       id={id}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onFocus={() => focus?.(...args)}
+      onBlur={() => blur?.(...args)}
+      onClick={() => click?.(...args)}
+      onMouseEnter={() => enter?.(...args)}
+      onMouseLeave={() => leave?.(...args)}
       className={className}
       {...rest}
     >
@@ -222,12 +203,6 @@ export const EventsManager = ({
 export const Separator = () => {
   return <hr className={cssModules.utils["separator"]} />;
 };
-
-interface KeyboardManagerProps extends ContainerProps {
-  onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
-  as?: ElementType;
-}
 
 export const RefManager = forwardRef<HTMLDivElement, ContainerProps>((props, ref) => {
   const id = `${useId()}_ref_manager`;
@@ -246,15 +221,28 @@ export const RefManager = forwardRef<HTMLDivElement, ContainerProps>((props, ref
   );
 });
 
-export const KeyboardManager = ({
+export const KeyboardManager = <T extends unknown[]>({
   as: Element = "div",
   children,
-  onKeyUp,
-  onKeyDown,
-}: KeyboardManagerProps) => {
-  const id = `${useId()}_keyboard_manager`;
+  keyboard,
+}: KeyboardManagerProps<T>) => {
+  const displayName = `_keyboard_manager`;
+
+  const onKeyDown = (e: KeyboardEvent<EventTarget>) => {
+    if (!keyboard) return;
+    const target = e.target as unknown as EventTarget;
+    const pressedKey = e.key as keyof typeof keyboard.keyboardHandlers;
+    if (!keyHandlers.includes(pressedKey)) return;
+    const { args, keyboardHandlers: handlers } = keyboard;
+    for (const key of keyHandlers) {
+      if (key !== pressedKey) continue;
+      handlers[key]?.(target, ...args);
+      break;
+    }
+  };
+
   return (
-    <Element id={id} onKeyUp={onKeyUp} onKeyDown={onKeyDown}>
+    <Element displayName={displayName} onKeyDown={(e: KeyboardEvent<EventTarget>) => onKeyDown(e)}>
       {children}
     </Element>
   );
@@ -295,17 +283,13 @@ export const Clock = () => {
   );
 };
 
-type FreshStartButtonProps = {
+type StartButtonProps = {
   isNavOpen?: boolean;
   toggleOpenAddPlayer: () => void;
   isAddPlayerOpen: boolean;
   hasPlayers: boolean;
 };
-export const FreshStartButton = ({
-  toggleOpenAddPlayer,
-  isAddPlayerOpen,
-  hasPlayers,
-}: FreshStartButtonProps) => {
+export const StartButton = ({ toggleOpenAddPlayer, isAddPlayerOpen, hasPlayers }: StartButtonProps) => {
   return (
     <>
       {!hasPlayers && !isAddPlayerOpen && (
@@ -320,9 +304,7 @@ export const FreshStartButton = ({
             gap: 20,
           }}
         >
-          <h3 style={{ fontSize: "1.3rem" }}>
-            Start by adding a player and a start score, good game !
-          </h3>
+          <h3 style={{ fontSize: "1.3rem" }}>Start by adding a player and a start score, good game !</h3>
           <IconButton
             style={{ cursor: "pointer", transform: "scale(1.2)" }}
             variant="nav"

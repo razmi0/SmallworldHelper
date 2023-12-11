@@ -1,8 +1,20 @@
 import { createRef } from "react";
 import type { KeyboardEvent } from "react";
 
+export type PointerType = "click" | "blur" | "focus" | "enter" | "leave";
+
+export type EventsManagerType<Arguments extends unknown[]> = {
+  blur: (...arg: Arguments) => void;
+  focus: (...arg: Arguments) => void;
+  click: (...arg: Arguments) => void;
+  enter: (...arg: Arguments) => void;
+  leave: (...arg: Arguments) => void;
+};
+
 // KEYBOARD NAVIGATION
 //--
+export type KeysType = "Enter" | "Backspace" | "ArrowUp" | "ArrowRight" | "ArrowDown" | "ArrowLeft" | "Tab" | "Escape";
+
 export const keys = {
   ENTER: "Enter",
   BACKSPACE: "Backspace",
@@ -13,6 +25,17 @@ export const keys = {
   TAB: "Tab",
   ESCAPE: "Escape",
 };
+export const keyHandlers = Object.values(keys) as KeysType[];
+export const pointers = {
+  CLICK: "click",
+  MOUSE_DOWN: "mousedown",
+  MOUSE_UP: "mouseup",
+  MOUSE_MOVE: "mousemove",
+  MOUSE_ENTER: "mouseenter",
+  MOUSE_LEAVE: "mouseleave",
+  BLUR: "blur",
+  FOCUS: "focus",
+};
 
 /**
  * [[0, 0, 0, 0] * 3]
@@ -21,11 +44,7 @@ const ROW_SIZE = 4;
 
 // const matrice = new Array(3).fill(null).map(() => new Array(4).fill(null));
 export type Directions = "PREV" | "NEXT" | "RIGHT" | "LEFT" | "SELF";
-export const navigateTo = (
-  matrice: HTMLElement[],
-  currentIndex: number,
-  direction?: Directions
-) => {
+export const navigateTo = (matrice: HTMLElement[], currentIndex: number, direction?: Directions) => {
   //
   switch (direction) {
     case "PREV":
@@ -119,7 +138,5 @@ export const blurInput = (inputsRefs: HTMLInputElement[]) => {
 };
 
 export const createRefsArr = (size: number) => {
-  return new Array(size)
-    .fill(null)
-    .map(() => createRef<HTMLInputElement>()) as unknown as HTMLInputElement[];
+  return new Array(size).fill(null).map(() => createRef<HTMLInputElement>()) as unknown as HTMLInputElement[];
 };
