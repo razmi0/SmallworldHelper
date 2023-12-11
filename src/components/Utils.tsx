@@ -226,7 +226,7 @@ export const KeyboardManager = <T extends unknown[]>({
   children,
   keyboard,
 }: KeyboardManagerProps<T>) => {
-  const displayName = `_keyboard_manager`;
+  const displayname = `_keyboard_manager`;
 
   const onKeyDown = (e: KeyboardEvent<EventTarget>) => {
     if (!keyboard) return;
@@ -242,7 +242,7 @@ export const KeyboardManager = <T extends unknown[]>({
   };
 
   return (
-    <Element displayName={displayName} onKeyDown={(e: KeyboardEvent<EventTarget>) => onKeyDown(e)}>
+    <Element displayname={displayname} onKeyDown={(e: KeyboardEvent<EventTarget>) => onKeyDown(e)}>
       {children}
     </Element>
   );
