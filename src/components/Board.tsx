@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
 import { useNotif } from "@/hooks/context/useNotif";
-import { HardInput } from "@Components/Inputs";
-import { CloseButton, ResetButton, UtilityButtonGroup } from "@Components/Buttons";
-import PlayerCard, { Heading, PlayerHandler } from "@/components/PlayerCard";
+import { HardInput } from "./Inputs";
+import { CloseButton, ResetButton, UtilityButtonGroup } from "./Buttons";
+import PlayerCard, { Heading, PlayerHandler } from "./PlayerCard";
+import { PlayerList } from "./Containers";
 import { blurInput, createRefsArr, keys, navigateTo } from "../utils/players/helpers";
-import { cssModules } from "@CssModules";
 import type { MutableRefObject, ReactNode } from "react";
-import type { ContainerProps, FocusActionsType, FocusStatesType, Player } from "@Types";
-import type { HeadingProps } from "@/components/PlayerCard";
+import type { FocusActionsType, FocusStatesType, Player } from "@Types";
+import type { HeadingProps } from "./PlayerCard";
 
-/* players, reset, remove, update, */
 // TYPES
 //--
 
@@ -152,45 +151,39 @@ const Board = ({ focusActions, focusStates, players, update, reset, remove, hide
   };
 
   return (
-    <Players>
-      <ul className={cssModules.player["players-list-ctn"]} ref={listRef}>
-        {players.map((player, i) => {
-          const { name, victoryPtn, id, color } = player;
-          const pseudoName = `${id}_${name.toLowerCase()}`;
-          const finalColor = getFinalColor(focusMap[i], color, onlyOneFocus.focused);
-          const headingProps: HeadingProps = {
-            ids: ["up", "bottom"],
-            color: finalColor,
-            isHover: focusMap[i],
-            iconName: "star",
-            iconColor: color,
-          };
-          const keyboard = { keyboardHandlers, args: [i, id] as number[] };
-          const pointer = { pointerHandlers, args: [i] as [index: number] };
+    <PlayerList ref={listRef}>
+      {players.map((player, i) => {
+        const { name, victoryPtn, id, color } = player;
+        const pseudoName = `${id}_${name.toLowerCase()}`;
+        const finalColor = getFinalColor(focusMap[i], color, onlyOneFocus.focused);
+        const headingProps: HeadingProps = {
+          ids: ["up", "bottom"],
+          color: finalColor,
+          isHover: focusMap[i],
+          iconName: "star",
+          iconColor: color,
+        };
+        const keyboard = { keyboardHandlers, args: [i, id] as number[] };
+        const pointer = { pointerHandlers, args: [i] as [index: number] };
 
-          return (
-            <PlayerHandler drag pointer={pointer} keyboard={keyboard} key={pseudoName}>
-              <PlayerCard color={finalColor}>
-                <UtilityButtonGroup isOpen={hoverMap[i]}>
-                  <CloseButton onClick={() => remove(id)} />
-                  <ResetButton onClick={() => reset(id)} />
-                </UtilityButtonGroup>
-                <Heading {...headingProps}>
-                  {name}
-                  {hideScore ? "***" : victoryPtn}
-                </Heading>
-                <HardInput ref={(el) => manageRefs(el, i)} color={color} pseudoName={pseudoName} />
-              </PlayerCard>
-            </PlayerHandler>
-          );
-        })}
-      </ul>
-    </Players>
+        return (
+          <PlayerHandler drag pointer={pointer} keyboard={keyboard} key={pseudoName}>
+            <PlayerCard color={finalColor}>
+              <UtilityButtonGroup isOpen={hoverMap[i]}>
+                <CloseButton onClick={() => remove(id)} />
+                <ResetButton onClick={() => reset(id)} />
+              </UtilityButtonGroup>
+              <Heading {...headingProps}>
+                {name}
+                {hideScore ? "***" : victoryPtn}
+              </Heading>
+              <HardInput ref={(el) => manageRefs(el, i)} color={color} pseudoName={pseudoName} />
+            </PlayerCard>
+          </PlayerHandler>
+        );
+      })}
+    </PlayerList>
   );
 };
 
 export default Board;
-
-const Players = ({ children }: ContainerProps) => {
-  return <div className={cssModules.player["players-view"]}>{children}</div>;
-};
