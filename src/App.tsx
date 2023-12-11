@@ -10,7 +10,7 @@ import Board, { PlayerStatsContainer } from "@Components/Board";
 import Nav from "@Components/Nav";
 import Charts from "@Components/Charts";
 import AddPlayerCard from "@Components/AddPlayer";
-import { FreshStartButton, Toast, RisingStars } from "@Components/Utils";
+import { StartButton, Toast, RisingStars } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import type { Player } from "@Types";
 
@@ -82,6 +82,8 @@ const App = () => {
   }, [playerSize]);
 
   const { hasPlayer, hasHistory, color } = workingVars(players, onlyOneFocus.index);
+  const focusStatesChart = { focusMap, onlyOneFocus, color, noFocus };
+  const focusStatesBoard = { focusMap, onlyOneFocus };
 
   return (
     <>
@@ -96,7 +98,7 @@ const App = () => {
           undoRedoStates={undoRedoStates}
           undoRedoActions={undoRedoActions}
         />
-        <FreshStartButton
+        <StartButton
           toggleOpenAddPlayer={toggleActions.openAddPlayer}
           hasPlayers={hasPlayer}
           isAddPlayerOpen={toggleStates.isAddPlayerOpen}
@@ -109,19 +111,11 @@ const App = () => {
             remove={removePlayer}
             update={updateScore}
             focusActions={focusActions}
-            focusStates={{
-              focusMap,
-              onlyOneFocus,
-            }}
+            focusStates={focusStatesBoard}
           />
           <Charts
             focusActions={focusActions}
-            focusStates={{
-              focusMap,
-              onlyOneFocus,
-              color,
-              noFocus,
-            }}
+            focusStates={focusStatesChart}
             isOpen={isChartsOpen && playerSize > 0 && hasHistory}
             lines={lines}
             bars={bars}
