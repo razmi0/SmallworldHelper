@@ -4,8 +4,27 @@
 
 /* FOR DOCUMENTATION */
 .cl {
-  color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef,
-    #560bad, #277da1, #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
+  color: #f94144, #43aa8b, #4cc9f0, #3a0ca3, #f9c74f, #4d908e, #4361ee, #f3722c, #f72585, #4895ef, #560bad, #277da1,
+    #3f37c9, #f8961e, #577590, #b5179e, #90be6d;
+}
+
+button.mock {
+  position: absolute;
+  top: 0;
+  background: var(--dark-color);
+  color: var(--light-color);
+  border: 1px solid var(--light-color);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9em;
+  font-weight: 600;
+  margin: 0.2em;
+  &:hover {
+    background: var(--light-color);
+    color: var(--dark-color);
+  }
 }
 /* FOR DOCUMENTATION */
 

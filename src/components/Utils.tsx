@@ -5,6 +5,7 @@ import { cssModules, getCardStyles } from "@Components/styles";
 import type { ReactNode, CSSProperties, KeyboardEvent } from "react";
 import type { ContainerProps, EventTarget, EventsManagerProps, KeyboardManagerProps } from "@Types";
 import { keyHandlers } from "@/utils/players/helpers";
+import { isProdEnv } from "@/utils/utils";
 
 /*
  * DRAGGABLE
@@ -325,4 +326,16 @@ export const Position = ({ variant, children }: PositionContainerProps) => {
   let classes: string;
   variant === "absolute-center" ? (classes = cssModules.utils["absolute-center"]) : (classes = "");
   return <div className={classes}>{children}</div>;
+};
+
+type MockButtonType = {
+  setMock: () => void;
+};
+export const MockButton = ({ setMock }: MockButtonType) => {
+  if (isProdEnv()) return <></>;
+  return (
+    <button className="mock" onClick={setMock}>
+      Mock
+    </button>
+  );
 };
