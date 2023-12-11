@@ -18,7 +18,7 @@ export default defineConfig({
       "@Types": path.resolve(__dirname, "./src/types/types.ts"),
       "@Utils": path.resolve(__dirname, "./src/utils"),
       "@Css": path.resolve(__dirname, "./src/css/index.css"),
-      "@CssModules": path.resolve(__dirname, "./src/css"),
+      "@CssModules": path.resolve(__dirname, "./src/components/styles/index.ts"),
       "@Icons": path.resolve(__dirname, "./icons"),
     },
   },

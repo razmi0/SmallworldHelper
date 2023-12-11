@@ -28,7 +28,7 @@
       "@Utils/*": ["src/utils/*"],
       "@Types": ["src/types/types.ts"],
       "@Css/*": ["src/css/index.css"],
-      "@CssModules": ["src/css"],
+      "@CssModules": ["src/components/styles/index.ts"],
       "@Icons/*": ["icons/*"]
     }
   },
