@@ -14,6 +14,14 @@ import { StartButton, Toast, RisingStars } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import type { Player } from "@Types";
 
+const workingVars = (players: Player[], onlyOneFocusIndex: number) => {
+  const hasPlayer = players.length > 0;
+  const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
+  const color = players[onlyOneFocusIndex]?.color;
+
+  return { hasPlayer, hasHistory, color };
+};
+
 const App = () => {
   console.log("App");
 
@@ -131,14 +139,6 @@ const App = () => {
       </MainContainer>
     </>
   );
-};
-
-const workingVars = (players: Player[], onlyOneFocusIndex: number) => {
-  const hasPlayer = players.length > 0;
-  const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
-  const color = players[onlyOneFocusIndex]?.color;
-
-  return { hasPlayer, hasHistory, color };
 };
 
 export default App;
