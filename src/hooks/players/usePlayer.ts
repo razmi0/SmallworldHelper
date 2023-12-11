@@ -99,14 +99,14 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
     case "REMOVE_PLAYER": {
       const { id } = payload;
       const { rmPlayers, rmPlayer } = removePlayer(players, id);
-      if (rmPlayers.length === 0) return { ...state, ...fullReset() };
+      if (rmPlayers.length === 0) return { ...state /**...fullReset()  */ };
 
       return {
         ...state,
         players: rmPlayers,
-        lines: removeLine(lines, rmPlayer.name),
-        bars: removeBar(bars, rmPlayer.name),
-        donuts: removedonut(donuts, rmPlayer.name),
+        // lines: removeLine(lines, rmPlayer.name),
+        // bars: removeBar(bars, rmPlayer.name),
+        // donuts: removedonut(donuts, rmPlayer.name),
       };
     }
 
@@ -116,9 +116,9 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
       return {
         ...state,
         players: rsPlayers,
-        lines: resetLine(lines, rsPlayer.name, rsPlayers),
-        bars: resetBar(bars, rsPlayer.name),
-        donuts: resetdonut(donuts, rsPlayer.name),
+        // lines: resetLine(lines, rsPlayer.name, rsPlayers),
+        // bars: resetBar(bars, rsPlayer.name),
+        // donuts: resetdonut(donuts, rsPlayer.name),
       };
     }
 
@@ -128,9 +128,9 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
       return {
         ...state,
         players: updatedPlayers,
-        lines: updateLines(lines, updatedPlayer, updatedPlayers),
-        bars: updateBars(bars, updatedPlayer),
-        donuts: updatedonuts(donuts, updatedPlayer),
+        // lines: updateLines(lines, updatedPlayer, updatedPlayers),
+        // bars: updateBars(bars, updatedPlayer),
+        // donuts: updatedonuts(donuts, updatedPlayer),
       };
     }
 
@@ -140,9 +140,9 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
       return {
         ...state,
         players,
-        lines: buildAllLines(players),
-        bars: buildAllBars(players),
-        donuts: buildAlldonuts(players),
+        // lines: buildAllLines(players),
+        // bars: buildAllBars(players),
+        // donuts: buildAlldonuts(players),
       };
     }
 
@@ -157,9 +157,9 @@ export const usePlayer = () => {
   const initialState = useMemo(
     () => ({
       players: initialPlayerStates.players,
-      lines: initialPlayerStates.lineData(),
-      bars: initialPlayerStates.barData(),
-      donuts: initialPlayerStates.donutData(),
+      // lines: initialPlayerStates.lineData(),
+      // bars: initialPlayerStates.barData(),
+      // donuts: initialPlayerStates.donutData(),
     }),
     []
   );

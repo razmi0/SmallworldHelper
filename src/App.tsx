@@ -10,7 +10,7 @@ import Board from "@Components/Board";
 import Nav from "@Components/Nav";
 import Charts from "@Components/Charts";
 import AddPlayerCard from "@Components/AddPlayer";
-import { StartButton, Toast, RisingStars } from "@Components/Utils";
+import { StartButton, Toast, RisingStars, MockButton } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import type { Player } from "@Types";
 import { buildAllBars, buildAllLines, buildAlldonuts } from "./hooks/players/helpers";
@@ -143,9 +143,117 @@ const App = () => {
           changeFocus={focusActions.changeFocus}
         />
         <Toast />
+        <MockButton setMock={() => setPlayers(mock)} />
       </MainContainer>
     </>
   );
 };
 
 export default App;
+
+const mock = [
+  {
+    id: 0,
+    name: "Thomas",
+    victoryPtn: 14,
+    history: [0, 1, 2, 6, 5],
+    addedScores: [0, 1, 2, 6, 5],
+    rankChange: 0,
+    color: "#DEAD2FFF",
+    max: 6,
+    min: 0,
+    avg: 3,
+    sum: 14,
+  },
+  {
+    id: 5,
+    name: "Nita",
+    victoryPtn: 17,
+    history: [0, 3, 8, 6],
+    addedScores: [0, 3, 8, 6],
+    rankChange: 0,
+    color: "#211EA9FF",
+    max: 8,
+    min: 0,
+    avg: 4,
+    sum: 17,
+  },
+  {
+    id: 98,
+    name: "Dfg",
+    victoryPtn: 14,
+    history: [0, 4, 3, 7],
+    addedScores: [0, 4, 3, 7],
+    rankChange: 0,
+    color: "#F0D6EEFF",
+    max: 7,
+    min: 0,
+    avg: 4,
+    sum: 14,
+  },
+  {
+    id: 30,
+    name: "Zer",
+    victoryPtn: 19,
+    history: [0, 5, 5, 9],
+    addedScores: [0, 5, 5, 9],
+    rankChange: 0,
+    color: "#519AC4FF",
+    max: 9,
+    min: 0,
+    avg: 5,
+    sum: 19,
+  },
+  {
+    id: 20,
+    name: "Fg",
+    victoryPtn: 21,
+    history: [0, 3, 9, 8, 1],
+    addedScores: [0, 3, 9, 8, 1],
+    rankChange: 0,
+    color: "#5991BFFF",
+    max: 9,
+    min: 0,
+    avg: 4,
+    sum: 21,
+  },
+  {
+    id: 75,
+    name: "Gh",
+    victoryPtn: 14,
+    history: [0, 4, 1, 9],
+    addedScores: [0, 4, 1, 9],
+    rankChange: 0,
+    color: "#C740B1FF",
+    max: 9,
+    min: 0,
+    avg: 4,
+    sum: 14,
+  },
+  {
+    id: 102,
+    name: "Sd",
+    victoryPtn: 8,
+    history: [0, 5, 2, 1],
+    addedScores: [0, 5, 2, 1],
+    rankChange: 0,
+    color: "#E818F0FF",
+    max: 5,
+    min: 0,
+    avg: 2,
+    sum: 8,
+  },
+  {
+    id: 66,
+    name: "Ukuh",
+    victoryPtn: 12,
+    history: [0, 7, 3, 2],
+    addedScores: [0, 7, 3, 2],
+    rankChange: 0,
+    color: "#02F7FEFF",
+    max: 7,
+    min: 0,
+    avg: 3,
+    sum: 12,
+  },
+];
