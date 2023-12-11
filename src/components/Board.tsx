@@ -34,7 +34,7 @@ const getFinalColor = (isFocus: boolean, color: string, onlyOneFocus: boolean): 
 // COMPONENTS
 //--
 
-const Board = ({ focusActions, focusStates, players, update, reset, remove, hideScore, children }: BoardProps) => {
+const Board = ({ focusActions, focusStates, players, update, reset, remove, hideScore }: BoardProps) => {
   const [hoverMap, setHover] = useState<boolean[]>(new Array(players.length).fill(false));
   const { post } = useNotif();
   const { changeFocus, resetFocus } = focusActions;
@@ -152,7 +152,7 @@ const Board = ({ focusActions, focusStates, players, update, reset, remove, hide
   };
 
   return (
-    <BoardView>
+    <Players>
       <ul className={cssModules.player["players-list-ctn"]} ref={listRef}>
         {players.map((player, i) => {
           const { name, victoryPtn, id, color } = player;
@@ -185,17 +185,12 @@ const Board = ({ focusActions, focusStates, players, update, reset, remove, hide
           );
         })}
       </ul>
-      {children}
-    </BoardView>
+    </Players>
   );
 };
 
 export default Board;
 
-const BoardView = ({ children }: ContainerProps) => {
-  return <div className={cssModules.player["board-view-ctn"]}>{children}</div>;
-};
-
-export const PlayerStatsContainer = ({ children }: ContainerProps) => {
-  return <section className={cssModules.player["player-stats-ctn"]}>{children}</section>;
+const Players = ({ children }: ContainerProps) => {
+  return <div className={cssModules.player["players-view"]}>{children}</div>;
 };

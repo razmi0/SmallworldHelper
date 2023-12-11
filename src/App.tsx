@@ -5,8 +5,8 @@ import { useToggle } from "@Hooks/useToggle";
 import { useFocus } from "@Hooks/useFocus";
 import { useStorage } from "@Context/useStorage";
 import { useNotif } from "@Context/useNotif";
-import { MainContainer } from "@Components/Containers";
-import Board, { PlayerStatsContainer } from "@Components/Board";
+import { MainContainer, BoardView } from "@Components/Containers";
+import Board from "@Components/Board";
 import Nav from "@Components/Nav";
 import Charts from "@Components/Charts";
 import AddPlayerCard from "@Components/AddPlayer";
@@ -67,9 +67,7 @@ const App = () => {
       case "SAVE":
         setSave(false);
         const err = saveToLocalStorage("players", players);
-        err
-          ? post({ type: "error", message: err })
-          : post({ type: "success", message: "Saved 👍" });
+        err ? post({ type: "error", message: err }) : post({ type: "success", message: "Saved 👍" });
         break;
 
       default:
@@ -103,7 +101,7 @@ const App = () => {
           hasPlayers={hasPlayer}
           isAddPlayerOpen={toggleStates.isAddPlayerOpen}
         />
-        <PlayerStatsContainer>
+        <BoardView>
           <Board
             hideScore={isScoreHidden}
             players={players}
@@ -121,7 +119,7 @@ const App = () => {
             bars={bars}
             donuts={donuts}
           />
-        </PlayerStatsContainer>
+        </BoardView>
         <AddPlayerCard
           addPlayer={addPlayer}
           isOpen={toggleStates.isAddPlayerOpen}

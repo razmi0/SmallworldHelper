@@ -1,4 +1,4 @@
-.player-stats-ctn {
+.board-view {
   display: flex;
   width: 100%;
   gap: 20px;
@@ -7,7 +7,7 @@
   margin-top: calc(1% + var(--nav-height));
 }
 
-.board-view-ctn {
+.players-view {
   display: flex;
   gap: 1rem;
   width: fit-content;
@@ -25,10 +25,10 @@
   gap: 16px;
 }
 @media screen and (max-width: 820px) {
-  .player-stats-ctn {
+  .board-view {
     display: block;
   }
-  .board-view-ctn {
+  .players-view {
     width: 100%;
     flex-direction: row;
     justify-content: center;
