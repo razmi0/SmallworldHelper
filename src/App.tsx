@@ -15,6 +15,13 @@ import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import type { Player } from "@Types";
 import { buildAllBars, buildAllLines, buildAlldonuts } from "./hooks/players/helpers";
 
+/**
+ *
+ * @param players
+ * @param onlyOneFocusIndex
+ * @returns
+ */
+
 const workingVars = (players: Player[], onlyOneFocusIndex: number) => {
   const hasPlayer = players.length > 0;
   const hasHistory = hasPlayer && players.some((player) => player.history.length > 1);
