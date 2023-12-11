@@ -6,9 +6,9 @@ import {
   buildAllBars,
   buildAlldonuts,
   buildBaseStats,
-  buildNewBars,
-  buildNewLines,
-  buildNewdonuts,
+  // buildNewBars,
+  // buildNewLines,
+  // buildNewdonuts,
   removeBar,
   removeLine,
   removedonut,
@@ -24,7 +24,8 @@ import {
   updatePlayersStats,
 } from "./helpers";
 import { getFromLocalStorage, isEqual } from "@Utils/utils";
-import type { BarDataType, LineDataType, DonutDataType, Player, PlayerState } from "@Types";
+import type { Player, PlayerState } from "@Types";
+// import type { BarDataType, LineDataType, DonutDataType } from "@Types";
 
 // TYPES
 // --
@@ -47,29 +48,20 @@ export const initialPlayerStates = {
 
   /* lineData not stored at the moment */
   lineData: () => {
-    const storedData = getFromLocalStorage<LineDataType>(
-      "lineData",
-      buildAllLines(initialPlayerStates.players)
-    );
-    return storedData.stored;
+    // const storedData = getFromLocalStorage<LineDataType>("lineData", buildAllLines(initialPlayerStates.players));
+    // return storedData.stored;
   },
 
   /* barData not stored at the moment */
   barData: () => {
-    const storedData = getFromLocalStorage<BarDataType>(
-      "barData",
-      buildAllBars(initialPlayerStates.players)
-    );
-    return storedData.stored;
+    // const storedData = getFromLocalStorage<BarDataType>("barData", buildAllBars(initialPlayerStates.players));
+    // return storedData.stored;
   },
 
   /* DonutData not stored at the moment */
   donutData: () => {
-    const storedData = getFromLocalStorage<DonutDataType>(
-      "DonutData",
-      buildAlldonuts(initialPlayerStates.players)
-    );
-    return storedData.stored;
+    // const storedData = getFromLocalStorage<DonutDataType>("DonutData", buildAlldonuts(initialPlayerStates.players));
+    // return storedData.stored;
   },
 };
 
@@ -98,9 +90,9 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
       return {
         ...state,
         players: [...players, newPlayer],
-        lines: buildNewLines(lines, newPlayer),
-        bars: buildNewBars(bars, newPlayer),
-        donuts: buildNewdonuts(donuts, newPlayer),
+        // lines: buildNewLines(lines, newPlayer),
+        // bars: buildNewBars(bars, newPlayer),
+        // donuts: buildNewdonuts(donuts, newPlayer),
       };
     }
 
@@ -171,7 +163,7 @@ export const usePlayer = () => {
     }),
     []
   );
-  const [playersStates, dispatch] = useReducer(playerReducer, initialState);
+  const [playersStates, dispatch] = useReducer(playerReducer, initialState as unknown as PlayerState);
 
   /**
    * Build charts from there
