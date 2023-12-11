@@ -13,12 +13,7 @@ import {
   ArcElement,
   BarElement,
 } from "chart.js";
-import {
-  TIME_BEFORE_RESET_FOCUS,
-  barOptions,
-  lineOptions,
-  donutOptions,
-} from "../utils/charts/options";
+import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "../utils/charts/options";
 import { focusOnBar, focusOnLine, focusOndonut } from "../utils/charts/helpers";
 import { arrayify, findSum } from "@Utils/utils";
 import { cssModules, getCardStyles } from "@Components/styles";
@@ -26,17 +21,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 import type { MutableRefObject, ReactNode, FC } from "react";
 import type { LineProps, BarProps, DonutProps, FocusActionsType, FocusStatesType } from "@Types";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  BarElement
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, BarElement);
 
 type ChartProps = {
   isOpen: boolean;
@@ -121,7 +106,7 @@ const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
           const classes = getClasses(chartType);
 
           return (
-            <Draggable>
+            <Draggable key={`${chartType}_${i}`}>
               <div
                 style={{ boxShadow: `0px 0px 1px 1px ${color}` }} // , borderRadius: "50%"
                 key={i}
