@@ -22,16 +22,16 @@ export const Header = ({ children, ...rest }: ContainerProps) => {
 };
 
 export const BoardView = ({ children }: ContainerProps) => {
-  return <section className={cssModules.player["board-view"]}>{children}</section>;
+  return <main className={cssModules.player["board-view"]}>{children}</main>;
 };
 
 export const PlayerList = forwardRef<HTMLUListElement, ContainerProps>(({ children }, ref) => {
   return (
-    <div className={cssModules.player["players-view"]}>
+    <section className={cssModules.player["players-view"]}>
       <ul ref={ref} className={cssModules.player["players-list-ctn"]}>
         {children}
       </ul>
-    </div>
+    </section>
   );
 });
 
