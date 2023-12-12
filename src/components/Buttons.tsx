@@ -42,26 +42,14 @@ export const UtilityButtonGroup = ({ children, isOpen }: Props) => {
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (
-    {
-      disabled,
-      variant,
-      datatype,
-      onClick,
-      iconName,
-      sx,
-      animStartAt = false,
-      animStartState = "none",
-      ...rest
-    },
+    { disabled, variant, datatype, onClick, iconName, sx, animStartAt = false, animStartState = "none", ...rest },
     ref
   ) => {
     const svgData = useMemo(() => getSvgData(variant ?? ""), [variant]);
 
-    const transform = animStartAt
-      ? animStartState
-      : svgData?.icons[iconName].transform?.() ?? "none";
-    const zIndex = svgData?.icons[iconName].zIndex?.() ?? "auto";
-    const transition = svgData?.icons[iconName].transition?.() ?? "none";
+    const transform = animStartAt ? animStartState : svgData?.icons[iconName]?.transform?.() ?? "none";
+    const zIndex = svgData?.icons[iconName]?.zIndex?.() ?? "auto";
+    const transition = svgData?.icons[iconName]?.transition?.() ?? "none";
 
     // merging with sx
     const styles: CSSProperties = {
