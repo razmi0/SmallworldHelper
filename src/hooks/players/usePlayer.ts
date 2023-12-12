@@ -2,25 +2,25 @@
 // --
 import { useCallback, useMemo, useReducer } from "react";
 import {
-  buildAllLines,
-  buildAllBars,
-  buildAlldonuts,
+  // buildAllLines,
+  // buildAllBars,
+  // buildAlldonuts,
   buildBaseStats,
   // buildNewBars,
   // buildNewLines,
   // buildNewdonuts,
-  removeBar,
-  removeLine,
-  removedonut,
+  // removeBar,
+  // removeLine,
+  // removedonut,
   removePlayer,
-  resetBar,
-  resetLine,
-  resetdonut,
+  // resetBar,
+  // resetLine,
+  // resetdonut,
   resetPlayersStats,
-  fullReset,
-  updateBars,
-  updateLines,
-  updatedonuts,
+  // fullReset,
+  // updateBars,
+  // updateLines,
+  // updatedonuts,
   updatePlayersStats,
 } from "./helpers";
 import { getFromLocalStorage, isEqual } from "@Utils/utils";
@@ -73,7 +73,7 @@ const extendId = () => {
 // --
 const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState => {
   const { type, payload } = action;
-  const { players, lines, bars, donuts } = state;
+  const { players } = state; // , lines, bars, donuts
 
   switch (type) {
     case "ADD_PLAYER": {
@@ -98,7 +98,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
 
     case "REMOVE_PLAYER": {
       const { id } = payload;
-      const { rmPlayers, rmPlayer } = removePlayer(players, id);
+      const { rmPlayers } = removePlayer(players, id); // , rmPlayer
       if (rmPlayers.length === 0) return { ...state /**...fullReset()  */ };
 
       return {
@@ -112,7 +112,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
 
     case "RESET_SCORE": {
       const { id } = payload;
-      const { rsPlayer, rsPlayers } = resetPlayersStats(players, id);
+      const { rsPlayers } = resetPlayersStats(players, id); //  rsPlayer,
       return {
         ...state,
         players: rsPlayers,
@@ -124,7 +124,7 @@ const playerReducer = (state: PlayerState, action: PlayerAction): PlayerState =>
 
     case "UPDATE_SCORE": {
       const { id, newScore } = payload;
-      const { updatedPlayer, updatedPlayers } = updatePlayersStats(players, newScore, id);
+      const { updatedPlayers } = updatePlayersStats(players, newScore, id); // updatedPlayer,
       return {
         ...state,
         players: updatedPlayers,

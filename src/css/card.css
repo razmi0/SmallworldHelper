@@ -39,7 +39,8 @@
 }
 
 .grainy:hover {
-  filter: brightness(1.5);
+  --grainy-hover-brightness: 1.5;
+  filter: brightness(var(--grainy-hover-brightness));
   transition: filter 0.2s;
 }
 
