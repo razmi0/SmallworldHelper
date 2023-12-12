@@ -22,11 +22,7 @@
   --std-card-radius-donut: 50%;
   --linear-dark-start: rgba(16, 16, 18, 0.5);
   --linear-dark-end: rgba(9, 9, 12, 1);
-  --linear-dark-card-bg: linear-gradient(
-    180deg,
-    var(--linear-dark-start) 0%,
-    var(--linear-dark-end) 100%
-  );
+  --linear-dark-card-bg: linear-gradient(180deg, var(--linear-dark-start) 0%, var(--linear-dark-end) 100%);
   --blocky-input-lbl-padding: 15px 20px;
   --blocky-input-lbl-transition: 0.4s cubic-bezier(0.05, 0.81, 0, 0.93);
 
@@ -36,6 +32,8 @@
   --dark-theme: #000000;
   --light-theme: #ffffde;
   --color-theme: #7272724d;
+
+  --raining-stars-color: #fff;
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
