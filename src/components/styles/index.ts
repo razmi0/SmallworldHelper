@@ -8,15 +8,7 @@ import iconsStyles from "./icons.module.css";
 import themeStyles from "@Context/theme/_.module.css";
 // import globalStyles from ".../components/css/index.css/?inline";
 
-type ModuleNames =
-  | "chart"
-  | "container"
-  | "player"
-  | "utils"
-  | "nav"
-  | "icons"
-  | "theme"
-  | ("global" & undefined);
+type ModuleNames = "chart" | "container" | "player" | "utils" | "nav" | "icons" | "theme" | ("global" & undefined);
 type CssStyles = Record<ModuleNames, CSSModuleClasses>;
 /* eslint-disable no-re-export/no-re-export */
 export const cssModules: CssStyles = {
@@ -32,8 +24,7 @@ export const cssModules: CssStyles = {
 // UI
 //--
 
-const defaultRadius =
-  " grainy-default-radius lin-dark-default-radius global-grainy-default-radius ";
+const defaultRadius = " grainy-default-radius lin-dark-default-radius global-grainy-default-radius ";
 const donutRadius = ` grainy-donut-radius lin-dark-donut-radius global-grainy-donut-radius `;
 const texture = " grainy lin-dark global-grainy shadow-ctn ";
 
@@ -45,10 +36,13 @@ export type CardType =
   | "header"
   | "bar"
   | "donut"
+  | "default-back"
   | "player-back"
   | "utility-back"
   | "chart-back"
-  | "donut-back";
+  | "donut-back"
+  | "nav"
+  | "nav-back";
 export const getCardStyles = (card: CardType) => {
   const statsClasses = cssModules.player["board-card"] + texture;
   const chartClasses = cssModules.container["figure-ctn"] + texture;
@@ -60,19 +54,11 @@ export const getCardStyles = (card: CardType) => {
   switch (card) {
     case "player":
       return (
-        statsClasses +
-        cssModules.player["card-size-player"] +
-        defaultRadius +
-        cssModules.player["list-element-ctn"]
+        statsClasses + cssModules.player["card-size-player"] + defaultRadius + cssModules.player["list-element-ctn"]
       );
 
     case "utility":
-      return (
-        statsClasses +
-        cssModules.player["card-size-utility"] +
-        defaultRadius +
-        cssModules.player["addplayer-ctn"]
-      );
+      return statsClasses + cssModules.player["card-size-utility"] + defaultRadius + cssModules.player["addplayer-ctn"];
 
     case "line":
       return chartClasses + defaultRadius;
@@ -95,7 +81,13 @@ export const getCardStyles = (card: CardType) => {
     case "utility-back":
       return utilityBack;
 
-    case "header":
+    case "nav":
+      return texture + cssModules.nav["nav-ctn"];
+
+    case "nav-back":
+      return cssModules.nav["nav-back"] + " " + cssModules.container["header-ctn"];
+
+    case "default-back":
       return texture;
 
     default:

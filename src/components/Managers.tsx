@@ -1,8 +1,9 @@
 import { forwardRef, useId } from "react";
-
-import type { KeyboardEvent } from "react";
-import type { EventsManagerProps, ContainerProps, KeyboardManagerProps, EventTarget } from "@Types";
 import { keyHandlers } from "@/utils/players/helpers";
+import { getCardStyles } from "./styles";
+import type { CSSProperties, ElementType, KeyboardEvent, ReactNode } from "react";
+import type { EventsManagerProps, ContainerProps, KeyboardManagerProps, EventTarget } from "@Types";
+import type { CardType } from "./styles";
 
 export const EventsManager = <T extends unknown[]>({
   children,
@@ -31,19 +32,15 @@ export const EventsManager = <T extends unknown[]>({
   );
 };
 
-export const RefManager = forwardRef<HTMLDivElement, ContainerProps>((props, ref) => {
+export type RefManagerProps = {
+  children?: ReactNode;
+  style?: CSSProperties;
+};
+export const RefManager = forwardRef<HTMLDivElement, RefManagerProps>(({ children, style }, ref) => {
   const id = `${useId()}_ref_manager`;
   return (
-    <div
-      id={id}
-      ref={ref}
-      style={{
-        width: "fit-content",
-        height: "fit-content",
-        ...props.style,
-      }}
-    >
-      {props.children}
+    <div id={id} ref={ref} data-all-inherit style={style}>
+      {children}
     </div>
   );
 });
@@ -72,5 +69,31 @@ export const KeyboardManager = <T extends unknown[]>({
     <Element displayname={displayname} onKeyDown={(e: KeyboardEvent<EventTarget>) => onKeyDown(e)}>
       {children}
     </Element>
+  );
+};
+
+interface CardStylesManagerProps extends ContainerProps {
+  children: ReactNode;
+  card?: [CardType, CardType];
+  as?: [ElementType, ElementType];
+}
+export const CardStylesManager = ({
+  children,
+  as: Element = ["div", "div"],
+  card = ["default-back", "default"],
+  ...rest
+}: CardStylesManagerProps) => {
+  const classes = card.map((card) => getCardStyles(card));
+  console.log(classes);
+
+  const ElementBack = Element[0];
+  const ElementFront = Element[1];
+
+  return (
+    <ElementBack className={classes[0]}>
+      <ElementFront className={classes[1]} {...rest}>
+        {children}
+      </ElementFront>
+    </ElementBack>
   );
 };

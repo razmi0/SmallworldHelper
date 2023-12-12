@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { CardStyles } from "./Containers";
+import { CardStylesManager, RefManager } from "./Managers";
 import { IconButton } from "./Buttons";
 import type { MutableRefObject } from "react";
 import type { Player, UndoRedoActions, UndoRedoStates } from "@Types";
@@ -30,30 +30,30 @@ const Nav = ({ togglers, isNavOpen, undoRedoStates, undoRedoActions, isScoreHidd
   const { isRedoPossible, isUndoPossible } = undoRedoStates;
   const { undo, redo } = undoRedoActions;
   const { hideScore, openAddPlayer, openCharts, openNav } = togglers;
-  const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLElement>;
+  const navRef = useRef<HTMLElement>(null) as MutableRefObject<HTMLDivElement>;
 
   useClickOutside(navRef, () => isNavOpen && navRef && openNav());
 
   const eye = isScoreHidden ? "eyeclose" : "eyeopen";
 
   return (
-    <CardStyles as={["header", "nav"]} card={["nav-back", "nav"]}>
-      {/* <NavContainer ref={navRef}> */}
-      <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
-      {isNavOpen && (
-        <>
-          <IconButton variant="nav" iconName="load" onClick={() => setLoad(true)} />
-          <IconButton variant="nav" iconName="save" onClick={() => setSave(true)} />
-          <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
-          <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
-          <IconButton variant="nav" iconName={eye} onClick={() => hideScore()} />
-          <IconButton variant="nav" iconName="undo" onClick={() => undo()} disabled={!isUndoPossible} />
-          <IconButton variant="nav" iconName="redo" onClick={() => redo()} disabled={!isRedoPossible} />
-          <IconButton variant="nav" iconName="github" onClick={() => console.log("github")} />
-        </>
-      )}
-      {/* </NavContainer> */}
-    </CardStyles>
+    <CardStylesManager as={["header", "nav"]} card={["nav-back", "nav"]}>
+      <RefManager ref={navRef}>
+        <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
+        {isNavOpen && (
+          <>
+            <IconButton variant="nav" iconName="load" onClick={() => setLoad(true)} />
+            <IconButton variant="nav" iconName="save" onClick={() => setSave(true)} />
+            <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
+            <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
+            <IconButton variant="nav" iconName={eye} onClick={() => hideScore()} />
+            <IconButton variant="nav" iconName="undo" onClick={() => undo()} disabled={!isUndoPossible} />
+            <IconButton variant="nav" iconName="redo" onClick={() => redo()} disabled={!isRedoPossible} />
+            <IconButton variant="nav" iconName="github" onClick={() => console.log("github")} />
+          </>
+        )}
+      </RefManager>
+    </CardStylesManager>
   );
 };
 

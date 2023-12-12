@@ -49,6 +49,13 @@ button.mock {
   outline: none;
 }
 
+*[data-all-inherit] {
+  position: absolute;
+  all: inherit;
+  padding: 0;
+  margin: 0;
+}
+
 li {
   list-style: none;
 }

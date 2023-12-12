@@ -1,7 +1,6 @@
-import { cssModules, getCardStyles } from "@Components/styles";
-import { ElementType, forwardRef } from "react";
+import { cssModules } from "@Components/styles";
+import { forwardRef } from "react";
 import type { ContainerProps } from "@Types";
-import { CardType } from "./styles/index";
 
 export const MainContainer = ({ children, ...rest }: ContainerProps) => {
   return (
@@ -10,30 +9,6 @@ export const MainContainer = ({ children, ...rest }: ContainerProps) => {
     </div>
   );
 };
-
-interface CardStyles extends ContainerProps {
-  children: React.ReactNode;
-  card?: CardType;
-  as?: ElementType;
-}
-export const CardStyles = ({ children, as: Element = "div", card = "default", ...rest }: CardStyles) => {
-  const classes = getCardStyles(card);
-  return (
-    <>
-      <Element className={cssModules.container["header-ctn"] + " " + classes} {...rest}>
-        {children}
-      </Element>
-    </>
-  );
-};
-
-export const NavContainer = forwardRef<HTMLElement, ContainerProps>(({ children }, navRef) => {
-  return (
-    <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
-      {children}
-    </nav>
-  );
-});
 
 export const BoardView = ({ children }: ContainerProps) => {
   return <main className={cssModules.player["board-view"]}>{children}</main>;

@@ -23,4 +23,5 @@
   height: var(--card-size-nav-back-height);
   border-radius: var(--std-card-radius-default);
   background-color: black;
+  z-index: 1;
 }

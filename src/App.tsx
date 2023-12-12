@@ -101,6 +101,15 @@ const App = () => {
 
   return (
     <>
+      <Nav
+        storageActions={storageActions}
+        togglers={toggleActions}
+        isNavOpen={isNavOpen}
+        isScoreHidden={isScoreHidden}
+        playerSize={playerSize}
+        undoRedoStates={undoRedoStates}
+        undoRedoActions={undoRedoActions}
+      />
       <RisingStars color={color} />
       <MainContainer>
         <StartButton
@@ -108,6 +117,7 @@ const App = () => {
           hasPlayers={hasPlayer}
           isAddPlayerOpen={toggleStates.isAddPlayerOpen}
         />
+
         <BoardView>
           <Board
             hideScore={isScoreHidden}
@@ -137,15 +147,6 @@ const App = () => {
         />
         <Toast />
         <MockButton setMock={() => setPlayers(mock)} />
-        <Nav
-          storageActions={storageActions}
-          togglers={toggleActions}
-          isNavOpen={isNavOpen}
-          isScoreHidden={isScoreHidden}
-          playerSize={playerSize}
-          undoRedoStates={undoRedoStates}
-          undoRedoActions={undoRedoActions}
-        />
       </MainContainer>
     </>
   );
