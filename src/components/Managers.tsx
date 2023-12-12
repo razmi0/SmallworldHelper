@@ -80,6 +80,12 @@ interface CardStyleManagerProps extends ContainerProps {
   card?: [CardType, CardType];
   as?: [ElementType, ElementType];
 }
+/**
+ * Add back and front card styles to children. Misc props are passed to front card.
+ * @param children
+ * @param as : [back, front]
+ * @param card : [back, front]
+ */
 export const CardStyleManager = ({
   children,
   as: Element = ["div", "div"],

@@ -1,7 +1,7 @@
 import Draggable from "react-draggable";
-import { EventsManager, KeyboardManager } from "./Managers";
+import { CardStyleManager, EventsManager, KeyboardManager } from "./Managers";
 import { arrayify } from "@Utils/utils";
-import { cssModules, getCardStyles } from "@CssModules";
+import { cssModules } from "@CssModules";
 import type { HTMLAttributes, ReactNode } from "react";
 import type { KeyboardHandlerTypeWithArgs, PointerHandlerTypeWithArgs, ContainerProps, IconName } from "@Types";
 import { IconHeading } from "./Icons";
@@ -11,16 +11,16 @@ interface PlayerCardProps extends ContainerProps {
 }
 
 const PlayerCard = ({ children, color }: PlayerCardProps) => {
-  const classes = getCardStyles("player");
-  const back = getCardStyles("player-back");
   const backShadowColor = color === "inherit" ? "rgba(255,255,222, 0.3)" : color;
 
   return (
-    <div className={back} style={{ boxShadow: `0px 0px 1px 1px ${backShadowColor}` }} color={backShadowColor}>
-      <div id="card" className={classes}>
-        {children}
-      </div>
-    </div>
+    <CardStyleManager
+      card={["player-back", "player"]}
+      as={["div", "div"]}
+      style={{ boxShadow: `0px 0px 1px 1px ${backShadowColor}` }}
+    >
+      {children}
+    </CardStyleManager>
   );
 };
 
