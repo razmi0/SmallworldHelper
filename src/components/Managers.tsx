@@ -35,15 +35,18 @@ export const EventsManager = <T extends unknown[]>({
 export type RefManagerProps = {
   children?: ReactNode;
   style?: CSSProperties;
+  as?: ElementType;
 };
-export const RefManager = forwardRef<HTMLDivElement, RefManagerProps>(({ children, style }, ref) => {
-  const id = `${useId()}_ref_manager`;
-  return (
-    <div id={id} ref={ref} data-all-inherit style={style}>
-      {children}
-    </div>
-  );
-});
+export const RefManager = forwardRef<HTMLDivElement, RefManagerProps>(
+  ({ children, style, as: Element = "div" }, ref) => {
+    const displayname = `_ref_manager`;
+    return (
+      <Element ref={ref} data-all-inherit style={style} displayname={displayname}>
+        {children}
+      </Element>
+    );
+  }
+);
 
 export const KeyboardManager = <T extends unknown[]>({
   as: Element = "div",
@@ -72,26 +75,26 @@ export const KeyboardManager = <T extends unknown[]>({
   );
 };
 
-interface CardStylesManagerProps extends ContainerProps {
+interface CardStyleManagerProps extends ContainerProps {
   children: ReactNode;
   card?: [CardType, CardType];
   as?: [ElementType, ElementType];
 }
-export const CardStylesManager = ({
+export const CardStyleManager = ({
   children,
   as: Element = ["div", "div"],
   card = ["default-back", "default"],
   ...rest
-}: CardStylesManagerProps) => {
+}: CardStyleManagerProps) => {
+  const displayname = `_card_style_manager`;
   const classes = card.map((card) => getCardStyles(card));
-  console.log(classes);
 
   const ElementBack = Element[0];
   const ElementFront = Element[1];
 
   return (
-    <ElementBack className={classes[0]}>
-      <ElementFront className={classes[1]} {...rest}>
+    <ElementBack className={classes[0]} displayname={displayname}>
+      <ElementFront className={classes[1]} displayname={displayname} {...rest}>
         {children}
       </ElementFront>
     </ElementBack>

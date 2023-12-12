@@ -24,10 +24,6 @@ export const cssModules: CssStyles = {
 // UI
 //--
 
-const defaultRadius = " grainy-default-radius lin-dark-default-radius global-grainy-default-radius ";
-const donutRadius = ` grainy-donut-radius lin-dark-donut-radius global-grainy-donut-radius `;
-const texture = " grainy lin-dark global-grainy shadow-ctn ";
-
 export type CardType =
   | "player"
   | "utility"
@@ -43,54 +39,80 @@ export type CardType =
   | "donut-back"
   | "nav"
   | "nav-back";
-export const getCardStyles = (card: CardType) => {
-  const statsClasses = cssModules.player["board-card"] + texture;
-  const chartClasses = cssModules.container["figure-ctn"] + texture;
-  const playerBack = cssModules.player["player-back"];
-  const chartBack = cssModules.chart["chart-back"];
-  const donutBack = cssModules.chart["donut-back"];
-  const utilityBack = cssModules.player["utility-back"];
 
+const defaultRadius = "grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
+const donutRadius = "grainy-donut-radius lin-dark-donut-radius global-grainy-donut-radius";
+const texture = "grainy lin-dark global-grainy shadow-ctn";
+const brightness = "brightness-15";
+export const getCardStyles = (card: CardType) => {
   switch (card) {
     case "player":
-      return (
-        statsClasses + cssModules.player["card-size-player"] + defaultRadius + cssModules.player["list-element-ctn"]
+      return spaced(
+        cssModules.player["board-card"],
+        texture,
+        cssModules.player["card-size-player"],
+        defaultRadius,
+        cssModules.player["list-element-ctn"],
+        brightness
       );
 
     case "utility":
-      return statsClasses + cssModules.player["card-size-utility"] + defaultRadius + cssModules.player["addplayer-ctn"];
+      return spaced(
+        cssModules.player["board-card"],
+        texture,
+        cssModules.player["card-size-utility"],
+        defaultRadius,
+        cssModules.player["list-element-ctn"]
+      );
 
     case "line":
-      return chartClasses + defaultRadius;
+      return spaced(cssModules.container["figure-ctn"], texture, defaultRadius, brightness);
 
     case "bar":
-      return chartClasses + defaultRadius;
+      return spaced(cssModules.container["figure-ctn"], texture, defaultRadius, brightness);
 
     case "donut":
-      return chartClasses + cssModules.chart["donut"] + donutRadius + cssModules.chart["donut-ctn"];
+      return spaced(
+        cssModules.container["figure-ctn"],
+        texture,
+        cssModules.chart["donut"],
+        donutRadius,
+        cssModules.chart["donut-ctn"],
+        brightness
+      );
 
     case "chart-back":
-      return chartBack;
+      return cssModules.chart["chart-back"];
 
     case "donut-back":
-      return donutBack;
+      return cssModules.chart["donut-back"];
 
     case "player-back":
-      return playerBack;
+      return cssModules.player["player-back"];
 
     case "utility-back":
-      return utilityBack;
+      return cssModules.player["utility-back"];
 
     case "nav":
-      return texture + cssModules.nav["nav-ctn"];
+      return spaced(texture, cssModules.nav["nav-ctn"]);
 
     case "nav-back":
-      return cssModules.nav["nav-back"] + " " + cssModules.container["header-ctn"];
+      return spaced(cssModules.nav["nav-back"], cssModules.container["header-ctn"]);
 
     case "default-back":
-      return texture;
+      return spaced(texture, brightness);
 
     default:
+      console.warn("No card type specified in getCardStyles");
       return "DEFAULT"; // cardStyles +
   }
+};
+
+/**
+ * Join strings with a space
+ * @param str
+ * @returns
+ */
+const spaced = (...str: string[]) => {
+  return str.join(" ");
 };

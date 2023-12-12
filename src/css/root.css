@@ -10,6 +10,11 @@
   --card-size-height-player: 150px;
   --card-size-height-utility: 100%;
   --card-size-width-utility: 100%;
+  --linear-dark-card-bg: linear-gradient(180deg, var(--linear-dark-start) 0%, var(--linear-dark-end) 100%);
+  --std-card-radius-default: 10px;
+  --std-card-radius-donut: 50%;
+
+  /*  */
   --light-color: #ffffff;
   --dark-color: #000000;
   --dark-color-lighter: #727272;
@@ -17,24 +22,24 @@
   --dark-icon: #609dff;
   --primary-color: #646cff;
   --other-primary-color: #213547;
+  /*  */
   --std-height: 40px;
-  --std-card-radius-default: 10px;
-  --std-card-radius-donut: 50%;
   --linear-dark-start: rgba(16, 16, 18, 0.5);
   --linear-dark-end: rgba(9, 9, 12, 1);
-  --linear-dark-card-bg: linear-gradient(180deg, var(--linear-dark-start) 0%, var(--linear-dark-end) 100%);
+  /*  */
   --blocky-input-lbl-padding: 15px 20px;
   --blocky-input-lbl-transition: 0.4s cubic-bezier(0.05, 0.81, 0, 0.93);
-
   --blocky-input-lbl-bg-focus: rgb(20, 20, 26);
   --blocky-input-lbl-border-focus: #212121 solid 1px;
   --blocky-input-lbl-transform-focus: translateX(14px) translateY(-7.5px);
+  /*  */
   --dark-theme: #000000;
   --light-theme: #ffffde;
   --color-theme: #7272724d;
-
+  --brightness-15: 1.5;
+  /*  */
   --raining-stars-color: #fff;
-
+  /*  */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

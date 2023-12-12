@@ -196,6 +196,7 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   btnType?: string;
   animStartAt?: boolean;
   animStartState?: string;
+  href?: string;
 }
 
 export type PlayerState = {

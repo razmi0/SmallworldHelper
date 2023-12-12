@@ -42,7 +42,7 @@ export const UtilityButtonGroup = ({ children, isOpen }: Props) => {
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (
-    { disabled, variant, datatype, onClick, iconName, sx, animStartAt = false, animStartState = "none", ...rest },
+    { href, disabled, variant, datatype, onClick, iconName, sx, animStartAt = false, animStartState = "none", ...rest },
     ref
   ) => {
     const svgData = useMemo(() => getSvgData(variant ?? ""), [variant]);
@@ -61,20 +61,41 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     };
 
     return (
-      <button
-        aria-label={`button ${iconName}`}
-        ref={ref}
-        disabled={disabled}
-        onClick={onClick}
-        style={styles}
-        type="button"
-        datatype={datatype}
-        {...rest}
-      >
-        <Icon variant={variant} iconName={iconName} disabled={disabled} />
-      </button>
+      <>
+        {href && (
+          <a href={href} data-all-inherit target="_blank">
+            <button
+              aria-label={`button ${iconName}`}
+              ref={ref}
+              disabled={disabled}
+              onClick={onClick}
+              style={styles}
+              type="button"
+              datatype={datatype}
+              {...rest}
+            >
+              <Icon variant={variant} iconName={iconName} disabled={disabled} />
+            </button>
+          </a>
+        )}
+        {!href && (
+          <button
+            aria-label={`button ${iconName}`}
+            ref={ref}
+            disabled={disabled}
+            onClick={onClick}
+            style={styles}
+            type="button"
+            datatype={datatype}
+            {...rest}
+          >
+            <Icon variant={variant} iconName={iconName} disabled={disabled} />
+          </button>
+        )}
+      </>
     );
   }
 );
+<a href="https://github.com/razmi0/SmallworldHelper"></a>;
 
 IconButton.displayName = "IconButton";
