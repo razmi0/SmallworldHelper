@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { CardStyles, NavContainer } from "./Containers";
+import { CardStyles } from "./Containers";
 import { IconButton } from "./Buttons";
 import type { MutableRefObject } from "react";
 import type { Player, UndoRedoActions, UndoRedoStates } from "@Types";
