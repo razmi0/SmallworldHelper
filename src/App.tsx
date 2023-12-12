@@ -44,6 +44,7 @@ const App = () => {
   const lines = useMemo(() => buildAllLines(players), [players]);
   const bars = useMemo(() => buildAllBars(players), [players]);
   const donuts = useMemo(() => buildAlldonuts(players), [players]);
+
   /**
    * useStorage
    */
@@ -102,15 +103,6 @@ const App = () => {
     <>
       <RisingStars color={color} />
       <MainContainer>
-        <Nav
-          storageActions={storageActions}
-          togglers={toggleActions}
-          isNavOpen={isNavOpen}
-          isScoreHidden={isScoreHidden}
-          playerSize={playerSize}
-          undoRedoStates={undoRedoStates}
-          undoRedoActions={undoRedoActions}
-        />
         <StartButton
           toggleOpenAddPlayer={toggleActions.openAddPlayer}
           hasPlayers={hasPlayer}
@@ -135,6 +127,7 @@ const App = () => {
             donuts={donuts}
           />
         </BoardView>
+
         <AddPlayerCard
           addPlayer={addPlayer}
           isOpen={toggleStates.isAddPlayerOpen}
@@ -144,6 +137,15 @@ const App = () => {
         />
         <Toast />
         <MockButton setMock={() => setPlayers(mock)} />
+        <Nav
+          storageActions={storageActions}
+          togglers={toggleActions}
+          isNavOpen={isNavOpen}
+          isScoreHidden={isScoreHidden}
+          playerSize={playerSize}
+          undoRedoStates={undoRedoStates}
+          undoRedoActions={undoRedoActions}
+        />
       </MainContainer>
     </>
   );
