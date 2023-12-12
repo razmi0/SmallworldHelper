@@ -37,21 +37,22 @@ const Nav = ({ togglers, isNavOpen, undoRedoStates, undoRedoActions, isScoreHidd
   const eye = isScoreHidden ? "eyeclose" : "eyeopen";
 
   return (
-    <CardStyles as="header" card="header">
-      <NavContainer ref={navRef}>
-        <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
-        {isNavOpen && (
-          <>
-            <IconButton variant="nav" iconName="load" onClick={() => setLoad(true)} />
-            <IconButton variant="nav" iconName="save" onClick={() => setSave(true)} />
-            <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
-            <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
-            <IconButton variant="nav" iconName={eye} onClick={() => hideScore()} />
-            <IconButton variant="nav" iconName="undo" onClick={() => undo()} disabled={!isUndoPossible} />
-            <IconButton variant="nav" iconName="redo" onClick={() => redo()} disabled={!isRedoPossible} />
-          </>
-        )}
-      </NavContainer>
+    <CardStyles as={["header", "nav"]} card={["nav-back", "nav"]}>
+      {/* <NavContainer ref={navRef}> */}
+      <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
+      {isNavOpen && (
+        <>
+          <IconButton variant="nav" iconName="load" onClick={() => setLoad(true)} />
+          <IconButton variant="nav" iconName="save" onClick={() => setSave(true)} />
+          <IconButton variant="nav" iconName="addplayer" onClick={() => openAddPlayer()} />
+          <IconButton variant="nav" iconName="chart" onClick={() => openCharts()} />
+          <IconButton variant="nav" iconName={eye} onClick={() => hideScore()} />
+          <IconButton variant="nav" iconName="undo" onClick={() => undo()} disabled={!isUndoPossible} />
+          <IconButton variant="nav" iconName="redo" onClick={() => redo()} disabled={!isRedoPossible} />
+          <IconButton variant="nav" iconName="github" onClick={() => console.log("github")} />
+        </>
+      )}
+      {/* </NavContainer> */}
     </CardStyles>
   );
 };
