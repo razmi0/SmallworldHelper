@@ -91,8 +91,9 @@ export const getSvgData = (variant: VariantType) => {
  *              positions increment from left to right to match the order of the buttons in the nav menu
  *              and subsequent translate factor animation.
  */
+const defaultColor = ["#FFFFFF", "#000"] as [string, string];
 export const NAV_STYLES: SvgDataType = {
-  size: ["30px", "30px"],
+  size: ["33px", "33px"],
   filter: ["0px", "0px"],
   transition: "all 0.2s ease-in-out",
   gap: "5px",
@@ -102,7 +103,7 @@ export const NAV_STYLES: SvgDataType = {
     /* position 0 */
 
     menu: {
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Open menu",
     },
 
@@ -110,7 +111,7 @@ export const NAV_STYLES: SvgDataType = {
 
     theme: {
       index: 1,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Toggle theme",
     },
 
@@ -118,7 +119,7 @@ export const NAV_STYLES: SvgDataType = {
 
     load: {
       index: 2,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Load session",
     },
 
@@ -126,7 +127,7 @@ export const NAV_STYLES: SvgDataType = {
 
     save: {
       index: 3,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Save session",
     },
 
@@ -134,7 +135,7 @@ export const NAV_STYLES: SvgDataType = {
 
     addplayer: {
       index: 4,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Add player",
     },
 
@@ -142,7 +143,7 @@ export const NAV_STYLES: SvgDataType = {
 
     chart: {
       index: 5,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Toggle chart",
     },
 
@@ -150,19 +151,19 @@ export const NAV_STYLES: SvgDataType = {
 
     eyes: {
       index: 6,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Hide scores",
     },
 
     eyeopen: {
       index: 6,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Show scores",
     },
 
     eyeclose: {
       index: 6,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Hide scores",
     },
 
@@ -170,7 +171,7 @@ export const NAV_STYLES: SvgDataType = {
 
     undo: {
       index: 7,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Undo action",
     },
 
@@ -178,8 +179,16 @@ export const NAV_STYLES: SvgDataType = {
 
     redo: {
       index: 8,
-      color: ["#646cff", "#609dff"],
+      color: defaultColor,
       message: "Redo action",
+    },
+
+    /* position 9 */
+    github: {
+      index: 9,
+      color: defaultColor,
+      message: "Github",
+      size: ["23px", "23px"],
     },
 
     // ADD MORE ICONS HERE
@@ -264,9 +273,11 @@ const TOASTER_STYLES: SvgDataType = {
 };
 
 if (HEADING_STYLES.animations?.translate.getAnimation)
-  HEADING_STYLES.animations.translate.getAnimation =
-    HEADING_STYLES.animations.translate.getAnimation.bind(HEADING_STYLES.animations?.translate);
+  HEADING_STYLES.animations.translate.getAnimation = HEADING_STYLES.animations.translate.getAnimation.bind(
+    HEADING_STYLES.animations?.translate
+  );
 
 if (HEADING_STYLES.animations?.rotate.getAnimation)
-  HEADING_STYLES.animations.rotate.getAnimation =
-    HEADING_STYLES.animations.rotate.getAnimation.bind(HEADING_STYLES.animations?.rotate);
+  HEADING_STYLES.animations.rotate.getAnimation = HEADING_STYLES.animations.rotate.getAnimation.bind(
+    HEADING_STYLES.animations?.rotate
+  );

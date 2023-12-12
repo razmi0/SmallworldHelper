@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0">
 <defs>
-<symbol fill="#646cff" viewBox="-4.8 -4.8 33.60 33.60" id="addplayer">
+<symbol fill="#FFFFFF" viewBox="-4.8 -4.8 33.60 33.60" id="addplayer">
       <path         transform="translate(-4.8, -4.8), scale(2.1)"
         fill="transparent"
         d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
@@ -9,7 +9,7 @@
       ></path>
       <path d="M2,21h8a1,1,0,0,0,0-2H3.071A7.011,7.011,0,0,1,10,13a5.044,5.044,0,1,0-3.377-1.337A9.01,9.01,0,0,0,1,20,1,1,0,0,0,2,21ZM10,5A3,3,0,1,1,7,8,3,3,0,0,1,10,5ZM23,16a1,1,0,0,1-1,1H19v3a1,1,0,0,1-2,0V17H14a1,1,0,0,1,0-2h3V12a1,1,0,0,1,2,0v3h3A1,1,0,0,1,23,16Z"></path>
     </symbol>
-<symbol viewBox="-6.4 -6.4 44.80 44.80" fill="#646cff" id="chart">
+<symbol viewBox="-6.4 -6.4 44.80 44.80" fill="#FFFFFF" id="chart">
       <path       fill="transparent"
         transform="translate(-6.4, -6.4), scale(2.8)"
         d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
@@ -29,7 +29,7 @@
 <symbol fill="" viewBox="-4.8 -4.8 33.60 33.60" id="delete">
       <path d="M1,20a1,1,0,0,0,1,1h8a1,1,0,0,0,0-2H3.071A7.011,7.011,0,0,1,10,13a5.044,5.044,0,1,0-3.377-1.337A9.01,9.01,0,0,0,1,20ZM10,5A3,3,0,1,1,7,8,3,3,0,0,1,10,5Zm12.707,9.707L20.414,17l2.293,2.293a1,1,0,1,1-1.414,1.414L19,18.414l-2.293,2.293a1,1,0,0,1-1.414-1.414L17.586,17l-2.293-2.293a1,1,0,0,1,1.414-1.414L19,15.586l2.293-2.293a1,1,0,0,1,1.414,1.414Z"></path>
     </symbol>
-<symbol viewBox="-9.6 -9.6 67.20 67.20" fill="#646cff" id="eyeclose">
+<symbol viewBox="-9.6 -9.6 67.20 67.20" fill="#FFFFFF" id="eyeclose">
       <path         transform="translate(-9.6, -9.6), scale(4.2)"
         fill="transparent"
         d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
@@ -39,7 +39,7 @@
       <path d="M45.3,22.1C43.2,19.5,35.4,11,24,11a23.4,23.4,0,0,0-3.8.3L23.8,15H24c8.8,0,15.3,6.2,17.7,9a33.7,33.7,0,0,1-4.6,4.3l2.8,2.8a30.1,30.1,0,0,0,5.4-5.2A3,3,0,0,0,45.3,22.1Z"></path>
       <path d="M29.4,26.6A5.8,5.8,0,0,0,30,24a6,6,0,0,0-6-6,5.8,5.8,0,0,0-2.6.6L9.7,6.9A2,2,0,0,0,6.9,9.7l4.7,4.8a32.1,32.1,0,0,0-8.9,7.6,3,3,0,0,0,0,3.8C4.8,28.5,12.6,37,24,37a23,23,0,0,0,8.5-1.6l5.8,5.7a2,2,0,1,0,2.8-2.8ZM24,33c-8.8,0-15.3-6.2-17.7-9a29.7,29.7,0,0,1,8.3-6.6l4,4A5.8,5.8,0,0,0,18,24a6,6,0,0,0,6,6,5.8,5.8,0,0,0,2.6-.6l2.8,2.8A19.1,19.1,0,0,1,24,33Z"></path>
     </symbol>
-<symbol viewBox="-9.6 -9.6 67.20 67.20" fill="#646cff" id="eyeopen">
+<symbol viewBox="-9.6 -9.6 67.20 67.20" fill="#FFFFFF" id="eyeopen">
       <path         transform="translate(-9.6, -9.6), scale(4.2)"
         fill="transparent"
         d="M9.66.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
@@ -49,6 +49,7 @@
       <path d="M45.3,22.1h0C43.2,19.5,35.4,11,24,11S4.8,19.5,2.7,22.1a3,3,0,0,0,0,3.8C4.8,28.5,12.6,37,24,37s19.2-8.5,21.3-11.1A3,3,0,0,0,45.3,22.1ZM24,33c-8.8,0-15.3-6.2-17.7-9,2.4-2.8,8.9-9,17.7-9s15.3,6.2,17.7,9C39.3,26.8,32.8,33,24,33Z"></path>
       <circle cx="24" cy="24" r="6"></circle>
     </symbol>
+<symbol viewBox="0 0 50 50" id="github"><path style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" d="M3,25c0,12.148,9.852,22,22,22s22-9.852,22-22S37.148,3,25,3S3,12.852,3,25z"></path><path style="fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" d="M38,25.655c4.51-0.282,7.58-0.017,9,0.163"></path><path style="fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" d="M37.401,27.519c5.169,0,8.498,0.675,9.699,0.967"></path><path style="fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" d="M3,25.802c1.42-0.181,4.49-0.445,9-0.163"></path><path style="fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" d="M2.999,28.476c1.199-0.292,4.528-0.968,9.701-0.968"></path><path style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" d="M36.3,18.6c0.5-1.6,1.3-5.2-0.2-6.6c-2.7,0-4.6,1.3-5.5,2.1C29,13.4,27.1,13,25,13s-4,0.4-5.7,1.1c-0.9-0.8-2.8-2.1-5.5-2.1c-1.4,1.3-0.7,4.9-0.2,6.6c-1.1,1.5-1.7,3.3-1.7,5c0,5.5,4.2,9.4,13,9.4s13-3.9,13-9.4C38,21.8,37.4,20.1,36.3,18.6z"></path><path style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" d="M19,39c0,0-3,0-3.6,0c-1.5,0-2.8-0.6-3.4-1.8c-0.7-1.3-1-3.5-2.8-4.7C8.9,32.3,9.1,32,9.7,32c0.6,0.1,1.9,0.9,2.7,2c0.9,1.1,1.8,2,3.4,2s3.8,0.1,4.5-0.7"></path><path style="fill:none;stroke:#FFFFFF;stroke-width:2;stroke-miterlimit:10;" d="M31,45.7v-6.1c0-2.7-1.9-6.5-4.5-6.5h-2.8c-2.6,0-4.7,3.8-4.7,6.5V46"></path></symbol>
 <symbol viewBox="-9.6 -9.6 67.20 67.20" fill="none" id="load">
       <path         transform="translate(-9.6, -9.6), scale(4.2)"
         fill="transparent"
@@ -57,31 +58,31 @@
       ></path>
       <rect width="0" height="0" fill="white" fill-opacity="0"></rect>
       <path         d="M11.6777 20.271C7.27476 21.3181 4 25.2766 4 30C4 35.5228 8.47715 40 14 40V40C14.9474 40 15.864 39.8683 16.7325 39.6221"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M36.0547 20.271C40.4577 21.3181 43.7324 25.2766 43.7324 30C43.7324 35.5228 39.2553 40 33.7324 40V40C32.785 40 31.8684 39.8683 30.9999 39.6221"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M36 20C36 13.3726 30.6274 8 24 8C17.3726 8 12 13.3726 12 20"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M17.0654 30.119L23.9999 37.0764L31.1318 30"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M24 20V33.5382"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -94,13 +95,13 @@
         stroke-width="0"
       ></path>
       <path         d="M4 12H20M4 8H20M4 16H12"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
     </symbol>
-<symbol viewBox="-4.8 -4.8 33.60 33.60" fill="#646cff" id="redo">
+<symbol viewBox="-4.8 -4.8 33.60 33.60" fill="#FFFFFF" id="redo">
       <path         transform="translate(-4.8, -4.8), scale(2.1)"
         fill="transparent"
         d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
@@ -109,7 +110,7 @@
       <path         fill-rule="evenodd"
         clip-rule="evenodd"
         d="M16.4697 3.46967C16.7626 3.17678 17.2374 3.17678 17.5303 3.46967L20.5303 6.46967C20.8232 6.76256 20.8232 7.23744 20.5303 7.53033L17.5303 10.5303C17.2374 10.8232 16.7626 10.8232 16.4697 10.5303C16.1768 10.2374 16.1768 9.76256 16.4697 9.46967L18.1893 7.75H9.00001C8.05159 7.75 7.39042 7.75072 6.8778 7.79718C6.37549 7.84271 6.0899 7.92737 5.875 8.05144C5.53296 8.24892 5.24893 8.53295 5.05145 8.87499C4.92738 9.0899 4.84271 9.37548 4.79718 9.87779C4.75072 10.3904 4.75 11.0516 4.75 12C4.75 12.9484 4.75072 13.6096 4.79718 14.1222C4.84271 14.6245 4.92737 14.9101 5.05144 15.125C5.24892 15.467 5.53296 15.7511 5.875 15.9486C6.0899 16.0726 6.37549 16.1573 6.87779 16.2028C7.39041 16.2493 8.05158 16.25 9 16.25H16C16.4142 16.25 16.75 16.5858 16.75 17C16.75 17.4142 16.4142 17.75 16 17.75H8.96423C8.05998 17.75 7.3307 17.75 6.7424 17.6967C6.13605 17.6417 5.60625 17.5254 5.125 17.2476C4.55493 16.9185 4.08154 16.4451 3.75241 15.875C3.47455 15.3937 3.35826 14.8639 3.3033 14.2576C3.24998 13.6693 3.24999 12.94 3.25 12.0358V11.9642C3.24999 11.06 3.24999 10.3307 3.30331 9.74239C3.35826 9.13604 3.47456 8.60624 3.75241 8.12499C4.08154 7.55492 4.55493 7.08154 5.125 6.75241C5.60625 6.47456 6.13605 6.35826 6.7424 6.3033C7.33069 6.24998 8.05997 6.24999 8.96421 6.25L18.1893 6.25L16.4697 4.53033C16.1768 4.23744 16.1768 3.76256 16.4697 3.46967Z"
-        fill="#646cff"
+        fill="#FFFFFF"
       ></path>
     </symbol>
 <symbol viewBox="-8 -8 39.60 39.60" fill="none" id="reset">
@@ -128,31 +129,31 @@
       ></path>
       <rect width="48" height="48" fill="white" fill-opacity="0"></rect>
       <path         d="M11.6777 20.271C7.27476 21.3181 4 25.2766 4 30C4 35.5228 8.47715 40 14 40C14.9474 40 15.864 39.8683 16.7325 39.6221"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M36.0547 20.271C40.4577 21.3181 43.7324 25.2766 43.7324 30C43.7324 35.5228 39.2553 40 33.7324 40V40C32.785 40 31.8684 39.8683 30.9999 39.6221"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M36 20C36 13.3726 30.6274 8 24 8C17.3726 8 12 13.3726 12 20"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M17.0654 27.881L23.9999 20.9236L31.1318 28"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
       ></path>
       <path         d="M24 38V24.4618"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -163,7 +164,7 @@
         d="M256 38.013c-22.458 0-66.472 110.3-84.64 123.502-18.17 13.2-136.674 20.975-143.614 42.334-6.94 21.358 84.362 97.303 91.302 118.662 6.94 21.36-22.286 136.465-4.116 149.665 18.17 13.2 118.61-50.164 141.068-50.164 22.458 0 122.9 63.365 141.068 50.164 18.17-13.2-11.056-128.306-4.116-149.665 6.94-21.36 98.242-97.304 91.302-118.663-6.94-21.36-125.444-29.134-143.613-42.335-18.168-13.2-62.182-123.502-84.64-123.502z"
       ></path>
     </symbol>
-<symbol fill="#646cff" viewBox="-60.41 -60.41 422.88 422.88" id="theme">
+<symbol fill="#FFFFFF" viewBox="-60.41 -60.41 422.88 422.88" id="theme">
       <path         transform="translate(-60.41, -60.41), scale(26.43)"
         fill="transparent"
         d="M9.166.33a2.25 2.25 0 00-2.332 0l-5.25 3.182A2.25 2.25 0 00.5 5.436v5.128a2.25 2.25 0 001.084 1.924l5.25 3.182a2.25 2.25 0 002.332 0l5.25-3.182a2.25 2.25 0 001.084-1.924V5.436a2.25 2.25 0 00-1.084-1.924L9.166.33z"
@@ -180,7 +181,7 @@
         stroke-width="0"
       ></path>
       <path         d="M4 7H15C17.7614 7 20 9.23857 20 12C20 14.7614 17.7614 17 15 17H8.00001M4 7L7 4M4 7L7 10"
-        stroke="#646cff"
+        stroke="#FFFFFF"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
