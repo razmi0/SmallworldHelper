@@ -1,12 +1,13 @@
 import { useCallback, useRef, useState } from "react";
 import { useNotif } from "@Context/useNotif";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { SoftInput } from "@Components/Inputs";
-import { CloseButton } from "@Components/Buttons";
-import { KeyboardManager, Position, RefManager } from "@Components/Utils";
+import { SoftInput } from "./Inputs";
+import { CloseButton } from "./Buttons";
+import { RefManager, KeyboardManager } from "./Managers";
+import { Position } from "./Utils";
 import { keys, validateIntOnChange } from "@Utils/players/helpers";
 import { beautify } from "@Utils/utils";
-import { getCardStyles } from "@Components/styles";
+import { getCardStyles } from "./styles";
 import type { ChangeEvent, MutableRefObject } from "react";
 import type { FocusActionsType, ContainerProps, KeyboardHandlerTypeWithArgs } from "@Types";
 
