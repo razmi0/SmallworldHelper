@@ -1,5 +1,5 @@
 import Draggable from "react-draggable";
-import { EventsManager, KeyboardManager } from "./Utils";
+import { EventsManager, KeyboardManager } from "./Managers";
 import { arrayify } from "@Utils/utils";
 import { cssModules, getCardStyles } from "@CssModules";
 import type { HTMLAttributes, ReactNode } from "react";
