@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { useClickOutside } from "@Hooks/useClickOutside";
-import { Header } from "@Components/Containers";
-import { IconButton } from "@Components/Buttons";
-import { cssModules } from "@Components/styles";
+import { CardStyles, NavContainer } from "./Containers";
+import { IconButton } from "./Buttons";
 import type { MutableRefObject } from "react";
 import type { Player, UndoRedoActions, UndoRedoStates } from "@Types";
 
@@ -38,8 +37,8 @@ const Nav = ({ togglers, isNavOpen, undoRedoStates, undoRedoActions, isScoreHidd
   const eye = isScoreHidden ? "eyeclose" : "eyeopen";
 
   return (
-    <Header>
-      <nav className={cssModules.nav["nav-ctn"]} ref={navRef}>
+    <CardStyles as="header" card="header">
+      <NavContainer ref={navRef}>
         <IconButton variant="nav" iconName="menu" onClick={() => openNav()} />
         {isNavOpen && (
           <>
@@ -52,8 +51,9 @@ const Nav = ({ togglers, isNavOpen, undoRedoStates, undoRedoActions, isScoreHidd
             <IconButton variant="nav" iconName="redo" onClick={() => redo()} disabled={!isRedoPossible} />
           </>
         )}
-      </nav>
-    </Header>
+      </NavContainer>
+    </CardStyles>
   );
 };
+
 export default Nav;
