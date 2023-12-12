@@ -1,8 +1,8 @@
 :root {
   --card-size-chart-width: fit-content;
   --card-size-chart-height: fit-content;
-  --card-size-nav-back-width: 140px;
-  --card-size-nav-back-height: 150px;
+  --card-size-nav-back-width: fit-content;
+  --card-size-nav-back-height: fit-content;
   --n-icons: 5;
   --nav-width: calc(50% - (26px * var(--n-icons)));
   --nav-height: 30px;

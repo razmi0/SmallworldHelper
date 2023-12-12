@@ -187,7 +187,8 @@ export type IconName =
   | "undo"
   | "redo"
   | "close"
-  | "star";
+  | "star"
+  | "github";
 export type KeyboardNavigationIdType = "soft-input" | "utility";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, IconProps {

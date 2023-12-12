@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: row;
   width: fit-content;
+  padding: 2px 5px;
+  gap: 3px;
 }
 .view-transition-manager {
   display: flex;
@@ -13,4 +15,12 @@
 .menu-icon-ctn {
   display: flex;
   place-content: center;
+}
+
+.nav-back {
+  position: relative;
+  width: var(--card-size-nav-back-width);
+  height: var(--card-size-nav-back-height);
+  border-radius: var(--std-card-radius-default);
+  background-color: black;
 }
