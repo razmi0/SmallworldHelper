@@ -6,9 +6,21 @@ import utilsStyles from "./utils.module.css";
 import navStyles from "./nav.module.css";
 import iconsStyles from "./icons.module.css";
 import themeStyles from "@Context/theme/_.module.css";
+import timerStyles from "./timer.module.css";
+
+import type { CardStyleType } from "@Types";
 // import globalStyles from ".../components/css/index.css/?inline";
 
-type ModuleNames = "chart" | "container" | "player" | "utils" | "nav" | "icons" | "theme" | ("global" & undefined);
+type ModuleNames =
+  | "chart"
+  | "container"
+  | "player"
+  | "timer"
+  | "utils"
+  | "nav"
+  | "icons"
+  | "theme"
+  | ("global" & undefined);
 type CssStyles = Record<ModuleNames, CSSModuleClasses>;
 /* eslint-disable no-re-export/no-re-export */
 export const cssModules: CssStyles = {
@@ -19,32 +31,17 @@ export const cssModules: CssStyles = {
   nav: navStyles,
   icons: iconsStyles,
   theme: themeStyles,
+  timer: timerStyles,
 };
 
 // UI
 //--
 
-export type CardType =
-  | "player"
-  | "utility"
-  | "default"
-  | "line"
-  | "header"
-  | "bar"
-  | "donut"
-  | "default-back"
-  | "player-back"
-  | "utility-back"
-  | "chart-back"
-  | "donut-back"
-  | "nav"
-  | "nav-back";
-
 const defaultRadius = "grainy-default-radius lin-dark-default-radius global-grainy-default-radius";
 const donutRadius = "grainy-donut-radius lin-dark-donut-radius global-grainy-donut-radius";
 const texture = "grainy lin-dark global-grainy shadow-ctn";
 const brightness = "brightness-15";
-export const getCardStyles = (card: CardType) => {
+export const getCardStyles = (card: CardStyleType) => {
   switch (card) {
     case "player":
       return spaced(
@@ -81,7 +78,10 @@ export const getCardStyles = (card: CardType) => {
         brightness
       );
 
-    case "chart-back":
+    case "line-back":
+      return cssModules.chart["chart-back"];
+
+    case "bar-back":
       return cssModules.chart["chart-back"];
 
     case "donut-back":
@@ -94,17 +94,23 @@ export const getCardStyles = (card: CardType) => {
       return cssModules.player["utility-back"];
 
     case "nav":
-      return spaced(texture, cssModules.nav["nav-ctn"]);
+      return spaced(texture, cssModules.nav["nav-ctn"], defaultRadius);
 
     case "nav-back":
       return spaced(cssModules.nav["nav-back"], cssModules.container["header-ctn"]);
 
+    case "timer":
+      return spaced(texture, cssModules.timer["timer-ctn"], defaultRadius);
+
+    case "timer-back":
+      return spaced(cssModules.timer["timer-back"]);
+
     case "default-back":
-      return spaced(texture, brightness);
+      return spaced(cssModules.nav["nav-back"]);
 
     default:
-      console.warn("No card type specified in getCardStyles");
-      return "DEFAULT"; // cardStyles +
+      console.warn(` getCardStyles : No card type specified ${card}`);
+      return spaced(texture, brightness, defaultRadius); // cardStyles +
   }
 };
 

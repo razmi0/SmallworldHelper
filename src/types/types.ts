@@ -2,6 +2,17 @@ import type { ChartData, ChartOptions } from "chart.js";
 import type { HTMLAttributes, ButtonHTMLAttributes, ComponentType, ReactNode, ElementType } from "react";
 import type { KeysType, PointerType } from "@/utils/players/helpers";
 
+export type Time = {
+  id: number;
+  intervalId: number;
+  seconds: number;
+  minutes: number;
+  color?: string;
+  isRunning: boolean;
+  start: () => void;
+  delete: () => void;
+};
+
 export type EventsManagerType<Arguments extends unknown[]> = {
   [key in PointerType]: (...arg: Arguments) => void;
 };
@@ -188,8 +199,29 @@ export type IconName =
   | "redo"
   | "close"
   | "star"
+  | "clock"
+  | "addcard"
   | "github";
 export type KeyboardNavigationIdType = "soft-input" | "utility";
+
+export type CardStyleType =
+  | "player"
+  | "utility"
+  | "default"
+  | "line"
+  | "header"
+  | "bar"
+  | "donut"
+  | "default-back"
+  | "player-back"
+  | "utility-back"
+  | "line-back"
+  | "bar-back"
+  | "donut-back"
+  | "timer"
+  | "timer-back"
+  | "nav"
+  | "nav-back";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, IconProps {
   datatype?: string; // not a standard button attribute ?
