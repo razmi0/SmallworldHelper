@@ -49,7 +49,7 @@ export const PlayerHandler = <T extends unknown[], P extends unknown[]>({
 
 interface HeadingBaseProps {
   ids: string[];
-  color: string;
+  color?: string;
   isHover?: boolean;
   iconName?: IconName;
   iconColor?: string;
@@ -79,7 +79,7 @@ export const Heading = ({ children, ids, color, iconName, isHover, iconColor }: 
     <PlayerTextContainer>
       {childrenArr.map((child, i) => {
         return (
-          <PlayerText color={color} id={ids[i]} key={i}>
+          <PlayerText color={color ? color : "#FFF"} id={ids[i]} key={i}>
             {i === 1 && iconName && (
               <IconHeading
                 animationName="rotate"
