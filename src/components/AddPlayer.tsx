@@ -86,7 +86,7 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleCard, names, changeFocus }: Ad
   return (
     <>
       {isOpen && (
-        <Position variant="absolute-center">
+        <Position position="absolute-center">
           <RefManager ref={ref}>
             <KeyboardManager keyboard={keyboard}>
               <AddStyles>
