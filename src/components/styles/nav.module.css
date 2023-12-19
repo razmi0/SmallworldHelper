@@ -5,12 +5,6 @@
   padding: 2px 5px;
   gap: 3px;
 }
-.view-transition-manager {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  view-transition-name: nav-vt;
-}
 
 .menu-icon-ctn {
   display: flex;

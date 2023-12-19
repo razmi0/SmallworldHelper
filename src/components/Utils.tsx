@@ -167,7 +167,7 @@ export const Position = ({ position, children }: PositionContainerProps) => {
 
   if (typeof position === "object") {
     const { x, y } = position;
-    classes = cssModules.utils["absolute-center"];
+    // classes = cssModules.utils["absolute-center"];
     return (
       <div style={{ position: "absolute", top: y, left: x }} className={classes}>
         {children}

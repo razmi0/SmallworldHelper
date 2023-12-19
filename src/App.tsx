@@ -10,12 +10,10 @@ import Board from "@Components/Board";
 import Nav from "@Components/Nav";
 import Charts from "@Components/Charts";
 import AddPlayerCard from "@Components/AddPlayer";
-import Timers from "@Components/TimerCard";
-import { useTimer } from "./hooks/useTimer";
 import { StartButton, Toast, RisingStars, MockButton } from "@Components/Utils";
 import { getFromLocalStorage, saveToLocalStorage } from "@Utils/utils";
 import { buildAllBars, buildAllLines, buildAlldonuts } from "./hooks/players/helpers";
-import type { Player, Time } from "@Types";
+import type { Player } from "@Types";
 
 const workingVars = (players: Player[], onlyOneFocusIndex: number) => {
   const hasPlayer = players.length > 0;
@@ -39,13 +37,6 @@ const App = () => {
   const { playersStates, playersActions, playerSize, playersNames } = usePlayer();
   const { players /**, lines, bars, donuts */ } = playersStates;
   const { addPlayer, resetScore, removePlayer, updateScore, setPlayers } = playersActions;
-
-  /**
-   * useTimer
-   */
-  const { timeState, timeActions } = useTimer();
-  const { timers } = timeState;
-  const { addTimer, resetTimer, setTimer, pauseTimer } = timeActions;
 
   /**
    * useChart
@@ -92,17 +83,8 @@ const App = () => {
         if (errorPlayers.status) {
           post({ type: "error", message: errorPlayers.text });
         }
-        /**
-         * Timers
-         */
-        const { stored: storedTimers, error: errorTimers } = getFromLocalStorage<Time[]>("timers", []);
-        if (errorTimers.status) {
-          post({ type: "error", message: errorTimers.text });
-        }
 
-        if (errorPlayers.status && errorTimers.status) return;
         if (!errorPlayers.status) setPlayers(storedPlayers);
-        if (!errorTimers.status) setTimer(storedTimers);
         post({ type: "success", message: "Loaded 👍" });
         break;
 
@@ -115,15 +97,7 @@ const App = () => {
         if (errorPlayer) {
           post({ type: "error", message: errorPlayer });
         }
-        /**
-         * Timers
-         */
-        // timers.map((timer) => pauseTimer(timer.id));
-        const errorTimer = saveToLocalStorage("timers", timers);
-        if (errorTimer) {
-          post({ type: "error", message: errorTimer });
-        }
-        if (!errorPlayer && !errorTimer) post({ type: "success", message: "Saved 👍" });
+
         break;
 
       default:
@@ -149,16 +123,14 @@ const App = () => {
         playerSize={playerSize}
         undoRedoStates={undoRedoStates}
         undoRedoActions={undoRedoActions}
-        addTimer={addTimer}
       />
       <RisingStars color={color} />
+      <StartButton
+        toggleOpenAddPlayer={toggleActions.openAddPlayer}
+        hasPlayers={hasPlayer}
+        isAddPlayerOpen={toggleStates.isAddPlayerOpen}
+      />
       <MainContainer>
-        <StartButton
-          toggleOpenAddPlayer={toggleActions.openAddPlayer}
-          hasPlayers={hasPlayer}
-          isAddPlayerOpen={toggleStates.isAddPlayerOpen}
-        />
-
         <BoardView>
           <Board
             hideScore={isScoreHidden}
@@ -187,7 +159,6 @@ const App = () => {
           changeFocus={focusActions.changeFocus}
         />
         <Toast />
-        <Timers timers={timers} pauseTimer={pauseTimer} />
         <MockButton setMock={() => setPlayers(mock)} />
       </MainContainer>
     </>

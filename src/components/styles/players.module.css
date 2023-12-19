@@ -25,6 +25,9 @@
   gap: 16px;
 }
 @media screen and (max-width: 820px) {
+  #root {
+    padding: 4em;
+  }
   .board-view {
     display: block;
   }

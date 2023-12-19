@@ -6,21 +6,11 @@ import utilsStyles from "./utils.module.css";
 import navStyles from "./nav.module.css";
 import iconsStyles from "./icons.module.css";
 import themeStyles from "@Context/theme/_.module.css";
-import timerStyles from "./timer.module.css";
 
 import type { CardStyleType } from "@Types";
 // import globalStyles from ".../components/css/index.css/?inline";
 
-type ModuleNames =
-  | "chart"
-  | "container"
-  | "player"
-  | "timer"
-  | "utils"
-  | "nav"
-  | "icons"
-  | "theme"
-  | ("global" & undefined);
+type ModuleNames = "chart" | "container" | "player" | "utils" | "nav" | "icons" | "theme" | ("global" & undefined);
 type CssStyles = Record<ModuleNames, CSSModuleClasses>;
 /* eslint-disable no-re-export/no-re-export */
 export const cssModules: CssStyles = {
@@ -31,7 +21,6 @@ export const cssModules: CssStyles = {
   nav: navStyles,
   icons: iconsStyles,
   theme: themeStyles,
-  timer: timerStyles,
 };
 
 // UI
@@ -98,12 +87,6 @@ export const getCardStyles = (card: CardStyleType) => {
 
     case "nav-back":
       return spaced(cssModules.nav["nav-back"], cssModules.container["header-ctn"]);
-
-    case "timer":
-      return spaced(texture, cssModules.timer["timer-ctn"], defaultRadius);
-
-    case "timer-back":
-      return spaced(cssModules.timer["timer-back"]);
 
     case "default-back":
       return spaced(cssModules.nav["nav-back"]);
