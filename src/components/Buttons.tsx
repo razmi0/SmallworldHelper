@@ -5,8 +5,8 @@ import { getSvgData } from "@Icons/data";
 import type { CSSProperties, ReactNode } from "react";
 import type { IconButtonProps } from "@Types";
 
-export const CloseButton = ({ onClick }: { onClick: () => void }) => {
-  return <IconButton onClick={onClick} iconName="close" variant="utility" />;
+export const CloseButton = ({ onClick, ...rest }: { onClick: () => void }) => {
+  return <IconButton onClick={onClick} iconName="close" variant="utility" {...rest} />;
 };
 
 export const ResetButton = ({ onClick }: { onClick: () => void }) => {

@@ -86,27 +86,30 @@ const AddPlayerCard = ({ addPlayer, isOpen, toggleCard, names, changeFocus }: Ad
   return (
     <>
       {isOpen && (
-        <Position position="absolute-center">
-          <RefManager ref={ref}>
-            <KeyboardManager keyboard={keyboard}>
-              <AddStyles>
-                <SoftInput
-                  label="Name"
-                  pseudoName="0_addPlayer"
-                  onChange={(e) => handleNewNameChange(e)}
-                  value={newName}
-                />
-                <SoftInput
-                  label="Start score"
-                  pseudoName="0_startScore"
-                  onChange={(e) => handleStartScoreChange(e)}
-                  value={finalStartScore}
-                />
-              </AddStyles>
-            </KeyboardManager>
-          </RefManager>
-          <CloseButton onClick={toggleCardAndReset} />
-        </Position>
+        <>
+          <div style={{ position: "absolute", left: "50%", transform: "translate(-50%)" }}>
+            <RefManager ref={ref}>
+              <KeyboardManager keyboard={keyboard}>
+                <AddStyles>
+                  <CloseButton onClick={toggleCardAndReset} />
+                  <SoftInput
+                    label="Name"
+                    pseudoName="0_addPlayer"
+                    onChange={(e) => handleNewNameChange(e)}
+                    value={newName}
+                  />
+                  <div style={{ height: "10px" }}></div>
+                  <SoftInput
+                    label="Start score"
+                    pseudoName="0_startScore"
+                    onChange={(e) => handleStartScoreChange(e)}
+                    value={finalStartScore}
+                  />
+                </AddStyles>
+              </KeyboardManager>
+            </RefManager>
+          </div>
+        </>
       )}
     </>
   );

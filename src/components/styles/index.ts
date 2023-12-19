@@ -34,20 +34,21 @@ export const getCardStyles = (card: CardStyleType) => {
   switch (card) {
     case "player":
       return spaced(
-        cssModules.player["board-card"],
+        brightness,
         texture,
-        cssModules.player["card-size-player"],
         defaultRadius,
+        cssModules.player["board-card"],
+        cssModules.player["card-size-player"],
         cssModules.player["list-element-ctn"],
-        brightness
+        cssModules.player["player-ctn"]
       );
 
     case "utility":
       return spaced(
-        cssModules.player["board-card"],
         texture,
-        cssModules.player["card-size-utility"],
         defaultRadius,
+        cssModules.player["addplayer-card"],
+        cssModules.player["card-size-utility"],
         cssModules.player["list-element-ctn"]
       );
 
