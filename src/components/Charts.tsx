@@ -1,6 +1,5 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Line as ChartLine, Doughnut as ChartDonut, Bar as ChartBar } from "react-chartjs-2";
-import Draggable from "react-draggable";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,8 +14,9 @@ import {
 } from "chart.js";
 import { TIME_BEFORE_RESET_FOCUS, barOptions, lineOptions, donutOptions } from "../utils/charts/options";
 import { focusOnBar, focusOnLine, focusOndonut } from "../utils/charts/helpers";
-import { arrayify, findSum } from "@Utils/utils";
-import { cssModules, getCardStyles } from "@Components/styles";
+import { findSum } from "@Utils/utils";
+import { ChartCard } from "./ChartCard";
+import { cssModules } from "@Components/styles";
 import type { ChartData, ChartOptions } from "chart.js";
 import type { MutableRefObject, ReactNode, FC } from "react";
 import type { LineProps, BarProps, DonutProps, FocusActionsType, FocusStatesType } from "@Types";
@@ -33,15 +33,14 @@ type ChartProps = {
 };
 
 const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: ChartProps) => {
-  console.log("Charts");
+  // console.log("Charts");
   const intervalIdRef = useRef(null) as MutableRefObject<ReturnType<typeof setInterval> | null>; // NodeJS.Timeout
 
   const { focusMap, onlyOneFocus, color, noFocus } = focusStates;
   const { resetFocus } = focusActions;
 
   useEffect(() => {
-    if (noFocus) return;
-    intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
+    if (!noFocus) intervalIdRef.current = setInterval(handleResetFocus, TIME_BEFORE_RESET_FOCUS);
     return () => {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
     };
@@ -62,13 +61,23 @@ const Charts = ({ isOpen, lines, bars, donuts, focusActions, focusStates }: Char
     focusedDonut = focusOndonut(onlyOneFocus.index, donuts);
   }
 
+  const finalColor = color || "rgba(255,255,255, 0.3)";
+
   return (
     <>
-      <ChartContainer isOpen={isOpen} color={color || "rgba(255,255,255, 0.3)"}>
-        <Line data={onlyOneFocus ? focusedLine : lines} options={lineOptions} type="line" />
-        <Bar data={onlyOneFocus ? focusedBar : bars} options={barOptions} type="bar" />
-        <Doughnut data={onlyOneFocus ? focusedDonut : donuts} options={donutOptions} type="donut" />
-      </ChartContainer>
+      <ChartsContainer isOpen={isOpen}>
+        <ChartCard color={finalColor} type="line" drag>
+          <Line data={onlyOneFocus ? focusedLine : lines} options={lineOptions} type="line" />
+        </ChartCard>
+
+        <ChartCard color={finalColor} type="bar" drag>
+          <Bar data={onlyOneFocus ? focusedBar : bars} options={barOptions} type="bar" />
+        </ChartCard>
+
+        <ChartCard color={finalColor} type="donut" drag>
+          <Doughnut data={onlyOneFocus ? focusedDonut : donuts} options={donutOptions} type="donut" />
+        </ChartCard>
+      </ChartsContainer>
     </>
   );
 };
@@ -80,47 +89,11 @@ type ChildWithProps = ReactNode & { props: { type: LocalChartType } };
 type Props = {
   children: ChildWithProps[] | ChildWithProps;
   isOpen: boolean;
-  color: string;
+  // color: string;
+  // type: Extract<CardStyleType, "default" | "default-back" | "donut" | "line" | "bar">;
 };
-const ChartContainer: FC<Props> = ({ children, isOpen, color }) => {
-  const childrenArr = arrayify(children);
-  const id = useId().replace(/:/g, "_");
-
-  const back = getCardStyles("chart-back");
-  const donutBack = getCardStyles("donut-back");
-
-  const getClasses = (chartType: LocalChartType) => {
-    if (chartType === "donut") return getCardStyles("donut");
-    if (chartType === "line") return getCardStyles("bar");
-    if (chartType === "bar") return getCardStyles("line");
-  };
-
-  return (
-    <section className="charts-ctn">
-      {isOpen &&
-        children &&
-        childrenArr.map((child, i) => {
-          const chartType = child.props.type;
-          const finalId = `${id}${chartType}`;
-
-          const classes = getClasses(chartType);
-
-          return (
-            <Draggable key={`${chartType}_${i}`}>
-              <div
-                style={{ boxShadow: `0px 0px 1px 1px ${color}` }} // , borderRadius: "50%"
-                key={i}
-                className={chartType === "donut" ? donutBack : back}
-              >
-                <figure id={finalId} className={classes}>
-                  {child}
-                </figure>
-              </div>
-            </Draggable>
-          );
-        })}
-    </section>
-  );
+const ChartsContainer: FC<Props> = ({ children, isOpen }) => {
+  return <section className="charts-ctn">{isOpen && children}</section>;
 };
 
 interface HasBothAxis extends ChartOptions {
