@@ -2,8 +2,7 @@ import { forwardRef, useId } from "react";
 import { keyHandlers } from "@/utils/players/helpers";
 import { getCardStyles } from "./styles";
 import type { CSSProperties, ElementType, KeyboardEvent, ReactNode } from "react";
-import type { EventsManagerProps, ContainerProps, KeyboardManagerProps, EventTarget } from "@Types";
-import type { CardType } from "./styles";
+import type { CardStyleType, EventsManagerProps, ContainerProps, KeyboardManagerProps, EventTarget } from "@Types";
 
 export const EventsManager = <T extends unknown[]>({
   children,
@@ -77,19 +76,21 @@ export const KeyboardManager = <T extends unknown[]>({
 
 interface CardStyleManagerProps extends ContainerProps {
   children: ReactNode;
-  card?: [CardType, CardType];
+  card?: [CardStyleType, CardStyleType];
   as?: [ElementType, ElementType];
+  backProps?: Record<string, unknown>;
+  frontProps?: Record<string, unknown>;
 }
 /**
  * Add back and front card styles to children. Misc props are passed to front card.
- * @param children
- * @param as : [back, front]
- * @param card : [back, front]
+ * @description [back, front]
  */
 export const CardStyleManager = ({
   children,
   as: Element = ["div", "div"],
   card = ["default-back", "default"],
+  backProps,
+  frontProps,
   ...rest
 }: CardStyleManagerProps) => {
   const displayname = `_card_style_manager`;
@@ -99,8 +100,8 @@ export const CardStyleManager = ({
   const ElementFront = Element[1];
 
   return (
-    <ElementBack className={classes[0]} displayname={displayname}>
-      <ElementFront className={classes[1]} displayname={displayname} {...rest}>
+    <ElementBack className={classes[0]} displayname={displayname} {...backProps}>
+      <ElementFront className={classes[1]} displayname={displayname} {...frontProps} {...rest}>
         {children}
       </ElementFront>
     </ElementBack>
