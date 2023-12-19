@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useId } from "react";
 import { IconButton } from "@Components/Buttons";
 import { useNotif } from "@Context/useNotif";
 import { cssModules, getCardStyles } from "@Components/styles";
@@ -133,29 +133,6 @@ export const Flex = ({ children, sx }: FlexProps) => {
   return <div style={{ ...sx, display: "flex" }}>{children}</div>;
 };
 
-type Clock = {
-  seconds: number;
-  minutes?: number;
-};
-export const Clock = () => {
-  const [state, setClock] = useState<Clock>({ seconds: 0, minutes: 0 });
-
-  setTimeout(() => {
-    let s = state.seconds;
-    let m = state.minutes || 0;
-    m = s === 59 ? m + 1 : m;
-    s = s === 59 ? 0 : s + 1;
-
-    setClock({ seconds: s, minutes: m });
-  }, 1000);
-
-  return (
-    <span style={{ position: "absolute", left: 0, top: 0, fontSize: 18 }}>
-      Last refresh : {state.minutes} : {state.seconds}
-    </span>
-  );
-};
-
 type StartButtonProps = {
   isNavOpen?: boolean;
   toggleOpenAddPlayer: () => void;
@@ -166,37 +143,37 @@ export const StartButton = ({ toggleOpenAddPlayer, isAddPlayerOpen, hasPlayers }
   return (
     <>
       {!hasPlayers && !isAddPlayerOpen && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            gap: 20,
-          }}
-        >
-          <h3 style={{ fontSize: "1.3rem" }}>Start by adding a player and a start score, good game !</h3>
+        <Position position={"absolute-center"}>
+          <h3 style={{ fontSize: "1.3rem" }}>Start new board</h3>
           <IconButton
             style={{ cursor: "pointer", transform: "scale(1.2)" }}
             variant="nav"
-            iconName="addplayer"
+            iconName="addcard"
             onClick={toggleOpenAddPlayer}
           />
-        </div>
+        </Position>
       )}
     </>
   );
 };
 
-type PositionType = "absolute-center";
+type PositionType = "absolute-center" | { x: number; y: number };
 interface PositionContainerProps extends ContainerProps {
-  variant: PositionType;
+  position: PositionType;
 }
-export const Position = ({ variant, children }: PositionContainerProps) => {
+export const Position = ({ position, children }: PositionContainerProps) => {
   let classes: string;
-  variant === "absolute-center" ? (classes = cssModules.utils["absolute-center"]) : (classes = "");
+  position === "absolute-center" ? (classes = cssModules.utils["absolute-center"]) : (classes = "");
+
+  if (typeof position === "object") {
+    const { x, y } = position;
+    classes = cssModules.utils["absolute-center"];
+    return (
+      <div style={{ position: "absolute", top: y, left: x }} className={classes}>
+        {children}
+      </div>
+    );
+  }
   return <div className={classes}>{children}</div>;
 };
 
