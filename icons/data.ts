@@ -139,6 +139,12 @@ export const NAV_STYLES: SvgDataType = {
       message: "Add player",
     },
 
+    addcard: {
+      index: 4,
+      color: defaultColor,
+      message: "Add card",
+    },
+
     /* position 5 */
 
     chart: {
@@ -190,6 +196,12 @@ export const NAV_STYLES: SvgDataType = {
       message: "Github",
       size: ["23px", "23px"],
     },
+    clock: {
+      index: 9,
+      color: defaultColor,
+      message: "Add timer",
+      size: ["23px", "23px"],
+    },
 
     // ADD MORE ICONS HERE
     //...
@@ -226,7 +238,17 @@ const HEADING_STYLES: SvgDataType = {
   transition: "all 1s ease-in-out",
   backgroundColor: "transparent",
 
-  icons: {},
+  icons: {
+    star: {
+      color: ["#F9C74F", "#F9C74F"],
+      size: ["40px", "40px"],
+      message: "Toggle favorite",
+    },
+    clock: {
+      color: ["#F9C74F", "#F9C74F"],
+      size: ["40px", "40px"],
+    },
+  },
   animations: {
     rotate: {
       name: "rotate",
